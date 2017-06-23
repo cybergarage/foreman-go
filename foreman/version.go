@@ -2,9 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
 package foreman
 
 const (
-	Version = ""
+	Version = "0.1"
 )

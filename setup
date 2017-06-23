@@ -1,0 +1,2 @@
+export GOPATH=/Users/skonno/Src/foreman-go
+go get -u github.com/cybergarage/foreman-go/foreman
