@@ -11,8 +11,9 @@
 PREFIX?=$(shell pwd)
 GOPATH=$(shell pwd)
 
-GITHUB=github.com/cybergarage/foreman-go
-PACKAGES=${GITHUB}/foreman
+GITHUB=github.com/cybergarage
+PACKAGES=${GITHUB}/foreman-go/foreman
+DEP_PACKAGES=${GITHUB}/go-graphite/net/graphite
 
 .PHONY: setup
 
@@ -26,19 +27,27 @@ version: ${VERSION_GO}
 SETUP_CMD="./setup"
 
 setup:
-	@echo "export GOPATH=${GOPATH}" > ${SETUP_CMD}
-	@echo "go get -u ${GITHUB}/foreman" >> ${SETUP_CMD}
+	@echo "#!/bin/bash" > ${SETUP_CMD}
+	@echo "export GOPATH=\`pwd\`" >> ${SETUP_CMD}
+	@echo "go get -u ${PACKAGES}" >> ${SETUP_CMD}
+	@echo "go get -u ${DEP_PACKAGES}" >> ${SETUP_CMD}
 	@chmod a+x ${SETUP_CMD}
 	@./${SETUP_CMD}
 
 commit:
-	cd src/${GITHUB} && git commit -a
+	pushd src/${GITHUB} && git commit -a && popd
 
 push:
-	cd src/${GITHUB} && git push
+	pushd src/${GITHUB} && git push && popd
+
+pull:
+	pushd src/${GITHUB} && git pull && popd
+
+diff:
+	pushd src/${GITHUB} && git diff && popd
 
 format:
-	gofmt -w src/${GITHUB}
+	gofmt -w src/${GITHUB} foreman
 
 package: format $(shell find . -type f -name '*.go')
 	go build -v ${PACKAGES}
