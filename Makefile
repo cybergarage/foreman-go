@@ -29,6 +29,7 @@ SETUP_CMD="./setup"
 setup:
 	@echo "#!/bin/bash" > ${SETUP_CMD}
 	@echo "export GOPATH=\`pwd\`" >> ${SETUP_CMD}
+	@echo "git pull" >> ${SETUP_CMD}
 	@echo "go get -u ${PACKAGES}" >> ${SETUP_CMD}
 	@echo "go get -u ${DEP_PACKAGES}" >> ${SETUP_CMD}
 	@chmod a+x ${SETUP_CMD}
