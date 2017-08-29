@@ -9,5 +9,5 @@ import (
 )
 
 func TestNewResultSet(t *testing.T) {
-	NewResultSet()
+	//NewResultSet()
 }

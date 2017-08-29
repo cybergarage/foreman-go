@@ -8,6 +8,17 @@ import (
 	"testing"
 )
 
-func TestNewStore(t *testing.T) {
-	NewStore()
+func testStore(t *testing.T, store *Store) {
+	err := store.Open()
+	if err != nil {
+		t.Error(t)
+	}
+	err = store.Close()
+	if err != nil {
+		t.Error(t)
+	}
+}
+
+func TestNewSQLiteStore(t *testing.T) {
+	testStore(t, NewSQLiteStore())
 }

@@ -6,6 +6,7 @@
 package foreman
 
 import (
+	"fmt"
 	"time"
 	"unsafe"
 )
@@ -33,7 +34,7 @@ func NewQuery() *Query {
 	return q
 }
 
-// CQuery returns a Query for Foreman C++.
+// CQuery returns a Query object for Foreman C++.
 func (self *Query) CQuery() (unsafe.Pointer, error) {
 	cq := C.foreman_query_new()
 
@@ -43,4 +44,9 @@ func (self *Query) CQuery() (unsafe.Pointer, error) {
 	C.foreman_query_setinterval(cq, (C.time_t)(self.Interval))
 
 	return cq, nil
+}
+
+// String returns a string description of the instance
+func (self *Query) String() string {
+	return fmt.Sprintf("%s [%s - %s]", self.Target, self.From.String(), self.Until.String())
 }
