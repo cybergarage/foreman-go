@@ -18,7 +18,7 @@ type Store struct {
 // Open initializes the store.
 func (self *Store) Open() error {
 	if self.cStore == nil {
-		return fmt.Errorf(errorStoreNotInitialized, self)
+		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
 	if !C.foreman_store_open(self.cStore) {
@@ -31,7 +31,7 @@ func (self *Store) Open() error {
 // Close closes the store.
 func (self *Store) Close() error {
 	if self.cStore == nil {
-		return fmt.Errorf(errorStoreNotInitialized, self)
+		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
 	if !C.foreman_store_close(self.cStore) {
@@ -44,7 +44,7 @@ func (self *Store) Close() error {
 // AddMetric adds a new metric.
 func (self *Store) AddMetric(m *Metric) error {
 	if self.cStore == nil {
-		return fmt.Errorf(errorStoreNotInitialized, self)
+		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
 	cm, err := m.CMetric()
@@ -64,9 +64,9 @@ func (self *Store) AddMetric(m *Metric) error {
 }
 
 // Query gets the specfied metrics.
-func (self *Store) Query(q Query) (*ResultSet, error) {
+func (self *Store) Query(q *Query) (*ResultSet, error) {
 	if self.cStore == nil {
-		return nil, fmt.Errorf(errorStoreNotInitialized, self)
+		return nil, fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
 	cq, err := q.CQuery()

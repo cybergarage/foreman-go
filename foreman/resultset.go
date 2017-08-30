@@ -10,6 +10,7 @@ package foreman
 import "C"
 
 import (
+	"fmt"
 	"runtime"
 	"unsafe"
 )
@@ -33,4 +34,25 @@ func resultSetFinalizer(self *ResultSet) {
 			self.cResultSet = nil
 		}
 	}
+}
+
+// GetCount returns a number of the result set.
+func (self *ResultSet) GetCount() (int64, error) {
+	if self.cResultSet == nil {
+		return 0, fmt.Errorf(errorClangObjectNotInitialized)
+	}
+	return int64(C.foreman_resultset_getcount(self.cResultSet)), nil
+}
+
+// GetValue returns a metric value of the specified index.
+func (self *ResultSet) GetValue(n int64) (float64, error) {
+	if self.cResultSet == nil {
+		return 0, fmt.Errorf(errorClangObjectNotInitialized)
+	}
+	var value C.double
+	isSuccess := C.foreman_resultset_getvalue(self.cResultSet, C.size_t(n), &value)
+	if !isSuccess {
+		return 0, fmt.Errorf(errorResultSetCouldGetValue, n)
+	}
+	return float64(value), nil
 }
