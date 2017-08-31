@@ -41,6 +41,26 @@ func (self *Store) Close() error {
 	return nil
 }
 
+// SetRetentionInterval sets the retention interval.
+func (self *Store) SetRetentionInterval(value float64) error {
+	if self.cStore == nil {
+		return fmt.Errorf(errorClangObjectNotInitialized)
+	}
+
+	C.foreman_store_setretentioninterval(self.cStore, C.time_t(value))
+
+	return nil
+}
+
+// GetRetentionInterval returns the retention interval.
+func (self *Store) GetRetentionInterval(value float64) (float64, error) {
+	if self.cStore == nil {
+		return 0, fmt.Errorf(errorClangObjectNotInitialized)
+	}
+
+	return float64(C.foreman_store_getretentioninterval(self.cStore)), nil
+}
+
 // AddMetric adds a new metric.
 func (self *Store) AddMetric(m *Metric) error {
 	if self.cStore == nil {
