@@ -12,6 +12,7 @@ import (
 // Server represents a Foreman Server.
 type Server struct {
 	graphite *graphite.Server
+	store    *Store
 }
 
 // NewServer returns a new Server.
@@ -21,6 +22,8 @@ func NewServer() *Server {
 	server.graphite = graphite.NewServer()
 	server.graphite.CarbonListener = server
 	server.graphite.RenderListener = server
+
+	server.store = NewStore()
 
 	return server
 }
@@ -32,6 +35,13 @@ func (self *Server) Start() error {
 		self.Stop()
 		return err
 	}
+
+	err = self.store.Open()
+	if err != nil {
+		self.Stop()
+		return err
+	}
+
 	return nil
 }
 
@@ -42,13 +52,31 @@ func (self *Server) Stop() error {
 		return err
 	}
 
+	err = self.store.Close()
+	if err != nil {
+		self.Stop()
+		return err
+	}
+
 	return nil
 }
 
 // MetricRequestReceived is a listener for Graphite Carbon
-func (self *Server) MetricRequestReceived(m *graphite.Metric, err error) {
+func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
+	// Ignore error requests
 	if err != nil {
 		return
+	}
+
+	// graphite.Metric to foreman.Metric
+	fm := NewMetric()
+	fm.Name = gm.Path
+	fm.Timestamp = gm.Timestamp
+	fm.Value = gm.Value
+
+	err = self.store.AddMetric(fm)
+	if err != nil {
+		// TODO : Handle the error
 	}
 }
 

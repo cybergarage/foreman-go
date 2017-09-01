@@ -9,5 +9,15 @@ import (
 )
 
 func TestNewServer(t *testing.T) {
-	NewServer()
+	server := NewServer()
+
+	err := server.Start()
+	if err != nil {
+		t.Error(t)
+	}
+
+	err = server.Stop()
+	if err != nil {
+		t.Error(t)
+	}
 }

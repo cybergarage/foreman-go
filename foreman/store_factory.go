@@ -35,3 +35,8 @@ func NewSQLiteStore() *Store {
 	store := newStoreWithCObject(C.foreman_store_tsmap_create())
 	return store
 }
+
+// NewStore returns a new Store.
+func NewStore() *Store {
+	return NewSQLiteStore()
+}
