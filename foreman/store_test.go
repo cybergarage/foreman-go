@@ -13,11 +13,13 @@ import (
 const (
 	testStoreMetricsCount       = 100
 	testStoreMetricsPrefix      = "path"
-	testStoreMetricsInterval    = 5 * 60
+	testStoreMetricsInterval    = DefaultRetiontionInterval
 	testStoreMetricsPeriodCount = 10
 )
 
 func testStore(t *testing.T, store *Store) {
+	store.SetRetentionInterval(testStoreMetricsInterval)
+
 	err := store.Open()
 	if err != nil {
 		t.Error(t)
@@ -46,15 +48,15 @@ func testStore(t *testing.T, store *Store) {
 				t.Error(t)
 			}
 		}
-		until = until.Add(testStoreMetricsInterval * time.Second)
+		until = until.Add(testStoreMetricsInterval)
 	}
 
 	// Query metric values
 
 	q := NewQuery()
-	q.From = from
+	q.From = &from
 	q.Interval = testStoreMetricsInterval
-	q.Until = until
+	q.Until = &until
 	for j := 0; j < testStoreMetricsCount; j++ {
 		q.Target = m[j].Name
 		rs, err := store.Query(q)

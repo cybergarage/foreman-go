@@ -18,18 +18,18 @@ import "C"
 // Query represents a Foreman Query.
 type Query struct {
 	Target   string
-	From     time.Time
-	Until    time.Time
-	Interval int
+	From     *time.Time
+	Until    *time.Time
+	Interval time.Duration
 }
 
 // NewQuery returns a new Query.
 func NewQuery() *Query {
-	q := &Query{}
-
-	q.From = time.Unix(0, 0)
-	q.Until = time.Unix(0, 0)
-	q.Interval = 0
+	q := &Query{
+		From:     nil,
+		Until:    nil,
+		Interval: 0,
+	}
 
 	return q
 }
@@ -39,9 +39,13 @@ func (self *Query) CQuery() (unsafe.Pointer, error) {
 	cq := C.foreman_query_new()
 
 	C.foreman_query_settarget(cq, C.CString(self.Target))
-	C.foreman_query_setfrom(cq, (C.time_t)(self.From.Unix()))
-	C.foreman_query_setuntil(cq, (C.time_t)(self.Until.Unix()))
-	C.foreman_query_setinterval(cq, (C.time_t)(self.Interval))
+	C.foreman_query_setinterval(cq, (C.time_t)(self.Interval.Seconds()))
+	if self.From != nil {
+		C.foreman_query_setfrom(cq, (C.time_t)(self.From.Unix()))
+	}
+	if self.Until != nil {
+		C.foreman_query_setuntil(cq, (C.time_t)(self.Until.Unix()))
+	}
 
 	return cq, nil
 }

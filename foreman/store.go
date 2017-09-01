@@ -9,6 +9,7 @@ package foreman
 import "C"
 import "unsafe"
 import "fmt"
+import "time"
 
 // Store represents a Foreman Store.
 type Store struct {
@@ -41,24 +42,27 @@ func (self *Store) Close() error {
 	return nil
 }
 
-// SetRetentionInterval sets the retention interval.
-func (self *Store) SetRetentionInterval(value float64) error {
+// SetRetentionInterval sets the retention duration.
+func (self *Store) SetRetentionInterval(value time.Duration) error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
-	C.foreman_store_setretentioninterval(self.cStore, C.time_t(value))
+	C.foreman_store_setretentioninterval(self.cStore, C.time_t(value.Seconds()))
 
 	return nil
 }
 
-// GetRetentionInterval returns the retention interval.
-func (self *Store) GetRetentionInterval(value float64) (float64, error) {
+// GetRetentionInterval returns the retention duration.
+func (self *Store) GetRetentionInterval() (time.Duration, error) {
 	if self.cStore == nil {
 		return 0, fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
-	return float64(C.foreman_store_getretentioninterval(self.cStore)), nil
+	durationSec := C.foreman_store_getretentioninterval(self.cStore)
+	duration := time.Second * time.Duration(durationSec)
+
+	return duration, nil
 }
 
 // AddMetric adds a new metric.
@@ -88,6 +92,12 @@ func (self *Store) Query(q *Query) (*ResultSet, error) {
 	if self.cStore == nil {
 		return nil, fmt.Errorf(errorClangObjectNotInitialized)
 	}
+
+	duration, err := self.GetRetentionInterval()
+	if err != nil {
+		return nil, err
+	}
+	q.Interval = duration
 
 	cq, err := q.CQuery()
 	if err != nil {

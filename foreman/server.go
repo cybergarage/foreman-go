@@ -6,7 +6,14 @@
 package foreman
 
 import (
+	"net/http"
+
 	"github.com/cybergarage/go-graphite/net/graphite"
+)
+
+const (
+	serverFQLPath       = "/fql"
+	serverFQLQueryParam = "q"
 )
 
 // Server represents a Foreman Server.
@@ -22,6 +29,7 @@ func NewServer() *Server {
 	server.graphite = graphite.NewServer()
 	server.graphite.CarbonListener = server
 	server.graphite.RenderListener = server
+	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
 	server.store = NewStore()
 
@@ -81,9 +89,43 @@ func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 }
 
 // QueryRequestReceived is a listener for Graphite Render
-func (self *Server) QueryRequestReceived(query *graphite.Query, err error) ([]*graphite.Metric, error) {
+func (self *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metric, error) {
+	// Ignore error requests
 	if err != nil {
 		return nil, nil
 	}
+
+	// graphite.Query to foreman.Query
+	fq := NewQuery()
+	fq.Target = gq.Target
+	fq.From = gq.From
+	fq.Until = gq.Until
+
+	_, err = self.store.Query(fq)
+	if err != nil {
+		return nil, err
+	}
+
 	return nil, nil
+}
+
+// HTTPRequestReceived is a listener for FQL
+func (self *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter) {
+	switch r.URL.Path {
+	case serverFQLPath:
+		self.fqlRequestReceived(r, w)
+		return
+	}
+
+	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+}
+
+// fqlRequestReceived handles FQL requests
+func (self *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter) {
+	self.badRequestReceived(r, w)
+}
+
+// badRequestReceived returns http.StatusBadRequest
+func (self *Server) badRequestReceived(r *http.Request, w http.ResponseWriter) {
+	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }
