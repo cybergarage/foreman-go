@@ -76,15 +76,17 @@ func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 		return
 	}
 
-	// graphite.Metric to foreman.Metric
-	fm := NewMetric()
-	fm.Name = gm.Path
-	fm.Timestamp = gm.Timestamp
-	fm.Value = gm.Value
+	for _, dp := range gm.DataPoints {
+		// graphite.Metric to foreman.Metric
+		fm := NewMetric()
+		fm.Name = gm.Name
+		fm.Timestamp = dp.Timestamp
+		fm.Value = dp.Value
 
-	err = self.store.AddMetric(fm)
-	if err != nil {
-		// TODO : Handle the error
+		err = self.store.AddMetric(fm)
+		if err != nil {
+			// TODO : Handle the error
+		}
 	}
 }
 
