@@ -103,12 +103,34 @@ func (self *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*grap
 	fq.From = gq.From
 	fq.Until = gq.Until
 
-	_, err = self.store.Query(fq)
+	rs, err := self.store.Query(fq)
 	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	mCount := rs.GetDataPointCount()
+	m := make([]*graphite.Metric, mCount)
+
+	dps := rs.GetFirstDataPoints()
+	for n := 0; n < mCount; n++ {
+		m[n] = graphite.NewMetric()
+		if dps == nil {
+			break
+		}
+		m[n].Name = dps.Name
+		dpCount := len(dps.Values)
+		m[n].DataPoints = make([]*graphite.DataPoint, dpCount)
+		for i := 0; i < dpCount; i++ {
+			dp := graphite.NewDataPoint()
+			dp.Timestamp = dps.Values[i].Timestamp
+			dp.Value = dps.Values[i].Value
+			m[n].DataPoints[i] = dp
+		}
+
+		dps = rs.GetNextDataPoints()
+	}
+
+	return m, nil
 }
 
 // HTTPRequestReceived is a listener for FQL
