@@ -21,10 +21,15 @@ type ResultSet struct {
 }
 
 // NewResultSet returns a new ResultSet.
-func NewResultSetWithCObject(cObj unsafe.Pointer) *ResultSet {
+func NewResultSet() *ResultSet {
 	rs := &ResultSet{}
-	rs.cResultSet = cObj
 	runtime.SetFinalizer(rs, resultSetFinalizer)
+	return rs
+}
+
+// NewResultSetWithCObject returns a new ResultSet from the C++ object.
+func NewResultSetWithCObject(cObj unsafe.Pointer) *ResultSet {
+	rs := NewResultSet()
 	return rs
 }
 
@@ -36,23 +41,38 @@ func resultSetFinalizer(self *ResultSet) {
 	}
 }
 
-// GetCount returns a number of the result set.
-func (self *ResultSet) GetCount() (int64, error) {
+// GetDataPointCount returns a number of the data points.
+func (self *ResultSet) GetDataPointCount() (int, error) {
 	if self.cResultSet == nil {
 		return 0, fmt.Errorf(errorClangObjectNotInitialized)
 	}
-	return int64(C.foreman_resultset_getcount(self.cResultSet)), nil
+	return int(C.foreman_resultset_getdatapointcount(self.cResultSet)), nil
 }
 
-// GetValue returns a metric value of the specified index.
-func (self *ResultSet) GetValue(n int64) (float64, error) {
+// GetFirstDataPoints returns a first data points.
+func (self *ResultSet) GetFirstDataPoints() *DataPoints {
 	if self.cResultSet == nil {
-		return 0, fmt.Errorf(errorClangObjectNotInitialized)
+		return nil
 	}
-	var value C.double
-	isSuccess := C.foreman_resultset_getvalue(self.cResultSet, C.size_t(n), &value)
-	if !isSuccess {
-		return 0, fmt.Errorf(errorResultSetCouldGetValue, n)
+
+	cDpsObject := C.foreman_resultset_firstdatapoints(self.cResultSet)
+	if cDpsObject == nil {
+		return nil
 	}
-	return float64(value), nil
+
+	return NewDataPointsWithCObject(cDpsObject)
+}
+
+// GetNextDataPoints returns a first data points.
+func (self *ResultSet) GetNextDataPoints() *DataPoints {
+	if self.cResultSet == nil {
+		return nil
+	}
+
+	cDpsObject := C.foreman_resultset_nextdatapoints(self.cResultSet)
+	if cDpsObject == nil {
+		return nil
+	}
+
+	return NewDataPointsWithCObject(cDpsObject)
 }
