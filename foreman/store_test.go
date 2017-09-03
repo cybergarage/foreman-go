@@ -25,8 +25,6 @@ func testStore(t *testing.T, store *Store) {
 		t.Error(t)
 	}
 
-	store.SetRetentionInterval(testStoreMetricsInterval)
-
 	// Setup metrics
 
 	var m [testStoreMetricsCount]*Metric
@@ -71,18 +69,25 @@ func testStore(t *testing.T, store *Store) {
 			t.Error(fmt.Errorf("ResultSet is invalid : %d", rsCount))
 		}
 
-		/*
-			for i := 0; i < int(rsCount); i++ {
-				value, err := rs.GetValue(int64(i))
-				if err != nil {
-					t.Error(t)
-				}
-				// fmt.Printf("[%d] : %f\n", i, value)
-				if int64(value) != int64(i*j) {
-					t.Error(fmt.Errorf("ResultSet value is invalid : %f != %f", value, float64(i*j)))
-				}
+		dps := rs.GetFirstDataPoints()
+		if dps == nil {
+			t.Error(fmt.Errorf("DataPoint is not found"))
+			return
+		}
+
+		if dps.Name != m[j].Name {
+			t.Error(fmt.Errorf("Invalid DataPoint Name %s != %s", dps.Name, m[j].Name))
+		}
+
+		dpsCount := len(dps.Values)
+		for i := 0; i < dpsCount; i++ {
+			dp := dps.Values[i]
+			value := dp.Value
+			// fmt.Printf("[%d] : %f\n", i, value)
+			if int(value) != int(i*j) {
+				t.Error(fmt.Errorf("ResultSet value is invalid : %d != %d", int(value), int(i*j)))
 			}
-		*/
+		}
 	}
 
 	err = store.Close()
