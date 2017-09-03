@@ -12,10 +12,7 @@ import (
 func TestNewResultSet(t *testing.T) {
 	rs := NewResultSet()
 
-	dpsCount, err := rs.GetDataPointCount()
-	if err != nil {
-		t.Error(t)
-	}
+	dpsCount := rs.GetDataPointCount()
 	if dpsCount != 0 {
 		t.Error(fmt.Errorf("DataPoints is found : %d", dpsCount))
 	}

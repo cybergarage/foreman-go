@@ -61,10 +61,7 @@ func testStore(t *testing.T, store *Store) {
 		if err != nil {
 			t.Error(t)
 		}
-		rsCount, err := rs.GetDataPointCount()
-		if err != nil {
-			t.Error(t)
-		}
+		rsCount := rs.GetDataPointCount()
 		if rsCount != 1 {
 			t.Error(fmt.Errorf("ResultSet is invalid : %d", rsCount))
 		}

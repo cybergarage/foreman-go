@@ -10,7 +10,6 @@ package foreman
 import "C"
 
 import (
-	"fmt"
 	"runtime"
 	"unsafe"
 )
@@ -42,11 +41,11 @@ func resultSetFinalizer(self *ResultSet) {
 }
 
 // GetDataPointCount returns a number of the data points.
-func (self *ResultSet) GetDataPointCount() (int, error) {
+func (self *ResultSet) GetDataPointCount() int {
 	if self.cObject == nil {
-		return 0, fmt.Errorf(errorClangObjectNotInitialized)
+		return 0
 	}
-	return int(C.foreman_resultset_getdatapointcount(self.cObject)), nil
+	return int(C.foreman_resultset_getdatapointcount(self.cObject))
 }
 
 // GetFirstDataPoints returns a first data points.
