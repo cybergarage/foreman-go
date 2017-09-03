@@ -83,7 +83,7 @@ func testStore(t *testing.T, store *Store) {
 		for i := 0; i < dpsCount; i++ {
 			dp := dps.Values[i]
 			value := dp.Value
-			// fmt.Printf("[%d] : %f\n", i, value)
+			//fmt.Printf("[%d] : %f\n", i, value)
 			if int(value) != int(i*j) {
 				t.Error(fmt.Errorf("ResultSet value is invalid : %d != %d", int(value), int(i*j)))
 			}

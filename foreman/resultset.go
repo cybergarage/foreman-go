@@ -17,45 +17,45 @@ import (
 
 // ResultSet represents a Foreman ResultSet.
 type ResultSet struct {
-	cResultSet unsafe.Pointer
+	cObject unsafe.Pointer
 }
 
 // NewResultSet returns a new ResultSet.
 func NewResultSet() *ResultSet {
-	rs := &ResultSet{}
-	runtime.SetFinalizer(rs, resultSetFinalizer)
-	return rs
+	return NewResultSetWithCObject(C.foreman_resultset_new())
 }
 
 // NewResultSetWithCObject returns a new ResultSet from the C++ object.
 func NewResultSetWithCObject(cObj unsafe.Pointer) *ResultSet {
-	rs := NewResultSet()
+	rs := &ResultSet{}
+	rs.cObject = cObj
+	runtime.SetFinalizer(rs, resultSetFinalizer)
 	return rs
 }
 
 func resultSetFinalizer(self *ResultSet) {
-	if self.cResultSet != nil {
-		if C.foreman_resultset_delete(self.cResultSet) {
-			self.cResultSet = nil
+	if self.cObject != nil {
+		if C.foreman_resultset_delete(self.cObject) {
+			self.cObject = nil
 		}
 	}
 }
 
 // GetDataPointCount returns a number of the data points.
 func (self *ResultSet) GetDataPointCount() (int, error) {
-	if self.cResultSet == nil {
+	if self.cObject == nil {
 		return 0, fmt.Errorf(errorClangObjectNotInitialized)
 	}
-	return int(C.foreman_resultset_getdatapointcount(self.cResultSet)), nil
+	return int(C.foreman_resultset_getdatapointcount(self.cObject)), nil
 }
 
 // GetFirstDataPoints returns a first data points.
 func (self *ResultSet) GetFirstDataPoints() *DataPoints {
-	if self.cResultSet == nil {
+	if self.cObject == nil {
 		return nil
 	}
 
-	cDpsObject := C.foreman_resultset_firstdatapoints(self.cResultSet)
+	cDpsObject := C.foreman_resultset_firstdatapoints(self.cObject)
 	if cDpsObject == nil {
 		return nil
 	}
@@ -65,11 +65,11 @@ func (self *ResultSet) GetFirstDataPoints() *DataPoints {
 
 // GetNextDataPoints returns a first data points.
 func (self *ResultSet) GetNextDataPoints() *DataPoints {
-	if self.cResultSet == nil {
+	if self.cObject == nil {
 		return nil
 	}
 
-	cDpsObject := C.foreman_resultset_nextdatapoints(self.cResultSet)
+	cDpsObject := C.foreman_resultset_nextdatapoints(self.cObject)
 	if cDpsObject == nil {
 		return nil
 	}

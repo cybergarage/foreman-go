@@ -5,9 +5,24 @@
 package foreman
 
 import (
+	"fmt"
 	"testing"
 )
 
 func TestNewResultSet(t *testing.T) {
-	//NewResultSet()
+	rs := NewResultSet()
+
+	dpsCount, err := rs.GetDataPointCount()
+	if err != nil {
+		t.Error(t)
+	}
+	if dpsCount != 0 {
+		t.Error(fmt.Errorf("DataPoints is found : %d", dpsCount))
+	}
+
+	dps := rs.GetFirstDataPoints()
+	if dps != nil {
+		t.Error(fmt.Errorf("DataPoints is not nil"))
+		return
+	}
 }
