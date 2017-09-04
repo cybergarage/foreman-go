@@ -20,14 +20,16 @@ type DataPoints struct {
 }
 
 // NewDataPoints returns a new DataPoint.
-func NewDataPoints() *DataPoints {
-	dps := &DataPoints{}
+func NewDataPoints(size int) *DataPoints {
+	dps := &DataPoints{
+		Values: make([]*DataPoint, size),
+	}
 	return dps
 }
 
 // NewDataPointsWithCObject returns a new DataPoint from the C++ object.
 func NewDataPointsWithCObject(cObject unsafe.Pointer) *DataPoints {
-	dps := NewDataPoints()
+	dps := NewDataPoints(0)
 
 	dataPointSize := int(C.foreman_datapoints_size(cObject))
 	dps.Name = C.GoString(C.foreman_datapoints_getname(cObject))

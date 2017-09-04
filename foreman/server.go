@@ -119,7 +119,7 @@ func (self *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*grap
 		}
 		m[n].Name = dps.Name
 		dpCount := len(dps.Values)
-		m[n].DataPoints = make([]*graphite.DataPoint, dpCount)
+		m[n].DataPoints = graphite.NewDataPoints(dpCount)
 		for i := 0; i < dpCount; i++ {
 			dp := graphite.NewDataPoint()
 			dp.Timestamp = dps.Values[i].Timestamp

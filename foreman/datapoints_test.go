@@ -9,5 +9,5 @@ import (
 )
 
 func TestNewDataPoints(t *testing.T) {
-	NewDataPoints()
+	NewDataPoints(0)
 }
