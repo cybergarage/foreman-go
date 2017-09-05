@@ -30,6 +30,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/cybergarage/foreman-go/foreman"
 	"github.com/cybergarage/foreman-go/foreman/log"
@@ -87,21 +89,6 @@ func main() {
 	}
 	defer log.SetSharedLogger(nil)
 
-	// Demonaize
-
-	/*　FIXME : Disabled the demonaize to use upstart temporarily.
-	if !*foreground {
-		_, ret, _ := syscall.RawSyscall(syscall.SYS_FORK, 0, 0, 0)
-		if ret != 1 {
-			os.Exit(0)
-		}
-	}
-	*/
-
-	// Startup Server
-
-	server := foreman.NewServer()
-
 	// Output log message
 
 	sharedLogger := log.GetSharedLogger()
@@ -114,11 +101,49 @@ func main() {
 
 	log.Info(fmt.Sprintf("%s is started", ProgramName))
 
+	server := foreman.NewServer()
 	err = server.Start()
 	if err != nil {
 		log.Error(fmt.Sprintf("%s couldn't be started (%s)", ProgramName, err.Error()))
 		os.Exit(1)
 	}
+
+	sigc := make(chan os.Signal, 1)
+
+	signal.Notify(sigc,
+		os.Interrupt,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
+
+	exitc := make(chan int)
+
+	go func() {
+		for {
+			s := <-sigc
+			switch s {
+			case syscall.SIGHUP:
+				err = server.Restart()
+				if err != nil {
+					log.Error(fmt.Sprintf("%s couldn't be restarted (%s)", ProgramName, err.Error()))
+					os.Exit(1)
+				}
+			case syscall.SIGTERM:
+			case syscall.SIGQUIT:
+				err = server.Stop()
+				if err != nil {
+					log.Error(fmt.Sprintf("%s couldn't be stopped (%s)", ProgramName, err.Error()))
+					os.Exit(1)
+				}
+				exitc <- 0
+			}
+		}
+	}()
+
+	code := <-exitc
+
+	os.Exit(code)
 
 	log.Info(fmt.Sprintf("%s is stop", ProgramName))
 

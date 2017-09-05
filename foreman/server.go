@@ -69,6 +69,21 @@ func (self *Server) Stop() error {
 	return nil
 }
 
+// Restart restats the server.
+func (self *Server) Restart() error {
+	err := self.Stop()
+	if err != nil {
+		return err
+	}
+
+	err = self.Start()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // MetricRequestReceived is a listener for Graphite Carbon
 func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 	// Ignore error requests
