@@ -5,14 +5,9 @@
 package foreman
 
 import (
-	"time"
+	"testing"
 )
 
-const (
-	RetiontionIntervalFiveMinute = time.Duration(5) * time.Minute
-	DefaultRetiontionInterval    = RetiontionIntervalFiveMinute
-)
-
-const (
-	ProgramName = "foreman"
-)
+func TestNewConfig(t *testing.T) {
+	NewConfig()
+}

@@ -36,6 +36,22 @@ func NewServer() *Server {
 	return server
 }
 
+// LoadConfig loads a specified configutation file.
+func (self *Server) LoadConfig(filename string) error {
+	config, err := NewConfigFromFile(filename)
+	if err != nil {
+		return err
+	}
+
+	return self.setConfig(config)
+}
+
+// setConfig sets the specified configutations to the server.
+func (self *Server) setConfig(config *Config) error {
+	// FIXE : Not Implemented yet
+	return nil
+}
+
 // Start starts the server.
 func (self *Server) Start() error {
 	err := self.graphite.Start()
