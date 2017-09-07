@@ -2,4 +2,5 @@
 export GOPATH=`pwd`
 git pull
 go get -u github.com/cybergarage/foreman-go/foreman
+go get -u github.com/cybergarage/go-config/config
 go get -u github.com/cybergarage/go-graphite/net/graphite

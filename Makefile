@@ -12,7 +12,8 @@ PREFIX?=$(shell pwd)
 GOPATH=$(shell pwd)
 
 GITHUB=github.com/cybergarage
-PACKAGES=${GITHUB}/foreman-go/foreman
+PACKAGES=${GITHUB}/foreman-go/foreman ${GITHUB}/foreman-go/foreman/log
+BINARYIES=${GITHUB}/foreman-go/foremand
 DEP_PACKAGES=${GITHUB}/go-graphite/net/graphite
 
 .PHONY: setup
@@ -50,14 +51,14 @@ diff:
 format:
 	gofmt -w src/${GITHUB} foreman
 
-package: format $(shell find . -type f -name '*.go')
-	go build -v ${PACKAGES}
+build: format $(shell find . -type f -name '*.go')
+	go build -v ${PACKAGES} ${BINARYIES}
 
-test: package
+test: build 
 	go test -v -cover ${PACKAGES}
 
 install: build
-	go install ${PACKAGES}
+	go install ${BINARYIES}
 
 clean:
 	rm ${PREFIX}/bin/*
