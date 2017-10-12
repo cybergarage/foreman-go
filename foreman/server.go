@@ -8,7 +8,7 @@ package foreman
 import (
 	"net/http"
 
-	"git.corp.cybergarage.org/kvspj/go-graphite/net/graphite"
+	"github.com/cybergarage/go-graphite/net/graphite"
 )
 
 const (
