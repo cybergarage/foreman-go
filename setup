@@ -1,6 +1,11 @@
 #!/bin/bash
 export GOPATH=`pwd`
 git pull
-go get -u github.com/cybergarage/foreman-go/foreman
-go get -u github.com/cybergarage/go-config/config
-go get -u github.com/cybergarage/go-graphite/net/graphite
+mkdir -p src
+rm -rf src/github.com/cybergarage
+# go-graphite
+go get -u github.com/cybergarage/go-graphite.git/net/graphite
+pushd src && mv github.com/cybergarage/go-graphite.git github.com/cybergarage/go-graphite && popd
+# foreman-go
+go get -u github.com/cybergarage/foreman-go.git/foreman
+pushd src && mv github.com/cybergarage/foreman-go.git github.com/cybergarage/foreman-go && popd
