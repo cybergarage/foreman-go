@@ -11,12 +11,30 @@
 PREFIX?=$(shell pwd)
 GOPATH=$(shell pwd)
 
-GITHUB=github.com/cybergarage
-PACKAGES=${GITHUB}/foreman-go/foreman ${GITHUB}/foreman-go/foreman/log
-BINARYIES=${GITHUB}/foreman-go/foremand
-DEP_PACKAGES=${GITHUB}/go-graphite/net/graphite
+GITHUB_ROOT=github.com/cybergarage
+
+PACKAGE_NAME=foreman
+BINARY_NAME=foremand
+
+GITHUB=${GITHUB_ROOT}/foreman-go
+
+GO_GRAPHITE_GITHUB=${GITHUB_ROOT}/go-graphite
+GO_GRAPHITE_PACKAGE_NAME=net/graphite
+GO_GRAPHITE_GITHUB_ID=${GO_GRAPHITE_GITHUB}.git/${GO_GRAPHITE_PACKAGE_NAME}
+GO_GRAPHITE_PACKAGE_ID=${GO_GRAPHITE_GITHUB}/${GO_GRAPHITE_PACKAGE_NAME}
+DEP_PACKAGES=${GO_GRAPHITE_PACKAGE_ID}
+
+GITHUB_ID=${GITHUB}.git/${PACKAGE_NAME}
+
+PACKAGE_ID=${GITHUB}/${PACKAGE_NAME}
+PACKAGES=${PACKAGE_ID} ${PACKAGE_ID}/log
+
+BINARY_ID=${GITHUB}/${BINARY_NAME}
+BINARYIES=${BINARY_ID}
 
 .PHONY: setup
+
+all: setup test
 
 VERSION_GO="./foreman/version.go"
 
@@ -31,28 +49,22 @@ setup:
 	@echo "#!/bin/bash" > ${SETUP_CMD}
 	@echo "export GOPATH=\`pwd\`" >> ${SETUP_CMD}
 	@echo "git pull" >> ${SETUP_CMD}
-	@echo "go get -u ${PACKAGES}" >> ${SETUP_CMD}
-	@echo "go get -u ${DEP_PACKAGES}" >> ${SETUP_CMD}
+	@echo "mkdir -p src" >> ${SETUP_CMD}
+	@echo "rm -rf src/${GITHUB_ROOT}" >> ${SETUP_CMD}
+	@echo "# go-graphite" >> ${SETUP_CMD}
+	@echo "go get -u ${GO_GRAPHITE_GITHUB_ID}" >> ${SETUP_CMD}
+	@echo "pushd src && mv ${GO_GRAPHITE_GITHUB}.git ${GO_GRAPHITE_GITHUB} && popd" >> ${SETUP_CMD}
+	@echo "# foreman-go" >> ${SETUP_CMD}
+	@echo "go get -u ${GITHUB_ID}" >> ${SETUP_CMD}
+	@echo "pushd src && mv ${GITHUB}.git ${GITHUB} && popd" >> ${SETUP_CMD}
 	@chmod a+x ${SETUP_CMD}
 	@./${SETUP_CMD}
 
-commit:
-	pushd src/${GITHUB} && git commit -a && popd
-
-push:
-	pushd src/${GITHUB} && git push && popd
-
-pull:
-	pushd src/${GITHUB} && git pull && popd
-
-diff:
-	pushd src/${GITHUB} && git diff && popd
-
 format:
-	gofmt -w src/${GITHUB} foreman
+	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${BINARY_NAME}
 
 build: format $(shell find . -type f -name '*.go')
-	go build -v ${PACKAGES} ${BINARYIES}
+	go build -v ${PACKAGES}
 
 test: build 
 	go test -v -cover ${PACKAGES}
