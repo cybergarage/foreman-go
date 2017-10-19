@@ -32,7 +32,7 @@ func storeFinalizer(self *Store) {
 
 // NewSQLiteStore returns a new Store.
 func NewSQLiteStore() *Store {
-	store := newStoreWithCObject(C.foreman_store_tsmap_create())
+	store := newStoreWithCObject(C.foreman_store_sqlite_create())
 	return store
 }
 
