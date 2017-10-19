@@ -4,7 +4,6 @@
 
 package qos
 
-import
 // A Literal represents a literal in a SAT problem.
 type Literal struct {
 	Var  *Var
