@@ -11,13 +11,13 @@ import "unsafe"
 import "fmt"
 import "time"
 
-// Store represents a Foreman Store.
-type Store struct {
+// MetricStore represents a metric store for Foreman.
+type MetricStore struct {
 	cStore unsafe.Pointer
 }
 
 // Open initializes the store.
-func (self *Store) Open() error {
+func (self *MetricStore) Open() error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -30,7 +30,7 @@ func (self *Store) Open() error {
 }
 
 // Close closes the store.
-func (self *Store) Close() error {
+func (self *MetricStore) Close() error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -43,7 +43,7 @@ func (self *Store) Close() error {
 }
 
 // SetRetentionInterval sets the retention duration.
-func (self *Store) SetRetentionInterval(value time.Duration) error {
+func (self *MetricStore) SetRetentionInterval(value time.Duration) error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -54,7 +54,7 @@ func (self *Store) SetRetentionInterval(value time.Duration) error {
 }
 
 // GetRetentionInterval returns the retention duration.
-func (self *Store) GetRetentionInterval() (time.Duration, error) {
+func (self *MetricStore) GetRetentionInterval() (time.Duration, error) {
 	if self.cStore == nil {
 		return 0, fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -66,7 +66,7 @@ func (self *Store) GetRetentionInterval() (time.Duration, error) {
 }
 
 // AddMetric adds a new metric.
-func (self *Store) AddMetric(m *Metric) error {
+func (self *MetricStore) AddMetric(m *Metric) error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -87,8 +87,8 @@ func (self *Store) AddMetric(m *Metric) error {
 	return nil
 }
 
-// Query gets the specfied metrics.
-func (self *Store) Query(q *Query) (*ResultSet, error) {
+// Query gets the specified metrics.
+func (self *MetricStore) Query(q *Query) (*ResultSet, error) {
 	if self.cStore == nil {
 		return nil, fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -115,7 +115,7 @@ func (self *Store) Query(q *Query) (*ResultSet, error) {
 }
 
 // String returns a string description of the instance
-func (self *Store) String() string {
+func (self *MetricStore) String() string {
 	// FIXME : Not implemented
 	return fmt.Sprintf("")
 }

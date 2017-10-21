@@ -18,8 +18,8 @@ const (
 
 // Server represents a Foreman Server.
 type Server struct {
-	graphite *graphite.Server
-	store    *Store
+	graphite    *graphite.Server
+	metricStore *MetricStore
 }
 
 // NewServer returns a new Server.
@@ -31,7 +31,7 @@ func NewServer() *Server {
 	server.graphite.RenderListener = server
 	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
-	server.store = NewStore()
+	server.metricStore = NewMetricStore()
 
 	return server
 }
@@ -60,7 +60,7 @@ func (self *Server) Start() error {
 		return err
 	}
 
-	err = self.store.Open()
+	err = self.metricStore.Open()
 	if err != nil {
 		self.Stop()
 		return err
@@ -76,7 +76,7 @@ func (self *Server) Stop() error {
 		return err
 	}
 
-	err = self.store.Close()
+	err = self.metricStore.Close()
 	if err != nil {
 		self.Stop()
 		return err
@@ -114,7 +114,7 @@ func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 		fm.Timestamp = dp.Timestamp
 		fm.Value = dp.Value
 
-		err = self.store.AddMetric(fm)
+		err = self.metricStore.AddMetric(fm)
 		if err != nil {
 			// TODO : Handle the error
 		}
@@ -134,7 +134,7 @@ func (self *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*grap
 	fq.From = gq.From
 	fq.Until = gq.Until
 
-	rs, err := self.store.Query(fq)
+	rs, err := self.metricStore.Query(fq)
 	if err != nil {
 		return nil, err
 	}
