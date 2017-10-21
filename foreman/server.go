@@ -129,7 +129,7 @@ func (self *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*grap
 	}
 
 	// graphite.Query to foreman.Query
-	fq := NewQuery()
+	fq := NewMetricQuery()
 	fq.Target = gq.Target
 	fq.From = gq.From
 	fq.Until = gq.Until
