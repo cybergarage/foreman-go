@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package foreman provides interfaces for Foreman.
-package foreman
+package metric
 
 // #include <foreman/foreman-c.h>
 // #cgo LDFLAGS: -lforeman++ -lstdc++
@@ -15,22 +15,22 @@ import (
 	"unsafe"
 )
 
-// Metric represents a Foreman Metric.
-type Metric struct {
+// Data represents a Foreman Data.
+type Data struct {
 	Name      string
 	Value     float64
 	Timestamp time.Time
 }
 
-// NewMetric returns a new Metric.
-func NewMetric() *Metric {
-	m := &Metric{}
+// NewData returns a new Data.
+func NewData() *Data {
+	m := &Data{}
 
 	return m
 }
 
-// CMetric returns a Metric object for Foreman C++.
-func (self *Metric) CMetric() (unsafe.Pointer, error) {
+// CMetric returns a Data object for Foreman C++.
+func (self *Data) CMetric() (unsafe.Pointer, error) {
 	cm := C.foreman_metric_new()
 
 	C.foreman_metric_setname(cm, C.CString(self.Name))
@@ -41,6 +41,6 @@ func (self *Metric) CMetric() (unsafe.Pointer, error) {
 }
 
 // String returns a string description of the instance
-func (self *Metric) String() string {
+func (self *Data) String() string {
 	return fmt.Sprintf("%s : %f (%d)", self.Name, self.Value, self.Timestamp.Unix())
 }
