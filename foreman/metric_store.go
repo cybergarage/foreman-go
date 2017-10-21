@@ -88,7 +88,7 @@ func (self *MetricStore) AddMetric(m *Metric) error {
 }
 
 // Query gets the specified metrics.
-func (self *MetricStore) Query(q *MetricQuery) (*ResultSet, error) {
+func (self *MetricStore) Query(q *MetricQuery) (*MetricResultSet, error) {
 	if self.cStore == nil {
 		return nil, fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -111,7 +111,7 @@ func (self *MetricStore) Query(q *MetricQuery) (*ResultSet, error) {
 		return nil, fmt.Errorf(errorStoreCouldNotAddMetric, q.String())
 	}
 
-	return NewResultSetWithCObject(crs), nil
+	return NewMetricResultSetWithCObject(crs), nil
 }
 
 // String returns a string description of the instance
