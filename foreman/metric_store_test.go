@@ -17,7 +17,7 @@ const (
 	testStoreMetricsPeriodCount = 10
 )
 
-func testStore(t *testing.T, store *Store) {
+func testStore(t *testing.T, store *MetricStore) {
 	store.SetRetentionInterval(testStoreMetricsInterval)
 
 	err := store.Open()
@@ -93,6 +93,6 @@ func testStore(t *testing.T, store *Store) {
 	}
 }
 
-func TestNewSQLiteStore(t *testing.T) {
-	testStore(t, NewSQLiteStore())
+func TestNewSQLiteMetricStoreStore(t *testing.T) {
+	testStore(t, NewSQLiteMetricStore())
 }

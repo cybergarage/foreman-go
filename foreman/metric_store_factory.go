@@ -14,15 +14,15 @@ import (
 	"unsafe"
 )
 
-// NewStore returns a new Store.
-func newStoreWithCObject(cObject unsafe.Pointer) *Store {
-	store := &Store{}
+// NewMetricStore returns a new MetricStore.
+func newMetricStoreWithCObject(cObject unsafe.Pointer) *MetricStore {
+	store := &MetricStore{}
 	store.cStore = cObject
 	runtime.SetFinalizer(store, storeFinalizer)
 	return store
 }
 
-func storeFinalizer(self *Store) {
+func storeFinalizer(self *MetricStore) {
 	if self.cStore != nil {
 		if C.foreman_store_delete(self.cStore) {
 			self.cStore = nil
@@ -30,13 +30,13 @@ func storeFinalizer(self *Store) {
 	}
 }
 
-// NewSQLiteStore returns a new Store.
-func NewSQLiteStore() *Store {
-	store := newStoreWithCObject(C.foreman_store_sqlite_create())
+// NewSQLiteStore returns a new MetricStore of SQLite.
+func NewSQLiteMetricStore() *MetricStore {
+	store := newMetricStoreWithCObject(C.foreman_store_sqlite_create())
 	return store
 }
 
-// NewStore returns a new Store.
-func NewStore() *Store {
-	return NewSQLiteStore()
+// NewStore returns a new MetricStore.
+func NewMetricStore() *MetricStore {
+	return NewSQLiteMetricStore()
 }
