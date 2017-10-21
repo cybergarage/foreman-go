@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
+// Package metric provides interfaces for MetricStore of Foreman C++.
 package metric
 
 // #include <foreman/foreman-c.h>
@@ -19,13 +19,13 @@ type ResultSet struct {
 	cObject unsafe.Pointer
 }
 
-// NewMetricResultSet returns a new ResultSet.
-func NewMetricResultSet() *ResultSet {
-	return NewMetricResultSetWithCObject(C.foreman_resultset_new())
+// NewResultSet returns a new ResultSet.
+func NewResultSet() *ResultSet {
+	return NewResultSetWithCObject(C.foreman_resultset_new())
 }
 
-// NewMetricResultSetWithCObject returns a new ResultSet from the C++ object.
-func NewMetricResultSetWithCObject(cObj unsafe.Pointer) *ResultSet {
+// NewResultSetWithCObject returns a new ResultSet from the C++ object.
+func NewResultSetWithCObject(cObj unsafe.Pointer) *ResultSet {
 	rs := &ResultSet{}
 	rs.cObject = cObj
 	runtime.SetFinalizer(rs, resultSetFinalizer)

@@ -8,6 +8,6 @@ import (
 	"testing"
 )
 
-func TestNewMetricQuery(t *testing.T) {
-	NewMetricQuery()
+func TestNewQuery(t *testing.T) {
+	NewQuery()
 }

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
+// Package metric provides interfaces for MetricStore of Foreman C++.
 package metric
 
 import (
