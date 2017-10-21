@@ -17,7 +17,7 @@ const (
 	testStoreMetricsPeriodCount = 10
 )
 
-func testStore(t *testing.T, store *MetricStore) {
+func testStore(t *testing.T, store *Store) {
 	store.SetRetentionInterval(testStoreMetricsInterval)
 
 	err := store.Open()
@@ -27,9 +27,9 @@ func testStore(t *testing.T, store *MetricStore) {
 
 	// Setup metrics
 
-	var m [testStoreMetricsCount]*Metric
+	var m [testStoreMetricsCount]*Data
 	for n := 0; n < testStoreMetricsCount; n++ {
-		m[n] = NewMetric()
+		m[n] = NewData()
 		m[n].Name = fmt.Sprintf("%s%d", testStoreMetricsPrefix, n)
 	}
 
@@ -41,7 +41,7 @@ func testStore(t *testing.T, store *MetricStore) {
 		for j := 0; j < testStoreMetricsCount; j++ {
 			m[j].Timestamp = until
 			m[j].Value = float64(i * j)
-			err = store.AddMetric(m[j])
+			err = store.AddData(m[j])
 			if err != nil {
 				t.Error(t)
 			}
@@ -51,7 +51,7 @@ func testStore(t *testing.T, store *MetricStore) {
 
 	// Query metric values
 
-	q := NewMetricQuery()
+	q := NewQuery()
 	q.From = &from
 	q.Interval = testStoreMetricsInterval
 	q.Until = &until
@@ -93,6 +93,6 @@ func testStore(t *testing.T, store *MetricStore) {
 	}
 }
 
-func TestNewSQLiteMetricStoreStore(t *testing.T) {
-	testStore(t, NewSQLiteMetricStore())
+func TestNewSQLiteStore(t *testing.T) {
+	testStore(t, NewSQLiteStore())
 }

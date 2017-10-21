@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
+// Package metric provides interfaces for MetricStore of Foreman C++.
 package metric
 
 // #include <foreman/foreman-c.h>
@@ -111,7 +111,7 @@ func (self *Store) Query(q *Query) (*ResultSet, error) {
 		return nil, fmt.Errorf(errorStoreCouldNotAddMetric, q.String())
 	}
 
-	return NewMetricResultSetWithCObject(crs), nil
+	return NewResultSetWithCObject(crs), nil
 }
 
 // String returns a string description of the instance

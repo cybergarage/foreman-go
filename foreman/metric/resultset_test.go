@@ -9,8 +9,8 @@ import (
 	"testing"
 )
 
-func TestNewMetricResultSet(t *testing.T) {
-	rs := NewMetricResultSet()
+func TestNewResultSet(t *testing.T) {
+	rs := NewResultSet()
 
 	dpsCount := rs.GetDataPointCount()
 	if dpsCount != 0 {

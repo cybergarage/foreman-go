@@ -4,15 +4,6 @@
 
 package foreman
 
-import (
-	"time"
-)
-
-const (
-	RetiontionIntervalFiveMinute = time.Duration(5) * time.Minute
-	DefaultRetiontionInterval    = RetiontionIntervalFiveMinute
-)
-
 const (
 	ProgramName = "foreman"
 )
