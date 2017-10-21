@@ -15,17 +15,17 @@ import (
 // #cgo LDFLAGS: -lforeman++ -lstdc++
 import "C"
 
-// Query represents a Foreman Query.
-type Query struct {
+// MetricQuery represents a Foreman MetricQuery.
+type MetricQuery struct {
 	Target   string
 	From     *time.Time
 	Until    *time.Time
 	Interval time.Duration
 }
 
-// NewQuery returns a new Query.
-func NewQuery() *Query {
-	q := &Query{
+// NewQuery returns a new MetricQuery.
+func NewMetricQuery() *MetricQuery {
+	q := &MetricQuery{
 		From:     nil,
 		Until:    nil,
 		Interval: 0,
@@ -34,8 +34,8 @@ func NewQuery() *Query {
 	return q
 }
 
-// CQuery returns a Query object for Foreman C++.
-func (self *Query) CQuery() (unsafe.Pointer, error) {
+// CQuery returns a MetricQuery object for Foreman C++.
+func (self *MetricQuery) CQuery() (unsafe.Pointer, error) {
 	cq := C.foreman_query_new()
 
 	C.foreman_query_settarget(cq, C.CString(self.Target))
@@ -51,6 +51,6 @@ func (self *Query) CQuery() (unsafe.Pointer, error) {
 }
 
 // String returns a string description of the instance
-func (self *Query) String() string {
+func (self *MetricQuery) String() string {
 	return fmt.Sprintf("%s [%s - %s]", self.Target, self.From.String(), self.Until.String())
 }

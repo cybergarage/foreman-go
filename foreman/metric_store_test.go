@@ -51,7 +51,7 @@ func testStore(t *testing.T, store *MetricStore) {
 
 	// Query metric values
 
-	q := NewQuery()
+	q := NewMetricQuery()
 	q.From = &from
 	q.Interval = testStoreMetricsInterval
 	q.Until = &until
