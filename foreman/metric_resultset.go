@@ -14,25 +14,25 @@ import (
 	"unsafe"
 )
 
-// ResultSet represents a Foreman ResultSet.
-type ResultSet struct {
+// MetricResultSet represents a Foreman MetricResultSet.
+type MetricResultSet struct {
 	cObject unsafe.Pointer
 }
 
-// NewResultSet returns a new ResultSet.
-func NewResultSet() *ResultSet {
-	return NewResultSetWithCObject(C.foreman_resultset_new())
+// NewMetricResultSet returns a new MetricResultSet.
+func NewMetricResultSet() *MetricResultSet {
+	return NewMetricResultSetWithCObject(C.foreman_resultset_new())
 }
 
-// NewResultSetWithCObject returns a new ResultSet from the C++ object.
-func NewResultSetWithCObject(cObj unsafe.Pointer) *ResultSet {
-	rs := &ResultSet{}
+// NewMetricResultSetWithCObject returns a new MetricResultSet from the C++ object.
+func NewMetricResultSetWithCObject(cObj unsafe.Pointer) *MetricResultSet {
+	rs := &MetricResultSet{}
 	rs.cObject = cObj
 	runtime.SetFinalizer(rs, resultSetFinalizer)
 	return rs
 }
 
-func resultSetFinalizer(self *ResultSet) {
+func resultSetFinalizer(self *MetricResultSet) {
 	if self.cObject != nil {
 		if C.foreman_resultset_delete(self.cObject) {
 			self.cObject = nil
@@ -41,7 +41,7 @@ func resultSetFinalizer(self *ResultSet) {
 }
 
 // GetDataPointCount returns a number of the data points.
-func (self *ResultSet) GetDataPointCount() int {
+func (self *MetricResultSet) GetDataPointCount() int {
 	if self.cObject == nil {
 		return 0
 	}
@@ -49,7 +49,7 @@ func (self *ResultSet) GetDataPointCount() int {
 }
 
 // GetFirstDataPoints returns a first data points.
-func (self *ResultSet) GetFirstDataPoints() *DataPoints {
+func (self *MetricResultSet) GetFirstDataPoints() *DataPoints {
 	if self.cObject == nil {
 		return nil
 	}
@@ -63,7 +63,7 @@ func (self *ResultSet) GetFirstDataPoints() *DataPoints {
 }
 
 // GetNextDataPoints returns a first data points.
-func (self *ResultSet) GetNextDataPoints() *DataPoints {
+func (self *MetricResultSet) GetNextDataPoints() *DataPoints {
 	if self.cObject == nil {
 		return nil
 	}
