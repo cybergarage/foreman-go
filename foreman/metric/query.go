@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package foreman provides interfaces for Foreman.
-package foreman
+package metric
 
 import (
 	"fmt"
@@ -15,17 +15,17 @@ import (
 // #cgo LDFLAGS: -lforeman++ -lstdc++
 import "C"
 
-// MetricQuery represents a Foreman MetricQuery.
-type MetricQuery struct {
+// Query represents a Foreman Query.
+type Query struct {
 	Target   string
 	From     *time.Time
 	Until    *time.Time
 	Interval time.Duration
 }
 
-// NewQuery returns a new MetricQuery.
-func NewMetricQuery() *MetricQuery {
-	q := &MetricQuery{
+// NewQuery returns a new Query.
+func NewQuery() *Query {
+	q := &Query{
 		From:     nil,
 		Until:    nil,
 		Interval: 0,
@@ -34,8 +34,8 @@ func NewMetricQuery() *MetricQuery {
 	return q
 }
 
-// CQuery returns a MetricQuery object for Foreman C++.
-func (self *MetricQuery) CQuery() (unsafe.Pointer, error) {
+// CQuery returns a Query object for Foreman C++.
+func (self *Query) CQuery() (unsafe.Pointer, error) {
 	cq := C.foreman_query_new()
 
 	C.foreman_query_settarget(cq, C.CString(self.Target))
@@ -51,6 +51,6 @@ func (self *MetricQuery) CQuery() (unsafe.Pointer, error) {
 }
 
 // String returns a string description of the instance
-func (self *MetricQuery) String() string {
+func (self *Query) String() string {
 	return fmt.Sprintf("%s [%s - %s]", self.Target, self.From.String(), self.Until.String())
 }

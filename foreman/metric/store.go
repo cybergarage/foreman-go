@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package foreman provides interfaces for Foreman.
-package foreman
+package metric
 
 // #include <foreman/foreman-c.h>
 import "C"
@@ -11,13 +11,13 @@ import "unsafe"
 import "fmt"
 import "time"
 
-// MetricStore represents a metric store for Foreman.
-type MetricStore struct {
+// Store represents a metric store for Foreman.
+type Store struct {
 	cStore unsafe.Pointer
 }
 
 // Open initializes the store.
-func (self *MetricStore) Open() error {
+func (self *Store) Open() error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -30,7 +30,7 @@ func (self *MetricStore) Open() error {
 }
 
 // Close closes the store.
-func (self *MetricStore) Close() error {
+func (self *Store) Close() error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -43,7 +43,7 @@ func (self *MetricStore) Close() error {
 }
 
 // SetRetentionInterval sets the retention duration.
-func (self *MetricStore) SetRetentionInterval(value time.Duration) error {
+func (self *Store) SetRetentionInterval(value time.Duration) error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -54,7 +54,7 @@ func (self *MetricStore) SetRetentionInterval(value time.Duration) error {
 }
 
 // GetRetentionInterval returns the retention duration.
-func (self *MetricStore) GetRetentionInterval() (time.Duration, error) {
+func (self *Store) GetRetentionInterval() (time.Duration, error) {
 	if self.cStore == nil {
 		return 0, fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -65,8 +65,8 @@ func (self *MetricStore) GetRetentionInterval() (time.Duration, error) {
 	return duration, nil
 }
 
-// AddMetric adds a new metric.
-func (self *MetricStore) AddMetric(m *Metric) error {
+// AddData adds a new metric.
+func (self *Store) AddData(m *Data) error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -88,7 +88,7 @@ func (self *MetricStore) AddMetric(m *Metric) error {
 }
 
 // Query gets the specified metrics.
-func (self *MetricStore) Query(q *MetricQuery) (*MetricResultSet, error) {
+func (self *Store) Query(q *Query) (*ResultSet, error) {
 	if self.cStore == nil {
 		return nil, fmt.Errorf(errorClangObjectNotInitialized)
 	}
@@ -115,7 +115,7 @@ func (self *MetricStore) Query(q *MetricQuery) (*MetricResultSet, error) {
 }
 
 // String returns a string description of the instance
-func (self *MetricStore) String() string {
+func (self *Store) String() string {
 	// FIXME : Not implemented
 	return fmt.Sprintf("")
 }

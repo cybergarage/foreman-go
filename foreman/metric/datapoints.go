@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package foreman provides interfaces for Foreman.
-package foreman
+package metric
 
 // #include <foreman/foreman-c.h>
 // #cgo LDFLAGS: -lforeman++ -lstdc++

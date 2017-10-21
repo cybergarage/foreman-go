@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package foreman provides interfaces for Foreman.
-package foreman
+package metric
 
 // #include <foreman/foreman-c.h>
 // #cgo LDFLAGS: -lforeman++ -lstdc++ -lsqlite3 -lfolly -lgflags
@@ -14,15 +14,15 @@ import (
 	"unsafe"
 )
 
-// NewMetricStore returns a new MetricStore.
-func newMetricStoreWithCObject(cObject unsafe.Pointer) *MetricStore {
-	store := &MetricStore{}
+// NewStore returns a new Store.
+func newStoreWithCObject(cObject unsafe.Pointer) *Store {
+	store := &Store{}
 	store.cStore = cObject
 	runtime.SetFinalizer(store, storeFinalizer)
 	return store
 }
 
-func storeFinalizer(self *MetricStore) {
+func storeFinalizer(self *Store) {
 	if self.cStore != nil {
 		if C.foreman_store_delete(self.cStore) {
 			self.cStore = nil
@@ -30,13 +30,13 @@ func storeFinalizer(self *MetricStore) {
 	}
 }
 
-// NewSQLiteStore returns a new MetricStore of SQLite.
-func NewSQLiteMetricStore() *MetricStore {
-	store := newMetricStoreWithCObject(C.foreman_store_sqlite_create())
+// NewSQLiteStore returns a new Store of SQLite.
+func NewSQLiteStore() *Store {
+	store := newStoreWithCObject(C.foreman_store_sqlite_create())
 	return store
 }
 
-// NewStore returns a new MetricStore.
-func NewMetricStore() *MetricStore {
-	return NewSQLiteMetricStore()
+// NewStore returns a new Store.
+func NewStore() *Store {
+	return NewSQLiteStore()
 }

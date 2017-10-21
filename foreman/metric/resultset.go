@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package foreman provides interfaces for Foreman.
-package foreman
+package metric
 
 // #include <foreman/foreman-c.h>
 // #cgo LDFLAGS: -lforeman++ -lstdc++
@@ -14,25 +14,25 @@ import (
 	"unsafe"
 )
 
-// MetricResultSet represents a Foreman MetricResultSet.
-type MetricResultSet struct {
+// ResultSet represents a Foreman ResultSet.
+type ResultSet struct {
 	cObject unsafe.Pointer
 }
 
-// NewMetricResultSet returns a new MetricResultSet.
-func NewMetricResultSet() *MetricResultSet {
+// NewMetricResultSet returns a new ResultSet.
+func NewMetricResultSet() *ResultSet {
 	return NewMetricResultSetWithCObject(C.foreman_resultset_new())
 }
 
-// NewMetricResultSetWithCObject returns a new MetricResultSet from the C++ object.
-func NewMetricResultSetWithCObject(cObj unsafe.Pointer) *MetricResultSet {
-	rs := &MetricResultSet{}
+// NewMetricResultSetWithCObject returns a new ResultSet from the C++ object.
+func NewMetricResultSetWithCObject(cObj unsafe.Pointer) *ResultSet {
+	rs := &ResultSet{}
 	rs.cObject = cObj
 	runtime.SetFinalizer(rs, resultSetFinalizer)
 	return rs
 }
 
-func resultSetFinalizer(self *MetricResultSet) {
+func resultSetFinalizer(self *ResultSet) {
 	if self.cObject != nil {
 		if C.foreman_resultset_delete(self.cObject) {
 			self.cObject = nil
@@ -41,7 +41,7 @@ func resultSetFinalizer(self *MetricResultSet) {
 }
 
 // GetDataPointCount returns a number of the data points.
-func (self *MetricResultSet) GetDataPointCount() int {
+func (self *ResultSet) GetDataPointCount() int {
 	if self.cObject == nil {
 		return 0
 	}
@@ -49,7 +49,7 @@ func (self *MetricResultSet) GetDataPointCount() int {
 }
 
 // GetFirstDataPoints returns a first data points.
-func (self *MetricResultSet) GetFirstDataPoints() *DataPoints {
+func (self *ResultSet) GetFirstDataPoints() *DataPoints {
 	if self.cObject == nil {
 		return nil
 	}
@@ -63,7 +63,7 @@ func (self *MetricResultSet) GetFirstDataPoints() *DataPoints {
 }
 
 // GetNextDataPoints returns a first data points.
-func (self *MetricResultSet) GetNextDataPoints() *DataPoints {
+func (self *ResultSet) GetNextDataPoints() *DataPoints {
 	if self.cObject == nil {
 		return nil
 	}
