@@ -31,12 +31,12 @@ func NewDataPoints(size int) *DataPoints {
 func NewDataPointsWithCObject(cObject unsafe.Pointer) *DataPoints {
 	dps := NewDataPoints(0)
 
-	dataPointSize := int(C.foreman_datapoints_size(cObject))
-	dps.Name = C.GoString(C.foreman_datapoints_getname(cObject))
+	dataPointSize := int(C.foreman_metric_datapoints_size(cObject))
+	dps.Name = C.GoString(C.foreman_metric_datapoints_getname(cObject))
 	dps.Values = make([]*DataPoint, dataPointSize)
 
 	for n := 0; n < dataPointSize; n++ {
-		cDpObject := C.foreman_datapoints_get(cObject, C.size_t(n))
+		cDpObject := C.foreman_metric_datapoints_get(cObject, C.size_t(n))
 		if cDpObject == nil {
 			dps.Values[n] = nil
 			continue

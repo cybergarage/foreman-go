@@ -22,7 +22,7 @@ func (self *Store) Open() error {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_store_open(self.cStore) {
+	if !C.foreman_metric_store_open(self.cStore) {
 		return fmt.Errorf(errorStoreCouldNotOpen, self)
 	}
 
@@ -35,7 +35,7 @@ func (self *Store) Close() error {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_store_close(self.cStore) {
+	if !C.foreman_metric_store_close(self.cStore) {
 		return fmt.Errorf(errorStoreCouldNotClose, self)
 	}
 
@@ -48,7 +48,7 @@ func (self *Store) SetRetentionInterval(value time.Duration) error {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
-	C.foreman_store_setretentioninterval(self.cStore, C.time_t(value.Seconds()))
+	C.foreman_metric_store_setretentioninterval(self.cStore, C.time_t(value.Seconds()))
 
 	return nil
 }
@@ -59,7 +59,7 @@ func (self *Store) GetRetentionInterval() (time.Duration, error) {
 		return 0, fmt.Errorf(errorClangObjectNotInitialized)
 	}
 
-	durationSec := C.foreman_store_getretentioninterval(self.cStore)
+	durationSec := C.foreman_metric_store_getretentioninterval(self.cStore)
 	duration := time.Second * time.Duration(durationSec)
 
 	return duration, nil
@@ -76,7 +76,7 @@ func (self *Store) AddData(m *Data) error {
 		return err
 	}
 
-	isSuccess, err := C.foreman_store_addmetric(self.cStore, cm)
+	isSuccess, err := C.foreman_metric_store_addmetric(self.cStore, cm)
 	if err != nil {
 		return err
 	}
@@ -104,10 +104,10 @@ func (self *Store) Query(q *Query) (*ResultSet, error) {
 		return nil, err
 	}
 
-	crs := C.foreman_resultset_new()
+	crs := C.foreman_metric_resultset_new()
 
-	if !C.foreman_store_query(self.cStore, cq, crs) {
-		C.foreman_resultset_delete(crs)
+	if !C.foreman_metric_store_query(self.cStore, cq, crs) {
+		C.foreman_metric_resultset_delete(crs)
 		return nil, fmt.Errorf(errorStoreCouldNotAddMetric, q.String())
 	}
 

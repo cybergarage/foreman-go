@@ -24,7 +24,7 @@ func newStoreWithCObject(cObject unsafe.Pointer) *Store {
 
 func storeFinalizer(self *Store) {
 	if self.cStore != nil {
-		if C.foreman_store_delete(self.cStore) {
+		if C.foreman_metric_store_delete(self.cStore) {
 			self.cStore = nil
 		}
 	}
@@ -32,7 +32,7 @@ func storeFinalizer(self *Store) {
 
 // NewSQLiteStore returns a new Store of SQLite.
 func NewSQLiteStore() *Store {
-	store := newStoreWithCObject(C.foreman_store_sqlite_create())
+	store := newStoreWithCObject(C.foreman_metric_store_sqlite_create())
 	return store
 }
 
