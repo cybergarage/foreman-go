@@ -10,21 +10,20 @@ import (
 	"time"
 )
 
-// Data represents a Foreman Data.
-type Data struct {
+// Metric represents a Foreman metric.
+type Metric struct {
 	Name      string
 	Value     float64
 	Timestamp time.Time
 }
 
-// NewData returns a new Data.
-func NewData() *Data {
-	m := &Data{}
-
+// NewMetric returns a new metric.
+func NewMetric() *Metric {
+	m := &Metric{}
 	return m
 }
 
 // String returns a string description of the instance
-func (self *Data) String() string {
+func (self *Metric) String() string {
 	return fmt.Sprintf("%s : %f (%d)", self.Name, self.Value, self.Timestamp.Unix())
 }

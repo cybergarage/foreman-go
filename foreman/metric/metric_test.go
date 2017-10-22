@@ -10,5 +10,5 @@ import (
 )
 
 func TestNewData(t *testing.T) {
-	NewData()
+	NewMetric()
 }

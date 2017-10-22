@@ -28,9 +28,9 @@ func testStore(t *testing.T, store Store) {
 
 	// Setup metrics
 
-	var m [testStoreMetricsCount]*Data
+	var m [testStoreMetricsCount]*Metric
 	for n := 0; n < testStoreMetricsCount; n++ {
-		m[n] = NewData()
+		m[n] = NewMetric()
 		m[n].Name = fmt.Sprintf("%s%d", testStoreMetricsPrefix, n)
 	}
 
@@ -42,7 +42,7 @@ func testStore(t *testing.T, store Store) {
 		for j := 0; j < testStoreMetricsCount; j++ {
 			m[j].Timestamp = until
 			m[j].Value = float64(i * j)
-			err = store.AddData(m[j])
+			err = store.AddMetric(m[j])
 			if err != nil {
 				t.Error(t)
 			}
