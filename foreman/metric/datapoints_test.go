@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package foreman
+package metric
 
 import (
 	"testing"
 )
 
-func TestNewQuery(t *testing.T) {
-	NewQuery()
+func TestNewDataPoints(t *testing.T) {
+	NewDataPoints(0)
 }

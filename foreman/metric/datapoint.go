@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
-package foreman
+// Package metric provides interfaces for MetricStore of Foreman C++.
+package metric
 
 // #include <foreman/foreman-c.h>
 // #cgo LDFLAGS: -lforeman++ -lstdc++
@@ -30,8 +30,8 @@ func NewDataPoint() *DataPoint {
 // NewDataPointWithCObject returns a new DataPoint from the C++ object.
 func NewDataPointWithCObject(cObject unsafe.Pointer) *DataPoint {
 	dp := NewDataPoint()
-	dp.Value = (float64)(C.foreman_datapoint_getvalue(cObject))
-	dp.Timestamp = time.Unix(int64(C.foreman_datapoint_gettimestamp(cObject)), 0)
+	dp.Value = (float64)(C.foreman_metric_datapoint_getvalue(cObject))
+	dp.Timestamp = time.Unix(int64(C.foreman_metric_datapoint_gettimestamp(cObject)), 0)
 	return dp
 }
 

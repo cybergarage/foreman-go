@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package foreman
+package metric
 
 import (
 	"fmt"
@@ -27,9 +27,9 @@ func testStore(t *testing.T, store *Store) {
 
 	// Setup metrics
 
-	var m [testStoreMetricsCount]*Metric
+	var m [testStoreMetricsCount]*Data
 	for n := 0; n < testStoreMetricsCount; n++ {
-		m[n] = NewMetric()
+		m[n] = NewData()
 		m[n].Name = fmt.Sprintf("%s%d", testStoreMetricsPrefix, n)
 	}
 
@@ -41,7 +41,7 @@ func testStore(t *testing.T, store *Store) {
 		for j := 0; j < testStoreMetricsCount; j++ {
 			m[j].Timestamp = until
 			m[j].Value = float64(i * j)
-			err = store.AddMetric(m[j])
+			err = store.AddData(m[j])
 			if err != nil {
 				t.Error(t)
 			}
