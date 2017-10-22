@@ -14,7 +14,7 @@ import (
 )
 
 // CData returns a data object for Foreman C++.
-func (self *Data) CMetric() (unsafe.Pointer, error) {
+func (self *Metric) CMetric() (unsafe.Pointer, error) {
 	cm := C.foreman_metric_new()
 
 	C.foreman_metric_setname(cm, C.CString(self.Name))

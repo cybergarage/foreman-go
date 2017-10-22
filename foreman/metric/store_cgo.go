@@ -65,8 +65,8 @@ func (self *CgoStore) GetRetentionInterval() (time.Duration, error) {
 	return duration, nil
 }
 
-// AddData adds a new metric.
-func (self *CgoStore) AddData(m *Data) error {
+// AddMetric adds a new metric.
+func (self *CgoStore) AddMetric(m *Metric) error {
 	if self.cStore == nil {
 		return fmt.Errorf(errorClangObjectNotInitialized)
 	}
