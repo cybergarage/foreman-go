@@ -2,12 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package meta provides interfaces for MetaStore of Foreman C++.
-package meta
-
-// #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lstdc++ -lsqlite3 -lfolly -lgflags
-import "C"
+// Package registry provides registry interfaces
+package registry
 
 // NewStore returns a new Store.
 func NewStore() *Store {
