@@ -21,7 +21,7 @@ type ResultSet struct {
 
 // NewResultSet returns a new ResultSet.
 func NewResultSet() *ResultSet {
-	return NewResultSetWithCObject(C.foreman_resultset_new())
+	return NewResultSetWithCObject(C.foreman_metric_resultset_new())
 }
 
 // NewResultSetWithCObject returns a new ResultSet from the C++ object.
@@ -34,7 +34,7 @@ func NewResultSetWithCObject(cObj unsafe.Pointer) *ResultSet {
 
 func resultSetFinalizer(self *ResultSet) {
 	if self.cObject != nil {
-		if C.foreman_resultset_delete(self.cObject) {
+		if C.foreman_metric_resultset_delete(self.cObject) {
 			self.cObject = nil
 		}
 	}
@@ -45,7 +45,7 @@ func (self *ResultSet) GetDataPointCount() int {
 	if self.cObject == nil {
 		return 0
 	}
-	return int(C.foreman_resultset_getdatapointcount(self.cObject))
+	return int(C.foreman_metric_resultset_getdatapointcount(self.cObject))
 }
 
 // GetFirstDataPoints returns a first data points.
@@ -54,7 +54,7 @@ func (self *ResultSet) GetFirstDataPoints() *DataPoints {
 		return nil
 	}
 
-	cDpsObject := C.foreman_resultset_firstdatapoints(self.cObject)
+	cDpsObject := C.foreman_metric_resultset_firstdatapoints(self.cObject)
 	if cDpsObject == nil {
 		return nil
 	}
@@ -68,7 +68,7 @@ func (self *ResultSet) GetNextDataPoints() *DataPoints {
 		return nil
 	}
 
-	cDpsObject := C.foreman_resultset_nextdatapoints(self.cObject)
+	cDpsObject := C.foreman_metric_resultset_nextdatapoints(self.cObject)
 	if cDpsObject == nil {
 		return nil
 	}
