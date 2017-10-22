@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
+// Package metric provides query interfaces for metric store.
 package metric
 
 // #include <foreman/foreman-c.h>
@@ -15,14 +15,14 @@ import (
 )
 
 // NewStore returns a new Store.
-func newStoreWithCObject(cObject unsafe.Pointer) *Store {
-	store := &Store{}
+func newStoreWithCObject(cObject unsafe.Pointer) *CgoStore {
+	store := &CgoStore{}
 	store.cStore = cObject
 	runtime.SetFinalizer(store, storeFinalizer)
 	return store
 }
 
-func storeFinalizer(self *Store) {
+func storeFinalizer(self *CgoStore) {
 	if self.cStore != nil {
 		if C.foreman_metric_store_delete(self.cStore) {
 			self.cStore = nil
@@ -31,12 +31,12 @@ func storeFinalizer(self *Store) {
 }
 
 // NewSQLiteStore returns a new Store of SQLite.
-func NewSQLiteStore() *Store {
+func NewSQLiteStore() *CgoStore {
 	store := newStoreWithCObject(C.foreman_metric_store_sqlite_create())
 	return store
 }
 
 // NewStore returns a new Store.
-func NewStore() *Store {
+func NewStore() *CgoStore {
 	return NewSQLiteStore()
 }

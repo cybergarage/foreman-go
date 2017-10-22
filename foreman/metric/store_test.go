@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// Package metric provides query interfaces for metric store.
 package metric
 
 import (
@@ -17,7 +18,7 @@ const (
 	testStoreMetricsPeriodCount = 10
 )
 
-func testStore(t *testing.T, store *Store) {
+func testStore(t *testing.T, store Store) {
 	store.SetRetentionInterval(testStoreMetricsInterval)
 
 	err := store.Open()
