@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
-package foreman
+// Package metric provides interfaces for MetricStore of Foreman C++.
+package metric
 
 import (
 	"fmt"
@@ -36,15 +36,15 @@ func NewQuery() *Query {
 
 // CQuery returns a Query object for Foreman C++.
 func (self *Query) CQuery() (unsafe.Pointer, error) {
-	cq := C.foreman_query_new()
+	cq := C.foreman_metric_query_new()
 
-	C.foreman_query_settarget(cq, C.CString(self.Target))
-	C.foreman_query_setinterval(cq, (C.time_t)(self.Interval.Seconds()))
+	C.foreman_metric_query_settarget(cq, C.CString(self.Target))
+	C.foreman_metric_query_setinterval(cq, (C.time_t)(self.Interval.Seconds()))
 	if self.From != nil {
-		C.foreman_query_setfrom(cq, (C.time_t)(self.From.Unix()))
+		C.foreman_metric_query_setfrom(cq, (C.time_t)(self.From.Unix()))
 	}
 	if self.Until != nil {
-		C.foreman_query_setuntil(cq, (C.time_t)(self.Until.Unix()))
+		C.foreman_metric_query_setuntil(cq, (C.time_t)(self.Until.Unix()))
 	}
 
 	return cq, nil
