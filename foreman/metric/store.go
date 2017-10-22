@@ -19,7 +19,7 @@ type Store interface {
 	Close() error
 
 	AddData(m *Data) error
-	Query(q *Query) (*ResultSet, error)
+	Query(q *Query) (ResultSet, error)
 
 	String() string
 }

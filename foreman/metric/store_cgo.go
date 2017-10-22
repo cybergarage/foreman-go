@@ -88,7 +88,7 @@ func (self *CgoStore) AddData(m *Data) error {
 }
 
 // Query gets the specified metrics.
-func (self *CgoStore) Query(q *Query) (*ResultSet, error) {
+func (self *CgoStore) Query(q *Query) (ResultSet, error) {
 	if self.cStore == nil {
 		return nil, fmt.Errorf(errorClangObjectNotInitialized)
 	}
