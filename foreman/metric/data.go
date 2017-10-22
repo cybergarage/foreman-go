@@ -2,17 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package metric provides interfaces for MetricStore of Foreman C++.
+// Package metric provides query interfaces for metric store.
 package metric
-
-// #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lstdc++
-import "C"
 
 import (
 	"fmt"
 	"time"
-	"unsafe"
 )
 
 // Data represents a Foreman Data.
@@ -27,17 +22,6 @@ func NewData() *Data {
 	m := &Data{}
 
 	return m
-}
-
-// CMetric returns a Data object for Foreman C++.
-func (self *Data) CMetric() (unsafe.Pointer, error) {
-	cm := C.foreman_metric_new()
-
-	C.foreman_metric_setname(cm, C.CString(self.Name))
-	C.foreman_metric_setvalue(cm, C.double(self.Value))
-	C.foreman_metric_settimestamp(cm, (C.time_t)(self.Timestamp.Unix()))
-
-	return cm, nil
 }
 
 // String returns a string description of the instance
