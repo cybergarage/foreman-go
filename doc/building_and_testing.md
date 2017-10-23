@@ -10,7 +10,7 @@
 To build `foreman-go`, you have to install [`foreman-cc`](https://github.com/cybergarage/foreman-cc) according to the following document at first.
 
 - [`foreman-cc`](https://github.com/cybergarage/foreman-cc)
-  -  [Building and Testing](https://github.com/cybergarage/foreman-cc/doc/building_and_testing.md)
+  -  [Building and Testing](https://github.com/cybergarage/foreman-cc/blob/master/doc/building_and_testing.md)
 
 About [`go-graphite`](https://github.com/cybergarage/go-graphite), you don't need to install the package directly because it is installed automatically by the following step.
 
