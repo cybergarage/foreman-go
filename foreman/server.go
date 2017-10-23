@@ -21,7 +21,7 @@ const (
 // Server represents a Foreman Server.
 type Server struct {
 	graphite    *graphite.Server
-	metricStore *metric.Store
+	metricStore metric.Store
 }
 
 // NewServer returns a new Server.
@@ -111,12 +111,12 @@ func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 
 	for _, dp := range gm.DataPoints {
 		// graphite.Metric to foreman.Metric
-		fm := metric.NewData()
+		fm := metric.NewMetric()
 		fm.Name = gm.Name
 		fm.Timestamp = dp.Timestamp
 		fm.Value = dp.Value
 
-		err = self.metricStore.AddData(fm)
+		err = self.metricStore.AddMetric(fm)
 		if err != nil {
 			// TODO : Handle the error
 		}

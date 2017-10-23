@@ -10,19 +10,20 @@ import (
 	"time"
 )
 
-// DataPoint represents a Foreman DataPoint.
-type DataPoint struct {
+// Metric represents a Foreman metric.
+type Metric struct {
+	Name      string
 	Value     float64
 	Timestamp time.Time
 }
 
-// NewDataPoint returns a new DataPoint.
-func NewDataPoint() *DataPoint {
-	dp := &DataPoint{}
-	return dp
+// NewMetric returns a new metric.
+func NewMetric() *Metric {
+	m := &Metric{}
+	return m
 }
 
 // String returns a string description of the instance
-func (self *DataPoint) String() string {
-	return fmt.Sprintf("[%d] %f", self.Timestamp.Unix(), self.Value)
+func (self *Metric) String() string {
+	return fmt.Sprintf("%s : %f (%d)", self.Name, self.Value, self.Timestamp.Unix())
 }

@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package metric
+// Package registry provides registry interfaces
+package registry
 
 import (
 	"testing"
 )
 
-func TestNewData(t *testing.T) {
-	NewData()
+func TestNewStore(t *testing.T) {
+	NewStore()
 }

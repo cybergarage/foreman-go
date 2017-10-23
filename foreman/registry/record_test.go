@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package metric provides query interfaces for metric store.
-package metric
+// Package registry provides registry interfaces
+package registry
 
 import (
 	"testing"
 )
 
-func TestNewDataPoints(t *testing.T) {
-	NewDataPoints(0)
+func TestNewRecord(t *testing.T) {
+	NewRecord()
 }

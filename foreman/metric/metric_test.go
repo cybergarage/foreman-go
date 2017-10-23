@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package meta
+// Package metric provides query interfaces for metric store.
+package metric
 
 import (
 	"testing"
 )
 
-func TestNewStore(t *testing.T) {
-	NewStore()
+func TestNewData(t *testing.T) {
+	NewMetric()
 }
