@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// Package metric provides query interfaces for metric store.
 package metric
 
 import (
@@ -17,7 +18,7 @@ const (
 	testStoreMetricsPeriodCount = 10
 )
 
-func testStore(t *testing.T, store *Store) {
+func testStore(t *testing.T, store Store) {
 	store.SetRetentionInterval(testStoreMetricsInterval)
 
 	err := store.Open()
@@ -27,9 +28,9 @@ func testStore(t *testing.T, store *Store) {
 
 	// Setup metrics
 
-	var m [testStoreMetricsCount]*Data
+	var m [testStoreMetricsCount]*Metric
 	for n := 0; n < testStoreMetricsCount; n++ {
-		m[n] = NewData()
+		m[n] = NewMetric()
 		m[n].Name = fmt.Sprintf("%s%d", testStoreMetricsPrefix, n)
 	}
 
@@ -41,7 +42,7 @@ func testStore(t *testing.T, store *Store) {
 		for j := 0; j < testStoreMetricsCount; j++ {
 			m[j].Timestamp = until
 			m[j].Value = float64(i * j)
-			err = store.AddData(m[j])
+			err = store.AddMetric(m[j])
 			if err != nil {
 				t.Error(t)
 			}
