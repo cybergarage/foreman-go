@@ -6,6 +6,7 @@
 package metric
 
 // #include <foreman/foreman-c.h>
+// #cgo LDFLAGS: -lforeman++ -lm -lstdc++
 import "C"
 import "unsafe"
 import "fmt"
