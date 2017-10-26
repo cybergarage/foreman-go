@@ -5,8 +5,10 @@
 // Package registry provides registry interfaces
 package registry
 
-// NewStore returns a new Store.
-func NewStore() Store {
-	// TODO : Not Implemented yet
-	return nil
+import (
+	"testing"
+)
+
+func TestNewQuery(t *testing.T) {
+	NewQuery()
 }
