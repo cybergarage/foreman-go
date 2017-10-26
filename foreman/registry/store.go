@@ -13,5 +13,7 @@ type Store interface {
 	SetRegistry(r *Record) error
 	GetRegistry(key string) (*Record, error)
 
+	Query(q *Query) ([]*Record, error)
+
 	String() string
 }
