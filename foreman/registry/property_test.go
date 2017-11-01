@@ -5,4 +5,9 @@
 // Package registry provides registry interfaces
 package registry
 
-const ()
+import (
+	"testing"
+)
+
+func TestNewProperty(t *testing.T) {
+}

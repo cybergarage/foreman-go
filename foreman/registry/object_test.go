@@ -9,6 +9,5 @@ import (
 	"testing"
 )
 
-func TestNewRecord(t *testing.T) {
-	NewRecord()
+func TestNewObject(t *testing.T) {
 }

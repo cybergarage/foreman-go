@@ -11,13 +11,13 @@ import (
 
 // Query represents a Foreman Query.
 type Query struct {
-	Key string
+	ObjectID string
 }
 
 // NewQuery returns a new Query.
 func NewQuery() *Query {
 	q := &Query{
-		Key: "",
+		ObjectID: "",
 	}
 
 	return q
@@ -25,5 +25,5 @@ func NewQuery() *Query {
 
 // String returns a string description of the instance
 func (self *Query) String() string {
-	return fmt.Sprintf("%s", self.Key)
+	return fmt.Sprintf("%s", self.ObjectID)
 }

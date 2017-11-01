@@ -5,4 +5,6 @@
 // Package registry provides registry interfaces
 package registry
 
-const ()
+const (
+	RootObjectID = "0"
+)
