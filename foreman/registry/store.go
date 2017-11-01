@@ -10,10 +10,12 @@ type Store interface {
 	Open() error
 	Close() error
 
-	SetRegistry(r *Record) error
-	GetRegistry(key string) (*Record, error)
+	SetObject(obj *Object) error
+	GetObject(objID string) (*Object, error)
+	DeleteObject(objID string) (*Object, error)
 
-	Query(q *Query) ([]*Record, error)
+	Browse(q *Query) ([]*Object, error)
+	Search(q *Query) ([]*Object, error)
 
 	String() string
 }
