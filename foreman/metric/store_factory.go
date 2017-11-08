@@ -6,7 +6,7 @@
 package metric
 
 // #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lstdc++ -lsqlite3 -lfolly -lgflags
+// #cgo LDFLAGS: -lforeman++ -lstdc++ -lsqlite3 -lfolly -lgflags -lglog
 import "C"
 
 import (
