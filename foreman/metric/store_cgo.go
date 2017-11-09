@@ -8,9 +8,14 @@ package metric
 // #include <foreman/foreman-c.h>
 // #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog
 import "C"
-import "unsafe"
-import "fmt"
-import "time"
+
+import (
+	"fmt"
+	"time"
+	"unsafe"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
+)
 
 // Store represents a metric store for Foreman.
 type CgoStore struct {
@@ -20,7 +25,7 @@ type CgoStore struct {
 // Open initializes the store.
 func (self *CgoStore) Open() error {
 	if self.cStore == nil {
-		return fmt.Errorf(errorClangObjectNotInitialized)
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
 	if !C.foreman_metric_store_open(self.cStore) {
@@ -33,7 +38,7 @@ func (self *CgoStore) Open() error {
 // Close closes the store.
 func (self *CgoStore) Close() error {
 	if self.cStore == nil {
-		return fmt.Errorf(errorClangObjectNotInitialized)
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
 	if !C.foreman_metric_store_close(self.cStore) {
@@ -46,7 +51,7 @@ func (self *CgoStore) Close() error {
 // SetRetentionInterval sets the retention duration.
 func (self *CgoStore) SetRetentionInterval(value time.Duration) error {
 	if self.cStore == nil {
-		return fmt.Errorf(errorClangObjectNotInitialized)
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
 	C.foreman_metric_store_setretentioninterval(self.cStore, C.time_t(value.Seconds()))
@@ -57,7 +62,7 @@ func (self *CgoStore) SetRetentionInterval(value time.Duration) error {
 // GetRetentionInterval returns the retention duration.
 func (self *CgoStore) GetRetentionInterval() (time.Duration, error) {
 	if self.cStore == nil {
-		return 0, fmt.Errorf(errorClangObjectNotInitialized)
+		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
 	durationSec := C.foreman_metric_store_getretentioninterval(self.cStore)
@@ -69,7 +74,7 @@ func (self *CgoStore) GetRetentionInterval() (time.Duration, error) {
 // AddMetric adds a new metric.
 func (self *CgoStore) AddMetric(m *Metric) error {
 	if self.cStore == nil {
-		return fmt.Errorf(errorClangObjectNotInitialized)
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
 	cm, err := m.CMetric()
@@ -91,7 +96,7 @@ func (self *CgoStore) AddMetric(m *Metric) error {
 // Query gets the specified metrics.
 func (self *CgoStore) Query(q *Query) (ResultSet, error) {
 	if self.cStore == nil {
-		return nil, fmt.Errorf(errorClangObjectNotInitialized)
+		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
 	duration, err := self.GetRetentionInterval()

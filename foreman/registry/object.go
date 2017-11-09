@@ -5,17 +5,25 @@
 // Package registry provides registry interfaces
 package registry
 
+import (
+	"fmt"
+)
+
 // Object represents a meta object in the registry store.
-type Object interface {
-	GetID() string
-	GetParentID() string
-	GetName() string
+type Object struct {
+	ID       string
+	ParentID string
+	Name     string
+	Data     string
+}
 
-	SetString(data string) error
-	GetString() (string, error)
+// NewObject returns a new object.
+func NewObject() *Object {
+	m := &Object{}
+	return m
+}
 
-	GetProperty(name string) (string, error)
-	GetAllProperties() ([]Property, error)
-
-	String() string
+// String returns a string description of the instance
+func (self *Object) String() string {
+	return fmt.Sprintf("[%s] : %s", self.ID, self.Name)
 }
