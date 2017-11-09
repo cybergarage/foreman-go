@@ -14,7 +14,7 @@ type Store interface {
 	CreateObject(obj *Object) error
 	UpdateObject(obj *Object) error
 	GetObject(objID string) (*Object, error)
-	DeleteObject(objID string) (*Object, error)
+	DeleteObject(objID string) error
 
 	Browse(q *Query) ([]*Object, error)
 	Search(q *Query) ([]*Object, error)
