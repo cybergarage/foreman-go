@@ -9,6 +9,7 @@ package registry
 type Store interface {
 	Open() error
 	Close() error
+	Clear() error
 
 	CreateObject(obj *Object) error
 	UpdateObject(obj *Object) error
