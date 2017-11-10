@@ -17,25 +17,55 @@ import (
 
 // NewWithCObject creates a error object from the clang object.
 func NewWithCObject(cobj unsafe.Pointer) error {
-	var cMsg, cDetailMsg *C.char
+	errMsg := ""
+
+	// Source code infomation
+
+	var cFileName, cFuncName *C.char
+	var cLineNo C.int
+
+	C.foreman_error_getfilename(cobj, &cFileName)
+	filename := C.GoString(cFileName)
+
+	C.foreman_error_getfuncname(cobj, &cFuncName)
+	funcname := C.GoString(cFuncName)
+
+	C.foreman_error_getlineno(cobj, &cLineNo)
+	lineno := (int)(cLineNo)
+
+	if 0 < len(filename) || 0 < len(funcname) {
+		errMsg += fmt.Sprintf("%s (%d)", funcname, lineno)
+	}
+
+	// Basic infomation
+
+	var cMsg *C.char
+	var cCode C.int
 
 	C.foreman_error_getmessage(cobj, &cMsg)
 	msg := C.GoString(cMsg)
 
+	C.foreman_error_getcode(cobj, &cCode)
+	code := (int)(cCode)
+
+	if 0 < len(msg) {
+		errMsg += fmt.Sprintf(" : [%d] %s", code, msg)
+	}
+
+	// Extra infomation
+
+	var cDetailMsg *C.char
+	var cDetailCode C.int
+
 	C.foreman_error_getdetailmessage(cobj, &cDetailMsg)
 	detailMsg := C.GoString(cDetailMsg)
 
-	if (0 < len(msg)) || (0 < len(detailMsg)) {
-		return fmt.Errorf("%s (%s)", msg, detailMsg)
-	}
-
-	if 0 < len(msg) {
-		return fmt.Errorf("%s", msg, detailMsg)
-	}
+	C.foreman_error_getdetailcode(cobj, &cDetailCode)
+	detailCode := (int)(cDetailCode)
 
 	if 0 < len(detailMsg) {
-		return fmt.Errorf("%s", detailMsg)
+		errMsg += fmt.Sprintf(" ([%d] %s)", detailCode, detailMsg)
 	}
 
-	return errors.New(ErrorClangNoMessage)
+	return errors.New(errMsg)
 }
