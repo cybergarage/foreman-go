@@ -22,8 +22,8 @@ const (
 // Server represents a Foreman Server.
 type Server struct {
 	graphite      *graphite.Server
-	metricStore   metric.Store
-	registryStore registry.Store
+	metricStore   *metric.Store
+	registryStore *registry.Store
 }
 
 // NewServer returns a new Server.

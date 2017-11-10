@@ -18,7 +18,7 @@ const (
 	testStoreMetricsPeriodCount = 10
 )
 
-func testStore(t *testing.T, store Store) {
+func testStore(t *testing.T, store *Store) {
 	store.SetRetentionInterval(testStoreMetricsInterval)
 
 	err := store.Open()
