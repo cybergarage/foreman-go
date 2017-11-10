@@ -23,7 +23,7 @@ func testStore(t *testing.T, store Store) {
 
 	err := store.Open()
 	if err != nil {
-		t.Error(t)
+		t.Error(err)
 	}
 
 	// Setup metrics
@@ -44,7 +44,7 @@ func testStore(t *testing.T, store Store) {
 			m[j].Value = float64(i * j)
 			err = store.AddMetric(m[j])
 			if err != nil {
-				t.Error(t)
+				t.Error(err)
 			}
 		}
 		until = until.Add(testStoreMetricsInterval)
@@ -60,7 +60,7 @@ func testStore(t *testing.T, store Store) {
 		q.Target = m[j].Name
 		rs, err := store.Query(q)
 		if err != nil {
-			t.Error(t)
+			t.Error(err)
 		}
 		rsCount := rs.GetDataPointCount()
 		if rsCount != 1 {
@@ -90,7 +90,7 @@ func testStore(t *testing.T, store Store) {
 
 	err = store.Close()
 	if err != nil {
-		t.Error(t)
+		t.Error(err)
 	}
 }
 
