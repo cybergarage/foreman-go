@@ -17,6 +17,7 @@ type Store interface {
 
 	Open() error
 	Close() error
+	Clear() error
 
 	AddMetric(m *Metric) error
 	Query(q *Query) (ResultSet, error)

@@ -48,6 +48,19 @@ func (self *CgoStore) Close() error {
 	return nil
 }
 
+// Clear remove all inserted data.
+func (self *CgoStore) Clear() error {
+	if self.cStore == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	if !C.foreman_metric_store_clear(self.cStore) {
+		return fmt.Errorf(errorStoreCouldNotClose, self)
+	}
+
+	return nil
+}
+
 // SetRetentionInterval sets the retention duration.
 func (self *CgoStore) SetRetentionInterval(value time.Duration) error {
 	if self.cStore == nil {
