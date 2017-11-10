@@ -71,6 +71,12 @@ func (self *Server) Start() error {
 		return err
 	}
 
+	err = self.registryStore.Open()
+	if err != nil {
+		self.Stop()
+		return err
+	}
+
 	return nil
 }
 
@@ -82,6 +88,12 @@ func (self *Server) Stop() error {
 	}
 
 	err = self.metricStore.Close()
+	if err != nil {
+		self.Stop()
+		return err
+	}
+
+	err = self.registryStore.Close()
 	if err != nil {
 		self.Stop()
 		return err

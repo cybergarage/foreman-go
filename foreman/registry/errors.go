@@ -5,4 +5,8 @@
 // Package registry provides registry interfaces
 package registry
 
-const ()
+const (
+	errorStoreCouldNotOpen  = "Couldn't open : %s"
+	errorStoreCouldNotClose = "Couldn't close : %s"
+	errorStoreCouldNotClear = "Couldn't clear : %s"
+)
