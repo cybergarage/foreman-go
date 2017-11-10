@@ -48,7 +48,7 @@ func (self *CgoStore) Close() error {
 }
 
 // Clear remove all registry data.
-func (self *CgoStore) Clear(obj *Object) error {
+func (self *CgoStore) Clear() error {
 	if self.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -70,6 +70,7 @@ func (self *CgoStore) CreateObject(obj *Object) error {
 	if err != nil {
 		return err
 	}
+	defer C.foreman_registry_object_delete(cobj)
 
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
@@ -91,6 +92,7 @@ func (self *CgoStore) UpdateObject(obj *Object) error {
 	if err != nil {
 		return err
 	}
+	defer C.foreman_registry_object_delete(cobj)
 
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
@@ -147,7 +149,6 @@ func (self *CgoStore) Browse(q *Query) ([]*Object, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	defer C.foreman_registry_query_delete(cq)
 
 	cobjs := C.foreman_registry_objects_new()
@@ -173,7 +174,6 @@ func (self *CgoStore) Search(q *Query) ([]*Object, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	defer C.foreman_registry_query_delete(cq)
 
 	cobjs := C.foreman_registry_objects_new()
