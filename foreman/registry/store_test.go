@@ -7,6 +7,7 @@ package registry
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -17,7 +18,7 @@ const (
 func testCreateRootObjects(t *testing.T, store Store) {
 	err := store.Clear()
 	if err != nil {
-		t.Error(t)
+		t.Error(err)
 	}
 
 	q := NewQuery()
@@ -40,7 +41,7 @@ func testCreateRootObjects(t *testing.T, store Store) {
 		obj.Data = data
 		err := store.CreateObject(obj)
 		if err != nil {
-			t.Error(t)
+			t.Error(err)
 		}
 	}
 
@@ -56,8 +57,46 @@ func testCreateRootObjects(t *testing.T, store Store) {
 
 	for n := 0; n < testStoreLoopCount; n++ {
 		obj := objs[n]
-		if !obj.IsRootParentID() {
-			t.Errorf("%s != %s", obj.ParentID, RootObjectID)
+
+		fetchObj, err := store.GetObject(obj.ID)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if !reflect.DeepEqual(obj, fetchObj) {
+			t.Errorf("%s != %s", obj, fetchObj)
+		}
+	}
+
+	// Updated
+
+	q = NewQuery()
+	q.ParentID = RootObjectID
+	objs, err = store.Browse(q)
+	if len(objs) != testStoreLoopCount {
+		t.Errorf("%d != %d", len(objs), testStoreLoopCount)
+		return
+	}
+
+	for n := 0; n < testStoreLoopCount; n++ {
+		obj := objs[n]
+
+		name := fmt.Sprintf("name%d", n)
+		data := fmt.Sprintf("data%d", n)
+		obj.Name = name
+		obj.Data = data
+		err := store.UpdateObject(obj)
+		if err != nil {
+			t.Error(err)
+		}
+
+		fetchObj, err := store.GetObject(obj.ID)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if !reflect.DeepEqual(obj, fetchObj) {
+			t.Errorf("%s != %s", obj, fetchObj)
 		}
 	}
 
@@ -83,14 +122,14 @@ func testCreateRootObjects(t *testing.T, store Store) {
 func testStore(t *testing.T, store Store) {
 	err := store.Open()
 	if err != nil {
-		t.Error(t)
+		t.Error(err)
 	}
 
 	testCreateRootObjects(t, store)
 
 	err = store.Close()
 	if err != nil {
-		t.Error(t)
+		t.Error(err)
 	}
 }
 
