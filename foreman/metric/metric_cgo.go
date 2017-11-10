@@ -13,7 +13,7 @@ import (
 	"unsafe"
 )
 
-// CData returns a data object for Foreman C++.
+// CMetric returns a data object for Foreman C++.
 func (self *Metric) CMetric() (unsafe.Pointer, error) {
 	cm := C.foreman_metric_new()
 

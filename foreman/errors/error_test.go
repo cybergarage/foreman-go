@@ -2,6 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package foreman
+// Package registry provides registry interfaces
+package errors
 
-const ()
+import (
+	"testing"
+)
+
+func TestNewError(t *testing.T) {
+}

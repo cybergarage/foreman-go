@@ -31,12 +31,12 @@ func storeFinalizer(self *CgoStore) {
 }
 
 // NewSQLiteStore returns a new Store of SQLite.
-func NewSQLiteStore() *CgoStore {
+func NewSQLiteStore() Store {
 	store := newStoreWithCObject(C.foreman_metric_store_sqlite_create())
 	return store
 }
 
 // NewStore returns a new Store.
-func NewStore() *CgoStore {
+func NewStore() Store {
 	return NewSQLiteStore()
 }
