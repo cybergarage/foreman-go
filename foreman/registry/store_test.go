@@ -15,7 +15,7 @@ const (
 	testStoreLoopCount = 100
 )
 
-func testCreateRootObjects(t *testing.T, store Store) {
+func testCreateRootObjects(t *testing.T, store *Store) {
 	err := store.Clear()
 	if err != nil {
 		t.Error(err)
@@ -119,7 +119,7 @@ func testCreateRootObjects(t *testing.T, store Store) {
 	}
 }
 
-func testStore(t *testing.T, store Store) {
+func testStore(t *testing.T, store *Store) {
 	err := store.Open()
 	if err != nil {
 		t.Error(err)

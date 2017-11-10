@@ -6,7 +6,7 @@
 package registry
 
 // Store represents an abstract interface of registry.
-type Store interface {
+type Storing interface {
 	Open() error
 	Close() error
 	Clear() error
@@ -20,4 +20,16 @@ type Store interface {
 	Search(q *Query) ([]*Object, error)
 
 	String() string
+}
+
+// Store represents an abstract interface of registry.
+type Store struct {
+	Storing
+}
+
+// GetRootObjects remove all root objects
+func (self *Store) GetRootObjects() ([]*Object, error) {
+	q := NewQuery()
+	q.ParentID = RootObjectID
+	return self.Browse(q)
 }
