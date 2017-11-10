@@ -13,11 +13,11 @@ func TestNewServer(t *testing.T) {
 
 	err := server.Start()
 	if err != nil {
-		t.Error(t)
+		t.Error(err)
 	}
 
 	err = server.Stop()
 	if err != nil {
-		t.Error(t)
+		t.Error(err)
 	}
 }
