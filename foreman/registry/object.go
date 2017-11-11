@@ -11,7 +11,7 @@ import (
 
 // Object represents a meta object in the registry store.
 type Object struct {
-	ID       string
+	ID       string // ID is guaranteed the uniqueness in the registry store basically. "0" is a special ID, and it is reserved for the root object.
 	ParentID string
 	Name     string
 	Data     string
@@ -23,9 +23,38 @@ func NewObject() *Object {
 	return m
 }
 
+// isID returns whether the object has a specified ID.
+func (self *Object) isID(id string) bool {
+	if self.ID != id {
+		return false
+	}
+	return true
+}
+
+// IsRootParentID returns whether the object has a specified ID.
+func (self *Object) IsParentID(id string) bool {
+	if self.ParentID != id {
+		return false
+	}
+	return true
+}
+
 // IsRootParentID returns whether the object has a root parent ID.
 func (self *Object) IsRootParentID() bool {
-	if self.ParentID != RootObjectID {
+	return self.IsParentID(RootObjectID)
+}
+
+// IsName returns whether the object has a specified name.
+func (self *Object) IsName(name string) bool {
+	if self.Name != name {
+		return false
+	}
+	return true
+}
+
+// IsData returns whether the object has a specified data.
+func (self *Object) IsData(data string) bool {
+	if self.Data != data {
 		return false
 	}
 	return true

@@ -14,7 +14,7 @@ import (
 )
 
 // NewObjectWithCObject returns a new object from the C++ object.
-func NewObjectWithCObject(cObject unsafe.Pointer) *Object {
+func newObjectWithCObject(cObject unsafe.Pointer) *Object {
 	obj := NewObject()
 
 	if cObject != nil {
@@ -48,8 +48,8 @@ func (self *Object) CObject() (unsafe.Pointer, error) {
 	return obj, nil
 }
 
-// NewObjectsWithCObject returns a new object from the C++ object.
-func NewObjectsWithCObject(cObjects unsafe.Pointer) []*Object {
+// newObjectsWithCObjects returns a new object from the C++ object.
+func newObjectsWithCObjects(cObjects unsafe.Pointer) []*Object {
 	objCount := (int)(C.foreman_registry_objects_size(cObjects))
 	goObjects := make([]*Object, objCount)
 	for n := 0; n < objCount; n++ {
@@ -58,7 +58,7 @@ func NewObjectsWithCObject(cObjects unsafe.Pointer) []*Object {
 			goObjects[n] = NewObject()
 			continue
 		}
-		goObjects[n] = NewObjectWithCObject(cObject)
+		goObjects[n] = newObjectWithCObject(cObject)
 	}
 
 	return goObjects

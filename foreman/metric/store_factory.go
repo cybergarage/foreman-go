@@ -22,13 +22,13 @@ func newStoreWithInterface(storeImpl Storing) *Store {
 }
 
 func newStoreWithCObject(cObject unsafe.Pointer) *Store {
-	storeImp := &CgoStore{}
+	storeImp := &cgoStore{}
 	storeImp.cStore = cObject
 	runtime.SetFinalizer(storeImp, storeFinalizer)
 	return newStoreWithInterface(storeImp)
 }
 
-func storeFinalizer(self *CgoStore) {
+func storeFinalizer(self *cgoStore) {
 	if self.cStore != nil {
 		if C.foreman_metric_store_delete(self.cStore) {
 			self.cStore = nil

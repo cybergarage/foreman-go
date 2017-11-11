@@ -79,6 +79,11 @@ func (self *cgoStore) CreateObject(obj *Object) error {
 		return errors.NewWithCObject(cerr)
 	}
 
+	var cID *C.char
+	if C.foreman_registry_object_getid(cobj, &cID) {
+		obj.ID = C.GoString(cID)
+	}
+
 	return nil
 }
 
@@ -120,7 +125,7 @@ func (self *cgoStore) GetObject(objID string) (*Object, error) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
-	return NewObjectWithCObject(cobj), nil
+	return newObjectWithCObject(cobj), nil
 }
 
 // DeleteObject deletes a specified object.
@@ -161,7 +166,7 @@ func (self *cgoStore) Browse(q *Query) ([]*Object, error) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
-	return NewObjectsWithCObject(cobjs), nil
+	return newObjectsWithCObjects(cobjs), nil
 }
 
 // Search finds a specified objects.
@@ -186,7 +191,7 @@ func (self *cgoStore) Search(q *Query) ([]*Object, error) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
-	return NewObjectsWithCObject(cobjs), nil
+	return newObjectsWithCObjects(cobjs), nil
 }
 
 // String returns a string description of the instance
