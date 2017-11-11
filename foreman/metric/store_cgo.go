@@ -18,12 +18,12 @@ import (
 )
 
 // Store represents a metric store for Foreman.
-type CgoStore struct {
+type cgoStore struct {
 	cStore unsafe.Pointer
 }
 
 // Open initializes the store.
-func (self *CgoStore) Open() error {
+func (self *cgoStore) Open() error {
 	if self.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -36,7 +36,7 @@ func (self *CgoStore) Open() error {
 }
 
 // Close closes the store.
-func (self *CgoStore) Close() error {
+func (self *cgoStore) Close() error {
 	if self.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -49,7 +49,7 @@ func (self *CgoStore) Close() error {
 }
 
 // Clear remove all inserted data.
-func (self *CgoStore) Clear() error {
+func (self *cgoStore) Clear() error {
 	if self.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -62,7 +62,7 @@ func (self *CgoStore) Clear() error {
 }
 
 // SetRetentionInterval sets the retention duration.
-func (self *CgoStore) SetRetentionInterval(value time.Duration) error {
+func (self *cgoStore) SetRetentionInterval(value time.Duration) error {
 	if self.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -73,7 +73,7 @@ func (self *CgoStore) SetRetentionInterval(value time.Duration) error {
 }
 
 // GetRetentionInterval returns the retention duration.
-func (self *CgoStore) GetRetentionInterval() (time.Duration, error) {
+func (self *cgoStore) GetRetentionInterval() (time.Duration, error) {
 	if self.cStore == nil {
 		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -85,7 +85,7 @@ func (self *CgoStore) GetRetentionInterval() (time.Duration, error) {
 }
 
 // AddMetric adds a new metric.
-func (self *CgoStore) AddMetric(m *Metric) error {
+func (self *cgoStore) AddMetric(m *Metric) error {
 	if self.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -107,7 +107,7 @@ func (self *CgoStore) AddMetric(m *Metric) error {
 }
 
 // Query gets the specified metrics.
-func (self *CgoStore) Query(q *Query) (ResultSet, error) {
+func (self *cgoStore) Query(q *Query) (ResultSet, error) {
 	if self.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -134,7 +134,7 @@ func (self *CgoStore) Query(q *Query) (ResultSet, error) {
 }
 
 // String returns a string description of the instance
-func (self *CgoStore) String() string {
+func (self *cgoStore) String() string {
 	// FIXME : Not implemented
 	return fmt.Sprintf("")
 }
