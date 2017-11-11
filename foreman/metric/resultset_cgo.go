@@ -32,29 +32,29 @@ func NewResultSetWithCObject(cObj unsafe.Pointer) *CgoResultSet {
 	return rs
 }
 
-func resultSetFinalizer(self *CgoResultSet) {
-	if self.cObject != nil {
-		if C.foreman_metric_resultset_delete(self.cObject) {
-			self.cObject = nil
+func resultSetFinalizer(r *CgoResultSet) {
+	if r.cObject != nil {
+		if C.foreman_metric_resultset_delete(r.cObject) {
+			r.cObject = nil
 		}
 	}
 }
 
 // GetDataPointCount returns a number of the data points.
-func (self *CgoResultSet) GetDataPointCount() int {
-	if self.cObject == nil {
+func (r *CgoResultSet) GetDataPointCount() int {
+	if r.cObject == nil {
 		return 0
 	}
-	return int(C.foreman_metric_resultset_getdatapointcount(self.cObject))
+	return int(C.foreman_metric_resultset_getdatapointcount(r.cObject))
 }
 
 // GetFirstDataPoints returns a first data points.
-func (self *CgoResultSet) GetFirstDataPoints() *DataPoints {
-	if self.cObject == nil {
+func (r *CgoResultSet) GetFirstDataPoints() *DataPoints {
+	if r.cObject == nil {
 		return nil
 	}
 
-	cDpsObject := C.foreman_metric_resultset_firstdatapoints(self.cObject)
+	cDpsObject := C.foreman_metric_resultset_firstdatapoints(r.cObject)
 	if cDpsObject == nil {
 		return nil
 	}
@@ -63,12 +63,12 @@ func (self *CgoResultSet) GetFirstDataPoints() *DataPoints {
 }
 
 // GetNextDataPoints returns a first data points.
-func (self *CgoResultSet) GetNextDataPoints() *DataPoints {
-	if self.cObject == nil {
+func (r *CgoResultSet) GetNextDataPoints() *DataPoints {
+	if r.cObject == nil {
 		return nil
 	}
 
-	cDpsObject := C.foreman_metric_resultset_nextdatapoints(self.cObject)
+	cDpsObject := C.foreman_metric_resultset_nextdatapoints(r.cObject)
 	if cDpsObject == nil {
 		return nil
 	}

@@ -37,15 +37,15 @@ func newObjectWithCObject(cObject unsafe.Pointer) *Object {
 }
 
 // CObject returns a registry object for Foreman C++.
-func (self *Object) CObject() (unsafe.Pointer, error) {
-	obj := C.foreman_registry_object_new()
+func (obj *Object) CObject() (unsafe.Pointer, error) {
+	cobj := C.foreman_registry_object_new()
 
-	C.foreman_registry_object_setid(obj, C.CString(self.ID))
-	C.foreman_registry_object_setparentid(obj, C.CString(self.ParentID))
-	C.foreman_registry_object_setname(obj, C.CString(self.Name))
-	C.foreman_registry_object_setdata(obj, C.CString(self.Data))
+	C.foreman_registry_object_setid(cobj, C.CString(obj.ID))
+	C.foreman_registry_object_setparentid(cobj, C.CString(obj.ParentID))
+	C.foreman_registry_object_setname(cobj, C.CString(obj.Name))
+	C.foreman_registry_object_setdata(cobj, C.CString(obj.Data))
 
-	return obj, nil
+	return cobj, nil
 }
 
 // newObjectsWithCObjects returns a new object from the C++ object.

@@ -24,6 +24,6 @@ func NewQuery() *Query {
 }
 
 // String returns a string description of the instance
-func (self *Query) String() string {
-	return fmt.Sprintf("%s", self.ParentID)
+func (q *Query) String() string {
+	return fmt.Sprintf("%s", q.ParentID)
 }

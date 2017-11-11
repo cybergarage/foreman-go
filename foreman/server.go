@@ -41,39 +41,39 @@ func NewServer() *Server {
 	return server
 }
 
-// LoadConfig loads a specified configutation file.
-func (self *Server) LoadConfig(filename string) error {
+// LoadConfig loads a specified configuration file.
+func (server *Server) LoadConfig(filename string) error {
 	config, err := NewConfigFromFile(filename)
 	if err != nil {
 		return err
 	}
 
-	return self.setConfig(config)
+	return server.setConfig(config)
 }
 
-// setConfig sets the specified configutations to the server.
-func (self *Server) setConfig(config *Config) error {
+// setConfig sets the specified configuration to the server.
+func (server *Server) setConfig(config *Config) error {
 	// FIXE : Not Implemented yet
 	return nil
 }
 
 // Start starts the server.
-func (self *Server) Start() error {
-	err := self.graphite.Start()
+func (server *Server) Start() error {
+	err := server.graphite.Start()
 	if err != nil {
-		self.Stop()
+		server.Stop()
 		return err
 	}
 
-	err = self.metricStore.Open()
+	err = server.metricStore.Open()
 	if err != nil {
-		self.Stop()
+		server.Stop()
 		return err
 	}
 
-	err = self.registryStore.Open()
+	err = server.registryStore.Open()
 	if err != nil {
-		self.Stop()
+		server.Stop()
 		return err
 	}
 
@@ -81,21 +81,21 @@ func (self *Server) Start() error {
 }
 
 // Stop stops the server.
-func (self *Server) Stop() error {
-	err := self.graphite.Stop()
+func (server *Server) Stop() error {
+	err := server.graphite.Stop()
 	if err != nil {
 		return err
 	}
 
-	err = self.metricStore.Close()
+	err = server.metricStore.Close()
 	if err != nil {
-		self.Stop()
+		server.Stop()
 		return err
 	}
 
-	err = self.registryStore.Close()
+	err = server.registryStore.Close()
 	if err != nil {
-		self.Stop()
+		server.Stop()
 		return err
 	}
 
@@ -103,13 +103,13 @@ func (self *Server) Stop() error {
 }
 
 // Restart restats the server.
-func (self *Server) Restart() error {
-	err := self.Stop()
+func (server *Server) Restart() error {
+	err := server.Stop()
 	if err != nil {
 		return err
 	}
 
-	err = self.Start()
+	err = server.Start()
 	if err != nil {
 		return err
 	}
@@ -118,7 +118,7 @@ func (self *Server) Restart() error {
 }
 
 // MetricRequestReceived is a listener for Graphite Carbon
-func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
+func (server *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 	// Ignore error requests
 	if err != nil {
 		return
@@ -131,7 +131,7 @@ func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 		fm.Timestamp = dp.Timestamp
 		fm.Value = dp.Value
 
-		err = self.metricStore.AddMetric(fm)
+		err = server.metricStore.AddMetric(fm)
 		if err != nil {
 			// TODO : Handle the error
 		}
@@ -139,7 +139,7 @@ func (self *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 }
 
 // QueryRequestReceived is a listener for Graphite Render
-func (self *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metric, error) {
+func (server *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metric, error) {
 	// Ignore error requests
 	if err != nil {
 		return nil, nil
@@ -151,7 +151,7 @@ func (self *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*grap
 	fq.From = gq.From
 	fq.Until = gq.Until
 
-	rs, err := self.metricStore.Query(fq)
+	rs, err := server.metricStore.Query(fq)
 	if err != nil {
 		return nil, err
 	}
@@ -182,10 +182,10 @@ func (self *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*grap
 }
 
 // HTTPRequestReceived is a listener for FQL
-func (self *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter) {
+func (server *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter) {
 	switch r.URL.Path {
 	case serverFQLPath:
-		self.fqlRequestReceived(r, w)
+		server.fqlRequestReceived(r, w)
 		return
 	}
 
@@ -193,11 +193,11 @@ func (self *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter) 
 }
 
 // fqlRequestReceived handles FQL requests
-func (self *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter) {
-	self.badRequestReceived(r, w)
+func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter) {
+	server.badRequestReceived(r, w)
 }
 
 // badRequestReceived returns http.StatusBadRequest
-func (self *Server) badRequestReceived(r *http.Request, w http.ResponseWriter) {
+func (server *Server) badRequestReceived(r *http.Request, w http.ResponseWriter) {
 	http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 }

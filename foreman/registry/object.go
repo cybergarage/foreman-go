@@ -24,43 +24,43 @@ func NewObject() *Object {
 }
 
 // isID returns whether the object has a specified ID.
-func (self *Object) isID(id string) bool {
-	if self.ID != id {
+func (obj *Object) isID(id string) bool {
+	if obj.ID != id {
 		return false
 	}
 	return true
 }
 
-// IsRootParentID returns whether the object has a specified ID.
-func (self *Object) IsParentID(id string) bool {
-	if self.ParentID != id {
+// IsParentID returns whether the object has a specified ID.
+func (obj *Object) IsParentID(id string) bool {
+	if obj.ParentID != id {
 		return false
 	}
 	return true
 }
 
 // IsRootParentID returns whether the object has a root parent ID.
-func (self *Object) IsRootParentID() bool {
-	return self.IsParentID(RootObjectID)
+func (obj *Object) IsRootParentID() bool {
+	return obj.IsParentID(RootObjectID)
 }
 
 // IsName returns whether the object has a specified name.
-func (self *Object) IsName(name string) bool {
-	if self.Name != name {
+func (obj *Object) IsName(name string) bool {
+	if obj.Name != name {
 		return false
 	}
 	return true
 }
 
 // IsData returns whether the object has a specified data.
-func (self *Object) IsData(data string) bool {
-	if self.Data != data {
+func (obj *Object) IsData(data string) bool {
+	if obj.Data != data {
 		return false
 	}
 	return true
 }
 
 // String returns a string description of the instance
-func (self *Object) String() string {
-	return fmt.Sprintf("[%s] : %s", self.ID, self.Name)
+func (obj *Object) String() string {
+	return fmt.Sprintf("[%s] : %s", obj.ID, obj.Name)
 }

@@ -63,20 +63,20 @@ func getStoreObjectByName(objs []*Object, name string) (*Object, error) {
 }
 
 // GetChildObjects returns all child objects.
-func (self *Store) GetChildObjects(parentID string) ([]*Object, error) {
+func (store *Store) GetChildObjects(parentID string) ([]*Object, error) {
 	q := NewQuery()
 	q.ParentID = parentID
-	return self.Browse(q)
+	return store.Browse(q)
 }
 
 // GetRootObjects returns all root objects
-func (self *Store) GetRootObjects() ([]*Object, error) {
-	return self.GetChildObjects(RootObjectID)
+func (store *Store) GetRootObjects() ([]*Object, error) {
+	return store.GetChildObjects(RootObjectID)
 }
 
 // GetChildObjectByName returns an object which has the specified name under the specified parent object.
-func (self *Store) GetChildObjectByName(parentID string, name string) (*Object, error) {
-	objs, err := self.GetChildObjects(parentID)
+func (store *Store) GetChildObjectByName(parentID string, name string) (*Object, error) {
+	objs, err := store.GetChildObjects(parentID)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func (self *Store) GetChildObjectByName(parentID string, name string) (*Object, 
 }
 
 // GetObjectByNamePath return an object by the specified name path.
-func (self *Store) GetObjectByNamePath(namePath string) (*Object, error) {
+func (store *Store) GetObjectByNamePath(namePath string) (*Object, error) {
 	names, err := getStorePathStrings(namePath)
 	if err != nil {
 		return nil, err
@@ -93,9 +93,9 @@ func (self *Store) GetObjectByNamePath(namePath string) (*Object, error) {
 	var lastObj *Object
 	for n, name := range names {
 		if n == 0 {
-			lastObj, err = self.GetChildObjectByName(RootObjectID, name)
+			lastObj, err = store.GetChildObjectByName(RootObjectID, name)
 		} else {
-			lastObj, err = self.GetChildObjectByName(lastObj.ID, name)
+			lastObj, err = store.GetChildObjectByName(lastObj.ID, name)
 		}
 		if err != nil {
 			return nil, err
@@ -109,13 +109,13 @@ func (self *Store) GetObjectByNamePath(namePath string) (*Object, error) {
 }
 
 // GetChildObjectsByNamePath return all objects by the specified name path.
-func (self *Store) GetChildObjectsByNamePath(namePath string) ([]*Object, error) {
-	pathObj, err := self.GetObjectByNamePath(namePath)
+func (store *Store) GetChildObjectsByNamePath(namePath string) ([]*Object, error) {
+	pathObj, err := store.GetObjectByNamePath(namePath)
 	if err != nil {
 		return nil, err
 	}
 	if pathObj == nil {
 		return []*Object{}, nil
 	}
-	return self.GetChildObjects(pathObj.ID)
+	return store.GetChildObjects(pathObj.ID)
 }

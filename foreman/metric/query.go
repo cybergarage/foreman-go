@@ -30,6 +30,6 @@ func NewQuery() *Query {
 }
 
 // String returns a string description of the instance
-func (self *Query) String() string {
-	return fmt.Sprintf("%s [%s - %s]", self.Target, self.From.String(), self.Until.String())
+func (q *Query) String() string {
+	return fmt.Sprintf("%s [%s - %s]", q.Target, q.From.String(), q.Until.String())
 }

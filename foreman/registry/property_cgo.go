@@ -11,11 +11,11 @@ import "C"
 import "unsafe"
 
 // CObject returns a registry property for Foreman C++.
-func (self *Property) CObject() (unsafe.Pointer, error) {
-	prop := C.foreman_registry_property_new()
+func (prop *Property) CObject() (unsafe.Pointer, error) {
+	cprop := C.foreman_registry_property_new()
 
-	C.foreman_registry_property_setname(prop, C.CString(self.Name))
-	C.foreman_registry_property_setdata(prop, C.CString(self.Data))
+	C.foreman_registry_property_setname(cprop, C.CString(prop.Name))
+	C.foreman_registry_property_setdata(cprop, C.CString(prop.Data))
 
-	return prop, nil
+	return cprop, nil
 }
