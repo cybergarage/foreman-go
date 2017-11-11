@@ -14,16 +14,16 @@ import (
 import "C"
 
 // CQuery returns a Query object for Foreman C++.
-func (self *Query) CQuery() (unsafe.Pointer, error) {
+func (q *Query) CQuery() (unsafe.Pointer, error) {
 	cq := C.foreman_metric_query_new()
 
-	C.foreman_metric_query_settarget(cq, C.CString(self.Target))
-	C.foreman_metric_query_setinterval(cq, (C.time_t)(self.Interval.Seconds()))
-	if self.From != nil {
-		C.foreman_metric_query_setfrom(cq, (C.time_t)(self.From.Unix()))
+	C.foreman_metric_query_settarget(cq, C.CString(q.Target))
+	C.foreman_metric_query_setinterval(cq, (C.time_t)(q.Interval.Seconds()))
+	if q.From != nil {
+		C.foreman_metric_query_setfrom(cq, (C.time_t)(q.From.Unix()))
 	}
-	if self.Until != nil {
-		C.foreman_metric_query_setuntil(cq, (C.time_t)(self.Until.Unix()))
+	if q.Until != nil {
+		C.foreman_metric_query_setuntil(cq, (C.time_t)(q.Until.Unix()))
 	}
 
 	return cq, nil

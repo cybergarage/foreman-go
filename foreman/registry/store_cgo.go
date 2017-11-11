@@ -22,47 +22,47 @@ type cgoStore struct {
 }
 
 // Open initializes the store.
-func (self *cgoStore) Open() error {
-	if self.cStore == nil {
+func (store *cgoStore) Open() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_registry_store_open(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotOpen, self)
+	if !C.foreman_registry_store_open(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotOpen, store)
 	}
 
 	return nil
 }
 
 // Close closes the store.
-func (self *cgoStore) Close() error {
-	if self.cStore == nil {
+func (store *cgoStore) Close() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_registry_store_close(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotClose, self)
+	if !C.foreman_registry_store_close(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotClose, store)
 	}
 
 	return nil
 }
 
 // Clear remove all registry data.
-func (self *cgoStore) Clear() error {
-	if self.cStore == nil {
+func (store *cgoStore) Clear() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_registry_store_clear(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotClear, self)
+	if !C.foreman_registry_store_clear(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotClear, store)
 	}
 
 	return nil
 }
 
 // CreateObject insert a new object
-func (self *cgoStore) CreateObject(obj *Object) error {
-	if self.cStore == nil {
+func (store *cgoStore) CreateObject(obj *Object) error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -75,7 +75,7 @@ func (self *cgoStore) CreateObject(obj *Object) error {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_createobject(self.cStore, cobj, cerr) {
+	if !C.foreman_registry_store_createobject(store.cStore, cobj, cerr) {
 		return errors.NewWithCObject(cerr)
 	}
 
@@ -88,8 +88,8 @@ func (self *cgoStore) CreateObject(obj *Object) error {
 }
 
 // CreateObject insert a new object
-func (self *cgoStore) UpdateObject(obj *Object) error {
-	if self.cStore == nil {
+func (store *cgoStore) UpdateObject(obj *Object) error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -102,7 +102,7 @@ func (self *cgoStore) UpdateObject(obj *Object) error {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_updateobject(self.cStore, cobj, cerr) {
+	if !C.foreman_registry_store_updateobject(store.cStore, cobj, cerr) {
 		return errors.NewWithCObject(cerr)
 	}
 
@@ -110,8 +110,8 @@ func (self *cgoStore) UpdateObject(obj *Object) error {
 }
 
 // GetObject gets a specified object.
-func (self *cgoStore) GetObject(objID string) (*Object, error) {
-	if self.cStore == nil {
+func (store *cgoStore) GetObject(objID string) (*Object, error) {
+	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -121,7 +121,7 @@ func (self *cgoStore) GetObject(objID string) (*Object, error) {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_getobject(self.cStore, C.CString(objID), cobj, cerr) {
+	if !C.foreman_registry_store_getobject(store.cStore, C.CString(objID), cobj, cerr) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
@@ -129,15 +129,15 @@ func (self *cgoStore) GetObject(objID string) (*Object, error) {
 }
 
 // DeleteObject deletes a specified object.
-func (self *cgoStore) DeleteObject(objID string) error {
-	if self.cStore == nil {
+func (store *cgoStore) DeleteObject(objID string) error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_deleteobject(self.cStore, C.CString(objID), cerr) {
+	if !C.foreman_registry_store_deleteobject(store.cStore, C.CString(objID), cerr) {
 		return errors.NewWithCObject(cerr)
 	}
 
@@ -145,8 +145,8 @@ func (self *cgoStore) DeleteObject(objID string) error {
 }
 
 // Browse returns a child objects
-func (self *cgoStore) Browse(q *Query) ([]*Object, error) {
-	if self.cStore == nil {
+func (store *cgoStore) Browse(q *Query) ([]*Object, error) {
+	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -162,7 +162,7 @@ func (self *cgoStore) Browse(q *Query) ([]*Object, error) {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_browse(self.cStore, cq, cobjs, cerr) {
+	if !C.foreman_registry_store_browse(store.cStore, cq, cobjs, cerr) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
@@ -170,8 +170,8 @@ func (self *cgoStore) Browse(q *Query) ([]*Object, error) {
 }
 
 // Search finds a specified objects.
-func (self *cgoStore) Search(q *Query) ([]*Object, error) {
-	if self.cStore == nil {
+func (store *cgoStore) Search(q *Query) ([]*Object, error) {
+	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -187,7 +187,7 @@ func (self *cgoStore) Search(q *Query) ([]*Object, error) {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_search(self.cStore, cq, cobjs, cerr) {
+	if !C.foreman_registry_store_search(store.cStore, cq, cobjs, cerr) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
@@ -195,9 +195,9 @@ func (self *cgoStore) Search(q *Query) ([]*Object, error) {
 }
 
 // String returns a string description of the instance
-func (self *cgoStore) String() string {
-	if self.cStore == nil {
+func (store *cgoStore) String() string {
+	if store.cStore == nil {
 		return ""
 	}
-	return fmt.Sprintf("%s/%s", C.GoString(C.foreman_registry_store_gettype(self.cStore)), C.GoString(C.foreman_registry_store_getversion(self.cStore)))
+	return fmt.Sprintf("%s/%s", C.GoString(C.foreman_registry_store_gettype(store.cStore)), C.GoString(C.foreman_registry_store_getversion(store.cStore)))
 }

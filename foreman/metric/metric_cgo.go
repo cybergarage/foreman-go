@@ -14,12 +14,12 @@ import (
 )
 
 // CMetric returns a data object for Foreman C++.
-func (self *Metric) CMetric() (unsafe.Pointer, error) {
+func (m *Metric) CMetric() (unsafe.Pointer, error) {
 	cm := C.foreman_metric_new()
 
-	C.foreman_metric_setname(cm, C.CString(self.Name))
-	C.foreman_metric_setvalue(cm, C.double(self.Value))
-	C.foreman_metric_settimestamp(cm, (C.time_t)(self.Timestamp.Unix()))
+	C.foreman_metric_setname(cm, C.CString(m.Name))
+	C.foreman_metric_setvalue(cm, C.double(m.Value))
+	C.foreman_metric_settimestamp(cm, (C.time_t)(m.Timestamp.Unix()))
 
 	return cm, nil
 }
