@@ -7,4 +7,6 @@ package registry
 
 const (
 	RootObjectID = "0"
+	RootPath     = "/"
+	PathDelim    = "/"
 )

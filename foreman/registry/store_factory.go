@@ -14,14 +14,21 @@ import (
 	"unsafe"
 )
 
-func newStoreWithCObject(cObject unsafe.Pointer) *CgoStore {
-	store := &CgoStore{}
-	store.cStore = cObject
-	runtime.SetFinalizer(store, storeFinalizer)
+func newStoreWithInterface(storeImpl Storing) *Store {
+	store := &Store{
+		Storing: storeImpl,
+	}
 	return store
 }
 
-func storeFinalizer(self *CgoStore) {
+func newStoreWithCObject(cObject unsafe.Pointer) *Store {
+	storeImp := &cgoStore{}
+	storeImp.cStore = cObject
+	runtime.SetFinalizer(storeImp, storeFinalizer)
+	return newStoreWithInterface(storeImp)
+}
+
+func storeFinalizer(self *cgoStore) {
 	if self.cStore != nil {
 		if C.foreman_registry_store_delete(self.cStore) {
 			self.cStore = nil
@@ -30,12 +37,12 @@ func storeFinalizer(self *CgoStore) {
 }
 
 // NewSQLiteStore returns a new SQLite store.
-func NewSQLiteStore() Store {
+func NewSQLiteStore() *Store {
 	store := newStoreWithCObject(C.foreman_registry_sqlite_store_new())
 	return store
 }
 
 // NewStore returns a new store.
-func NewStore() Store {
+func NewStore() *Store {
 	return NewSQLiteStore()
 }

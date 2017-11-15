@@ -24,6 +24,6 @@ func NewMetric() *Metric {
 }
 
 // String returns a string description of the instance
-func (self *Metric) String() string {
-	return fmt.Sprintf("%s : %f (%d)", self.Name, self.Value, self.Timestamp.Unix())
+func (m *Metric) String() string {
+	return fmt.Sprintf("%s : %f (%d)", m.Name, m.Value, m.Timestamp.Unix())
 }

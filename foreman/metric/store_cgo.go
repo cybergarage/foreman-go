@@ -18,75 +18,75 @@ import (
 )
 
 // Store represents a metric store for Foreman.
-type CgoStore struct {
+type cgoStore struct {
 	cStore unsafe.Pointer
 }
 
 // Open initializes the store.
-func (self *CgoStore) Open() error {
-	if self.cStore == nil {
+func (store *cgoStore) Open() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_metric_store_open(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotOpen, self)
+	if !C.foreman_metric_store_open(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotOpen, store)
 	}
 
 	return nil
 }
 
 // Close closes the store.
-func (self *CgoStore) Close() error {
-	if self.cStore == nil {
+func (store *cgoStore) Close() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_metric_store_close(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotClose, self)
+	if !C.foreman_metric_store_close(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotClose, store)
 	}
 
 	return nil
 }
 
 // Clear remove all inserted data.
-func (self *CgoStore) Clear() error {
-	if self.cStore == nil {
+func (store *cgoStore) Clear() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_metric_store_clear(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotClose, self)
+	if !C.foreman_metric_store_clear(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotClose, store)
 	}
 
 	return nil
 }
 
 // SetRetentionInterval sets the retention duration.
-func (self *CgoStore) SetRetentionInterval(value time.Duration) error {
-	if self.cStore == nil {
+func (store *cgoStore) SetRetentionInterval(value time.Duration) error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	C.foreman_metric_store_setretentioninterval(self.cStore, C.time_t(value.Seconds()))
+	C.foreman_metric_store_setretentioninterval(store.cStore, C.time_t(value.Seconds()))
 
 	return nil
 }
 
 // GetRetentionInterval returns the retention duration.
-func (self *CgoStore) GetRetentionInterval() (time.Duration, error) {
-	if self.cStore == nil {
+func (store *cgoStore) GetRetentionInterval() (time.Duration, error) {
+	if store.cStore == nil {
 		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	durationSec := C.foreman_metric_store_getretentioninterval(self.cStore)
+	durationSec := C.foreman_metric_store_getretentioninterval(store.cStore)
 	duration := time.Second * time.Duration(durationSec)
 
 	return duration, nil
 }
 
 // AddMetric adds a new metric.
-func (self *CgoStore) AddMetric(m *Metric) error {
-	if self.cStore == nil {
+func (store *cgoStore) AddMetric(m *Metric) error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -95,7 +95,7 @@ func (self *CgoStore) AddMetric(m *Metric) error {
 		return err
 	}
 
-	isSuccess, err := C.foreman_metric_store_addmetric(self.cStore, cm)
+	isSuccess, err := C.foreman_metric_store_addmetric(store.cStore, cm)
 	if err != nil {
 		return err
 	}
@@ -107,12 +107,12 @@ func (self *CgoStore) AddMetric(m *Metric) error {
 }
 
 // Query gets the specified metrics.
-func (self *CgoStore) Query(q *Query) (ResultSet, error) {
-	if self.cStore == nil {
+func (store *cgoStore) Query(q *Query) (ResultSet, error) {
+	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	duration, err := self.GetRetentionInterval()
+	duration, err := store.GetRetentionInterval()
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (self *CgoStore) Query(q *Query) (ResultSet, error) {
 
 	crs := C.foreman_metric_resultset_new()
 
-	if !C.foreman_metric_store_query(self.cStore, cq, crs) {
+	if !C.foreman_metric_store_query(store.cStore, cq, crs) {
 		C.foreman_metric_resultset_delete(crs)
 		return nil, fmt.Errorf(errorStoreCouldNotAddMetric, q.String())
 	}
@@ -134,7 +134,7 @@ func (self *CgoStore) Query(q *Query) (ResultSet, error) {
 }
 
 // String returns a string description of the instance
-func (self *CgoStore) String() string {
+func (store *cgoStore) String() string {
 	// FIXME : Not implemented
 	return fmt.Sprintf("")
 }

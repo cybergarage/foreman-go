@@ -23,6 +23,6 @@ func NewDataPoint() *DataPoint {
 }
 
 // String returns a string description of the instance
-func (self *DataPoint) String() string {
-	return fmt.Sprintf("[%d] %f", self.Timestamp.Unix(), self.Value)
+func (dp *DataPoint) String() string {
+	return fmt.Sprintf("[%d] %f", dp.Timestamp.Unix(), dp.Value)
 }
