@@ -14,10 +14,10 @@ import (
 )
 
 // CObject returns a registry query for Foreman C++.
-func (self *Query) CObject() (unsafe.Pointer, error) {
-	q := C.foreman_registry_query_new()
+func (q *Query) CObject() (unsafe.Pointer, error) {
+	cq := C.foreman_registry_query_new()
 
-	C.foreman_registry_query_setparentid(q, C.CString(self.ParentID))
+	C.foreman_registry_query_setparentid(cq, C.CString(q.ParentID))
 
-	return q, nil
+	return cq, nil
 }

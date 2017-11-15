@@ -17,52 +17,52 @@ import (
 )
 
 // Store represents a registry store for Foreman.
-type CgoStore struct {
+type cgoStore struct {
 	cStore unsafe.Pointer
 }
 
 // Open initializes the store.
-func (self *CgoStore) Open() error {
-	if self.cStore == nil {
+func (store *cgoStore) Open() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_registry_store_open(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotOpen, self)
+	if !C.foreman_registry_store_open(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotOpen, store)
 	}
 
 	return nil
 }
 
 // Close closes the store.
-func (self *CgoStore) Close() error {
-	if self.cStore == nil {
+func (store *cgoStore) Close() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_registry_store_close(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotClose, self)
+	if !C.foreman_registry_store_close(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotClose, store)
 	}
 
 	return nil
 }
 
 // Clear remove all registry data.
-func (self *CgoStore) Clear() error {
-	if self.cStore == nil {
+func (store *cgoStore) Clear() error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	if !C.foreman_registry_store_clear(self.cStore) {
-		return fmt.Errorf(errorStoreCouldNotClear, self)
+	if !C.foreman_registry_store_clear(store.cStore) {
+		return fmt.Errorf(errorStoreCouldNotClear, store)
 	}
 
 	return nil
 }
 
 // CreateObject insert a new object
-func (self *CgoStore) CreateObject(obj *Object) error {
-	if self.cStore == nil {
+func (store *cgoStore) CreateObject(obj *Object) error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -75,16 +75,21 @@ func (self *CgoStore) CreateObject(obj *Object) error {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_createobject(self.cStore, cobj, cerr) {
+	if !C.foreman_registry_store_createobject(store.cStore, cobj, cerr) {
 		return errors.NewWithCObject(cerr)
 	}
 
+	var cID *C.char
+	if C.foreman_registry_object_getid(cobj, &cID) {
+		obj.ID = C.GoString(cID)
+	}
+
 	return nil
 }
 
 // CreateObject insert a new object
-func (self *CgoStore) UpdateObject(obj *Object) error {
-	if self.cStore == nil {
+func (store *cgoStore) UpdateObject(obj *Object) error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -97,7 +102,7 @@ func (self *CgoStore) UpdateObject(obj *Object) error {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_updateobject(self.cStore, cobj, cerr) {
+	if !C.foreman_registry_store_updateobject(store.cStore, cobj, cerr) {
 		return errors.NewWithCObject(cerr)
 	}
 
@@ -105,8 +110,8 @@ func (self *CgoStore) UpdateObject(obj *Object) error {
 }
 
 // GetObject gets a specified object.
-func (self *CgoStore) GetObject(objID string) (*Object, error) {
-	if self.cStore == nil {
+func (store *cgoStore) GetObject(objID string) (*Object, error) {
+	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -116,23 +121,23 @@ func (self *CgoStore) GetObject(objID string) (*Object, error) {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_getobject(self.cStore, C.CString(objID), cobj, cerr) {
+	if !C.foreman_registry_store_getobject(store.cStore, C.CString(objID), cobj, cerr) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
-	return NewObjectWithCObject(cobj), nil
+	return newObjectWithCObject(cobj), nil
 }
 
 // DeleteObject deletes a specified object.
-func (self *CgoStore) DeleteObject(objID string) error {
-	if self.cStore == nil {
+func (store *cgoStore) DeleteObject(objID string) error {
+	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_deleteobject(self.cStore, C.CString(objID), cerr) {
+	if !C.foreman_registry_store_deleteobject(store.cStore, C.CString(objID), cerr) {
 		return errors.NewWithCObject(cerr)
 	}
 
@@ -140,8 +145,8 @@ func (self *CgoStore) DeleteObject(objID string) error {
 }
 
 // Browse returns a child objects
-func (self *CgoStore) Browse(q *Query) ([]*Object, error) {
-	if self.cStore == nil {
+func (store *cgoStore) Browse(q *Query) ([]*Object, error) {
+	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -157,16 +162,16 @@ func (self *CgoStore) Browse(q *Query) ([]*Object, error) {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_browse(self.cStore, cq, cobjs, cerr) {
+	if !C.foreman_registry_store_browse(store.cStore, cq, cobjs, cerr) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
-	return NewObjectsWithCObject(cobjs), nil
+	return newObjectsWithCObjects(cobjs), nil
 }
 
 // Search finds a specified objects.
-func (self *CgoStore) Search(q *Query) ([]*Object, error) {
-	if self.cStore == nil {
+func (store *cgoStore) Search(q *Query) ([]*Object, error) {
+	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
@@ -182,17 +187,17 @@ func (self *CgoStore) Search(q *Query) ([]*Object, error) {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_search(self.cStore, cq, cobjs, cerr) {
+	if !C.foreman_registry_store_search(store.cStore, cq, cobjs, cerr) {
 		return nil, errors.NewWithCObject(cerr)
 	}
 
-	return NewObjectsWithCObject(cobjs), nil
+	return newObjectsWithCObjects(cobjs), nil
 }
 
 // String returns a string description of the instance
-func (self *CgoStore) String() string {
-	if self.cStore == nil {
+func (store *cgoStore) String() string {
+	if store.cStore == nil {
 		return ""
 	}
-	return fmt.Sprintf("%s/%s", C.GoString(C.foreman_registry_store_gettype(self.cStore)), C.GoString(C.foreman_registry_store_getversion(self.cStore)))
+	return fmt.Sprintf("%s/%s", C.GoString(C.foreman_registry_store_gettype(store.cStore)), C.GoString(C.foreman_registry_store_getversion(store.cStore)))
 }

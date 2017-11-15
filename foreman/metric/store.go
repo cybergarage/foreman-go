@@ -10,8 +10,8 @@ import "C"
 
 import "time"
 
-// Store represents an abstract interface of metric store for Foreman.
-type Store interface {
+// Storing represents an abstract interface of metric store
+type Storing interface {
 	SetRetentionInterval(value time.Duration) error
 	GetRetentionInterval() (time.Duration, error)
 
@@ -23,4 +23,9 @@ type Store interface {
 	Query(q *Query) (ResultSet, error)
 
 	String() string
+}
+
+// Store represents an metric store.
+type Store struct {
+	Storing
 }
