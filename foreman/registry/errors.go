@@ -9,4 +9,6 @@ const (
 	errorStoreCouldNotOpen  = "Couldn't open : %s"
 	errorStoreCouldNotClose = "Couldn't close : %s"
 	errorStoreCouldNotClear = "Couldn't clear : %s"
+
+	errorInvalidPropertyData = "Invalid property data : %s"
 )

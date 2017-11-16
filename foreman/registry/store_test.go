@@ -139,7 +139,7 @@ func testCreateRootObjects(t *testing.T, store *Store) {
 		}
 
 		if !reflect.DeepEqual(obj, fetchObj) {
-			t.Errorf("%s != %s", obj, fetchObj)
+			t.Errorf("'%s' != '%s'", obj, fetchObj)
 		}
 	}
 
