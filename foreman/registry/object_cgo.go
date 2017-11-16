@@ -31,6 +31,9 @@ func newObjectWithCObject(cObject unsafe.Pointer) *Object {
 		if C.foreman_registry_object_getdata(cObject, &cString) {
 			obj.Data = C.GoString(cString)
 		}
+		if C.foreman_registry_object_getpropertydata(cObject, &cString) {
+			obj.propertyData = C.GoString(cString)
+		}
 	}
 
 	return obj
@@ -44,6 +47,7 @@ func (obj *Object) CObject() (unsafe.Pointer, error) {
 	C.foreman_registry_object_setparentid(cobj, C.CString(obj.ParentID))
 	C.foreman_registry_object_setname(cobj, C.CString(obj.Name))
 	C.foreman_registry_object_setdata(cobj, C.CString(obj.Data))
+	C.foreman_registry_object_setpropertydata(cobj, C.CString(obj.propertyData))
 
 	return cobj, nil
 }
