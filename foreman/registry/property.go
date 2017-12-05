@@ -15,7 +15,7 @@ type Property struct {
 	Data string
 }
 
-// NewProperty returns a propery object.
+// NewProperty returns a property object.
 func NewProperty() *Property {
 	prop := &Property{}
 	return prop
