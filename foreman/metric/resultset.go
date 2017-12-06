@@ -6,7 +6,7 @@
 package metric
 
 // #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog
+// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -lua -lpython
 import "C"
 
 // ResultSet represents an abstract interface of metric store for Foreman.
