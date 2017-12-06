@@ -5,9 +5,6 @@
 // Package metric provides query interfaces for metric store.
 package metric
 
-// #include <foreman/foreman-c.h>
-import "C"
-
 import "time"
 
 // Storing represents an abstract interface of metric store
