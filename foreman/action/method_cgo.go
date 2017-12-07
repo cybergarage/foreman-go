@@ -16,7 +16,7 @@ import (
 
 // CObject returns a method objectfor foreman-cc.
 func (method *Method) CObject() (unsafe.Pointer, error) {
-	cmethod := C.foreman_action_method_new()
+	cmethod := C.foreman_action_method_new(C.CString(method.Language))
 	if cmethod == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
