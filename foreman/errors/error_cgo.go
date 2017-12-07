@@ -6,7 +6,7 @@
 package errors
 
 // #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -lua -lpython
+// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
 import "C"
 
 import (

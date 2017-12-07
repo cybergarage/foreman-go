@@ -6,13 +6,21 @@
 package registry
 
 // #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -lua -lpython
+// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
 import "C"
-import "unsafe"
+import (
+	"fmt"
+	"unsafe"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
+)
 
 // CObject returns a registry property for Foreman C++.
 func (prop *Property) CObject() (unsafe.Pointer, error) {
 	cprop := C.foreman_registry_property_new()
+	if cprop == nil {
+		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
 
 	C.foreman_registry_property_setname(cprop, C.CString(prop.Name))
 	C.foreman_registry_property_setdata(cprop, C.CString(prop.Data))

@@ -6,11 +6,14 @@
 package registry
 
 // #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -lua -lpython
+// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
 import "C"
 
 import (
+	"fmt"
 	"unsafe"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
 // NewObjectWithCObject returns a new object from the C++ object.
@@ -42,6 +45,9 @@ func newObjectWithCObject(cObject unsafe.Pointer) *Object {
 // CObject returns a registry object for Foreman C++.
 func (obj *Object) CObject() (unsafe.Pointer, error) {
 	cobj := C.foreman_registry_object_new()
+	if cobj == nil {
+		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
 
 	C.foreman_registry_object_setid(cobj, C.CString(obj.ID))
 	C.foreman_registry_object_setparentid(cobj, C.CString(obj.ParentID))
