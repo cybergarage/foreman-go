@@ -74,6 +74,38 @@ func (param *Parameter) GetName() string {
 	return param.Name
 }
 
+// Equals returns true when the specified parameter is same, otherwise false.
+func (param *Parameter) Equals(other *Parameter) bool {
+	if param.Name != other.Name {
+		return false
+	}
+
+	if param.Type != other.Type {
+		return false
+	}
+
+	switch param.Type {
+	case ParameterIntegerType:
+		if param.iValue != other.iValue {
+			return false
+		}
+	case ParameterRealType:
+		if param.rValue != other.rValue {
+			return false
+		}
+	case ParameterBoolType:
+		if param.bValue != other.bValue {
+			return false
+		}
+	case ParameterStringType:
+		if param.sValue != other.sValue {
+			return false
+		}
+	}
+
+	return true
+}
+
 // IsInteger returns whether the parameter type is integer.
 func (param *Parameter) IsInteger() bool {
 	if param.Type != ParameterIntegerType {
