@@ -6,16 +6,22 @@
 package metric
 
 import (
+	"fmt"
 	"unsafe"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
 // #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -lua -lpython
+// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
 import "C"
 
 // CQuery returns a Query object for Foreman C++.
 func (q *Query) CQuery() (unsafe.Pointer, error) {
 	cq := C.foreman_metric_query_new()
+	if cq == nil {
+		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
 
 	C.foreman_metric_query_settarget(cq, C.CString(q.Target))
 	C.foreman_metric_query_setinterval(cq, (C.time_t)(q.Interval.Seconds()))

@@ -6,16 +6,22 @@
 package registry
 
 // #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -lua -lpython
+// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
 import "C"
 
 import (
+	"fmt"
 	"unsafe"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
 // CObject returns a registry query for Foreman C++.
 func (q *Query) CObject() (unsafe.Pointer, error) {
 	cq := C.foreman_registry_query_new()
+	if cq == nil {
+		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
 
 	C.foreman_registry_query_setparentid(cq, C.CString(q.ParentID))
 
