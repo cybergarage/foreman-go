@@ -42,7 +42,7 @@ func newObjectWithCObject(cObject unsafe.Pointer) *Object {
 	return obj
 }
 
-// CObject returns a registry object for Foreman C++.
+// CObject returns a registry object for foreman-cc.
 func (obj *Object) CObject() (unsafe.Pointer, error) {
 	cobj := C.foreman_registry_object_new()
 	if cobj == nil {

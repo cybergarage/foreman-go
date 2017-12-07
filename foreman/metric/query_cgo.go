@@ -16,7 +16,7 @@ import (
 // #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
 import "C"
 
-// CQuery returns a Query object for Foreman C++.
+// CQuery returns a Query object for foreman-cc.
 func (q *Query) CQuery() (unsafe.Pointer, error) {
 	cq := C.foreman_metric_query_new()
 	if cq == nil {

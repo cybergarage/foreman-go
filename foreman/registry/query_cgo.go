@@ -16,7 +16,7 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-// CObject returns a registry query for Foreman C++.
+// CObject returns a registry query for foreman-cc.
 func (q *Query) CObject() (unsafe.Pointer, error) {
 	cq := C.foreman_registry_query_new()
 	if cq == nil {
