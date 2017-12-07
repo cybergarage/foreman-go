@@ -8,8 +8,8 @@ package action
 type EncodingType int
 
 const (
-	None EncodingType = iota
-	Base64
+	EncodingNone   = 0
+	EncodingBase64 = 1
 )
 
 // Method represents an action method.
@@ -17,11 +17,13 @@ type Method struct {
 	Language string
 	Name     string
 	Code     []byte
-	Encoding EncodingType
+	Encoding int
 }
 
 // NewMethod returns a new method.
 func NewMethod() *Method {
-	m := &Method{}
+	m := &Method{
+		Encoding: EncodingNone,
+	}
 	return m
 }

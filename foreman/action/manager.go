@@ -5,8 +5,16 @@
 // Package action provides scripting interfaces.
 package action
 
-// Manager represents an abstract interface of action manager
-type Manager interface {
+// Scripting represents an abstract interface of action script manager
+type Scripting interface {
+	HasEngine(method string) bool
+
 	AddMethod(method *Method) error
+	HasMethod(method string) bool
 	ExecMethod(name string, params Parameters, results Parameters) error
+}
+
+// Manager represents an action manager.
+type Manager struct {
+	Scripting
 }

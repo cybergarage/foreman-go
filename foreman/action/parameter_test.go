@@ -11,7 +11,7 @@ import (
 func TestNewIntegerParameter(t *testing.T) {
 	param := NewParameterFromInteger("", 0)
 	if !param.IsInteger() {
-		t.Errorf(errorInvalidType, param.Type, IntegerType)
+		t.Errorf(errorInvalidParameterType, param.Type, ParameterIntegerType)
 	}
 	_, err := param.GetInteger()
 	if err != nil {
@@ -22,7 +22,7 @@ func TestNewIntegerParameter(t *testing.T) {
 func TestNewRealParameter(t *testing.T) {
 	param := NewParameterFromReal("", 0)
 	if !param.IsReal() {
-		t.Errorf(errorInvalidType, param.Type, RealType)
+		t.Errorf(errorInvalidParameterType, param.Type, ParameterRealType)
 	}
 	_, err := param.GetReal()
 	if err != nil {
@@ -33,7 +33,7 @@ func TestNewRealParameter(t *testing.T) {
 func TestNewBoolParameter(t *testing.T) {
 	param := NewParameterFromBool("", true)
 	if !param.IsBool() {
-		t.Errorf(errorInvalidType, param.Type, BoolType)
+		t.Errorf(errorInvalidParameterType, param.Type, ParameterBoolType)
 	}
 	_, err := param.GetBool()
 	if err != nil {
@@ -44,7 +44,7 @@ func TestNewBoolParameter(t *testing.T) {
 func TestNewStringParameter(t *testing.T) {
 	param := NewParameterFromString("", "")
 	if !param.IsString() {
-		t.Errorf(errorInvalidType, param.Type, StringType)
+		t.Errorf(errorInvalidParameterType, param.Type, ParameterStringType)
 	}
 	_, err := param.GetString()
 	if err != nil {

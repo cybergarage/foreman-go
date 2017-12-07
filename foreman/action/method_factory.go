@@ -4,7 +4,11 @@
 
 package action
 
-const (
-	errorUnknownParameterType = "Unknown parameter type (%d)"
-	errorInvalidParameterType = "Invalid parameter type (%d != %d)"
-)
+import "C"
+
+// NewPythonMethod returns a new Python method.
+func NewPythonMethod() *Method {
+	m := NewMethod()
+	m.Language = PythonEngine
+	return m
+}
