@@ -19,6 +19,10 @@ const (
 	ParameterStringType
 )
 
+const (
+	parameterStringFormat = "%s (%d) : %s"
+)
+
 // Parameter represents a parameter for action method.
 type Parameter struct {
 	Name   string
@@ -168,4 +172,26 @@ func (param *Parameter) GetString() (string, error) {
 		return "", fmt.Errorf(errorInvalidParameterType, param.Type, ParameterStringType)
 	}
 	return param.sValue, nil
+}
+
+// String returns a string description of the instance
+func (param *Parameter) String() string {
+	switch param.Type {
+	case ParameterIntegerType:
+		strValue := fmt.Sprintf("%d", param.iValue)
+		return fmt.Sprintf(parameterStringFormat, param.Name, param.Type, strValue)
+	case ParameterRealType:
+		strValue := fmt.Sprintf("%f", param.rValue)
+		return fmt.Sprintf(parameterStringFormat, param.Name, param.Type, strValue)
+	case ParameterBoolType:
+		strValue := "true"
+		if !param.bValue {
+			strValue = "false"
+		}
+		return fmt.Sprintf(parameterStringFormat, param.Name, param.Type, strValue)
+	case ParameterStringType:
+		return fmt.Sprintf(parameterStringFormat, param.Name, param.Type, param.sValue)
+	}
+
+	return ""
 }
