@@ -15,7 +15,7 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-// CObject returns a registry property for Foreman C++.
+// CObject returns a registry property for foreman-cc.
 func (prop *Property) CObject() (unsafe.Pointer, error) {
 	cprop := C.foreman_registry_property_new()
 	if cprop == nil {

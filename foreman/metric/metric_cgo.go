@@ -16,7 +16,7 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-// CMetric returns a data object for Foreman C++.
+// CMetric returns a data object for foreman-cc.
 func (m *Metric) CMetric() (unsafe.Pointer, error) {
 	cm := C.foreman_metric_new()
 	if cm == nil {
