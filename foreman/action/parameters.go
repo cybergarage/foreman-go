@@ -18,3 +18,23 @@ func (params Parameters) AddParameter(param *Parameter) error {
 	params[param.Name] = param
 	return nil
 }
+
+// Equals returns true when the specified parameters is same, otherwise false.
+func (params Parameters) Equals(others Parameters) bool {
+	if len(params) != len(others) {
+		return false
+	}
+
+	for name, param := range params {
+		oparam, ok := others[name]
+		if !ok {
+			return false
+		}
+
+		if !param.Equals(oparam) {
+			return false
+		}
+	}
+
+	return true
+}
