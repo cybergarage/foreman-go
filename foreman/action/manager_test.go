@@ -16,8 +16,9 @@ const (
 )
 
 const (
-	errorMethodNotFound = "Method (%s) is not found"
-	errorEngineNotFound = "Script Engine (%s) is not found"
+	errorMethodNotFound  = "Method (%s) is not found"
+	errorEngineNotFound  = "Script Engine (%s) is not found"
+	errorObjectNotEquals = "Object does not equal (%v != %v)"
 )
 
 func echoExecutionTest(t *testing.T, mgr *Manager, method *Method, params Parameters, results Parameters) error {
@@ -31,12 +32,14 @@ func echoExecutionTest(t *testing.T, mgr *Manager, method *Method, params Parame
 		return nil
 	}
 
-	/* Skip
 	err = mgr.ExecMethod(method.Name, params, results)
 	if err != nil {
 		t.Error(err)
 	}
-	*/
+
+	if !params.Equals(results) {
+		t.Errorf(errorObjectNotEquals, params, results)
+	}
 
 	return nil
 }
