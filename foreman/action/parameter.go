@@ -12,11 +12,11 @@ import (
 type ParameterType int
 
 const (
-	Unknown ParameterType = iota
-	IntegerType
-	RealType
-	BoolType
-	StringType
+	ParameterUnknownType ParameterType = iota
+	ParameterIntegerType
+	ParameterRealType
+	ParameterBoolType
+	ParameterStringType
 )
 
 // Parameter represents a parameter for action method.
@@ -33,7 +33,7 @@ type Parameter struct {
 func NewParameterFromInteger(name string, value int64) *Parameter {
 	param := &Parameter{
 		Name:   name,
-		Type:   IntegerType,
+		Type:   ParameterIntegerType,
 		iValue: value,
 	}
 	return param
@@ -43,7 +43,7 @@ func NewParameterFromInteger(name string, value int64) *Parameter {
 func NewParameterFromReal(name string, value float64) *Parameter {
 	param := &Parameter{
 		Name:   name,
-		Type:   RealType,
+		Type:   ParameterRealType,
 		rValue: value,
 	}
 	return param
@@ -53,7 +53,7 @@ func NewParameterFromReal(name string, value float64) *Parameter {
 func NewParameterFromBool(name string, value bool) *Parameter {
 	param := &Parameter{
 		Name:   name,
-		Type:   BoolType,
+		Type:   ParameterBoolType,
 		bValue: value,
 	}
 	return param
@@ -63,7 +63,7 @@ func NewParameterFromBool(name string, value bool) *Parameter {
 func NewParameterFromString(name string, value string) *Parameter {
 	param := &Parameter{
 		Name:   name,
-		Type:   StringType,
+		Type:   ParameterStringType,
 		sValue: value,
 	}
 	return param
@@ -76,7 +76,7 @@ func (param *Parameter) GetName() string {
 
 // IsInteger returns whether the parameter type is integer.
 func (param *Parameter) IsInteger() bool {
-	if param.Type != IntegerType {
+	if param.Type != ParameterIntegerType {
 		return false
 	}
 	return true
@@ -84,7 +84,7 @@ func (param *Parameter) IsInteger() bool {
 
 // IsReal returns whether the parameter type is real.
 func (param *Parameter) IsReal() bool {
-	if param.Type != RealType {
+	if param.Type != ParameterRealType {
 		return false
 	}
 	return true
@@ -92,7 +92,7 @@ func (param *Parameter) IsReal() bool {
 
 // IsBool returns whether the parameter type is boolean.
 func (param *Parameter) IsBool() bool {
-	if param.Type != BoolType {
+	if param.Type != ParameterBoolType {
 		return false
 	}
 	return true
@@ -100,7 +100,7 @@ func (param *Parameter) IsBool() bool {
 
 // IsString returns whether the parameter type is string.
 func (param *Parameter) IsString() bool {
-	if param.Type != StringType {
+	if param.Type != ParameterStringType {
 		return false
 	}
 	return true
@@ -109,7 +109,7 @@ func (param *Parameter) IsString() bool {
 // GetInteger returns a stored integer value.
 func (param *Parameter) GetInteger() (int64, error) {
 	if !param.IsInteger() {
-		return 0, fmt.Errorf(errorInvalidType, param.Type, IntegerType)
+		return 0, fmt.Errorf(errorInvalidParameterType, param.Type, ParameterIntegerType)
 	}
 	return param.iValue, nil
 }
@@ -117,7 +117,7 @@ func (param *Parameter) GetInteger() (int64, error) {
 // GetReal returns a stored real value.
 func (param *Parameter) GetReal() (float64, error) {
 	if !param.IsReal() {
-		return 0, fmt.Errorf(errorInvalidType, param.Type, RealType)
+		return 0, fmt.Errorf(errorInvalidParameterType, param.Type, ParameterRealType)
 	}
 	return param.rValue, nil
 }
@@ -125,7 +125,7 @@ func (param *Parameter) GetReal() (float64, error) {
 // GetBool returns a stored boolean value.
 func (param *Parameter) GetBool() (bool, error) {
 	if !param.IsBool() {
-		return false, fmt.Errorf(errorInvalidType, param.Type, BoolType)
+		return false, fmt.Errorf(errorInvalidParameterType, param.Type, ParameterBoolType)
 	}
 	return param.bValue, nil
 }
@@ -133,7 +133,7 @@ func (param *Parameter) GetBool() (bool, error) {
 // GetString returns a stored integer value.
 func (param *Parameter) GetString() (string, error) {
 	if !param.IsString() {
-		return "", fmt.Errorf(errorInvalidType, param.Type, StringType)
+		return "", fmt.Errorf(errorInvalidParameterType, param.Type, ParameterStringType)
 	}
 	return param.sValue, nil
 }

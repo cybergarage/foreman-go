@@ -5,6 +5,6 @@
 package action
 
 const (
-	errorUnknownParameterType = "Unknown parameter type (%d)"
-	errorInvalidParameterType = "Invalid parameter type (%d != %d)"
+	PythonEngine = "python"
+	LuaEngine    = "lua"
 )
