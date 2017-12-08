@@ -19,7 +19,7 @@ func (params Parameters) AddParameter(param *Parameter) error {
 	return nil
 }
 
-// Equals returns true when the specified parameters is same, otherwise false.
+// Equals returns true when the specified parameters are same, otherwise false.
 func (params Parameters) Equals(others Parameters) bool {
 	if len(params) != len(others) {
 		return false
