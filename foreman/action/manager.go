@@ -11,7 +11,7 @@ type Scripting interface {
 
 	AddMethod(method *Method) error
 	HasMethod(method string) bool
-	ExecMethod(name string, params Parameters, results Parameters) error
+	ExecMethod(name string, params Parameters) (Parameters, error)
 }
 
 // Manager represents an action manager.
