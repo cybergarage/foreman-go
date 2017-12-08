@@ -53,15 +53,16 @@ func (mgr *cgoManager) AddMethod(method *Method) error {
 }
 
 // ExecMethod executes a specified method with the parameters.
-func (mgr *cgoManager) ExecMethod(name string, params Parameters, results Parameters) error {
+func (mgr *cgoManager) ExecMethod(name string, params Parameters) (Parameters, error) {
 	cparams, err := params.CObject()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
+	results := NewParameters()
 	cresults, err := results.CObject()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	cerr := C.foreman_error_new()
@@ -69,13 +70,13 @@ func (mgr *cgoManager) ExecMethod(name string, params Parameters, results Parame
 
 	if !C.foreman_action_script_manager_execmethod(mgr.cManager, C.CString(name), cparams, cresults, cerr) {
 		err = errors.NewWithCObject(cerr)
-		return err
+		return nil, err
 	}
 
 	err = results.SetCObject(cresults)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return results, nil
 }

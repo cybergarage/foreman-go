@@ -4,6 +4,7 @@
 package action
 
 import "testing"
+import "fmt"
 
 const (
 	echoMethod     = "echo"
@@ -21,27 +22,32 @@ const (
 	errorObjectNotEquals = "Object does not equal (%v != %v)"
 )
 
-func echoExecutionTest(t *testing.T, mgr *Manager, method *Method, params Parameters, results Parameters) error {
+func echoExecutionTest(t *testing.T, mgr *Manager, method *Method, params Parameters) (Parameters, error) {
 	err := mgr.AddMethod(method)
 	if err != nil {
 		t.Error(err)
+		return nil, err
 	}
 
 	if !mgr.HasMethod(method.Name) {
-		t.Errorf(errorMethodNotFound, method.Name)
-		return nil
+		err = fmt.Errorf(errorMethodNotFound, method.Name)
+		t.Error(err)
+		return nil, err
 	}
 
-	err = mgr.ExecMethod(method.Name, params, results)
+	results, err := mgr.ExecMethod(method.Name, params)
 	if err != nil {
 		t.Error(err)
+		return nil, err
 	}
 
 	if !params.Equals(results) {
-		t.Errorf(errorObjectNotEquals, params, results)
+		err = fmt.Errorf(errorObjectNotEquals, params, results)
+		t.Error(err)
+		return nil, err
 	}
 
-	return nil
+	return results, nil
 }
 
 func TestPythonEngine(t *testing.T) {
@@ -60,9 +66,7 @@ func TestPythonEngine(t *testing.T) {
 	param := NewParameterFromString(echoParamName, echoParamValue)
 	params.AddParameter(param)
 
-	results := NewParameters()
-
-	err := echoExecutionTest(t, mgr, method, params, results)
+	_, err := echoExecutionTest(t, mgr, method, params)
 	if err != nil {
 		t.Error(err)
 	}
