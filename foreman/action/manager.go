@@ -5,16 +5,17 @@
 // Package action provides scripting interfaces.
 package action
 
-// Scripting represents an abstract interface of action script manager
-type Scripting interface {
-	HasEngine(method string) bool
-
-	AddMethod(method *Method) error
-	HasMethod(method string) bool
-	ExecMethod(name string, params Parameters) (Parameters, error)
-}
-
 // Manager represents an action manager.
 type Manager struct {
-	Scripting
+	*ScriptManager
+	*RouteManager
+}
+
+// NewManager returns a new action manager.
+func NewManager() *Manager {
+	mgr := &Manager{
+		ScriptManager: NewScriptManager(),
+		RouteManager:  NewRouteManager(),
+	}
+	return mgr
 }

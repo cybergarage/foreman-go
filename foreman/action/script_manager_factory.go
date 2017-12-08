@@ -13,21 +13,21 @@ import (
 	"unsafe"
 )
 
-func newManagerWithInterface(mgrImpl Scripting) *Manager {
-	mgr := &Manager{
+func newScriptManagerWithInterface(mgrImpl Scripting) *ScriptManager {
+	mgr := &ScriptManager{
 		Scripting: mgrImpl,
 	}
 	return mgr
 }
 
-func newManagerWithCObject(cObject unsafe.Pointer) *Manager {
-	mgrImp := &cgoManager{}
+func newScriptManagerWithCObject(cObject unsafe.Pointer) *ScriptManager {
+	mgrImp := &cgoScriptManager{}
 	mgrImp.cManager = cObject
-	runtime.SetFinalizer(mgrImp, managerFinalizer)
-	return newManagerWithInterface(mgrImp)
+	runtime.SetFinalizer(mgrImp, scriptManagerFinalizer)
+	return newScriptManagerWithInterface(mgrImp)
 }
 
-func managerFinalizer(self *cgoManager) {
+func scriptManagerFinalizer(self *cgoScriptManager) {
 	if self.cManager != nil {
 		if C.foreman_action_script_manager_delete(self.cManager) {
 			self.cManager = nil
@@ -35,8 +35,8 @@ func managerFinalizer(self *cgoManager) {
 	}
 }
 
-// NewManager returns a new action manager.
-func NewManager() *Manager {
-	mgr := newManagerWithCObject(C.foreman_action_script_manager_new())
+// NewScriptManager returns a new script manager.
+func NewScriptManager() *ScriptManager {
+	mgr := newScriptManagerWithCObject(C.foreman_action_script_manager_new())
 	return mgr
 }

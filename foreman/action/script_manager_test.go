@@ -22,7 +22,7 @@ const (
 	errorObjectNotEquals = "Object does not equal (%v != %v)"
 )
 
-func echoExecutionTest(t *testing.T, mgr *Manager, method *Method, params Parameters) (Parameters, error) {
+func echoExecutionTest(t *testing.T, mgr *ScriptManager, method *Method, params Parameters) (Parameters, error) {
 	err := mgr.AddMethod(method)
 	if err != nil {
 		t.Error(err)
@@ -51,7 +51,7 @@ func echoExecutionTest(t *testing.T, mgr *Manager, method *Method, params Parame
 }
 
 func TestPythonEngine(t *testing.T) {
-	mgr := NewManager()
+	mgr := NewScriptManager()
 
 	if !mgr.HasEngine(PythonEngine) {
 		t.Errorf(errorEngineNotFound, PythonEngine)
