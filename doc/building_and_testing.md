@@ -21,7 +21,7 @@ About [`go-graphite`](https://github.com/cybergarage/go-graphite), you don't nee
 To build `foreman-go`, you have to install ANTLR v4 later.
 
 - [Getting Started with ANTLR v4](https://github.com/antlr/antlr4/blob/master/doc/getting-started.md)
-- [ANTLR4 Language Target, Runtime for Go](https://github.com/antlr/antlr4/blob/master/doc/go-target.md)
+  - [ANTLR4 Language Target, Runtime for Go](https://github.com/antlr/antlr4/blob/master/doc/go-target.md)
 
 #### MacOSX
 
