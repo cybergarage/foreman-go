@@ -11,10 +11,65 @@ type Storing interface {
 	Clear() error
 
 	SetObject(obj *Object) error
-	GetObject(objID string) (*Object, error)
+	GetObject(key string) (*Object, bool)
+
+	Size() int
 }
 
 // Store represents an register store.
 type Store struct {
 	Storing
+	registers map[string]*Object
+}
+
+// NewStore returns a new store instance.
+func NewStore() *Store {
+	store := &Store{}
+	store.Clear()
+	return store
+}
+
+// Open opens the store.
+func (store *Store) Open() error {
+	return nil
+}
+
+// Close closes the store.
+func (store *Store) Close() error {
+	return nil
+}
+
+// Clear clears all registers.
+func (store *Store) Clear() error {
+	store.registers = make(map[string]*Object)
+	return nil
+}
+
+// SetObject set a object into the store.
+func (store *Store) SetObject(obj *Object) error {
+	err := obj.incrementVersion()
+	if err != nil {
+		return err
+	}
+
+	err = obj.updateTimestamp()
+	if err != nil {
+		return err
+	}
+
+	key := obj.GetName()
+	store.registers[key] = obj
+
+	return nil
+}
+
+// GetObject set a object into the store.
+func (store *Store) GetObject(key string) (*Object, bool) {
+	obj, ok := store.registers[key]
+	return obj, ok
+}
+
+// Size returns the object count.
+func (store *Store) Size() int {
+	return len(store.registers)
 }

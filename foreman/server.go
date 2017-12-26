@@ -12,6 +12,7 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/metric"
+	"github.com/cybergarage/foreman-go/foreman/register"
 	"github.com/cybergarage/foreman-go/foreman/registry"
 )
 
@@ -23,6 +24,7 @@ const (
 // Server represents a Foreman Server.
 type Server struct {
 	graphite      *graphite.Server
+	registerStore *register.Store
 	registryStore *registry.Store
 	metricStore   *metric.Store
 	actionMgr     *action.Manager
@@ -37,8 +39,8 @@ func NewServer() *Server {
 	server.graphite.RenderListener = server
 	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
+	server.registerStore = register.NewStore()
 	server.registryStore = registry.NewStore()
-
 	server.metricStore = metric.NewStore()
 
 	server.actionMgr = action.NewManager()
@@ -70,13 +72,19 @@ func (server *Server) Start() error {
 		return err
 	}
 
-	err = server.metricStore.Open()
+	err = server.registerStore.Open()
 	if err != nil {
 		server.Stop()
 		return err
 	}
 
 	err = server.registryStore.Open()
+	if err != nil {
+		server.Stop()
+		return err
+	}
+
+	err = server.metricStore.Open()
 	if err != nil {
 		server.Stop()
 		return err
@@ -92,15 +100,18 @@ func (server *Server) Stop() error {
 		return err
 	}
 
-	err = server.metricStore.Close()
+	err = server.registerStore.Close()
 	if err != nil {
-		server.Stop()
 		return err
 	}
 
 	err = server.registryStore.Close()
 	if err != nil {
-		server.Stop()
+		return err
+	}
+
+	err = server.metricStore.Close()
+	if err != nil {
 		return err
 	}
 
