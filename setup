@@ -16,20 +16,35 @@ go get github.com/antlr/antlr4/runtime/Go/antlr
 ########################################
 
 git pull
-mkdir -p src
-rm -rf src/github.com/cybergarage
+
+if [ ! -d src ]; then
+  mkdir -p src
+#else
+#  rm -rf src/github.com/cybergarage
+fi
 
 # go-graphite
-go get -u github.com/cybergarage/go-graphite.git/net/graphite
-pushd src && mv github.com/cybergarage/go-graphite.git github.com/cybergarage/go-graphite && popd
+go_graphite_path="github.com/cybergarage/go-graphite"
+go_graphite_dir="src/${go_graphite_path}"
+if [ -d ${go_graphite_dir} ]; then
+  pushd ${go_graphite_dir} && git pull && popd
+else
+  go get -u github.com/cybergarage/go-graphite.git/net/graphite
+  pushd src && mv github.com/cybergarage/go-graphite.git {$go_graphite_path} && popd
+fi
 
 # foreman-go
-go get -u github.com/cybergarage/foreman-go.git/foreman
-pushd src && mv github.com/cybergarage/foreman-go.git github.com/cybergarage/foreman-go && popd
-
+foreman_go_path="github.com/cybergarage/foreman-go"
+foreman_go_dir="src/${foreman_go_path}"
+if [ -d ${foreman_go_dir} ]; then
+  pushd ${foreman_go_dir} && git pull && popd
+else
+  go get -u github.com/cybergarage/foreman-go.git/foreman
+  pushd src && mv github.com/cybergarage/foreman-go.git github.com/cybergarage/foreman-go && popd
+fi
 
 ########################################
-# Get latest source codes.
+# Update source files based on ANTLR 
 ########################################
 
 pushd src/github.com/cybergarage/foreman-go/foreman/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
