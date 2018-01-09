@@ -4,13 +4,18 @@
 
 package qos
 
-// A Problem represents a SAT problem.
-type Problem struct {
+// Rule represents a QoS rule.
+type Rule struct {
 	Clauses []Clause
 }
 
-// NewProblem returns a new null problem.
-func NewProblem() *Problem {
-	p := &Problem{}
+// NewRule returns a new null rule.
+func NewRule() *Rule {
+	p := &Rule{}
 	return p
+}
+
+// ParseString parses a specified string.
+func (rule *Rule) ParseString(ruleString string) error {
+	return nil
 }

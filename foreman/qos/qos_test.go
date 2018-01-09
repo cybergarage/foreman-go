@@ -8,6 +8,6 @@ import (
 	"testing"
 )
 
-func TestNewRule(t *testing.T) {
-	NewRule()
+func TestNewQoS(t *testing.T) {
+	NewQoS()
 }

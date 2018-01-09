@@ -4,10 +4,7 @@
 
 package qos
 
-import (
-	"testing"
-)
-
-func TestNewRule(t *testing.T) {
-	NewRule()
+type Variable interface {
+	GetName() string
+	GetValue() interface{}
 }
