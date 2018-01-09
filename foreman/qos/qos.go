@@ -4,10 +4,13 @@
 
 package qos
 
-import (
-	"testing"
-)
+// QoS includes all QoS rules.
+type QoS struct {
+	Rules []Rule
+}
 
-func TestNewRule(t *testing.T) {
-	NewRule()
+// NewQoS returns a new null object.
+func NewQoS() *QoS {
+	qos := &QoS{}
+	return qos
 }
