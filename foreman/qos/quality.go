@@ -4,10 +4,7 @@
 
 package qos
 
-import (
-	"testing"
-)
-
-func TestNewRule(t *testing.T) {
-	NewRule()
+// A Quality represents a quality formula in a QoS clause.
+type Quality interface {
+	GetVariable() Variable
 }

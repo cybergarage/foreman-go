@@ -4,9 +4,9 @@
 
 package qos
 
-// A Clause represents a clause in a SAT problem.
+// A Clause represents a clause in a QoS rule.
 type Clause struct {
-	Literals []Literal
+	qualities []Quality
 }
 
 // NewClause returns a new clause.
