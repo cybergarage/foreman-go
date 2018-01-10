@@ -17,7 +17,7 @@ const (
 )
 
 type TestParser struct {
-	Parsering
+	Factory
 	variables map[string]Variable
 }
 
@@ -32,7 +32,7 @@ func (parser *TestParser) CreateVariable(id string) (Variable, error) {
 
 func newTestParser() *Parser {
 	parser := &TestParser{}
-	return NewParserWithInterface(parser)
+	return NewParserWithFactory(parser)
 }
 
 func TestNewParser(t *testing.T) {
