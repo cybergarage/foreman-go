@@ -6,11 +6,15 @@ package qos
 
 // QoS includes all QoS rules.
 type QoS struct {
-	Rules []Rule
+	Rules     []Rule
+	variables map[string]Variable
 }
 
 // NewQoS returns a new null object.
 func NewQoS() *QoS {
-	qos := &QoS{}
+	qos := &QoS{
+		Rules:     make([]Rule, 0),
+		variables: make(map[string]Variable),
+	}
 	return qos
 }

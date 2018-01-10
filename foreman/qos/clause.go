@@ -6,11 +6,19 @@ package qos
 
 // A Clause represents a clause in a QoS rule.
 type Clause struct {
-	qualities []Quality
+	Qualities []*Quality
 }
 
 // NewClause returns a new clause.
 func NewClause() *Clause {
-	c := &Clause{}
-	return c
+	clause := &Clause{
+		Qualities: make([]*Quality, 0),
+	}
+	return clause
+}
+
+// AddQuality adds a nre quality.
+func (clause *Clause) AddQuality(quality *Quality) error {
+	clause.Qualities = append(clause.Qualities, quality)
+	return nil
 }

@@ -20,7 +20,7 @@ func NewParserWithFactory(factory Factory) *Parser {
 // ParseString returns a rule when the specified string is valid, otherwise an error
 func (parser *Parser) ParseString(ruleString string) (*Rule, error) {
 	rule := NewRule()
-	err := rule.ParseString(ruleString)
+	err := rule.ParseString(parser, ruleString)
 	if err != nil {
 		return nil, err
 	}

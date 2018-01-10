@@ -4,8 +4,6 @@
 
 package qos
 
-// Variable represents an variable interface in qualities.
-type Variable interface {
-	GetName() string
-	GetValue() interface{}
-}
+const (
+	errorInvalidQualityString = "Invalid quality string (%s)"
+)
