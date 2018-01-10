@@ -4,20 +4,15 @@
 
 package qos
 
-// Parsering represents an abstract interface for the parser.
-type Parsering interface {
-	CreateVariable(id string) (Variable, error)
-}
-
 // A Parser represents a parser.
 type Parser struct {
-	Parsering
+	Factory
 }
 
-// NewParserWithInterface returns a new parser with the specified interface.
-func NewParserWithInterface(parsering Parsering) *Parser {
+// NewParserWithFactory returns a new parser with the specified interface.
+func NewParserWithFactory(factory Factory) *Parser {
 	parser := &Parser{
-		Parsering: parsering,
+		Factory: factory,
 	}
 	return parser
 }
