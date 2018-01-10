@@ -1,11 +1,11 @@
 // Copyright (C) 2017 Satoshi Konno. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-
 package qos
 
-// Variable represents an variable interface in qualities.
-type Variable interface {
-	GetName() string
-	GetValue() interface{}
+import (
+	"testing"
+)
+
+func TestNewFactory(t *testing.T) {
 }

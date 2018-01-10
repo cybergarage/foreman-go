@@ -4,8 +4,7 @@
 
 package qos
 
-// Variable represents an variable interface in qualities.
-type Variable interface {
-	GetName() string
+// Objective represents an objective interface in qualities.
+type Objective interface {
 	GetValue() interface{}
 }

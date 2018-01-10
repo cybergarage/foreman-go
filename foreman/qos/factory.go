@@ -6,5 +6,10 @@ package qos
 
 // Factory represents an abstract interface for the parser.
 type Factory interface {
-	CreateVariable(id string) (Variable, error)
+	// CreateVariable return a singleton value.
+	CreateVariable(varStr string) (Variable, error)
+	// CreateOperator return an operater instance.
+	CreateOperator(opeStr string) (Operator, error)
+	// CreateObjective return an objective instance.
+	CreateObjective(objStr string) (Objective, error)
 }

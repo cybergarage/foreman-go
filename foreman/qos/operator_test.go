@@ -7,6 +7,21 @@ import (
 	"testing"
 )
 
+type TestOperator struct {
+}
+
+func (v *TestOperator) IsSatisfied(value1 interface{}, value2 interface{}) (bool, error) {
+	return true, nil
+}
+
+func newTestOperatorWithString(opeStr string) *TestOperator {
+	return &TestOperator{}
+}
+
+func newTestOperator() *TestOperator {
+	return newTestOperatorWithString("")
+}
+
 func TestNewOperator(t *testing.T) {
-	NewOperator(1)
+	newTestOperator()
 }

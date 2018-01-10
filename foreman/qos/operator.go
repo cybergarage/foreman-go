@@ -4,15 +4,8 @@
 
 package qos
 
-// A Operator represents an operator in a formula.
-type Operator struct {
-	Type int
-}
-
-// NewOperator returns a new operator with the specified type.
-func NewOperator(t int) *Operator {
-	op := &Operator{
-		Type: t,
-	}
-	return op
+// Operator represents an operator interface in qualities.
+type Operator interface {
+	// IsSatisfied checks if 'value1' op 'value2' is valid
+	IsSatisfied(value1 interface{}, value2 interface{}) (bool, error)
 }

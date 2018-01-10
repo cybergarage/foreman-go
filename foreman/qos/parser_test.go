@@ -21,17 +21,27 @@ type TestParser struct {
 	variables map[string]Variable
 }
 
-func (parser *TestParser) CreateVariable(id string) (Variable, error) {
-	v, ok := parser.variables[id]
+func (parser *TestParser) CreateVariable(varStr string) (Variable, error) {
+	v, ok := parser.variables[varStr]
 	if ok {
 		return v, nil
 	}
-	parser.variables[id] = newTestVariableWithName(id)
-	return parser.variables[id], nil
+	parser.variables[varStr] = newTestVariableWithName(varStr)
+	return parser.variables[varStr], nil
+}
+
+func (parser *TestParser) CreateObjective(objStr string) (Objective, error) {
+	return newTestObjectiveWithString(objStr), nil
+}
+
+func (parser *TestParser) CreateOperator(opeStr string) (Operator, error) {
+	return newTestOperatorWithString(opeStr), nil
 }
 
 func newTestParser() *Parser {
-	parser := &TestParser{}
+	parser := &TestParser{
+		variables: make(map[string]Variable),
+	}
 	return NewParserWithFactory(parser)
 }
 
