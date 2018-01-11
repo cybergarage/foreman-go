@@ -39,7 +39,7 @@ func (operator *Operator) SetTypeString(typeString string) error {
 	return fmt.Errorf(errorInvalidOperator, typeString)
 }
 
-// IsSatisfied checks whether ('value1' op 'value2') is valid
+// IsSatisfied is an interface method of kb.Operator
 func (operator *Operator) IsSatisfied(value1 interface{}, value2 interface{}) (bool, error) {
 	return true, nil
 }

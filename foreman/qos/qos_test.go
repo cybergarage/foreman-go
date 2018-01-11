@@ -11,18 +11,27 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/kb"
 )
 
 const (
 	testQoSCaseFilename = "parser_test.csv"
 )
 
+func testQoSFactory(t *testing.T, factory kb.Factory) {
+	factory.CreateVariable("var")
+	factory.CreateOperator(">")
+	factory.CreateObjective("th")
+}
+
 func TestNewQoS(t *testing.T) {
-	NewQoS()
+	qos := NewQoS()
+	testQoSFactory(t, qos)
 }
 
 func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, clauses int) {
-
+	qos.ParseQoSString(qosString)
 	qos.Clear()
 }
 
