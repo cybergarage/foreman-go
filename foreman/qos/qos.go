@@ -6,6 +6,7 @@ package qos
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/cybergarage/foreman-go/foreman/kb"
 )
@@ -50,8 +51,18 @@ func (qos *QoS) CreateVariable(variable interface{}) (kb.Variable, error) {
 func (qos *QoS) CreateObjective(objective interface{}) (kb.Objective, error) {
 	objValue, ok := objective.(float64)
 	if !ok {
-		return nil, fmt.Errorf(errorInvalidObjective, objective)
+		objStr, ok := objective.(string)
+		if !ok {
+			return nil, fmt.Errorf(errorInvalidObjective, objective)
+		}
+
+		var err error
+		objValue, err = strconv.ParseFloat(objStr, 64)
+		if err != nil {
+			return nil, fmt.Errorf(errorInvalidObjective, objective)
+		}
 	}
+
 	return NewThresholdWithValue(objValue), nil
 }
 
