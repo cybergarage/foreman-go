@@ -27,8 +27,8 @@ func NewKnowledgeBase() *KnowledgeBase {
 func (kb *KnowledgeBase) AddRule(rule *Rule) error {
 	// Add all variables in the rule
 	for _, clause := range rule.Clauses {
-		for _, quality := range clause.Qualities {
-			variable := quality.Variable
+		for _, formula := range clause.Formulas {
+			variable := formula.Variable
 			variableName := variable.GetName()
 
 			mapVariable, ok := kb.Variables[variableName]

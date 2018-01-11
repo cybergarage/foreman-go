@@ -5,6 +5,6 @@
 package kb
 
 const (
-	errorInvalidQualityString = "Invalid quality string (%s)"
+	errorInvalidFormulaString = "Invalid formula string (%s)"
 	errorInvalidRuleVariable  = "Invalid variable (%s:%v). Another variable (%v) is already added"
 )

@@ -4,7 +4,7 @@
 
 package kb
 
-// Operator represents an operator interface in qualities.
+// Operator represents an operator interface in formulas.
 type Operator interface {
 	// IsSatisfied checks whether ('value1' op 'value2') is valid
 	IsSatisfied(value1 interface{}, value2 interface{}) (bool, error)
