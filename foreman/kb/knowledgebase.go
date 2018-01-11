@@ -16,11 +16,16 @@ type KnowledgeBase struct {
 
 // NewKnowledgeBase returns a new knowledge base instance.
 func NewKnowledgeBase() *KnowledgeBase {
-	kb := &KnowledgeBase{
-		Rules:     make([]*Rule, 0),
-		Variables: make(map[string]Variable),
-	}
+	kb := &KnowledgeBase{}
+	kb.Clear()
 	return kb
+}
+
+// Clear removes all rules and variables..
+func (kb *KnowledgeBase) Clear() error {
+	kb.Rules = make([]*Rule, 0)
+	kb.Variables = make(map[string]Variable)
+	return nil
 }
 
 // AddRule adds a new rules.
