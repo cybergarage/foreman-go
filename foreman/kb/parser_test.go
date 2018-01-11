@@ -1,7 +1,7 @@
 // Copyright (C) 2017 Satoshi Konno. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
-package qos
+package kb
 
 import (
 	"encoding/csv"
@@ -49,19 +49,19 @@ func TestNewParser(t *testing.T) {
 	newTestParser()
 }
 
-func testQoSCase(t *testing.T, qosString string, variables int, clauses int) {
+func testQoSCase(t *testing.T, kbString string, variables int, clauses int) {
 	parser := newTestParser()
-	parser.ParseString(qosString)
+	parser.ParseString(kbString)
 }
 
 func TestQoSCases(t *testing.T) {
-	qosStrings, err := ioutil.ReadFile(testQoSCaseFilename)
+	kbStrings, err := ioutil.ReadFile(testQoSCaseFilename)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	r := csv.NewReader(strings.NewReader(string(qosStrings)))
+	r := csv.NewReader(strings.NewReader(string(kbStrings)))
 	r.Comment = rune('#')
 
 	for {

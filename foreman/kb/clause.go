@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package qos
+package kb
 
 // A Clause represents a clause in a QoS rule.
 type Clause struct {
