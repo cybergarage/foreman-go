@@ -4,16 +4,7 @@
 package kb
 
 import (
-	"encoding/csv"
-	"io"
-	"io/ioutil"
-	"strconv"
-	"strings"
 	"testing"
-)
-
-const (
-	testQoSCaseFilename = "parser_test.csv"
 )
 
 type TestParser struct {
@@ -21,7 +12,8 @@ type TestParser struct {
 	variables map[string]Variable
 }
 
-func (parser *TestParser) CreateVariable(varStr string) (Variable, error) {
+func (parser *TestParser) CreateVariable(variable interface{}) (Variable, error) {
+	varStr := variable.(string)
 	v, ok := parser.variables[varStr]
 	if ok {
 		return v, nil
@@ -30,11 +22,13 @@ func (parser *TestParser) CreateVariable(varStr string) (Variable, error) {
 	return parser.variables[varStr], nil
 }
 
-func (parser *TestParser) CreateObjective(objStr string) (Objective, error) {
+func (parser *TestParser) CreateObjective(object interface{}) (Objective, error) {
+	objStr := object.(string)
 	return newTestObjectiveWithString(objStr), nil
 }
 
-func (parser *TestParser) CreateOperator(opeStr string) (Operator, error) {
+func (parser *TestParser) CreateOperator(operator interface{}) (Operator, error) {
+	opeStr := operator.(string)
 	return newTestOperatorWithString(opeStr), nil
 }
 
@@ -47,45 +41,4 @@ func newTestParser() *Parser {
 
 func TestNewParser(t *testing.T) {
 	newTestParser()
-}
-
-func testQoSCase(t *testing.T, kbString string, variables int, clauses int) {
-	parser := newTestParser()
-	parser.ParseString(kbString)
-}
-
-func TestQoSCases(t *testing.T) {
-	kbStrings, err := ioutil.ReadFile(testQoSCaseFilename)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	r := csv.NewReader(strings.NewReader(string(kbStrings)))
-	r.Comment = rune('#')
-
-	for {
-		record, err := r.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			t.Error(err)
-			break
-		}
-
-		ruleString := record[0]
-		variables, err := strconv.Atoi(record[1])
-		if err != nil {
-			t.Error(err)
-			break
-		}
-		clauses, err := strconv.Atoi(record[2])
-		if err != nil {
-			t.Error(err)
-			break
-		}
-
-		testQoSCase(t, ruleString, variables, clauses)
-	}
 }
