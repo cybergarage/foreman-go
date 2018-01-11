@@ -10,32 +10,21 @@ import (
 
 //KnowledgeBase includes all knowledge rules.
 type KnowledgeBase struct {
-	Factory
 	Rules     []*Rule
 	Variables map[string]Variable
 }
 
 // NewKnowledgeBase returns a new knowledge base.
 func NewKnowledgeBase() *KnowledgeBase {
-	kb := &KnowledgeBase{
-		Factory: nil,
-	}
-	kb.Clear()
-	return kb
-}
-
-// NewKnowledgeBaseWithFactory returns a new knowledge base instance with the specified factory.
-func NewKnowledgeBaseWithFactory(factory Factory) *KnowledgeBase {
-	kb := NewKnowledgeBase()
+	kb := &KnowledgeBase{}
 	kb.Clear()
 	return kb
 }
 
 // ParseRuleString parses a specified rule string.
-func (kb *KnowledgeBase) ParseRuleString(ruleString string) error {
-	parser := NewParserWithFactory(kb)
-
-	rule, err := parser.ParseString(ruleString)
+func (kb *KnowledgeBase) ParseRuleString(factory Factory, ruleString string) error {
+	parser := NewParser()
+	rule, err := parser.ParseString(factory, ruleString)
 	if err != nil {
 		return err
 	}

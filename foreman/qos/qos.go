@@ -17,17 +17,18 @@ type QoS struct {
 
 // NewQoS returns a new null object.
 func NewQoS() *QoS {
-	qos := &QoS{}
-	qos.KnowledgeBase = *kb.NewKnowledgeBaseWithFactory(qos)
+	qos := &QoS{
+		KnowledgeBase: *kb.NewKnowledgeBase(),
+	}
 	return qos
 }
 
 // ParseQoSString parses a specified QoS string.
 func (qos *QoS) ParseQoSString(qosString string) error {
-	return qos.ParseRuleString(qosString)
+	return qos.ParseRuleString(qos, qosString)
 }
 
-// CreateVariable is a interface of kb.Factory
+// CreateVariable is an interface method of kb.Factory
 func (qos *QoS) CreateVariable(variable interface{}) (kb.Variable, error) {
 	varStr, ok := variable.(string)
 	if !ok {
@@ -39,14 +40,13 @@ func (qos *QoS) CreateVariable(variable interface{}) (kb.Variable, error) {
 		return v, nil
 	}
 
-	m := NewMetric()
-	m.Name = varStr
+	m := NewMetricWithName(varStr)
 	qos.Variables[varStr] = m
 
 	return m, nil
 }
 
-// CreateObjective is a interface of kb.Factory
+// CreateObjective is an interface method kb.Factory
 func (qos *QoS) CreateObjective(objective interface{}) (kb.Objective, error) {
 	objValue, ok := objective.(float64)
 	if !ok {
@@ -55,7 +55,7 @@ func (qos *QoS) CreateObjective(objective interface{}) (kb.Objective, error) {
 	return NewThresholdWithValue(objValue), nil
 }
 
-// CreateOperator is a interface of kb.Factory
+// CreateOperator is an interface method kb.Factory
 func (qos *QoS) CreateOperator(operator interface{}) (kb.Operator, error) {
 	operatorStr, ok := operator.(string)
 	if !ok {

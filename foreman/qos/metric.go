@@ -23,10 +23,19 @@ func NewMetric() *Metric {
 	return m
 }
 
+// NewMetricWithName returns a new metric instance with the specified name.
+func NewMetricWithName(name string) *Metric {
+	m := NewMetric()
+	m.Name = name
+	return m
+}
+
+// GetName is an interface method of kb.Variable
 func (m *Metric) GetName() string {
 	return m.Name
 }
 
+// GetValue is an interface method of kb.Variable
 func (m *Metric) GetValue() interface{} {
 	return m.Value
 }
