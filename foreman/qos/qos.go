@@ -12,28 +12,19 @@ import (
 
 // QoS includes all QoS rules.
 type QoS struct {
-	kb.Factory
 	kb.KnowledgeBase
 }
 
 // NewQoS returns a new null object.
 func NewQoS() *QoS {
-	qos := &QoS{
-		KnowledgeBase: *kb.NewKnowledgeBase(),
-	}
+	qos := &QoS{}
+	qos.KnowledgeBase = *kb.NewKnowledgeBaseWithFactory(qos)
 	return qos
 }
 
 // ParseQoSString parses a specified QoS string.
 func (qos *QoS) ParseQoSString(qosString string) error {
-	parser := NewParserWithFactory(qos)
-
-	rule, err := parser.ParseString(qosString)
-	if err != nil {
-		return err
-	}
-
-	return qos.AddRule(rule)
+	return qos.ParseRuleString(qosString)
 }
 
 // CreateVariable is a interface of kb.Factory
