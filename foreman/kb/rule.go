@@ -10,15 +10,21 @@ import (
 
 // Rule represents a QoS rule.
 type Rule struct {
-	Clauses []Clause
+	Clauses []*Clause
 }
 
 // NewRule returns a new null rule.
 func NewRule() *Rule {
 	p := &Rule{
-		Clauses: make([]Clause, 0),
+		Clauses: make([]*Clause, 0),
 	}
 	return p
+}
+
+// AddClause adds a new clause.
+func (rule *Rule) AddClause(clause *Clause) error {
+	rule.Clauses = append(rule.Clauses, clause)
+	return nil
 }
 
 // ParseString parses a specified rule string.
@@ -41,6 +47,11 @@ func (rule *Rule) ParseString(factory Factory, ruleString string) error {
 			if err != nil {
 				return err
 			}
+		}
+
+		err := rule.AddClause(clause)
+		if err != nil {
+			return err
 		}
 	}
 
