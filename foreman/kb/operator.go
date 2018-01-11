@@ -6,6 +6,6 @@ package kb
 
 // Operator represents an operator interface in qualities.
 type Operator interface {
-	// IsSatisfied checks if 'value1' op 'value2' is valid
+	// IsSatisfied checks whether ('value1' op 'value2') is valid
 	IsSatisfied(value1 interface{}, value2 interface{}) (bool, error)
 }
