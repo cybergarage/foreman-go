@@ -17,9 +17,9 @@ type Operator struct {
 }
 
 // NewOperatorWithType returns a new operator with the specified type.
-func NewOperatorWithType(typeId int) *Operator {
+func NewOperatorWithType(typeID int) *Operator {
 	operator := &Operator{
-		Type: typeId,
+		Type: typeID,
 	}
 	return operator
 }
@@ -36,6 +36,12 @@ func NewOperatorWithString(typeString string) (*Operator, error) {
 
 // SetTypeString update the current type with the specified string.
 func (operator *Operator) SetTypeString(typeString string) error {
+	operatorType, ok := qosOperatorTypes[typeString]
+	if ok {
+		operator.Type = operatorType
+		return nil
+	}
+
 	return fmt.Errorf(errorInvalidOperator, typeString)
 }
 

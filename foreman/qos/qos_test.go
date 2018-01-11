@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	testQoSCaseFilename = "parser_test.csv"
+	testQoSCaseFilename = "qos_test.csv"
 )
 
 func testQoSFactory(t *testing.T, factory kb.Factory) {
@@ -31,7 +31,29 @@ func TestNewQoS(t *testing.T) {
 }
 
 func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, clauses int) {
-	qos.ParseQoSString(qosString)
+	err := qos.ParseQoSString(qosString)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	if len(qos.Variables) != variables {
+		t.Errorf("Invalid variable count of %s (%d != %d)", qosString, len(qos.Variables), variables)
+		return
+	}
+
+	if len(qos.Rules) <= 0 {
+		t.Errorf("Not found rules in %s", qosString)
+		return
+	}
+
+	firstRule := qos.Rules[0]
+
+	if len(firstRule.Clauses) != clauses {
+		t.Errorf("Invalid clause count of %s (%d != %d)", qosString, len(firstRule.Clauses), clauses)
+		return
+	}
+
 	qos.Clear()
 }
 
