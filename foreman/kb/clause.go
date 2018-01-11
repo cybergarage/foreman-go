@@ -17,7 +17,7 @@ func NewClause() *Clause {
 	return clause
 }
 
-// AddFormula adds a nre formula.
+// AddFormula adds a new formula.
 func (clause *Clause) AddFormula(formula *Formula) error {
 	clause.Formulas = append(clause.Formulas, formula)
 	return nil
