@@ -4,7 +4,7 @@
 
 package kb
 
-// Variable represents an variable interface in qualities.
+// Variable represents an variable interface in formulas.
 type Variable interface {
 	GetName() string
 	GetValue() interface{}

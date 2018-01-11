@@ -28,15 +28,15 @@ func (rule *Rule) ParseString(factory Factory, ruleString string) error {
 	for _, clauseString := range clausesString {
 		clause := NewClause()
 		clauseString = strings.Trim(clauseString, (StartBracket + EndBracket))
-		qualitiesString := strings.Split(clauseString, QualitySeparator)
-		for _, qualityString := range qualitiesString {
-			quality := NewQuality()
-			qualityString = strings.Trim(qualityString, (StartBracket + EndBracket))
-			err := quality.ParseString(factory, qualityString)
+		formulasString := strings.Split(clauseString, FormulaSeparator)
+		for _, formulaString := range formulasString {
+			formula := NewFormula()
+			formulaString = strings.Trim(formulaString, (StartBracket + EndBracket))
+			err := formula.ParseString(factory, formulaString)
 			if err != nil {
 				return err
 			}
-			err = clause.AddQuality(quality)
+			err = clause.AddFormula(formula)
 			if err != nil {
 				return err
 			}

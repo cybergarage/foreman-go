@@ -12,8 +12,8 @@ const (
 	EndBracket = "("
 	// ClauseSeparator is a delimiter for clauses.
 	ClauseSeparator = "|"
-	// QualitySeparator is a delimiter for qualities.
-	QualitySeparator = "&"
+	// FormulaSeparator is a delimiter for formulas.
+	FormulaSeparator = "&"
 	// SpaceSeparator is a blank separator.
 	SpaceSeparator = " "
 )
