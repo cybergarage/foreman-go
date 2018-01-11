@@ -3,7 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // Package metric provides query interfaces for metric store.
-package qos
+package kb
 
 const (
 	// StartBracket is a start bracket.

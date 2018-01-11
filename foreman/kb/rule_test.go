@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package qos
+package kb
 
 import (
 	"testing"
 )
 
-func TestNewQoS(t *testing.T) {
-	NewQoS()
+func TestNewRule(t *testing.T) {
+	NewRule()
 }

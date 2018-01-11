@@ -2,11 +2,10 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package qos
+package kb
 
-import (
-	"testing"
-)
-
-func TestNewQuality(t *testing.T) {
+// Variable represents an variable interface in qualities.
+type Variable interface {
+	GetName() string
+	GetValue() interface{}
 }

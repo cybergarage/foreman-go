@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package qos
+package kb
 
 // Operator represents an operator interface in qualities.
 type Operator interface {
