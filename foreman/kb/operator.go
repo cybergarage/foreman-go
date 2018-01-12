@@ -8,4 +8,6 @@ package kb
 type Operator interface {
 	// IsSatisfied checks whether ('value1' op 'value2') is valid
 	IsSatisfied(value1 interface{}, value2 interface{}) (bool, error)
+	// String returns a string description of the instance
+	String() string
 }

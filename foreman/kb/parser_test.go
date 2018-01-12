@@ -32,11 +32,11 @@ func (parser *TestParser) CreateOperator(operator interface{}) (Operator, error)
 	return newTestOperatorWithString(opeStr), nil
 }
 
-func newTestParser() *Parser {
+func newTestParser() *TestParser {
 	parser := &TestParser{
 		variables: make(map[string]Variable),
 	}
-	return NewParserWithFactory(parser)
+	return parser
 }
 
 func TestNewParser(t *testing.T) {

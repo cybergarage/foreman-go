@@ -4,8 +4,10 @@
 
 package kb
 
-import "strings"
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // A Formula represents a formula formula in a QoS clause.
 type Formula struct {
@@ -55,4 +57,9 @@ func (formula *Formula) ParseString(factory Factory, formulaString string) error
 	formula.Objective = objective
 
 	return nil
+}
+
+// String returns a string description of the instance
+func (formula *Formula) String() string {
+	return fmt.Sprintf("%s%s %s %s%s", StartBracket, formula.Variable.GetName(), formula.Operator.String(), formula.Objective.String(), EndBracket)
 }
