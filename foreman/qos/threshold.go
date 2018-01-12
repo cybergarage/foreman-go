@@ -5,6 +5,8 @@
 package qos
 
 import (
+	"fmt"
+
 	"github.com/cybergarage/foreman-go/foreman/kb"
 )
 
@@ -30,4 +32,9 @@ func NewThresholdWithValue(value float64) *Threshold {
 // GetValue returns the stored value.
 func (th *Threshold) GetValue() interface{} {
 	return th.Value
+}
+
+// String returns a string description of the instance
+func (th *Threshold) String() string {
+	return fmt.Sprintf("%f", th.Value)
 }

@@ -5,6 +5,7 @@
 package kb
 
 import (
+	"bytes"
 	"strings"
 )
 
@@ -57,4 +58,26 @@ func (rule *Rule) ParseString(factory Factory, ruleString string) error {
 	}
 
 	return nil
+}
+
+// String returns a string description of the instance
+func (rule *Rule) String() string {
+	if len(rule.Clauses) == 0 {
+		return ""
+	}
+
+	if len(rule.Clauses) == 1 {
+		return rule.Clauses[0].String()
+	}
+
+	var b bytes.Buffer
+	b.Write([]byte(StartBracket))
+	for n, clause := range rule.Clauses {
+		if 0 < n {
+			b.Write([]byte(SpaceSeparator + ClauseSeparator + SpaceSeparator))
+		}
+		b.Write([]byte(clause.String()))
+	}
+	b.Write([]byte(EndBracket))
+	return b.String()
 }

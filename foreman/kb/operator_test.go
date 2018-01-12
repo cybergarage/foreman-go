@@ -14,6 +14,10 @@ func (v *TestOperator) IsSatisfied(value1 interface{}, value2 interface{}) (bool
 	return true, nil
 }
 
+func (v *TestOperator) String() string {
+	return ""
+}
+
 func newTestOperatorWithString(opeStr string) *TestOperator {
 	return &TestOperator{}
 }

@@ -49,3 +49,13 @@ func (operator *Operator) SetTypeString(typeString string) error {
 func (operator *Operator) IsSatisfied(value1 interface{}, value2 interface{}) (bool, error) {
 	return true, nil
 }
+
+// String returns a string description of the instance
+func (operator *Operator) String() string {
+	for operatorString, operatorType := range qosOperatorTypes {
+		if operator.Type == operatorType {
+			return operatorString
+		}
+	}
+	return ""
+}

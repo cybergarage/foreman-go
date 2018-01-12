@@ -7,4 +7,5 @@ package kb
 // Objective represents an objective interface in formulas.
 type Objective interface {
 	GetValue() interface{}
+	String() string
 }

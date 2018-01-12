@@ -4,6 +4,7 @@
 package kb
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -13,6 +14,10 @@ type TestObjective struct {
 
 func (obj *TestObjective) GetValue() interface{} {
 	return obj.Value
+}
+
+func (obj *TestObjective) String() string {
+	return fmt.Sprintf("%f", obj.Value)
 }
 
 func newTestObjectiveWithString(value string) *TestObjective {
