@@ -51,6 +51,10 @@ func (rule *Rule) ParseString(factory Factory, ruleString string) error {
 			}
 		}
 
+		if len(clause.Formulas) <= 0 {
+			continue
+		}
+
 		err := rule.AddClause(clause)
 		if err != nil {
 			return err
