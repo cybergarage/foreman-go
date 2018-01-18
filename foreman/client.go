@@ -7,6 +7,7 @@ package foreman
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/metric"
+	rpc "github.com/cybergarage/foreman-go/foreman/rpc/graphite"
 	"github.com/cybergarage/go-graphite/net/graphite"
 )
 
@@ -36,8 +37,16 @@ func (client *Client) SendMetric(host string, m *metric.Metric) error {
 }
 
 // PostMetric posts a specified metric into all metric datapoints to Carbon.
-func (client *Client) PostMetric(*metric.Metric) error {
-	//err := client.graphite.PostMetric(m)
-	//return err
+func (client *Client) PostMetric(m *metric.Metric) error {
+	gm, err := rpc.NewGraphiteMetricsWithMetric(m)
+	if err != nil {
+		return err
+	}
+
+	err = client.graphite.PostMetric(gm)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
