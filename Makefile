@@ -42,23 +42,6 @@ ${VERSION_GO}: ./foreman/version.gen
 
 version: ${VERSION_GO}
 
-SETUP_CMD="./setup"
-
-setup:
-	@echo "#!/bin/bash" > ${SETUP_CMD}
-	@echo "export GOPATH=\`pwd\`" >> ${SETUP_CMD}
-	@echo "git pull" >> ${SETUP_CMD}
-	@echo "mkdir -p src" >> ${SETUP_CMD}
-	@echo "rm -rf src/${GITHUB_ROOT}" >> ${SETUP_CMD}
-	@echo "# go-graphite" >> ${SETUP_CMD}
-	@echo "go get -u ${GO_GRAPHITE_GITHUB_ID}" >> ${SETUP_CMD}
-	@echo "pushd src && mv ${GO_GRAPHITE_GITHUB}.git ${GO_GRAPHITE_GITHUB} && popd" >> ${SETUP_CMD}
-	@echo "# foreman-go" >> ${SETUP_CMD}
-	@echo "go get -u ${GITHUB_ID}" >> ${SETUP_CMD}
-	@echo "pushd src && mv ${GITHUB}.git ${GITHUB} && popd" >> ${SETUP_CMD}
-	@chmod a+x ${SETUP_CMD}
-	@./${SETUP_CMD}
-
 format:
 	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${BINARY_NAME}
 
