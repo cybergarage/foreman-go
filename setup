@@ -30,7 +30,7 @@ if [ -d ${go_graphite_dir} ]; then
   pushd ${go_graphite_dir} && git pull && popd
 else
   go get -u github.com/cybergarage/go-graphite.git/net/graphite
-  pushd src && mv github.com/cybergarage/go-graphite.git {$go_graphite_path} && popd
+  pushd src && mv github.com/cybergarage/go-graphite.git ${go_graphite_path} && popd
 fi
 
 # foreman-go
@@ -40,7 +40,7 @@ if [ -d ${foreman_go_dir} ]; then
   pushd ${foreman_go_dir} && git pull && popd
 else
   go get -u github.com/cybergarage/foreman-go.git/foreman
-  pushd src && mv github.com/cybergarage/foreman-go.git github.com/cybergarage/foreman-go && popd
+  pushd src && mv github.com/cybergarage/foreman-go.git ${foreman_go_path} && popd
 fi
 
 ########################################
