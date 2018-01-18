@@ -5,5 +5,6 @@
 package foreman
 
 const (
-	ProgramName = "foreman"
+	ProgramName       = "foreman"
+	DefaultServerHost = "localhost"
 )
