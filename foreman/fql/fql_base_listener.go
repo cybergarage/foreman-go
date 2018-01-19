@@ -20,6 +20,12 @@ func (s *BaseFQLListener) EnterEveryRule(ctx antlr.ParserRuleContext) {}
 // ExitEveryRule is called when any rule is exited.
 func (s *BaseFQLListener) ExitEveryRule(ctx antlr.ParserRuleContext) {}
 
+// EnterFql is called when production fql is entered.
+func (s *BaseFQLListener) EnterFql(ctx *FqlContext) {}
+
+// ExitFql is called when production fql is exited.
+func (s *BaseFQLListener) ExitFql(ctx *FqlContext) {}
+
 // EnterStatement_list is called when production statement_list is entered.
 func (s *BaseFQLListener) EnterStatement_list(ctx *Statement_listContext) {}
 
@@ -37,3 +43,9 @@ func (s *BaseFQLListener) EnterSet_stmt(ctx *Set_stmtContext) {}
 
 // ExitSet_stmt is called when production set_stmt is exited.
 func (s *BaseFQLListener) ExitSet_stmt(ctx *Set_stmtContext) {}
+
+// EnterQos_stmt is called when production qos_stmt is entered.
+func (s *BaseFQLListener) EnterQos_stmt(ctx *Qos_stmtContext) {}
+
+// ExitQos_stmt is called when production qos_stmt is exited.
+func (s *BaseFQLListener) ExitQos_stmt(ctx *Qos_stmtContext) {}
