@@ -8,15 +8,15 @@ import (
 	"testing"
 )
 
-func TestNewServer(t *testing.T) {
+func testClientDial(t *testing.T, client *Client) {
 	server := NewServer()
 
-	_, err := server.GetHostname()
+	err := server.Start()
 	if err != nil {
 		t.Error(err)
 	}
 
-	err = server.Start()
+	serverHostname, err := server.GetHostname()
 	if err != nil {
 		t.Error(err)
 	}
@@ -25,4 +25,9 @@ func TestNewServer(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+}
+
+func TestNewClient(t *testing.T) {
+	client := NewClient()
+	testClientDial(t, client)
 }
