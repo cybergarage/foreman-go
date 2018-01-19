@@ -19,7 +19,17 @@ type Metric struct {
 
 // NewMetric returns a new metric.
 func NewMetric() *Metric {
-	m := &Metric{}
+	m := &Metric{
+		Timestamp: time.Now(),
+		Value:     0.0,
+	}
+	return m
+}
+
+// NewMetricWithName returns a new metric with the specified name.
+func NewMetricWithName(name string) *Metric {
+	m := NewMetric()
+	m.Name = name
 	return m
 }
 
