@@ -7,6 +7,7 @@ package foreman
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/cybergarage/go-graphite/net/graphite"
 
@@ -46,6 +47,11 @@ func NewServer() *Server {
 	server.actionMgr = action.NewManager()
 
 	return server
+}
+
+// GetHostname returns the hostname.
+func (server *Server) GetHostname() (string, error) {
+	return os.Hostname()
 }
 
 // LoadConfig loads a specified configuration file.
