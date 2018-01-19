@@ -36,7 +36,7 @@ func (client *Client) SendMetric(host string, m *metric.Metric) error {
 	return nil
 }
 
-// PostMetric posts a specified metric into all metric datapoints to Carbon.
+// PostMetric posts a metric over Graphite interface
 func (client *Client) PostMetric(m *metric.Metric) error {
 	gm, err := rpc.NewGraphiteMetricsWithMetric(m)
 	if err != nil {
@@ -49,4 +49,9 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 	}
 
 	return nil
+}
+
+// QueryMetrics posts a query over Graphite interface
+func (client *Client) QueryMetrics(q *metric.Query) (metric.ResultSet, error) {
+	return nil, nil
 }
