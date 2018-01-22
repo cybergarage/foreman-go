@@ -7,8 +7,15 @@ package metric
 
 import "time"
 
+// StoreListener represents a listener for store.
+type StoreListener interface {
+	MetricAdded(*Metric, error)
+}
+
 // Storing represents an abstract interface of metric store
 type Storing interface {
+	SetListener(StoreListener) error
+
 	SetRetentionInterval(value time.Duration) error
 	GetRetentionInterval() (time.Duration, error)
 
