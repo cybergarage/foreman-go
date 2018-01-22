@@ -6,6 +6,7 @@
 package metric
 
 const (
+	errorInvalidMetric          = "Invalid metric : %v"
 	errorStoreCouldNotOpen      = "Couldn't open : %s"
 	errorStoreCouldNotClose     = "Couldn't close : %s"
 	errorStoreCouldNotAddMetric = "Couldn't add a metric : %s"
