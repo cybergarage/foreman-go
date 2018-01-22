@@ -14,47 +14,43 @@ import (
 	"unsafe"
 )
 
-// CgoResultSet represents a Foreman ResultSet.
-type CgoResultSet struct {
+// cgoResultSet represents a result set of foreman-cc.
+type cgoResultSet struct {
+	ResultSet
 	cObject unsafe.Pointer
 }
 
-// NewResultSet returns a new ResultSet.
-func NewResultSet() *CgoResultSet {
-	return NewResultSetWithCObject(C.foreman_metric_resultset_new())
-}
-
 // NewResultSetWithCObject returns a new ResultSet from the C++ object.
-func NewResultSetWithCObject(cObj unsafe.Pointer) *CgoResultSet {
-	rs := &CgoResultSet{}
+func NewResultSetWithCObject(cObj unsafe.Pointer) *cgoResultSet {
+	rs := &cgoResultSet{}
 	rs.cObject = cObj
 	runtime.SetFinalizer(rs, resultSetFinalizer)
 	return rs
 }
 
-func resultSetFinalizer(r *CgoResultSet) {
-	if r.cObject != nil {
-		if C.foreman_metric_resultset_delete(r.cObject) {
-			r.cObject = nil
+func resultSetFinalizer(rs *cgoResultSet) {
+	if rs.cObject != nil {
+		if C.foreman_metric_resultset_delete(rs.cObject) {
+			rs.cObject = nil
 		}
 	}
 }
 
 // GetDataPointCount returns a number of the data points.
-func (r *CgoResultSet) GetDataPointCount() int {
-	if r.cObject == nil {
+func (rs *cgoResultSet) GetDataPointCount() int {
+	if rs.cObject == nil {
 		return 0
 	}
-	return int(C.foreman_metric_resultset_getdatapointcount(r.cObject))
+	return int(C.foreman_metric_resultset_getdatapointcount(rs.cObject))
 }
 
 // GetFirstDataPoints returns a first data points.
-func (r *CgoResultSet) GetFirstDataPoints() *DataPoints {
-	if r.cObject == nil {
+func (rs *cgoResultSet) GetFirstDataPoints() *DataPoints {
+	if rs.cObject == nil {
 		return nil
 	}
 
-	cDpsObject := C.foreman_metric_resultset_firstdatapoints(r.cObject)
+	cDpsObject := C.foreman_metric_resultset_firstdatapoints(rs.cObject)
 	if cDpsObject == nil {
 		return nil
 	}
@@ -63,12 +59,12 @@ func (r *CgoResultSet) GetFirstDataPoints() *DataPoints {
 }
 
 // GetNextDataPoints returns a first data points.
-func (r *CgoResultSet) GetNextDataPoints() *DataPoints {
-	if r.cObject == nil {
+func (rs *cgoResultSet) GetNextDataPoints() *DataPoints {
+	if rs.cObject == nil {
 		return nil
 	}
 
-	cDpsObject := C.foreman_metric_resultset_nextdatapoints(r.cObject)
+	cDpsObject := C.foreman_metric_resultset_nextdatapoints(rs.cObject)
 	if cDpsObject == nil {
 		return nil
 	}

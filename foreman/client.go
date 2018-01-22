@@ -59,10 +59,15 @@ func (client *Client) QueryMetrics(q *metric.Query) (metric.ResultSet, error) {
 		return nil, err
 	}
 
-	m, err := client.graphite.PostQuery(gq)
+	gms, err := client.graphite.PostQuery(gq)
 	if err != nil {
 		return nil, err
 	}
 
-	return nil, nil
+	rs, err := rpc.NewResultSetWithGraphiteMetrics(gms)
+	if err != nil {
+		return nil, err
+	}
+
+	return rs, nil
 }
