@@ -10,8 +10,5 @@ import (
 )
 
 // MetricAdded is a listener for metric.Store
-func (server *Server) MetricAdded(m *metric.Metric, err error) {
-	if err != nil {
-		return
-	}
+func (server *Server) MetricAdded(m *metric.Metric) {
 }

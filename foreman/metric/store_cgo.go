@@ -96,8 +96,8 @@ func (store *cgoStore) GetRetentionInterval() (time.Duration, error) {
 	return duration, nil
 }
 
-// addMetric adds a new metric.
-func (store *cgoStore) addMetric(m *Metric) error {
+// AddMetric adds a new metric.
+func (store *cgoStore) AddMetric(m *Metric) error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -112,16 +112,11 @@ func (store *cgoStore) addMetric(m *Metric) error {
 		return fmt.Errorf(errorStoreCouldNotAddMetric, m.String())
 	}
 
-	return nil
-}
-
-// AddMetric adds a new metric.
-func (store *cgoStore) AddMetric(m *Metric) error {
-	err := store.addMetric(m)
 	if store.listener != nil {
-		store.listener.MetricAdded(m, err)
+		store.listener.MetricAdded(m)
 	}
-	return err
+
+	return nil
 }
 
 // Query gets the specified metrics.
