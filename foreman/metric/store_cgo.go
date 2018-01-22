@@ -19,7 +19,8 @@ import (
 
 // Store represents a metric store for Foreman.
 type cgoStore struct {
-	cStore unsafe.Pointer
+	cStore   unsafe.Pointer
+	listener StoreListener
 }
 
 // Open initializes the store.
@@ -61,6 +62,17 @@ func (store *cgoStore) Clear() error {
 	return nil
 }
 
+// SetListener sets a listener.
+func (store *cgoStore) SetListener(listener StoreListener) error {
+	if store.cStore == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	store.listener = listener
+
+	return nil
+}
+
 // SetRetentionInterval sets the retention duration.
 func (store *cgoStore) SetRetentionInterval(value time.Duration) error {
 	if store.cStore == nil {
@@ -84,8 +96,8 @@ func (store *cgoStore) GetRetentionInterval() (time.Duration, error) {
 	return duration, nil
 }
 
-// AddMetric adds a new metric.
-func (store *cgoStore) AddMetric(m *Metric) error {
+// addMetric adds a new metric.
+func (store *cgoStore) addMetric(m *Metric) error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -95,15 +107,21 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 		return err
 	}
 
-	isSuccess, err := C.foreman_metric_store_addmetric(store.cStore, cm)
-	if err != nil {
-		return err
-	}
+	isSuccess := C.foreman_metric_store_addmetric(store.cStore, cm)
 	if !isSuccess {
 		return fmt.Errorf(errorStoreCouldNotAddMetric, m.String())
 	}
 
 	return nil
+}
+
+// AddMetric adds a new metric.
+func (store *cgoStore) AddMetric(m *Metric) error {
+	err := store.addMetric(m)
+	if store.listener != nil {
+		store.listener.MetricAdded(m, err)
+	}
+	return err
 }
 
 // Query gets the specified metrics.
