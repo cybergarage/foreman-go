@@ -60,8 +60,8 @@ func main() {
 	if 0 < len(*configFile) {
 		err := server.LoadConfig(*configFile)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s", err)
-			os.Exit(1)
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+			//os.Exit(1)
 		}
 	}
 
