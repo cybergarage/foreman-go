@@ -16,7 +16,7 @@ func testClientDial(t *testing.T, client *Client) {
 		t.Error(err)
 	}
 
-	serverHostname, err := server.GetHostname()
+	_, err = server.GetHostname()
 	if err != nil {
 		t.Error(err)
 	}
