@@ -30,6 +30,11 @@ func NewRegister() *Register {
 	return reg
 }
 
+// SetListener sets a listener.
+func (rs *Register) SetListener(listener RegisterListener) {
+	rs.Listener = listener
+}
+
 // GetMetric gets the specified metric.
 func (rs *Register) GetMetric(key string) (*Metric, bool) {
 	obj, ok := rs.GetObject(key)

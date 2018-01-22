@@ -13,7 +13,6 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/metric"
-	"github.com/cybergarage/foreman-go/foreman/register"
 	"github.com/cybergarage/foreman-go/foreman/registry"
 )
 
@@ -24,21 +23,21 @@ const (
 
 // Server represents a Foreman Server.
 type Server struct {
-	graphite      *graphite.Server
-	registerStore *register.Store
-	registryStore *registry.Store
-	metricStore   *metric.Store
-	actionMgr     *action.Manager
+	graphite       *graphite.Server
+	registryStore  *registry.Store
+	metricStore    *metric.Store
+	metricRegister *metric.Register
+	actionMgr      *action.Manager
 }
 
 // NewServer returns a new Server.
 func NewServer() *Server {
 	server := &Server{
-		graphite:      graphite.NewServer(),
-		registerStore: register.NewStore(),
-		registryStore: registry.NewStore(),
-		metricStore:   metric.NewStore(),
-		actionMgr:     action.NewManager(),
+		graphite:       graphite.NewServer(),
+		registryStore:  registry.NewStore(),
+		metricStore:    metric.NewStore(),
+		metricRegister: metric.NewRegister(),
+		actionMgr:      action.NewManager(),
 	}
 
 	server.graphite.CarbonListener = server
@@ -46,6 +45,7 @@ func NewServer() *Server {
 	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
 	server.metricStore.SetListener(server)
+	server.metricRegister.SetListener(server)
 
 	return server
 }
@@ -79,12 +79,6 @@ func (server *Server) Start() error {
 		return err
 	}
 
-	err = server.registerStore.Open()
-	if err != nil {
-		server.Stop()
-		return err
-	}
-
 	err = server.registryStore.Open()
 	if err != nil {
 		server.Stop()
@@ -92,6 +86,12 @@ func (server *Server) Start() error {
 	}
 
 	err = server.metricStore.Open()
+	if err != nil {
+		server.Stop()
+		return err
+	}
+
+	err = server.metricRegister.Open()
 	if err != nil {
 		server.Stop()
 		return err
@@ -107,17 +107,17 @@ func (server *Server) Stop() error {
 		return err
 	}
 
-	err = server.registerStore.Close()
-	if err != nil {
-		return err
-	}
-
 	err = server.registryStore.Close()
 	if err != nil {
 		return err
 	}
 
 	err = server.metricStore.Close()
+	if err != nil {
+		return err
+	}
+
+	err = server.metricRegister.Close()
 	if err != nil {
 		return err
 	}

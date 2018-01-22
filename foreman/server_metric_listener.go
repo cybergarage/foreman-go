@@ -11,4 +11,9 @@ import (
 
 // MetricAdded is a listener for metric.Store
 func (server *Server) MetricAdded(m *metric.Metric) {
+	server.metricRegister.UpdateMetric(m)
+}
+
+// MetricUpdated is a listener for metric.Register
+func (server *Server) MetricUpdated(m *metric.Metric) {
 }
