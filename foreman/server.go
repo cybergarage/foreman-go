@@ -33,18 +33,19 @@ type Server struct {
 
 // NewServer returns a new Server.
 func NewServer() *Server {
-	server := &Server{}
+	server := &Server{
+		graphite:      graphite.NewServer(),
+		registerStore: register.NewStore(),
+		registryStore: registry.NewStore(),
+		metricStore:   metric.NewStore(),
+		actionMgr:     action.NewManager(),
+	}
 
-	server.graphite = graphite.NewServer()
 	server.graphite.CarbonListener = server
 	server.graphite.RenderListener = server
 	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
-	server.registerStore = register.NewStore()
-	server.registryStore = registry.NewStore()
-	server.metricStore = metric.NewStore()
-
-	server.actionMgr = action.NewManager()
+	server.metricStore.SetListener(server)
 
 	return server
 }
@@ -137,70 +138,6 @@ func (server *Server) Restart() error {
 	}
 
 	return nil
-}
-
-// MetricRequestReceived is a listener for Graphite Carbon
-func (server *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
-	// Ignore error requests
-	if err != nil {
-		return
-	}
-
-	for _, dp := range gm.DataPoints {
-		// graphite.Metric to foreman.Metric
-		fm := metric.NewMetric()
-		fm.Name = gm.Name
-		fm.Timestamp = dp.Timestamp
-		fm.Value = dp.Value
-
-		err = server.metricStore.AddMetric(fm)
-		if err != nil {
-			// TODO : Handle the error
-		}
-	}
-}
-
-// QueryRequestReceived is a listener for Graphite Render
-func (server *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metric, error) {
-	// Ignore error requests
-	if err != nil {
-		return nil, nil
-	}
-
-	// graphite.Query to foreman.Query
-	fq := metric.NewQuery()
-	fq.Target = gq.Target
-	fq.From = gq.From
-	fq.Until = gq.Until
-
-	rs, err := server.metricStore.Query(fq)
-	if err != nil {
-		return nil, err
-	}
-
-	mCount := rs.GetDataPointCount()
-	m := make([]*graphite.Metric, mCount)
-
-	dps := rs.GetFirstDataPoints()
-	for n := 0; n < mCount; n++ {
-		m[n] = graphite.NewMetric()
-		if dps == nil {
-			break
-		}
-		m[n].Name = dps.Name
-		dpCount := len(dps.Values)
-		m[n].DataPoints = graphite.NewDataPoints(dpCount)
-		for i := 0; i < dpCount; i++ {
-			dp := graphite.NewDataPoint()
-			dp.Timestamp = dps.Values[i].Timestamp
-			dp.Value = dps.Values[i].Value
-			m[n].DataPoints[i] = dp
-		}
-
-		dps = rs.GetNextDataPoints()
-	}
-
-	return m, nil
 }
 
 // HTTPRequestReceived is a listener for FQL
