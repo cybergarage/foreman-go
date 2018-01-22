@@ -53,5 +53,16 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 
 // QueryMetrics posts a query over Graphite interface
 func (client *Client) QueryMetrics(q *metric.Query) (metric.ResultSet, error) {
+
+	gq, err := rpc.NewGraphiteQueryWithMetricQuery(q)
+	if err != nil {
+		return nil, err
+	}
+
+	m, err := client.graphite.PostQuery(gq)
+	if err != nil {
+		return nil, err
+	}
+
 	return nil, nil
 }
