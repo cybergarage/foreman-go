@@ -45,14 +45,9 @@ func (obj *Object) GetTimestamp() time.Time {
 	return obj.timestamp
 }
 
-// incrementVersion updates the current version number.
-func (obj *Object) incrementVersion() error {
+// UpdateVersionAndTimestamp updates the current version number and timestamp.
+func (obj *Object) UpdateVersionAndTimestamp() error {
 	obj.version++
-	return nil
-}
-
-// updateTimestamp updates the current time stamp.
-func (obj *Object) updateTimestamp() error {
 	obj.timestamp = time.Now()
 	return nil
 }
