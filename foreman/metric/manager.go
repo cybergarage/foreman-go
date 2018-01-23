@@ -22,8 +22,8 @@ func NewManager() *Manager {
 	return mgr
 }
 
-// MetricAdded is a listener for Store
-func (mgr *Manager) MetricAdded(m *Metric) {
+// StoreMetricAdded is a listener for Store
+func (mgr *Manager) StoreMetricAdded(m *Metric) {
 	mgr.Register.UpdateMetric(m)
 }
 

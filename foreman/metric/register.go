@@ -12,10 +12,10 @@ import (
 
 // RegisterListener represents a listener for metric register.
 type RegisterListener interface {
-	// MetricAdded is called when a new metric is added
-	MetricAdded(*Metric)
-	// MetricUpdated is called when a metric which is already added is updated
-	MetricUpdated(*Metric)
+	// RegisterMetricAdded is called when a new metric is added
+	RegisterMetricAdded(*Metric)
+	// RegisterMetricUpdated is called when a metric which is already added is updated
+	RegisterMetricUpdated(*Metric)
 }
 
 // Register represents an register store for metric.
@@ -82,9 +82,9 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 
 	if rs.Listener != nil {
 		if isNewMetricAdded {
-			rs.Listener.MetricAdded(rm)
+			rs.Listener.RegisterMetricAdded(rm)
 		} else {
-			rs.Listener.MetricUpdated(rm)
+			rs.Listener.RegisterMetricUpdated(rm)
 		}
 	}
 

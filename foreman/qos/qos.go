@@ -54,6 +54,7 @@ func (qos *QoS) SetMetricToAllRules(m *metric.Metric) error {
 			}
 		}
 	}
+
 	return nil
 }
 
