@@ -9,18 +9,25 @@ import (
 	"time"
 )
 
+// ObjectListener represents an interface of the meta object.
+type ObjectListener interface {
+	ObjectUpdated(obj *Object)
+}
+
 // Object represents a meta object in the register store.
 type Object struct {
 	Name      string
 	Data      interface{}
 	version   int64
 	timestamp time.Time
+	listeners []ObjectListener
 }
 
 // NewObject returns a new object.
 func NewObject() *Object {
 	m := &Object{
-		version: 0,
+		version:   0,
+		listeners: make([]ObjectListener, 0),
 	}
 	return m
 }
@@ -49,7 +56,49 @@ func (obj *Object) GetTimestamp() time.Time {
 func (obj *Object) UpdateVersionAndTimestamp() error {
 	obj.version++
 	obj.timestamp = time.Now()
+
+	for _, l := range obj.listeners {
+		l.ObjectUpdated(obj)
+	}
+
 	return nil
+}
+
+// HasListener checks whether the specified listener is already added
+func (obj *Object) HasListener(listener ObjectListener) bool {
+	for _, l := range obj.listeners {
+		if l == listener {
+			return true
+		}
+	}
+	return false
+}
+
+// AddListener adds a new listener
+func (obj *Object) AddListener(listener ObjectListener) bool {
+	if obj.HasListener(listener) {
+		return false
+	}
+	obj.listeners = append(obj.listeners, listener)
+	return true
+}
+
+// RemoveListener removes the specified listener
+func (obj *Object) RemoveListener(listener ObjectListener) bool {
+	for n, l := range obj.listeners {
+		if l == listener {
+			lastIndex := len(obj.listeners) - 1
+			obj.listeners[lastIndex], obj.listeners[n] = obj.listeners[n], obj.listeners[lastIndex]
+			obj.listeners = obj.listeners[:lastIndex]
+			return true
+		}
+	}
+	return false
+}
+
+// GetListeners returns the current listeners
+func (obj *Object) GetListeners() []ObjectListener {
+	return obj.listeners
 }
 
 // String returns a string description of the instance
