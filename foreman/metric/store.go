@@ -9,6 +9,8 @@ import "time"
 
 // Storing represents an abstract interface of metric store
 type Storing interface {
+	SetStoreListener(StoreListener) error
+
 	SetRetentionInterval(value time.Duration) error
 	GetRetentionInterval() (time.Duration, error)
 

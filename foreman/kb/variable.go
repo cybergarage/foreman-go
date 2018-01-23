@@ -7,5 +7,5 @@ package kb
 // Variable represents an variable interface in formulas.
 type Variable interface {
 	GetName() string
-	GetValue() interface{}
+	GetValue() (interface{}, error)
 }
