@@ -8,4 +8,5 @@ const (
 	errorInvalidVariable  = "Invalid variable (%v)"
 	errorInvalidOperator  = "Invalid operator (%v)"
 	errorInvalidObjective = "Invalid objective (%v)"
+	errorNullEntity       = "Entity (%s) is null"
 )

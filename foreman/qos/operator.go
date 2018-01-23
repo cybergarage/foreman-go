@@ -46,8 +46,64 @@ func (operator *Operator) SetTypeString(typeString string) error {
 }
 
 // IsSatisfied is an interface method of kb.Operator
-func (operator *Operator) IsSatisfied(value1 interface{}, value2 interface{}) (bool, error) {
-	return true, nil
+func (operator *Operator) IsSatisfied(v interface{}, obj interface{}) (bool, error) {
+	m, ok := v.(*Metric)
+	if !ok {
+		return false, fmt.Errorf(errorInvalidVariable, v)
+	}
+	mObj, err := m.GetValue()
+	if err != nil {
+		return false, err
+	}
+	mValue, ok := mObj.(float64)
+	if !ok {
+		return false, fmt.Errorf(errorInvalidVariable, v)
+	}
+
+	th, ok := obj.(*Threshold)
+	if !ok {
+		return false, fmt.Errorf(errorInvalidObjective, obj)
+	}
+	thObj := th.GetValue()
+	thValue, ok := thObj.(float64)
+	if !ok {
+		return false, fmt.Errorf(errorInvalidVariable, v)
+	}
+
+	switch operator.Type {
+	case qosOperatorTypeLT:
+		if mValue < thValue {
+			return true, nil
+		}
+		return false, nil
+	case qosOperatorTypeLE:
+		if mValue <= thValue {
+			return true, nil
+		}
+		return false, nil
+	case qosOperatorTypeGT:
+		if mValue > thValue {
+			return true, nil
+		}
+		return false, nil
+	case qosOperatorTypeGE:
+		if mValue >= thValue {
+			return true, nil
+		}
+		return false, nil
+	case qosOperatorTypeEQ:
+		if mValue == thValue {
+			return true, nil
+		}
+		return false, nil
+	case qosOperatorTypeNotEQ:
+		if mValue != thValue {
+			return true, nil
+		}
+		return false, nil
+	}
+
+	return false, fmt.Errorf(errorInvalidOperator, operator)
 }
 
 // String returns a string description of the instance

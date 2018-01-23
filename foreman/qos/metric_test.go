@@ -8,5 +8,5 @@ import (
 )
 
 func TestNewMetric(t *testing.T) {
-	NewMetric()
+	NewMetricWithName("")
 }
