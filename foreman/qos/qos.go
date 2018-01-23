@@ -29,6 +29,11 @@ func (qos *QoS) ParseQoSString(qosString string) error {
 	return qos.ParseRuleString(qos, qosString)
 }
 
+// parseFormulaString parses a specified QoS formula string.
+func (qos *QoS) parseFormulaString(qosString string) (*kb.Formula, error) {
+	return qos.ParseFormulaString(qos, qosString)
+}
+
 // CreateVariable is an interface method of kb.Factory
 func (qos *QoS) CreateVariable(variable interface{}) (kb.Variable, error) {
 	varStr, ok := variable.(string)

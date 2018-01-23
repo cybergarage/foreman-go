@@ -5,18 +5,14 @@
 package qos
 
 import (
-	"encoding/csv"
-	"io"
-	"io/ioutil"
-	"strconv"
-	"strings"
 	"testing"
 
 	"github.com/cybergarage/foreman-go/foreman/kb"
+	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
 const (
-	testQoSCaseFilename = "qos_test.csv"
+	errorInvalidFormulaOperator = "Invalid formula : %s"
 )
 
 func testQoSFactory(t *testing.T, factory kb.Factory) {
@@ -25,80 +21,104 @@ func testQoSFactory(t *testing.T, factory kb.Factory) {
 	factory.CreateObjective("th")
 }
 
+func testQoSGoodFormula(t *testing.T, qos *QoS, formula *kb.Formula) {
+	ok, err := formula.IsSatisfied()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if !ok {
+		t.Errorf(errorInvalidFormulaOperator, formula)
+	}
+}
+
+func testQoSBadFormula(t *testing.T, qos *QoS, formula *kb.Formula) {
+	ok, err := formula.IsSatisfied()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	if ok {
+		t.Errorf(errorInvalidFormulaOperator, formula)
+	}
+}
+
+func testQoSOperators(t *testing.T, qos *QoS) {
+	formulaStrings := []string{
+		"x == 10.0",
+		"x != 1.0",
+		"x > 5.0",
+		"x >= 10.0",
+		"x < 20.0",
+		"x <= 10.0",
+	}
+
+	xm := metric.NewMetricWithName("x")
+
+	formulas := make([]*kb.Formula, len(formulaStrings))
+	for n, formulaString := range formulaStrings {
+		formula, err := qos.parseFormulaString(formulaString)
+		if err != nil {
+			t.Error(err)
+		}
+
+		vm := formula.Variable
+		qm, _ := vm.(*Metric)
+		qm.SetEntity(xm)
+
+		formulas[n] = formula
+	}
+
+	// All formulas are good when x == 10.0
+
+	xm.Value = 10.0
+	for _, formula := range formulas {
+		testQoSGoodFormula(t, qos, formula)
+	}
+
+	// x == 1
+
+	xm.Value = 1.0
+	goodFormulas := []*kb.Formula{
+		formulas[4],
+		formulas[5],
+	}
+	for _, formula := range goodFormulas {
+		testQoSGoodFormula(t, qos, formula)
+	}
+	badFormulas := []*kb.Formula{
+		formulas[0],
+		formulas[1],
+		formulas[2],
+		formulas[3],
+	}
+	for _, formula := range badFormulas {
+		testQoSBadFormula(t, qos, formula)
+	}
+
+	// x == 100.0
+
+	xm.Value = 100.0
+	goodFormulas = []*kb.Formula{
+		formulas[1],
+		formulas[2],
+		formulas[3],
+	}
+	for _, formula := range goodFormulas {
+		testQoSGoodFormula(t, qos, formula)
+	}
+	badFormulas = []*kb.Formula{
+		formulas[0],
+		formulas[4],
+		formulas[5],
+	}
+	for _, formula := range badFormulas {
+		testQoSBadFormula(t, qos, formula)
+	}
+}
+
 func TestNewQoS(t *testing.T) {
 	qos := NewQoS()
 	testQoSFactory(t, qos)
-}
-
-func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, formulas int, clauses int) {
-	err := qos.ParseQoSString(qosString)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	if len(qos.Variables) != variables {
-		t.Errorf("Invalid variable count of %s (%d != %d)", qosString, len(qos.Variables), variables)
-		return
-	}
-
-	if len(qos.Rules) <= 0 {
-		t.Errorf("Not found rules in %s", qosString)
-		return
-	}
-
-	firstRule := qos.Rules[0]
-
-	if len(firstRule.Clauses) != clauses {
-		t.Errorf("Invalid clause count of %s (%d != %d) : %s", qosString, len(firstRule.Clauses), clauses, firstRule.String())
-		return
-	}
-
-	qos.Clear()
-}
-
-func TestQoSCases(t *testing.T) {
-	qos := NewQoS()
-
-	kbStrings, err := ioutil.ReadFile(testQoSCaseFilename)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-
-	r := csv.NewReader(strings.NewReader(string(kbStrings)))
-	r.Comment = rune('#')
-
-	for {
-		record, err := r.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			t.Error(err)
-			break
-		}
-
-		qosString := record[0]
-
-		variables, err := strconv.Atoi(record[1])
-		if err != nil {
-			t.Error(err)
-			break
-		}
-
-		formulas, err := strconv.Atoi(record[2])
-		if err != nil {
-			t.Error(err)
-			break
-		}
-
-		clauses, err := strconv.Atoi(record[3])
-		if err != nil {
-			t.Error(err)
-			break
-		}
-
-		testQoSCase(t, qos, qosString, variables, formulas, clauses)
-	}
+	testQoSOperators(t, qos)
 }
