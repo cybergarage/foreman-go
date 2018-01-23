@@ -62,8 +62,8 @@ func (store *cgoStore) Clear() error {
 	return nil
 }
 
-// SetListener sets a listener.
-func (store *cgoStore) SetListener(listener StoreListener) error {
+// SetStoreListener sets a listener.
+func (store *cgoStore) SetStoreListener(listener StoreListener) error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
