@@ -13,6 +13,7 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/metric"
+	"github.com/cybergarage/foreman-go/foreman/qos"
 	"github.com/cybergarage/foreman-go/foreman/registry"
 )
 
@@ -25,6 +26,7 @@ const (
 type Server struct {
 	graphite      *graphite.Server
 	registryStore *registry.Store
+	qosMgr        *qos.Manager
 	metricMgr     *metric.Manager
 	actionMgr     *action.Manager
 }
@@ -34,6 +36,7 @@ func NewServer() *Server {
 	server := &Server{
 		graphite:      graphite.NewServer(),
 		registryStore: registry.NewStore(),
+		qosMgr:        qos.NewManager(),
 		metricMgr:     metric.NewManager(),
 		actionMgr:     action.NewManager(),
 	}
@@ -82,6 +85,12 @@ func (server *Server) Start() error {
 		return err
 	}
 
+	err = server.qosMgr.Start()
+	if err != nil {
+		server.Stop()
+		return err
+	}
+
 	err = server.metricMgr.Start()
 	if err != nil {
 		server.Stop()
@@ -99,6 +108,11 @@ func (server *Server) Stop() error {
 	}
 
 	err = server.registryStore.Close()
+	if err != nil {
+		return err
+	}
+
+	err = server.qosMgr.Stop()
 	if err != nil {
 		return err
 	}
