@@ -9,10 +9,10 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
-// MetricAdded is a listener for metric.Register
-func (server *Server) MetricAdded(m *metric.Metric) {
+// RegisterMetricAdded is a listener for metric.Register
+func (server *Server) RegisterMetricAdded(m *metric.Metric) {
 }
 
-// MetricUpdated is a listener for metric.Register
-func (server *Server) MetricUpdated(m *metric.Metric) {
+// RegisterMetricUpdated is a listener for metric.Register
+func (server *Server) RegisterMetricUpdated(m *metric.Metric) {
 }

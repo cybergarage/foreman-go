@@ -113,7 +113,7 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 	}
 
 	if store.listener != nil {
-		store.listener.MetricAdded(m)
+		store.listener.StoreMetricAdded(m)
 	}
 
 	return nil
