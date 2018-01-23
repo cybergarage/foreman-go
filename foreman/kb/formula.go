@@ -24,6 +24,11 @@ func NewFormula() *Formula {
 	return formula
 }
 
+// IsSatisfied checks whether the formula is valid
+func (formula *Formula) IsSatisfied() (bool, error) {
+	return formula.Operator.IsSatisfied(formula.Variable, formula.Objective)
+}
+
 // ParseString parses a specified formula string.
 func (formula *Formula) ParseString(factory Factory, formulaString string) error {
 	formulaStrings := strings.Split(formulaString, SpaceSeparator)
