@@ -10,14 +10,6 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/register"
 )
 
-// RegisterListener represents a listener for metric register.
-type RegisterListener interface {
-	// RegisterMetricAdded is called when a new metric is added
-	RegisterMetricAdded(*Metric)
-	// RegisterMetricUpdated is called when a metric which is already added is updated
-	RegisterMetricUpdated(*Metric)
-}
-
 // Register represents an register store for metric.
 type Register struct {
 	*register.Store
@@ -33,24 +25,24 @@ func NewRegister() *Register {
 	return reg
 }
 
-// SetListener sets a listener.
+// SetRegisterListener sets a listener.
 func (rs *Register) SetRegisterListener(listener RegisterListener) {
 	rs.Listener = listener
 }
 
 // GetMetric gets the specified metric.
-func (rs *Register) GetMetric(key string) (*Metric, bool) {
+func (rs *Register) GetMetric(key string) (*RegisterMetric, bool) {
 	obj, ok := rs.GetObject(key)
 	if !ok {
 		return nil, false
 	}
 
-	m, ok := obj.Data.(*Metric)
+	rm, ok := obj.Data.(*RegisterMetric)
 	if !ok {
 		return nil, false
 	}
 
-	return m, ok
+	return rm, ok
 }
 
 // UpdateMetric updates the specified metric.
@@ -60,7 +52,7 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 
 	obj, _ := rs.GetObject(key)
 	if obj == nil {
-		rm := NewMetric()
+		rm := NewRegisterMetric()
 		rm.Name = key
 		obj = register.NewObject()
 		obj.Name = key
@@ -68,17 +60,17 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 		isNewMetricAdded = true
 	}
 
-	rm, ok := obj.Data.(*Metric)
+	rm, ok := obj.Data.(*RegisterMetric)
 	if !ok {
 		return fmt.Errorf(errorInvalidMetric, rm)
 	}
+
+	rm.Value = m.Value
 
 	err := obj.UpdateVersionAndTimestamp()
 	if err != nil {
 		return err
 	}
-
-	rm.Value = m.Value
 
 	if rs.Listener != nil {
 		if isNewMetricAdded {
