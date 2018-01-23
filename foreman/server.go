@@ -23,29 +23,26 @@ const (
 
 // Server represents a Foreman Server.
 type Server struct {
-	graphite       *graphite.Server
-	registryStore  *registry.Store
-	metricStore    *metric.Store
-	metricRegister *metric.Register
-	actionMgr      *action.Manager
+	graphite      *graphite.Server
+	registryStore *registry.Store
+	metricMgr     *metric.Manager
+	actionMgr     *action.Manager
 }
 
 // NewServer returns a new Server.
 func NewServer() *Server {
 	server := &Server{
-		graphite:       graphite.NewServer(),
-		registryStore:  registry.NewStore(),
-		metricStore:    metric.NewStore(),
-		metricRegister: metric.NewRegister(),
-		actionMgr:      action.NewManager(),
+		graphite:      graphite.NewServer(),
+		registryStore: registry.NewStore(),
+		metricMgr:     metric.NewManager(),
+		actionMgr:     action.NewManager(),
 	}
 
 	server.graphite.CarbonListener = server
 	server.graphite.RenderListener = server
 	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
-	server.metricStore.SetListener(server)
-	server.metricRegister.SetListener(server)
+	server.metricMgr.SetRegisterListener(server)
 
 	return server
 }
@@ -85,13 +82,7 @@ func (server *Server) Start() error {
 		return err
 	}
 
-	err = server.metricStore.Open()
-	if err != nil {
-		server.Stop()
-		return err
-	}
-
-	err = server.metricRegister.Open()
+	err = server.metricMgr.Start()
 	if err != nil {
 		server.Stop()
 		return err
@@ -112,12 +103,7 @@ func (server *Server) Stop() error {
 		return err
 	}
 
-	err = server.metricStore.Close()
-	if err != nil {
-		return err
-	}
-
-	err = server.metricRegister.Close()
+	err = server.metricMgr.Stop()
 	if err != nil {
 		return err
 	}

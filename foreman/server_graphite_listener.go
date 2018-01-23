@@ -24,7 +24,7 @@ func (server *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 		fm.Timestamp = dp.Timestamp
 		fm.Value = dp.Value
 
-		err = server.metricStore.AddMetric(fm)
+		err = server.metricMgr.AddMetric(fm)
 		if err != nil {
 			// TODO : Handle the error
 		}
@@ -44,7 +44,7 @@ func (server *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*gr
 	fq.From = gq.From
 	fq.Until = gq.Until
 
-	rs, err := server.metricStore.Query(fq)
+	rs, err := server.metricMgr.Query(fq)
 	if err != nil {
 		return nil, err
 	}
