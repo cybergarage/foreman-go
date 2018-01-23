@@ -12,6 +12,9 @@ import (
 
 // RegisterListener represents a listener for metric register.
 type RegisterListener interface {
+	// MetricAdded is called when a new metric is added
+	MetricAdded(*Metric)
+	// MetricUpdated is called when a metric which is already added is updated
 	MetricUpdated(*Metric)
 }
 
@@ -31,7 +34,7 @@ func NewRegister() *Register {
 }
 
 // SetListener sets a listener.
-func (rs *Register) SetListener(listener RegisterListener) {
+func (rs *Register) SetRegisterListener(listener RegisterListener) {
 	rs.Listener = listener
 }
 
@@ -53,6 +56,7 @@ func (rs *Register) GetMetric(key string) (*Metric, bool) {
 // UpdateMetric updates the specified metric.
 func (rs *Register) UpdateMetric(m *Metric) error {
 	key := m.Name
+	isNewMetricAdded := false
 
 	obj, _ := rs.GetObject(key)
 	if obj == nil {
@@ -61,6 +65,7 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 		obj = register.NewObject()
 		obj.Name = key
 		obj.Data = rm
+		isNewMetricAdded = true
 	}
 
 	rm, ok := obj.Data.(*Metric)
@@ -76,7 +81,11 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 	rm.Value = m.Value
 
 	if rs.Listener != nil {
-		rs.Listener.MetricUpdated(rm)
+		if isNewMetricAdded {
+			rs.Listener.MetricAdded(rm)
+		} else {
+			rs.Listener.MetricUpdated(rm)
+		}
 	}
 
 	return nil

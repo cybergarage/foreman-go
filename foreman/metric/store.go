@@ -14,7 +14,7 @@ type StoreListener interface {
 
 // Storing represents an abstract interface of metric store
 type Storing interface {
-	SetListener(StoreListener) error
+	SetStoreListener(StoreListener) error
 
 	SetRetentionInterval(value time.Duration) error
 	GetRetentionInterval() (time.Duration, error)
