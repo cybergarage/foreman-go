@@ -10,9 +10,9 @@ import (
 )
 
 // RegisterMetricAdded is a listener for metric.Register
-func (server *Server) RegisterMetricAdded(m *metric.Metric) {
+func (server *Server) RegisterMetricAdded(rm *metric.RegisterMetric) {
 }
 
 // RegisterMetricUpdated is a listener for metric.Register
-func (server *Server) RegisterMetricUpdated(m *metric.Metric) {
+func (server *Server) RegisterMetricUpdated(rm *metric.RegisterMetric) {
 }
