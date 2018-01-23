@@ -17,8 +17,8 @@ func (v *TestVariable) GetName() string {
 	return v.Name
 }
 
-func (v *TestVariable) GetValue() interface{} {
-	return v.Value
+func (v *TestVariable) GetValue() (interface{}, error) {
+	return v.Value, nil
 }
 
 func newTestVariableWithName(name string) *TestVariable {

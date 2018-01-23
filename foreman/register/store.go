@@ -47,12 +47,7 @@ func (store *Store) Clear() error {
 
 // SetObject set a object into the store.
 func (store *Store) SetObject(obj *Object) error {
-	err := obj.incrementVersion()
-	if err != nil {
-		return err
-	}
-
-	err = obj.updateTimestamp()
+	err := obj.UpdateVersionAndTimestamp()
 	if err != nil {
 		return err
 	}
@@ -63,7 +58,7 @@ func (store *Store) SetObject(obj *Object) error {
 	return nil
 }
 
-// GetObject set a object into the store.
+// GetObject gets the specified object.
 func (store *Store) GetObject(key string) (*Object, bool) {
 	obj, ok := store.registers[key]
 	return obj, ok

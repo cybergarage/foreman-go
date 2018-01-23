@@ -22,8 +22,10 @@ func newStoreWithInterface(storeImpl Storing) *Store {
 }
 
 func newStoreWithCObject(cObject unsafe.Pointer) *Store {
-	storeImp := &cgoStore{}
-	storeImp.cStore = cObject
+	storeImp := &cgoStore{
+		cStore:   cObject,
+		listener: nil,
+	}
 	runtime.SetFinalizer(storeImp, storeFinalizer)
 	return newStoreWithInterface(storeImp)
 }
