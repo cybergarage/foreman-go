@@ -21,17 +21,6 @@ func NewKnowledgeBase() *KnowledgeBase {
 	return kb
 }
 
-// ParseRuleString parses a specified rule string.
-func (kb *KnowledgeBase) ParseRuleString(factory Factory, ruleString string) error {
-	parser := NewParser()
-	rule, err := parser.ParseString(factory, ruleString)
-	if err != nil {
-		return err
-	}
-
-	return kb.AddRule(rule)
-}
-
 // Clear removes all rules and variables..
 func (kb *KnowledgeBase) Clear() error {
 	kb.Rules = make([]*Rule, 0)
@@ -75,4 +64,25 @@ func (kb *KnowledgeBase) AddRules(rules []*Rule) error {
 	}
 
 	return nil
+}
+
+// ParseRuleString parses a specified rule string.
+func (kb *KnowledgeBase) ParseRuleString(factory Factory, ruleString string) error {
+	parser := NewParser()
+	rule, err := parser.ParseString(factory, ruleString)
+	if err != nil {
+		return err
+	}
+
+	return kb.AddRule(rule)
+}
+
+// ParseFormulaString parses a specified formula string.
+func (kb *KnowledgeBase) ParseFormulaString(factory Factory, formulaString string) (*Formula, error) {
+	formula := NewFormula()
+	err := formula.ParseString(factory, formulaString)
+	if err != nil {
+		return nil, err
+	}
+	return formula, nil
 }
