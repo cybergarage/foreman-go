@@ -37,11 +37,14 @@ func (rule *Rule) ParseString(factory Factory, ruleString string) error {
 		clauseString = strings.Trim(clauseString, (StartBracket + EndBracket))
 		formulasString := strings.Split(clauseString, FormulaSeparator)
 		for _, formulaString := range formulasString {
-			formula := NewFormula()
+			formula, err := factory.CreateFormula(formulasString)
+			if err != nil {
+				return err
+			}
 			formulaString = strings.TrimSpace(formulaString)
 			formulaString = strings.TrimLeft(formulaString, StartBracket)
 			formulaString = strings.TrimRight(formulaString, EndBracket)
-			err := formula.ParseString(factory, formulaString)
+			err = formula.ParseString(factory, formulaString)
 			if err != nil {
 				return err
 			}

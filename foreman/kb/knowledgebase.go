@@ -33,7 +33,7 @@ func (kb *KnowledgeBase) AddRule(rule *Rule) error {
 	// Add all variables in the rule
 	for _, clause := range rule.Clauses {
 		for _, formula := range clause.Formulas {
-			variable := formula.Variable
+			variable := formula.GetVariable()
 			variableName := variable.GetName()
 
 			mapVariable, ok := kb.Variables[variableName]
@@ -78,9 +78,12 @@ func (kb *KnowledgeBase) ParseRuleString(factory Factory, ruleString string) err
 }
 
 // ParseFormulaString parses a specified formula string.
-func (kb *KnowledgeBase) ParseFormulaString(factory Factory, formulaString string) (*Formula, error) {
-	formula := NewFormula()
-	err := formula.ParseString(factory, formulaString)
+func (kb *KnowledgeBase) ParseFormulaString(factory Factory, formulaString string) (Formula, error) {
+	formula, err := factory.CreateFormula(formulaString)
+	if err != nil {
+		return nil, err
+	}
+	err = formula.ParseString(factory, formulaString)
 	if err != nil {
 		return nil, err
 	}

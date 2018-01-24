@@ -8,19 +8,19 @@ import "bytes"
 
 // A Clause represents a clause in a QoS rule.
 type Clause struct {
-	Formulas []*Formula
+	Formulas []Formula
 }
 
 // NewClause returns a new clause.
 func NewClause() *Clause {
 	clause := &Clause{
-		Formulas: make([]*Formula, 0),
+		Formulas: make([]Formula, 0),
 	}
 	return clause
 }
 
 // AddFormula adds a new formula.
-func (clause *Clause) AddFormula(formula *Formula) error {
+func (clause *Clause) AddFormula(formula Formula) error {
 	clause.Formulas = append(clause.Formulas, formula)
 	return nil
 }
