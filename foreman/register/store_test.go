@@ -50,8 +50,8 @@ func testStore(t *testing.T, store *Store) {
 
 	for n := 0; n < testStoreLoopCount; n++ {
 		obj := NewObject()
-		obj.Name = fmt.Sprintf(testStoreKeyFormat, n)
-		obj.Data = fmt.Sprintf(testStoreDataFormat, n)
+		obj.SetName(fmt.Sprintf(testStoreKeyFormat, n))
+		obj.SetData(fmt.Sprintf(testStoreDataFormat, n))
 		err = store.SetObject(obj)
 		if err != nil {
 			t.Error(err)
@@ -72,11 +72,11 @@ func testStore(t *testing.T, store *Store) {
 			t.Error(fmt.Errorf(testObjectNotFound, key))
 		}
 
-		objData, ok := obj.Data.(string)
+		objData, ok := obj.GetData().(string)
 		if !ok {
 			t.Error(fmt.Errorf(testObjectInvalidDataType, key))
 		}
-		if obj.Data != data {
+		if objData != data {
 			t.Error(fmt.Errorf(testObjectInvalidData, key, objData, data))
 		}
 

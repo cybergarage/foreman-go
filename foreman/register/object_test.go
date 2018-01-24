@@ -13,45 +13,48 @@ const (
 	errorInvalidListenerUpdateCount = "Invalid listener update count (%d != %d)"
 )
 
-type testObjectListener struct {
+type testObject struct {
+	*Object
+	Value       float64
 	UpdateCount int
 }
 
-func newTestObjectListener() *testObjectListener {
-	l := &testObjectListener{
+func newTestObject() *testObject {
+	obj := &testObject{
+		Object:      NewObject(),
+		Value:       0.0,
 		UpdateCount: 0,
 	}
-	return l
+	return obj
 }
 
-func (l *testObjectListener) ObjectUpdated(obj *Object) {
-	l.UpdateCount++
+func (obj *testObject) ObjectUpdated() {
+	obj.UpdateCount++
 }
 
 func TestObjectListener(t *testing.T) {
-	obj := NewObject()
+	obj := newTestObject()
 
 	if len(obj.GetListeners()) != 0 {
 		t.Errorf(errorInvalidListenerCount, len(obj.GetListeners()), 0)
 	}
 
-	l := newTestObjectListener()
-	obj.AddListener(l)
+	obj.AddListener(obj)
 	if len(obj.GetListeners()) != 1 {
 		t.Errorf(errorInvalidListenerCount, len(obj.GetListeners()), 1)
 	}
 
 	// Adds same listener
-	obj.AddListener(l)
+	obj.AddListener(obj)
 	if len(obj.GetListeners()) != 1 {
 		t.Errorf(errorInvalidListenerCount, len(obj.GetListeners()), 1)
 	}
 
 	updateLoopCount := 10
 	for n := 0; n < updateLoopCount; n++ {
-		obj.UpdateVersionAndTimestamp()
-		if l.UpdateCount != (n + 1) {
-			t.Errorf(errorInvalidListenerUpdateCount, l.UpdateCount, (n + 1))
+		obj.UpdateVersion()
+		if obj.UpdateCount != (n + 1) {
+			t.Errorf(errorInvalidListenerUpdateCount, obj.UpdateCount, (n + 1))
 		}
 	}
 }

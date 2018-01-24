@@ -45,7 +45,12 @@ func (rs *Register) GetMetric(key string) (*RegisterMetric, bool) {
 		return nil, false
 	}
 
-	rm, ok := obj.Data.(*RegisterMetric)
+	objData := obj.GetData()
+	if objData == nil {
+		return nil, false
+	}
+
+	rm, ok := objData.(*RegisterMetric)
 	if !ok {
 		return nil, false
 	}
@@ -63,19 +68,24 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 		rm := NewRegisterMetric()
 		rm.Name = key
 		obj = register.NewObject()
-		obj.Name = key
-		obj.Data = rm
+		obj.SetName(key)
+		obj.SetData(rm)
 		isNewMetricAdded = true
 	}
 
-	rm, ok := obj.Data.(*RegisterMetric)
+	objData := obj.GetData()
+	if objData == nil {
+		return fmt.Errorf(errorInvalidMetric, nil)
+	}
+
+	rm, ok := objData.(*RegisterMetric)
 	if !ok {
 		return fmt.Errorf(errorInvalidMetric, rm)
 	}
 
 	rm.Value = m.Value
 
-	err := obj.UpdateVersionAndTimestamp()
+	err := obj.UpdateVersion()
 	if err != nil {
 		return err
 	}
