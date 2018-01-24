@@ -19,7 +19,7 @@ type Storing interface {
 // Store represents an register store.
 type Store struct {
 	Storing
-	registers map[string]*Object
+	registers map[string]Object
 }
 
 // NewStore returns a new store instance.
@@ -41,12 +41,12 @@ func (store *Store) Close() error {
 
 // Clear clears all registers.
 func (store *Store) Clear() error {
-	store.registers = make(map[string]*Object)
+	store.registers = make(map[string]Object)
 	return nil
 }
 
 // SetObject sets a object into the store.
-func (store *Store) SetObject(obj *Object) error {
+func (store *Store) SetObject(obj Object) error {
 	key := obj.GetName()
 	store.registers[key] = obj
 
@@ -54,7 +54,7 @@ func (store *Store) SetObject(obj *Object) error {
 }
 
 // GetObject gets the specified object.
-func (store *Store) GetObject(key string) (*Object, bool) {
+func (store *Store) GetObject(key string) (Object, bool) {
 	obj, ok := store.registers[key]
 	return obj, ok
 }

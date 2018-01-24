@@ -49,9 +49,9 @@ func testStore(t *testing.T, store *Store) {
 	// Add objects
 
 	for n := 0; n < testStoreLoopCount; n++ {
-		obj := NewObject()
+		obj := newTestObject()
 		obj.SetName(fmt.Sprintf(testStoreKeyFormat, n))
-		obj.SetData(fmt.Sprintf(testStoreDataFormat, n))
+		obj.Data = fmt.Sprintf(testStoreDataFormat, n)
 		err = store.SetObject(obj)
 		if err != nil {
 			t.Error(err)
@@ -67,17 +67,24 @@ func testStore(t *testing.T, store *Store) {
 	for n := 0; n < testStoreLoopCount; n++ {
 		key := fmt.Sprintf(testStoreKeyFormat, n)
 		data := fmt.Sprintf(testStoreDataFormat, n)
-		obj, ok := store.GetObject(key)
+		rawObj, ok := store.GetObject(key)
 		if !ok {
 			t.Error(fmt.Errorf(testObjectNotFound, key))
 		}
 
-		objData, ok := obj.GetData().(string)
+		obj, ok := rawObj.(*testObject)
 		if !ok {
-			t.Error(fmt.Errorf(testObjectInvalidDataType, key))
+			t.Error(fmt.Errorf(testObjectNotFound, key))
 		}
+
+		objData := obj.Data
 		if objData != data {
 			t.Error(fmt.Errorf(testObjectInvalidData, key, objData, data))
+		}
+
+		err = obj.UpdateVersion()
+		if err != nil {
+			t.Error(err)
 		}
 
 		ver := obj.GetVersion()
