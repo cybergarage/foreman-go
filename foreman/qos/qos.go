@@ -9,7 +9,6 @@ import (
 	"strconv"
 
 	"github.com/cybergarage/foreman-go/foreman/kb"
-	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
 // QoS includes all QoS rules.
@@ -35,9 +34,10 @@ func (qos *QoS) parseFormulaString(qosString string) (*kb.Formula, error) {
 	return qos.ParseFormulaString(qos, qosString)
 }
 
-// SetMetricToAllRules sets the specified metric to all formula's metrics.
-func (qos *QoS) SetMetricToAllRules(m *metric.Metric) error {
-	name := m.Name
+// FindFormulaMetrics returns all QoS metrics of the the specified name.
+func (qos *QoS) FindFormulaMetrics(q *Query) ([]*Metric, error) {
+	name := q.Target
+	qms := make([]*Metric, 0)
 
 	for _, rule := range qos.Rules {
 		for _, clause := range rule.Clauses {
@@ -50,12 +50,12 @@ func (qos *QoS) SetMetricToAllRules(m *metric.Metric) error {
 				if !ok {
 					continue
 				}
-				qm.SetEntity(m)
+				qms = append(qms, qm)
 			}
 		}
 	}
 
-	return nil
+	return qms, nil
 }
 
 // CreateVariable is an interface method of kb.Factory
