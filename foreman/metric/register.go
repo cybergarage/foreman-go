@@ -10,6 +10,14 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/register"
 )
 
+// RegisterListener represents a listener for metric register.
+type RegisterListener interface {
+	// RegisterMetricAdded is called when a new metric is added
+	RegisterMetricAdded(*RegisterMetric)
+	// RegisterMetricUpdated is called when a metric which is already added is updated
+	RegisterMetricUpdated(*RegisterMetric)
+}
+
 // Register represents an register store for metric.
 type Register struct {
 	*register.Store

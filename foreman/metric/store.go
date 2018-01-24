@@ -7,6 +7,11 @@ package metric
 
 import "time"
 
+// StoreListener represents a listener for metric store.
+type StoreListener interface {
+	StoreMetricAdded(*Metric)
+}
+
 // Storing represents an abstract interface of metric store
 type Storing interface {
 	SetStoreListener(StoreListener) error
