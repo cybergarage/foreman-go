@@ -11,13 +11,12 @@ import (
 
 // ObjectListener represents an interface of the meta object.
 type ObjectListener interface {
-	ObjectUpdated(obj *Object)
+	ObjectUpdated()
 }
 
 // Object represents a meta object in the register store.
 type Object struct {
-	Name      string
-	Data      interface{}
+	name      string
 	version   int64
 	timestamp time.Time
 	listeners []ObjectListener
@@ -32,14 +31,15 @@ func NewObject() *Object {
 	return m
 }
 
-// GetName returns the object name
-func (obj *Object) GetName() string {
-	return obj.Name
+// SetName sets a specified name
+func (obj *Object) SetName(name string) error {
+	obj.name = name
+	return nil
 }
 
-// GetData returns the object data
-func (obj *Object) GetData() interface{} {
-	return obj.Data
+// GetName returns the object name
+func (obj *Object) GetName() string {
+	return obj.name
 }
 
 // GetVersion returns a version number of the instance
@@ -52,13 +52,13 @@ func (obj *Object) GetTimestamp() time.Time {
 	return obj.timestamp
 }
 
-// UpdateVersionAndTimestamp updates the current version number and timestamp.
-func (obj *Object) UpdateVersionAndTimestamp() error {
+// UpdateVersion updates the internal timestamp and version, and sends the update messages to the listeners
+func (obj *Object) UpdateVersion() error {
 	obj.version++
 	obj.timestamp = time.Now()
 
 	for _, l := range obj.listeners {
-		l.ObjectUpdated(obj)
+		l.ObjectUpdated()
 	}
 
 	return nil
@@ -103,5 +103,5 @@ func (obj *Object) GetListeners() []ObjectListener {
 
 // String returns a string description of the instance
 func (obj *Object) String() string {
-	return fmt.Sprintf("[%s] : %s", obj.Name, obj.Data)
+	return fmt.Sprintf("[%s] (%d:%d)", obj.name, obj.version, obj.timestamp.Unix())
 }
