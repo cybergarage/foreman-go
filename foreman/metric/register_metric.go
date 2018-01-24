@@ -5,16 +5,21 @@
 // Package metric provides query interfaces for metric store.
 package metric
 
+import (
+	"github.com/cybergarage/foreman-go/foreman/register"
+)
+
 // RegisterMetric represents a metric for the register.
 type RegisterMetric struct {
 	*Metric
+	*register.BaseObject
 }
 
 // NewRegisterMetric returns a new metric.
 func NewRegisterMetric() *RegisterMetric {
 	m := &RegisterMetric{
-		Metric:    NewMetric(),
-		listeners: make([]RegisterMetricListener, 0),
+		Metric:     NewMetric(),
+		BaseObject: register.NewObject(),
 	}
 	return m
 }
