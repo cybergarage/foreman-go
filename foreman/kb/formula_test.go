@@ -9,4 +9,5 @@ import (
 )
 
 func TestNewFormula(t *testing.T) {
+	NewFormula()
 }
