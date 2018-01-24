@@ -30,39 +30,44 @@ func (qos *QoS) ParseQoSString(qosString string) error {
 }
 
 // parseFormulaString parses a specified QoS formula string.
-func (qos *QoS) parseFormulaString(qosString string) (*kb.Formula, error) {
+func (qos *QoS) parseFormulaString(qosString string) (kb.Formula, error) {
 	return qos.ParseFormulaString(qos, qosString)
 }
 
-// FindFormulaMetrics returns all QoS metrics of the the specified name.
-func (qos *QoS) FindFormulaMetrics(q *Query) ([]*Metric, error) {
+// FindRelatedFormulas returns all QoS metrics of the the specified name.
+func (qos *QoS) FindRelatedFormulas(q *Query) ([]kb.Formula, error) {
 	name := q.Target
-	qms := make([]*Metric, 0)
+	formulas := make([]kb.Formula, 0)
 
 	for _, rule := range qos.Rules {
 		for _, clause := range rule.Clauses {
 			for _, formula := range clause.Formulas {
-				v := formula.Variable
+				v := formula.GetVariable()
 				if v.GetName() != name {
 					continue
 				}
-				qm, ok := v.(*Metric)
+				_, ok := v.(*Metric)
 				if !ok {
 					continue
 				}
-				qms = append(qms, qm)
+				formulas = append(formulas, formula)
 			}
 		}
 	}
 
-	return qms, nil
+	return formulas, nil
+}
+
+// CreateFormula is an interface method of kb.Factory
+func (qos *QoS) CreateFormula(obj interface{}) (kb.Formula, error) {
+	return NewFormula(), nil
 }
 
 // CreateVariable is an interface method of kb.Factory
-func (qos *QoS) CreateVariable(variable interface{}) (kb.Variable, error) {
-	varStr, ok := variable.(string)
+func (qos *QoS) CreateVariable(obj interface{}) (kb.Variable, error) {
+	varStr, ok := obj.(string)
 	if !ok {
-		return nil, fmt.Errorf(errorInvalidVariable, variable)
+		return nil, fmt.Errorf(errorInvalidVariable, obj)
 	}
 
 	v, ok := qos.Variables[varStr]
@@ -77,18 +82,18 @@ func (qos *QoS) CreateVariable(variable interface{}) (kb.Variable, error) {
 }
 
 // CreateObjective is an interface method kb.Factory
-func (qos *QoS) CreateObjective(objective interface{}) (kb.Objective, error) {
-	objValue, ok := objective.(float64)
+func (qos *QoS) CreateObjective(obj interface{}) (kb.Objective, error) {
+	objValue, ok := obj.(float64)
 	if !ok {
-		objStr, ok := objective.(string)
+		objStr, ok := obj.(string)
 		if !ok {
-			return nil, fmt.Errorf(errorInvalidObjective, objective)
+			return nil, fmt.Errorf(errorInvalidObjective, obj)
 		}
 
 		var err error
 		objValue, err = strconv.ParseFloat(objStr, 64)
 		if err != nil {
-			return nil, fmt.Errorf(errorInvalidObjective, objective)
+			return nil, fmt.Errorf(errorInvalidObjective, obj)
 		}
 	}
 
@@ -96,10 +101,10 @@ func (qos *QoS) CreateObjective(objective interface{}) (kb.Objective, error) {
 }
 
 // CreateOperator is an interface method kb.Factory
-func (qos *QoS) CreateOperator(operator interface{}) (kb.Operator, error) {
-	operatorStr, ok := operator.(string)
+func (qos *QoS) CreateOperator(obj interface{}) (kb.Operator, error) {
+	operatorStr, ok := obj.(string)
 	if !ok {
-		return nil, fmt.Errorf(errorInvalidOperator, operator)
+		return nil, fmt.Errorf(errorInvalidOperator, obj)
 	}
 	ope, err := NewOperatorWithString(operatorStr)
 	if err != nil {

@@ -21,7 +21,7 @@ func testQoSFactory(t *testing.T, factory kb.Factory) {
 	factory.CreateObjective("th")
 }
 
-func testQoSGoodFormula(t *testing.T, qos *QoS, formula *kb.Formula) {
+func testQoSGoodFormula(t *testing.T, qos *QoS, formula kb.Formula) {
 	ok, err := formula.IsSatisfied()
 	if err != nil {
 		t.Error(err)
@@ -32,7 +32,7 @@ func testQoSGoodFormula(t *testing.T, qos *QoS, formula *kb.Formula) {
 	}
 }
 
-func testQoSBadFormula(t *testing.T, qos *QoS, formula *kb.Formula) {
+func testQoSBadFormula(t *testing.T, qos *QoS, formula kb.Formula) {
 	ok, err := formula.IsSatisfied()
 	if err != nil {
 		t.Error(err)
@@ -55,14 +55,14 @@ func testQoSOperators(t *testing.T, qos *QoS) {
 
 	xm := metric.NewMetricWithName("x")
 
-	formulas := make([]*kb.Formula, len(formulaStrings))
+	formulas := make([]kb.Formula, len(formulaStrings))
 	for n, formulaString := range formulaStrings {
 		formula, err := qos.parseFormulaString(formulaString)
 		if err != nil {
 			t.Error(err)
 		}
 
-		vm := formula.Variable
+		vm := formula.GetVariable()
 		qm, _ := vm.(*Metric)
 		qm.SetEntity(xm)
 
@@ -79,14 +79,14 @@ func testQoSOperators(t *testing.T, qos *QoS) {
 	// x == 1
 
 	xm.Value = 1.0
-	goodFormulas := []*kb.Formula{
+	goodFormulas := []kb.Formula{
 		formulas[4],
 		formulas[5],
 	}
 	for _, formula := range goodFormulas {
 		testQoSGoodFormula(t, qos, formula)
 	}
-	badFormulas := []*kb.Formula{
+	badFormulas := []kb.Formula{
 		formulas[0],
 		formulas[1],
 		formulas[2],
@@ -99,7 +99,7 @@ func testQoSOperators(t *testing.T, qos *QoS) {
 	// x == 100.0
 
 	xm.Value = 100.0
-	goodFormulas = []*kb.Formula{
+	goodFormulas = []kb.Formula{
 		formulas[1],
 		formulas[2],
 		formulas[3],
@@ -107,7 +107,7 @@ func testQoSOperators(t *testing.T, qos *QoS) {
 	for _, formula := range goodFormulas {
 		testQoSGoodFormula(t, qos, formula)
 	}
-	badFormulas = []*kb.Formula{
+	badFormulas = []kb.Formula{
 		formulas[0],
 		formulas[4],
 		formulas[5],
