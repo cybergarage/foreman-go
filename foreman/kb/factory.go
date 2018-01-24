@@ -6,10 +6,12 @@ package kb
 
 // Factory represents an abstract interface for the parser.
 type Factory interface {
+	// CreateFormula return a formula instance.
+	CreateFormula(obj interface{}) (Formula, error)
 	// CreateVariable return a singleton value.
-	CreateVariable(variable interface{}) (Variable, error)
+	CreateVariable(obj interface{}) (Variable, error)
 	// CreateOperator return an operater instance.
-	CreateOperator(operator interface{}) (Operator, error)
+	CreateOperator(obj interface{}) (Operator, error)
 	// CreateObjective return an objective instance.
-	CreateObjective(object interface{}) (Objective, error)
+	CreateObjective(obj interface{}) (Objective, error)
 }
