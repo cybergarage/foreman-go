@@ -14,15 +14,15 @@ const (
 )
 
 type testObject struct {
-	*Object
-	Value       float64
+	*BaseObject
+	Data        string
 	UpdateCount int
 }
 
 func newTestObject() *testObject {
 	obj := &testObject{
-		Object:      NewObject(),
-		Value:       0.0,
+		BaseObject:  NewObject(),
+		Data:        "",
 		UpdateCount: 0,
 	}
 	return obj
