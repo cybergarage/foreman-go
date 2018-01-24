@@ -9,6 +9,11 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/register"
 )
 
+// RegisterMetricListener represents a listener interface for the register metric.
+type RegisterMetricListener interface {
+	register.ObjectListener
+}
+
 // RegisterMetric represents a metric for the register.
 type RegisterMetric struct {
 	*Metric
