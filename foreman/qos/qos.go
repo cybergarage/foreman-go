@@ -35,9 +35,9 @@ func (qos *QoS) parseFormulaString(qosString string) (kb.Formula, error) {
 }
 
 // FindRelatedFormulas returns all QoS metrics of the the specified name.
-func (qos *QoS) FindRelatedFormulas(q *Query) ([]kb.Formula, error) {
+func (qos *QoS) FindRelatedFormulas(q *Query) ([]*Formula, error) {
 	name := q.Target
-	formulas := make([]kb.Formula, 0)
+	qoSFormulas := make([]*Formula, 0)
 
 	for _, rule := range qos.Rules {
 		for _, clause := range rule.Clauses {
@@ -46,16 +46,16 @@ func (qos *QoS) FindRelatedFormulas(q *Query) ([]kb.Formula, error) {
 				if v.GetName() != name {
 					continue
 				}
-				_, ok := v.(*Metric)
+				qosFormula, ok := formula.(*Formula)
 				if !ok {
 					continue
 				}
-				formulas = append(formulas, formula)
+				qoSFormulas = append(qoSFormulas, qosFormula)
 			}
 		}
 	}
 
-	return formulas, nil
+	return qoSFormulas, nil
 }
 
 // CreateFormula is an interface method of kb.Factory
