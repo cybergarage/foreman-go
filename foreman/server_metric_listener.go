@@ -7,10 +7,19 @@ package foreman
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/metric"
+	"github.com/cybergarage/foreman-go/foreman/qos"
 )
 
 // RegisterMetricAdded is a listener for metric.Register
 func (server *Server) RegisterMetricAdded(rm *metric.RegisterMetric) {
+	q := qos.NewQuery()
+	q.Target = rm.GetName()
+
+	formula, err := server.qosMgr.FindRelatedFormulas(q)
+	if err != nil {
+		return
+	}
+
 }
 
 // RegisterMetricUpdated is a listener for metric.Register
