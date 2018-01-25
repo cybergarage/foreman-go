@@ -12,6 +12,7 @@ import (
 	"github.com/cybergarage/go-graphite/net/graphite"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/kb"
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	"github.com/cybergarage/foreman-go/foreman/qos"
 	"github.com/cybergarage/foreman-go/foreman/registry"
@@ -24,6 +25,9 @@ const (
 
 // Server represents a Foreman Server.
 type Server struct {
+	metric.RegisterListener
+	kb.RuleListener
+
 	graphite      *graphite.Server
 	registryStore *registry.Store
 	qosMgr        *qos.Manager
@@ -45,7 +49,7 @@ func NewServer() *Server {
 	server.graphite.RenderListener = server
 	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
-	server.metricMgr.SetRegisterListener(server.qosMgr)
+	server.metricMgr.SetRegisterListener(server)
 
 	return server
 }
