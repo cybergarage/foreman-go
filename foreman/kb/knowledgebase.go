@@ -10,7 +10,7 @@ import (
 
 //KnowledgeBase includes all knowledge rules.
 type KnowledgeBase struct {
-	Rules     []*Rule
+	Rules     []Rule
 	Variables map[string]Variable
 }
 
@@ -23,15 +23,15 @@ func NewKnowledgeBase() *KnowledgeBase {
 
 // Clear removes all rules and variables..
 func (kb *KnowledgeBase) Clear() error {
-	kb.Rules = make([]*Rule, 0)
+	kb.Rules = make([]Rule, 0)
 	kb.Variables = make(map[string]Variable)
 	return nil
 }
 
 // AddRule adds a new rules.
-func (kb *KnowledgeBase) AddRule(rule *Rule) error {
+func (kb *KnowledgeBase) AddRule(rule Rule) error {
 	// Add all variables in the rule
-	for _, clause := range rule.Clauses {
+	for _, clause := range rule.GetClauses() {
 		for _, formula := range clause.GetFormulas() {
 			variable := formula.GetVariable()
 			variableName := variable.GetName()
@@ -55,7 +55,7 @@ func (kb *KnowledgeBase) AddRule(rule *Rule) error {
 }
 
 // AddRules adds a new rules.
-func (kb *KnowledgeBase) AddRules(rules []*Rule) error {
+func (kb *KnowledgeBase) AddRules(rules []Rule) error {
 	for _, rule := range rules {
 		err := kb.AddRule(rule)
 		if err != nil {

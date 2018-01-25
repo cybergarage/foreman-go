@@ -15,7 +15,7 @@ func NewParser() *Parser {
 }
 
 // ParseString returns a rule when the specified string is valid, otherwise an error
-func (parser *Parser) ParseString(factory Factory, ruleString string) (*Rule, error) {
+func (parser *Parser) ParseString(factory Factory, ruleString string) (Rule, error) {
 	rule := NewRule()
 	err := rule.ParseString(factory, ruleString)
 	if err != nil {
