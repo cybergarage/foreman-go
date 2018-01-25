@@ -4,11 +4,18 @@
 
 package kb
 
+// RuleListener represents a listener interface.
+type RuleListener interface {
+	RuleSatisfied(Rule)
+	Unsatisfied(Rule)
+}
+
 // Rule represents a interface.
 type Rule interface {
-	AddClause(clause Clause) error
+	AddClause(Clause) error
 	GetClauses() []Clause
-	ParseString(factory Factory, ruleString string) error
 	IsSatisfied() (bool, error)
+	ParseString(Factory, string) error
+	SetListener(RuleListener)
 	String() string
 }
