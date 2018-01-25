@@ -32,7 +32,7 @@ func (kb *KnowledgeBase) Clear() error {
 func (kb *KnowledgeBase) AddRule(rule *Rule) error {
 	// Add all variables in the rule
 	for _, clause := range rule.Clauses {
-		for _, formula := range clause.Formulas {
+		for _, formula := range clause.GetFormulas() {
 			variable := formula.GetVariable()
 			variableName := variable.GetName()
 

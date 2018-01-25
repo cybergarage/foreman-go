@@ -11,19 +11,19 @@ import (
 
 // Rule represents a QoS rule.
 type Rule struct {
-	Clauses []*Clause
+	Clauses []Clause
 }
 
 // NewRule returns a new null rule.
 func NewRule() *Rule {
 	p := &Rule{
-		Clauses: make([]*Clause, 0),
+		Clauses: make([]Clause, 0),
 	}
 	return p
 }
 
 // AddClause adds a new clause.
-func (rule *Rule) AddClause(clause *Clause) error {
+func (rule *Rule) AddClause(clause Clause) error {
 	rule.Clauses = append(rule.Clauses, clause)
 	return nil
 }
