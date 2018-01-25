@@ -48,7 +48,7 @@ func (m *Metric) GetName() string {
 // GetValue is an interface method of kb.Variable
 func (m *Metric) GetValue() (interface{}, error) {
 	if m.entity == nil {
-		return nil, fmt.Errorf(errorNullEntity, m.Name)
+		return nil, fmt.Errorf(errorNullMetricEntity, m.Name)
 	}
 	return m.entity.Value, nil
 }

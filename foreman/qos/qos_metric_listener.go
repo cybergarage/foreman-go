@@ -2,26 +2,27 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
-package foreman
+package qos
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/metric"
-	"github.com/cybergarage/foreman-go/foreman/qos"
 )
 
 // RegisterMetricAdded is a listener for metric.Register
-func (server *Server) RegisterMetricAdded(rm *metric.RegisterMetric) {
-	q := qos.NewQuery()
+func (qos *QoS) RegisterMetricAdded(rm *metric.RegisterMetric) {
+	q := NewQuery()
 	q.Target = rm.GetName()
 
-	formula, err := server.qosMgr.FindRelatedFormulas(q)
+	formulas, err := qos.FindRelatedFormulas(q)
 	if err != nil {
 		return
 	}
 
+	for _, formula := range formulas {
+		formula.SetMetricEntity(rm.Metric)
+	}
 }
 
 // RegisterMetricUpdated is a listener for metric.Register
-func (server *Server) RegisterMetricUpdated(rm *metric.RegisterMetric) {
+func (qos *QoS) RegisterMetricUpdated(rm *metric.RegisterMetric) {
 }

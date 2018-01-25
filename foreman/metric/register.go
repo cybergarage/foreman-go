@@ -20,6 +20,7 @@ type RegisterListener interface {
 
 // Register represents an register store for metric.
 type Register struct {
+	StoreListener
 	*register.Store
 	Listener RegisterListener
 }

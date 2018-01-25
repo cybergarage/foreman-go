@@ -36,8 +36,9 @@ func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, formul
 
 	firstRule := qos.Rules[0]
 
-	if len(firstRule.Clauses) != clauses {
-		t.Errorf("Invalid clause count of %s (%d != %d) : %s", qosString, len(firstRule.Clauses), clauses, firstRule.String())
+	firstRuleClauses := firstRule.GetClauses()
+	if len(firstRuleClauses) != clauses {
+		t.Errorf("Invalid clause count of %s (%d != %d) : %s", qosString, len(firstRuleClauses), clauses, firstRule.String())
 		return
 	}
 

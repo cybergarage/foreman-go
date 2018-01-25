@@ -11,6 +11,11 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/kb"
 )
 
+// CreateRule is an interface method of kb.Factory
+func (qos *QoS) CreateRule(obj interface{}) (kb.Rule, error) {
+	return NewRule(), nil
+}
+
 // CreateClause is an interface method of kb.Factory
 func (qos *QoS) CreateClause(obj interface{}) (kb.Clause, error) {
 	return kb.NewClause(), nil

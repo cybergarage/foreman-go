@@ -17,14 +17,9 @@ func NewManager() *Manager {
 		Register: NewRegister(),
 	}
 
-	mgr.Store.SetStoreListener(mgr)
+	mgr.Store.SetStoreListener(mgr.Register)
 
 	return mgr
-}
-
-// StoreMetricAdded is a listener for Store
-func (mgr *Manager) StoreMetricAdded(m *Metric) {
-	mgr.Register.UpdateMetric(m)
 }
 
 // Start starts the manager.

@@ -6,10 +6,12 @@ package qos
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/kb"
+	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
 // Rule represents a formula.
 type Rule struct {
+	metric.RegisterListener
 	*kb.BaseRule
 }
 
@@ -19,4 +21,8 @@ func NewRule() *Rule {
 		BaseRule: kb.NewRule(),
 	}
 	return rule
+}
+
+// ObjectUpdated is a listener for the metric register store.
+func (rule *Rule) ObjectUpdated() {
 }

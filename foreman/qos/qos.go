@@ -5,9 +5,6 @@
 package qos
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/cybergarage/foreman-go/foreman/kb"
 )
 
@@ -34,14 +31,38 @@ func (qos *QoS) parseFormulaString(qosString string) (kb.Formula, error) {
 	return qos.ParseFormulaString(qos, qosString)
 }
 
+// FindRelatedRules returns all rules of the the specified name.
+func (qos *QoS) FindRelatedRules(q *Query) ([]*Rule, error) {
+	name := q.Target
+	qosRules := make([]*Rule, 0)
+
+	for _, rule := range qos.Rules {
+		for _, clause := range rule.GetClauses() {
+			for _, formula := range clause.GetFormulas() {
+				v := formula.GetVariable()
+				if v.GetName() != name {
+					continue
+				}
+				qosRule, ok := rule.(*Rule)
+				if !ok {
+					continue
+				}
+				qosRules = append(qosRules, qosRule)
+			}
+		}
+	}
+
+	return qosRules, nil
+}
+
 // FindRelatedFormulas returns all QoS metrics of the the specified name.
 func (qos *QoS) FindRelatedFormulas(q *Query) ([]*Formula, error) {
 	name := q.Target
 	qoSFormulas := make([]*Formula, 0)
 
 	for _, rule := range qos.Rules {
-		for _, clause := range rule.Clauses {
-			for _, formula := range clause.Formulas {
+		for _, clause := range rule.GetClauses() {
+			for _, formula := range clause.GetFormulas() {
 				v := formula.GetVariable()
 				if v.GetName() != name {
 					continue
@@ -56,59 +77,4 @@ func (qos *QoS) FindRelatedFormulas(q *Query) ([]*Formula, error) {
 	}
 
 	return qoSFormulas, nil
-}
-
-// CreateFormula is an interface method of kb.Factory
-func (qos *QoS) CreateFormula(obj interface{}) (kb.Formula, error) {
-	return NewFormula(), nil
-}
-
-// CreateVariable is an interface method of kb.Factory
-func (qos *QoS) CreateVariable(obj interface{}) (kb.Variable, error) {
-	varStr, ok := obj.(string)
-	if !ok {
-		return nil, fmt.Errorf(errorInvalidVariable, obj)
-	}
-
-	v, ok := qos.Variables[varStr]
-	if ok {
-		return v, nil
-	}
-
-	m := NewMetricWithName(varStr)
-	qos.Variables[varStr] = m
-
-	return m, nil
-}
-
-// CreateObjective is an interface method kb.Factory
-func (qos *QoS) CreateObjective(obj interface{}) (kb.Objective, error) {
-	objValue, ok := obj.(float64)
-	if !ok {
-		objStr, ok := obj.(string)
-		if !ok {
-			return nil, fmt.Errorf(errorInvalidObjective, obj)
-		}
-
-		var err error
-		objValue, err = strconv.ParseFloat(objStr, 64)
-		if err != nil {
-			return nil, fmt.Errorf(errorInvalidObjective, obj)
-		}
-	}
-
-	return NewThresholdWithValue(objValue), nil
-}
-
-// CreateOperator is an interface method kb.Factory
-func (qos *QoS) CreateOperator(obj interface{}) (kb.Operator, error) {
-	operatorStr, ok := obj.(string)
-	if !ok {
-		return nil, fmt.Errorf(errorInvalidOperator, obj)
-	}
-	ope, err := NewOperatorWithString(operatorStr)
-	if err != nil {
-		return nil, err
-	}
-	return ope, nil
 }
