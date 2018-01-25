@@ -31,6 +31,17 @@ func (clause *BaseClause) GetFormulas() []Formula {
 	return clause.Formulas
 }
 
+// IsSatisfied returns whether the all formulas in the clause are satisfied.
+func (clause *BaseClause) IsSatisfied() (bool, error) {
+	for _, formula := range clause.Formulas {
+		ok, err := formula.IsSatisfied()
+		if !ok || err != nil {
+			return false, err
+		}
+	}
+	return true, nil
+}
+
 // String returns a string description of the instance
 func (clause *BaseClause) String() string {
 	if len(clause.Formulas) == 0 {

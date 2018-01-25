@@ -8,5 +8,6 @@ package kb
 type Clause interface {
 	AddFormula(formula Formula) error
 	GetFormulas() []Formula
+	IsSatisfied() (bool, error)
 	String() string
 }

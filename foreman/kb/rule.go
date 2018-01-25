@@ -9,5 +9,6 @@ type Rule interface {
 	AddClause(clause Clause) error
 	GetClauses() []Clause
 	ParseString(factory Factory, ruleString string) error
+	IsSatisfied() bool
 	String() string
 }
