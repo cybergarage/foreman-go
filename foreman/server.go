@@ -45,7 +45,7 @@ func NewServer() *Server {
 	server.graphite.RenderListener = server
 	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
-	server.metricMgr.SetRegisterListener(server)
+	server.metricMgr.SetRegisterListener(server.qosMgr)
 
 	return server
 }
