@@ -6,6 +6,8 @@ package kb
 
 // Factory represents an abstract interface for the parser.
 type Factory interface {
+	// CreateRule return a rule instance.
+	CreateRule(obj interface{}) (Rule, error)
 	// CreateClause return a clause instance.
 	CreateClause(obj interface{}) (Clause, error)
 	// CreateFormula return a formula instance.
