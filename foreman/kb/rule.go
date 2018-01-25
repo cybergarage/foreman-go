@@ -33,7 +33,10 @@ func (rule *Rule) ParseString(factory Factory, ruleString string) error {
 	clausesString := strings.Split(ruleString, ClauseSeparator)
 
 	for _, clauseString := range clausesString {
-		clause := NewClause()
+		clause, err := factory.CreateClause(clausesString)
+		if err != nil {
+			return nil
+		}
 		clauseString = strings.Trim(clauseString, (StartBracket + EndBracket))
 		formulasString := strings.Split(clauseString, FormulaSeparator)
 		for _, formulaString := range formulasString {
@@ -54,11 +57,11 @@ func (rule *Rule) ParseString(factory Factory, ruleString string) error {
 			}
 		}
 
-		if len(clause.Formulas) <= 0 {
+		if len(clause.GetFormulas()) <= 0 {
 			continue
 		}
 
-		err := rule.AddClause(clause)
+		err = rule.AddClause(clause)
 		if err != nil {
 			return err
 		}

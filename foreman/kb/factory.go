@@ -6,6 +6,8 @@ package kb
 
 // Factory represents an abstract interface for the parser.
 type Factory interface {
+	// CreateClause return a clause instance.
+	CreateClause(obj interface{}) (Clause, error)
 	// CreateFormula return a formula instance.
 	CreateFormula(obj interface{}) (Formula, error)
 	// CreateVariable return a singleton value.
