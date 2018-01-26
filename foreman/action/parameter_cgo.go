@@ -16,7 +16,7 @@ import (
 )
 
 // NewParameterWithCObject returns a new parameter of the specified C++ object.
-func NewParameterWithCObject(cObject unsafe.Pointer) *Parameter {
+func NewParameterWithCObject(cObject unsafe.Pointer) Parameter {
 	name := C.GoString(C.foreman_action_parameter_getname(cObject))
 
 	if C.foreman_action_parameter_isinteger(cObject) {
@@ -36,7 +36,7 @@ func NewParameterWithCObject(cObject unsafe.Pointer) *Parameter {
 }
 
 // CObject returns a parameter object for foreman-cc.
-func (param *Parameter) CObject() (unsafe.Pointer, error) {
+func (param *BaseParameter) CObject() (unsafe.Pointer, error) {
 	var cparam unsafe.Pointer
 
 	switch param.Type {
@@ -45,25 +45,29 @@ func (param *Parameter) CObject() (unsafe.Pointer, error) {
 		if cparam == nil {
 			return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 		}
-		C.foreman_action_parameter_setinteger(cparam, C.long(param.iValue))
+		value, _ := param.GetInteger()
+		C.foreman_action_parameter_setinteger(cparam, C.long(value))
 	case ParameterRealType:
 		cparam = C.foreman_action_parameter_real_new()
 		if cparam == nil {
 			return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 		}
-		C.foreman_action_parameter_setreal(cparam, C.double(param.rValue))
+		value, _ := param.GetReal()
+		C.foreman_action_parameter_setreal(cparam, C.double(value))
 	case ParameterBoolType:
 		cparam = C.foreman_action_parameter_bool_new()
 		if cparam == nil {
 			return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 		}
-		C.foreman_action_parameter_setbool(cparam, C.bool(param.bValue))
+		value, _ := param.GetBool()
+		C.foreman_action_parameter_setbool(cparam, C.bool(value))
 	case ParameterStringType:
 		cparam = C.foreman_action_parameter_string_new()
 		if cparam == nil {
 			return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 		}
-		C.foreman_action_parameter_setstring(cparam, C.CString(param.sValue))
+		value, _ := param.GetString()
+		C.foreman_action_parameter_setstring(cparam, C.CString(value))
 	}
 
 	if cparam == nil {
