@@ -5,7 +5,7 @@
 package action
 
 // Parameters represents a parameter map.
-type Parameters map[string]*Parameter
+type Parameters map[string]Parameter
 
 // NewParameters returns a null parameter map.
 func NewParameters() Parameters {
@@ -14,8 +14,8 @@ func NewParameters() Parameters {
 }
 
 // AddParameter adds a new parameter.
-func (params Parameters) AddParameter(param *Parameter) error {
-	params[param.Name] = param
+func (params Parameters) AddParameter(param Parameter) error {
+	params[param.GetName()] = param
 	return nil
 }
 
