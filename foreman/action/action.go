@@ -4,10 +4,8 @@
 
 package action
 
-import (
-	"testing"
-)
-
-func TestNewRoute(t *testing.T) {
-	NewRouteWithObjects(nil, nil)
+// ActionObject represents an abstract interface for the action.
+type ActionObject interface {
+	Object
+	ProcessEvent(e *Event) (ResultSet, error)
 }

@@ -8,17 +8,35 @@ import (
 	"fmt"
 )
 
-// RouteObject represents an abstract interface for the route objects.
+// RouteObject represents an abstract interface for the route object.
 type RouteObject interface {
-	GetName() string
-	ProcessEvent(e *Event) error
-	String() string
+}
+
+// RootSource represents an abstract interface for the route source object.
+type RootSource interface {
+	RouteObject
+	EventSource
+}
+
+// RootDestination represents an abstract interface for the route destination object.
+type RootDestination interface {
+	RouteObject
+	ActionObject
 }
 
 // Route represents a route.
 type Route struct {
-	Destination RouteObject
-	Source      RouteObject
+	Source      RootSource
+	Destination RootDestination
+}
+
+// NewRouteWithObjects returns a new boolean parameter.
+func NewRouteWithObjects(srcObj RootSource, destObj RootDestination) *Route {
+	route := &Route{
+		Source:      srcObj,
+		Destination: destObj,
+	}
+	return route
 }
 
 // Equals returns true when the specified routes aresame, otherwise false.
