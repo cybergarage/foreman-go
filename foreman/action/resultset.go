@@ -4,10 +4,5 @@
 
 package action
 
-import (
-	"testing"
-)
-
-func TestNewRoute(t *testing.T) {
-	NewRouteWithObjects(nil, nil)
-}
+// ResultSet is an alias of Parameters
+type ResultSet = Parameters

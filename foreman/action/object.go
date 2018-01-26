@@ -4,10 +4,8 @@
 
 package action
 
-import (
-	"testing"
-)
-
-func TestNewRoute(t *testing.T) {
-	NewRouteWithObjects(nil, nil)
+// Object represents an abstract object in the package.
+type Object interface {
+	GetName() string
+	String() string
 }

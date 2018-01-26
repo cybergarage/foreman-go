@@ -6,10 +6,45 @@ package action
 
 import "time"
 
-// Event represents an event of a paremeter for the source and destination objects.
-type Event interface {
+// EventSource represents an interface of the event object.
+type EventSource interface {
 	GetName() string
-	GetSource() RouteObject
-	GetTimeStamp() time.Time
-	GetParameters() Parameters
+	String() string
+}
+
+// Event represents an event object.
+type Event struct {
+	source    EventSource
+	timestamp time.Time
+	params    Parameters
+}
+
+// NewEventWithSource returns a new event object with the specified object.
+func NewEventWithSource(sourceObj EventSource) *Event {
+	e := &Event{
+		source:    sourceObj,
+		timestamp: time.Now(),
+		params:    NewParameters(),
+	}
+	return e
+}
+
+// GetSource returns the source object which creates this event.
+func (e *Event) GetSource() EventSource {
+	return e.source
+}
+
+// GetTimestamp returns a timestamp of the event.
+func (e *Event) GetTimestamp() time.Time {
+	return e.timestamp
+}
+
+// GetParameters returns the parameters of the event.
+func (e *Event) GetParameters() Parameters {
+	return e.params
+}
+
+// AddParameter adds a new parameter.
+func (e *Event) AddParameter(param *Parameter) error {
+	return e.AddParameter(param)
 }

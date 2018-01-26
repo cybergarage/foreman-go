@@ -19,3 +19,15 @@ func NewManager() *Manager {
 	}
 	return mgr
 }
+
+// PostEvent posts an event.
+func (mgr *Manager) PostEvent(e *Event) error {
+	routes := mgr.FindRoutesBySourceObject(e.GetSource())
+
+	// TODO : Update to call parallel.
+	for _, route := range routes {
+		route.Destination.ProcessEvent(e)
+	}
+
+	return nil
+}

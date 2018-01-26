@@ -36,8 +36,8 @@ func (mgr RouteManager) GetRoutes(key string) ([]*Route, bool) {
 	return routes, ok
 }
 
-// FindRoutes returns a route lists by the specified regex key.
-func (mgr RouteManager) FindRoutes(regKey string) []*Route {
+// FindRoutesBySourceRegKey returns a route lists by the specified regex key.
+func (mgr RouteManager) FindRoutesBySourceRegKey(regKey string) []*Route {
 	r := regexp.MustCompile(regKey)
 	foundRoutes := make([]*Route, 0)
 	for key, routes := range mgr.routeMap {
@@ -47,4 +47,9 @@ func (mgr RouteManager) FindRoutes(regKey string) []*Route {
 		foundRoutes = append(foundRoutes, routes...)
 	}
 	return foundRoutes
+}
+
+// FindRoutesBySourceObject returns the target routes for the specified source objects.
+func (mgr RouteManager) FindRoutesBySourceObject(srcObject RootSource) []*Route {
+	return mgr.FindRoutesBySourceRegKey(srcObject.GetName())
 }
