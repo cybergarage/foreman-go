@@ -1,4 +1,4 @@
-// Generated from FQL.g4 by ANTLR 4.7.
+// Generated from FQL.g4 by ANTLR 4.6.
 
 package fql // FQL
 import (
@@ -15,24 +15,27 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 26, 29, 4,
+	3, 1072, 54993, 33286, 44333, 17431, 44785, 36224, 43741, 3, 26, 29, 4,
 	2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 3, 2, 3, 2, 3,
 	3, 3, 3, 3, 3, 7, 3, 18, 10, 3, 12, 3, 14, 3, 21, 11, 3, 3, 4, 3, 4, 3,
-	5, 3, 5, 3, 6, 3, 6, 3, 6, 2, 2, 7, 2, 4, 6, 8, 10, 2, 2, 2, 24, 2, 12,
-	3, 2, 2, 2, 4, 14, 3, 2, 2, 2, 6, 22, 3, 2, 2, 2, 8, 24, 3, 2, 2, 2, 10,
-	26, 3, 2, 2, 2, 12, 13, 5, 4, 3, 2, 13, 3, 3, 2, 2, 2, 14, 19, 5, 6, 4,
-	2, 15, 16, 7, 20, 2, 2, 16, 18, 5, 6, 4, 2, 17, 15, 3, 2, 2, 2, 18, 21,
-	3, 2, 2, 2, 19, 17, 3, 2, 2, 2, 19, 20, 3, 2, 2, 2, 20, 5, 3, 2, 2, 2,
-	21, 19, 3, 2, 2, 2, 22, 23, 5, 8, 5, 2, 23, 7, 3, 2, 2, 2, 24, 25, 7, 6,
-	2, 2, 25, 9, 3, 2, 2, 2, 26, 27, 7, 8, 2, 2, 27, 11, 3, 2, 2, 2, 3, 19,
+	5, 3, 5, 3, 6, 3, 6, 3, 6, 2, 2, 7, 2, 4, 6, 8, 10, 2, 2, 24, 2, 12, 3,
+	2, 2, 2, 4, 14, 3, 2, 2, 2, 6, 22, 3, 2, 2, 2, 8, 24, 3, 2, 2, 2, 10, 26,
+	3, 2, 2, 2, 12, 13, 5, 4, 3, 2, 13, 3, 3, 2, 2, 2, 14, 19, 5, 6, 4, 2,
+	15, 16, 7, 20, 2, 2, 16, 18, 5, 6, 4, 2, 17, 15, 3, 2, 2, 2, 18, 21, 3,
+	2, 2, 2, 19, 17, 3, 2, 2, 2, 19, 20, 3, 2, 2, 2, 20, 5, 3, 2, 2, 2, 21,
+	19, 3, 2, 2, 2, 22, 23, 5, 8, 5, 2, 23, 7, 3, 2, 2, 2, 24, 25, 7, 6, 2,
+	2, 25, 9, 3, 2, 2, 2, 26, 27, 7, 8, 2, 2, 27, 11, 3, 2, 2, 2, 3, 19,
 }
+
 var deserializer = antlr.NewATNDeserializer(nil)
+
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
 
 var literalNames = []string{
 	"", "", "", "", "", "", "", "'*'", "'='", "'=='", "'<'", "'<='", "'>'",
 	"'>='", "'!='", "", "", "','", "';'",
 }
+
 var symbolicNames = []string{
 	"", "SELECT", "INSERT", "DELETE", "SET", "EXPORT", "QOS", "ASTERISK", "SINGLE_EQ",
 	"DOUBLE_EQ", "OP_LT", "LE", "GT", "GE", "NOTEQ", "AND", "OR", "COMMA",
@@ -42,24 +45,24 @@ var symbolicNames = []string{
 var ruleNames = []string{
 	"fql", "statement_list", "statement", "set_stmt", "qos_stmt",
 }
-var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
-
-func init() {
-	for index, ds := range deserializedATN.DecisionToState {
-		decisionToDFA[index] = antlr.NewDFA(ds, index)
-	}
-}
 
 type FQLParser struct {
 	*antlr.BaseParser
 }
 
 func NewFQLParser(input antlr.TokenStream) *FQLParser {
+	var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
+	var sharedContextCache = antlr.NewPredictionContextCache()
+
+	for index, ds := range deserializedATN.DecisionToState {
+		decisionToDFA[index] = antlr.NewDFA(ds, index)
+	}
+
 	this := new(FQLParser)
 
 	this.BaseParser = antlr.NewBaseParser(input)
 
-	this.Interpreter = antlr.NewParserATNSimulator(this, deserializedATN, decisionToDFA, antlr.NewPredictionContextCache())
+	this.Interpreter = antlr.NewParserATNSimulator(this, deserializedATN, decisionToDFA, sharedContextCache)
 	this.RuleNames = ruleNames
 	this.LiteralNames = literalNames
 	this.SymbolicNames = symbolicNames
