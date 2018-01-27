@@ -10,18 +10,19 @@ import (
 
 // RouteObject represents an abstract interface for the route object.
 type RouteObject interface {
+	GetName() string
+	String() string
 }
 
 // RootSource represents an abstract interface for the route source object.
 type RootSource interface {
 	RouteObject
-	EventSource
 }
 
 // RootDestination represents an abstract interface for the route destination object.
 type RootDestination interface {
 	RouteObject
-	ActionObject
+	ProcessEvent(e *Event) (ResultSet, error)
 }
 
 // Route represents a route.

@@ -6,21 +6,20 @@ package action
 
 import "time"
 
-// EventSource represents an interface of the event object.
-type EventSource interface {
-	GetName() string
-	String() string
+// EventObject represents an interface of the event object.
+type EventObject interface {
+	RootSource
 }
 
 // Event represents an event object.
 type Event struct {
-	source    EventSource
+	source    EventObject
 	timestamp time.Time
 	params    Parameters
 }
 
 // NewEventWithSource returns a new event object with the specified object.
-func NewEventWithSource(sourceObj EventSource) *Event {
+func NewEventWithSource(sourceObj EventObject) *Event {
 	e := &Event{
 		source:    sourceObj,
 		timestamp: time.Now(),
@@ -30,7 +29,7 @@ func NewEventWithSource(sourceObj EventSource) *Event {
 }
 
 // GetSource returns the source object which creates this event.
-func (e *Event) GetSource() EventSource {
+func (e *Event) GetSource() EventObject {
 	return e.source
 }
 

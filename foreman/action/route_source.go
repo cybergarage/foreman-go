@@ -1,0 +1,25 @@
+// Copyright (C) 2017 Satoshi Konno. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+package action
+
+type routeSource struct {
+	RootSource
+	Name string
+}
+
+func newRouteSourceWithName(name string) *routeSource {
+	rs := &routeSource{
+		Name: name,
+	}
+	return rs
+}
+
+func (rs *routeSource) GetName() string {
+	return rs.Name
+}
+
+func (rs *routeSource) String() string {
+	return rs.Name
+}
