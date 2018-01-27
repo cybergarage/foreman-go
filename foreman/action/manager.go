@@ -5,6 +5,10 @@
 // Package action provides scripting interfaces.
 package action
 
+import (
+	"fmt"
+)
+
 // Manager represents an action manager.
 type Manager struct {
 	*ScriptManager
@@ -18,6 +22,32 @@ func NewManager() *Manager {
 		RouteManager:  NewRouteManager(),
 	}
 	return mgr
+}
+
+// CreateRoute tries to creat a new route with the specified route names.
+func (mgr *Manager) CreateRoute(srcName string, destName string) error {
+
+	// Find a target method of the specified destination name.
+
+	ok := mgr.ScriptManager.HasMethod(srcName)
+	if !ok {
+		return fmt.Errorf(errorRouteDestinationNotFound, srcName)
+	}
+	destMethod := newRouteSourceWithScriptManagerAndName(mgr.ScriptManager, destName)
+
+	// Create a route object with the specified source name.
+
+	srcObj := newRouteSourceWithName(srcName)
+
+	// Added a new route
+
+	route := NewRouteWithObjects(srcObj, destMethod)
+	err := mgr.RouteManager.AddRoute(route)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // PostEvent posts an event.

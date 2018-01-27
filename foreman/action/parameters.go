@@ -7,7 +7,7 @@ package action
 // Parameters represents a parameter map.
 type Parameters map[string]Parameter
 
-// NewParameters returns a null parameter map.
+// NewParameters returns a new parameter map.
 func NewParameters() Parameters {
 	params := make(Parameters)
 	return params
