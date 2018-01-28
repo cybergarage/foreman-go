@@ -12,6 +12,7 @@ import (
 // BaseRule represents a rule.
 type BaseRule struct {
 	Rule
+	Name     string
 	Clauses  []Clause
 	Listener RuleListener
 }
@@ -19,10 +20,22 @@ type BaseRule struct {
 // NewRule returns a new null rule.
 func NewRule() *BaseRule {
 	p := &BaseRule{
+		Name:     "",
 		Clauses:  make([]Clause, 0),
 		Listener: nil,
 	}
 	return p
+}
+
+// SetName set a name to the rule.
+func (rule *BaseRule) SetName(name string) error {
+	rule.Name = name
+	return nil
+}
+
+// GetName returns a name of the rule.
+func (rule *BaseRule) GetName() string {
+	return rule.Name
 }
 
 // AddClause adds a new clause.
