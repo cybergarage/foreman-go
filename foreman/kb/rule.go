@@ -12,6 +12,8 @@ type RuleListener interface {
 
 // Rule represents a interface.
 type Rule interface {
+	SetName(string) error
+	GetName() string
 	AddClause(Clause) error
 	GetClauses() []Clause
 	IsSatisfied() (bool, error)
