@@ -19,8 +19,13 @@ type BaseRule struct {
 
 // NewRule returns a new null rule.
 func NewRule() *BaseRule {
+	return NewRuleWithName("")
+}
+
+// NewRuleWithName returns a new null rule.
+func NewRuleWithName(name string) *BaseRule {
 	p := &BaseRule{
-		Name:     "",
+		Name:     name,
 		Clauses:  make([]Clause, 0),
 		Listener: nil,
 	}
