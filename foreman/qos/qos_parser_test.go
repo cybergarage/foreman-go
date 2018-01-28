@@ -18,27 +18,15 @@ const (
 )
 
 func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, formulas int, clauses int) {
-	err := qos.ParseQoSString(qosString)
+	rule, err := qos.ParseQoSString(qosString)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	if len(qos.Variables) != variables {
-		t.Errorf("Invalid variable count of %s (%d != %d)", qosString, len(qos.Variables), variables)
-		return
-	}
-
-	if len(qos.Rules) <= 0 {
-		t.Errorf("Not found rules in %s", qosString)
-		return
-	}
-
-	firstRule := qos.Rules[0]
-
-	firstRuleClauses := firstRule.GetClauses()
+	firstRuleClauses := rule.GetClauses()
 	if len(firstRuleClauses) != clauses {
-		t.Errorf("Invalid clause count of %s (%d != %d) : %s", qosString, len(firstRuleClauses), clauses, firstRule.String())
+		t.Errorf("Invalid clause count of %s (%d != %d)", qosString, len(firstRuleClauses), clauses)
 		return
 	}
 
