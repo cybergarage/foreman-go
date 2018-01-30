@@ -14,14 +14,14 @@ const (
 )
 
 type testObject struct {
-	*BaseObject
+	Object
 	Data        string
 	UpdateCount int
 }
 
 func newTestObject() *testObject {
 	obj := &testObject{
-		BaseObject:  NewObject(),
+		Object:      NewObject(),
 		Data:        "",
 		UpdateCount: 0,
 	}
