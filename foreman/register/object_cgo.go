@@ -37,8 +37,7 @@ func NewObject() *cgoObject {
 
 // SetName sets a specified name
 func (obj *cgoObject) SetName(name string) error {
-	ok := C.foreman_register_object_setkey(obj.cObject, C.CString(name))
-	if !ok {
+	if !C.foreman_register_object_setkey(obj.cObject, C.CString(name)) {
 		return fmt.Errorf(errorInvalidObject, obj.String())
 	}
 	return nil
@@ -47,18 +46,43 @@ func (obj *cgoObject) SetName(name string) error {
 // GetName returns the object name
 func (obj *cgoObject) GetName() (string, error) {
 	var name *C.char
-	ok := C.foreman_register_object_getkey(obj.cObject, &name)
-	if !ok {
+	if !C.foreman_register_object_getkey(obj.cObject, &name) {
 		return "", fmt.Errorf(errorInvalidObject, obj.String())
 	}
 	return C.GoString(name), nil
 }
 
+// SetData sets a specified data
+func (obj *cgoObject) SetData(data interface{}) error {
+	stringData, ok := data.(string)
+	if !ok {
+		return fmt.Errorf(errorInvalidObjectData, obj, data)
+	}
+	if !C.foreman_register_object_setdata(obj.cObject, C.CString(stringData)) {
+		return fmt.Errorf(errorInvalidObject, obj.String())
+	}
+
+	// Notify to the listeners
+	for _, l := range obj.listeners {
+		l.ObjectUpdated()
+	}
+
+	return nil
+}
+
+// GetData returns the object data
+func (obj *cgoObject) GetData() (interface{}, error) {
+	var data *C.char
+	if !C.foreman_register_object_getdata(obj.cObject, &data) {
+		return "", fmt.Errorf(errorInvalidObject, obj.String())
+	}
+	return C.GoString(data), nil
+}
+
 // GetVersion returns a version number of the instance
 func (obj *cgoObject) GetVersion() (int64, error) {
 	var ver C.long
-	ok := C.foreman_register_object_getversion(obj.cObject, &ver)
-	if !ok {
+	if !C.foreman_register_object_getversion(obj.cObject, &ver) {
 		return 0, fmt.Errorf(errorInvalidObject, obj.String())
 	}
 	return int64(ver), nil
@@ -67,8 +91,7 @@ func (obj *cgoObject) GetVersion() (int64, error) {
 // GetTimestamp returns a timestamp of the instance
 func (obj *cgoObject) GetTimestamp() (time.Time, error) {
 	var ts C.time_t
-	ok := C.foreman_register_object_gettimestamp(obj.cObject, &ts)
-	if !ok {
+	if !C.foreman_register_object_gettimestamp(obj.cObject, &ts) {
 		return time.Now(), fmt.Errorf(errorInvalidObject, obj.String())
 	}
 	return time.Unix(int64(ts), 0), nil

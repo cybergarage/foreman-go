@@ -22,7 +22,6 @@ type testObject struct {
 func newTestObject() *testObject {
 	obj := &testObject{
 		Object:      NewObject(),
-		Data:        "",
 		UpdateCount: 0,
 	}
 	return obj
@@ -52,7 +51,7 @@ func TestObjectListener(t *testing.T) {
 
 	updateLoopCount := 10
 	for n := 0; n < updateLoopCount; n++ {
-		obj.UpdateVersion()
+		obj.SetData("")
 		if obj.UpdateCount != (n + 1) {
 			t.Errorf(errorInvalidListenerUpdateCount, obj.UpdateCount, (n + 1))
 		}
