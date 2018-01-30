@@ -22,10 +22,10 @@ const (
 	testObjectInvalidDataType  = "%s is invalid data type"
 	testObjectInvalidData      = "%s is invalid data (%s != %s)"
 	testObjectInvalidVersion   = "%s is invalid version (%d)"
-	testObjectInvalidTimestamp = "%s is invalid timestamp (%s)"
+	testObjectInvalidTimestamp = "%s is invalid timestamp (%s < %s)"
 )
 
-func testStore(t *testing.T, store *Store) {
+func testStore(t *testing.T, store Store) {
 	now := time.Now()
 
 	// Open
@@ -51,7 +51,7 @@ func testStore(t *testing.T, store *Store) {
 	for n := 0; n < testStoreLoopCount; n++ {
 		obj := newTestObject()
 		obj.SetName(fmt.Sprintf(testStoreKeyFormat, n))
-		obj.Data = fmt.Sprintf(testStoreDataFormat, n)
+		obj.SetData(fmt.Sprintf(testStoreDataFormat, n))
 		err = store.SetObject(obj)
 		if err != nil {
 			t.Error(err)
@@ -67,17 +67,17 @@ func testStore(t *testing.T, store *Store) {
 	for n := 0; n < testStoreLoopCount; n++ {
 		key := fmt.Sprintf(testStoreKeyFormat, n)
 		data := fmt.Sprintf(testStoreDataFormat, n)
-		rawObj, ok := store.GetObject(key)
+		obj, ok := store.GetObject(key)
 		if !ok {
 			t.Error(fmt.Errorf(testObjectNotFound, key))
 		}
 
-		obj, ok := rawObj.(*testObject)
-		if !ok {
-			t.Error(fmt.Errorf(testObjectNotFound, key))
+		objRawData, err := obj.GetData()
+		if err != nil {
+			t.Error(err)
 		}
 
-		objData := obj.Data
+		objData, _ := objRawData.(string)
 		if objData != data {
 			t.Error(fmt.Errorf(testObjectInvalidData, key, objData, data))
 		}
@@ -87,14 +87,20 @@ func testStore(t *testing.T, store *Store) {
 			t.Error(err)
 		}
 
-		ver := obj.GetVersion()
+		ver, err := obj.GetVersion()
+		if err != nil {
+			t.Error(err)
+		}
 		if ver <= 0 {
 			t.Error(fmt.Errorf(testObjectInvalidVersion, key, ver))
 		}
 
-		ts := obj.GetTimestamp()
-		if ts.Sub(now) < 0 {
-			t.Error(fmt.Errorf(testObjectInvalidTimestamp, key, ts))
+		ts, err := obj.GetTimestamp()
+		if err != nil {
+			t.Error(err)
+		}
+		if (ts.Sub(now) / time.Second) < 0 {
+			t.Error(fmt.Errorf(testObjectInvalidTimestamp, key, ts, now))
 		}
 	}
 

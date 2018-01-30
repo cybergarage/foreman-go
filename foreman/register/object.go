@@ -6,6 +6,7 @@ package register
 
 import (
 	"time"
+	"unsafe"
 )
 
 // ObjectListener represents an interface of the object in the register store.
@@ -13,8 +14,10 @@ type ObjectListener interface {
 	ObjectUpdated()
 }
 
-// Object represents a meta object in the register store.
+// Object represents an register object in thestore.
 type Object interface {
+	// GetCObject returns the native object
+	GetCObject() unsafe.Pointer
 	// SetName sets a specified name
 	SetName(name string) error
 	// GetName returns the object name

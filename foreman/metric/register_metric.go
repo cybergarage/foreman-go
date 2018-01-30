@@ -17,14 +17,14 @@ type RegisterMetricListener interface {
 // RegisterMetric represents a metric for the register.
 type RegisterMetric struct {
 	*Metric
-	*register.BaseObject
+	*register.Object
 }
 
 // NewRegisterMetric returns a new metric.
 func NewRegisterMetric() *RegisterMetric {
 	m := &RegisterMetric{
-		Metric:     NewMetric(),
-		BaseObject: register.NewObject(),
+		Metric: NewMetric(),
+		Object: register.NewObject(),
 	}
 	return m
 }
