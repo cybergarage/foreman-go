@@ -11,8 +11,13 @@ import (
 
 // RegisterMetricAdded is a listener for metric.Register
 func (server *Server) RegisterMetricAdded(rm *metric.RegisterMetric) {
+	metricName, err := rm.GetName()
+	if err != nil {
+		return
+	}
+
 	q := qos.NewQuery()
-	q.Target = rm.GetName()
+	q.Target = metricName
 
 	// Set a new metric into the related formulas
 

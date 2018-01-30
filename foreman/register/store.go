@@ -47,7 +47,10 @@ func (store *Store) Clear() error {
 
 // SetObject sets a object into the store.
 func (store *Store) SetObject(obj Object) error {
-	key := obj.GetName()
+	key, err := obj.GetName()
+	if err != nil {
+		return err
+	}
 	store.registers[key] = obj
 
 	return nil

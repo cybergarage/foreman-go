@@ -35,8 +35,8 @@ func (obj *BaseObject) SetName(name string) error {
 }
 
 // GetName returns the object name
-func (obj *BaseObject) GetName() string {
-	return obj.name
+func (obj *BaseObject) GetName() (string, error) {
+	return obj.name, nil
 }
 
 // GetVersion returns a version number of the instance

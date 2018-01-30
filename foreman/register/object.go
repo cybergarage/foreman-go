@@ -18,7 +18,7 @@ type Object interface {
 	// SetName sets a specified name
 	SetName(name string) error
 	// GetName returns the object name
-	GetName() string
+	GetName() (string, error)
 	// GetVersion returns a version number of the instance
 	GetVersion() int64
 	// GetTimestamp returns a timestamp of the instance
