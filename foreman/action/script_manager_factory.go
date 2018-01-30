@@ -29,7 +29,7 @@ func newScriptManagerWithCObject(cObject unsafe.Pointer) *ScriptManager {
 
 func scriptManagerFinalizer(self *cgoScriptManager) {
 	if self.cManager != nil {
-		if C.foreman_action_script_manager_delete(self.cManager) {
+		if C.foreman_action_manager_delete(self.cManager) {
 			self.cManager = nil
 		}
 	}
@@ -37,6 +37,6 @@ func scriptManagerFinalizer(self *cgoScriptManager) {
 
 // NewScriptManager returns a new script manager.
 func NewScriptManager() *ScriptManager {
-	mgr := newScriptManagerWithCObject(C.foreman_action_script_manager_new())
+	mgr := newScriptManagerWithCObject(C.foreman_action_manager_new())
 	return mgr
 }

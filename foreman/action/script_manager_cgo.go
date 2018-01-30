@@ -22,12 +22,12 @@ type cgoScriptManager struct {
 
 // HasEngine checks whether a script engine of the specified programming language is added.
 func (mgr *cgoScriptManager) HasEngine(lang string) bool {
-	return bool(C.foreman_action_script_manager_hasengine(mgr.cManager, C.CString(lang)))
+	return bool(C.foreman_action_manager_hasengine(mgr.cManager, C.CString(lang)))
 }
 
 // HasMethod checks whether the specified method is added.
 func (mgr *cgoScriptManager) HasMethod(method string) bool {
-	return bool(C.foreman_action_script_manager_hasmethod(mgr.cManager, C.CString(method)))
+	return bool(C.foreman_action_manager_hasmethod(mgr.cManager, C.CString(method)))
 }
 
 // AddMethod adds a new method to the action manager.
@@ -44,7 +44,7 @@ func (mgr *cgoScriptManager) AddMethod(method *Method) error {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_action_script_manager_addmethod(mgr.cManager, cmethod, cerr) {
+	if !C.foreman_action_manager_addmethod(mgr.cManager, cmethod, cerr) {
 		err = errors.NewWithCObject(cerr)
 		return err
 	}
@@ -68,7 +68,7 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_action_script_manager_execmethod(mgr.cManager, C.CString(name), cparams, cresults, cerr) {
+	if !C.foreman_action_manager_execmethod(mgr.cManager, C.CString(name), cparams, cresults, cerr) {
 		err = errors.NewWithCObject(cerr)
 		return nil, err
 	}
