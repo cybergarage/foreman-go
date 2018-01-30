@@ -20,9 +20,9 @@ type Object interface {
 	// GetName returns the object name
 	GetName() (string, error)
 	// GetVersion returns a version number of the instance
-	GetVersion() int64
+	GetVersion() (int64, error)
 	// GetTimestamp returns a timestamp of the instance
-	GetTimestamp() time.Time
+	GetTimestamp() (time.Time, error)
 	// UpdateVersion updates the internal timestamp and version, and sends the update messages to the listeners
 	UpdateVersion() error
 	// AddListener adds a new listener
