@@ -19,6 +19,10 @@ type Object interface {
 	SetName(name string) error
 	// GetName returns the object name
 	GetName() (string, error)
+	// SetData sets a specified data
+	SetData(data interface{}) error
+	// GetData returns the object data
+	GetData() (interface{}, error)
 	// GetVersion returns a version number of the instance
 	GetVersion() (int64, error)
 	// GetTimestamp returns a timestamp of the instance

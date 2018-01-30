@@ -5,5 +5,6 @@
 package register
 
 const (
-	errorInvalidObject = "Invalid object (%s)"
+	errorInvalidObject     = "Invalid object (%s)"
+	errorInvalidObjectData = "Invalid object (%s) data (%s)"
 )
