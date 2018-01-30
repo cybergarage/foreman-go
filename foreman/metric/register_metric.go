@@ -17,7 +17,7 @@ type RegisterMetricListener interface {
 // RegisterMetric represents a metric for the register.
 type RegisterMetric struct {
 	*Metric
-	*register.Object
+	register.Object
 }
 
 // NewRegisterMetric returns a new metric.
