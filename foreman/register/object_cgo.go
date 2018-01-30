@@ -21,8 +21,8 @@ type cgoObject struct {
 	listeners []ObjectListener
 }
 
-// NewObjectWithCObject returns a new object with the C++ object.
-func newObjectWithCObject(cObject unsafe.Pointer) *cgoObject {
+// newObjectWithCObject returns a new object with the specified C++ object.
+func newObjectWithCObject(cObject unsafe.Pointer) Object {
 	obj := &cgoObject{
 		cObject:   cObject,
 		listeners: make([]ObjectListener, 0),
@@ -30,9 +30,14 @@ func newObjectWithCObject(cObject unsafe.Pointer) *cgoObject {
 	return obj
 }
 
-// NewObject returns a new base object.
-func NewObject() *cgoObject {
+// NewObject returns a new object.
+func NewObject() Object {
 	return newObjectWithCObject(C.foreman_register_object_new())
+}
+
+// GetCObject returns a stored C object
+func (obj *cgoObject) GetCObject() unsafe.Pointer {
+	return obj.cObject
 }
 
 // SetName sets a specified name
