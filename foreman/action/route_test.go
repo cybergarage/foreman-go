@@ -10,4 +10,6 @@ import (
 
 func TestNewRoute(t *testing.T) {
 	NewRouteWithObjects(nil, nil)
+	newRouteSourceWithName("")
+	newRouteSourceWithScriptManagerAndName(nil, "")
 }

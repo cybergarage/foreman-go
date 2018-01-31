@@ -22,7 +22,7 @@ func NewQoS() *QoS {
 }
 
 // ParseQoSString parses a specified QoS string.
-func (qos *QoS) ParseQoSString(qosString string) error {
+func (qos *QoS) ParseQoSString(qosString string) (kb.Rule, error) {
 	return qos.ParseRuleString(qos, qosString)
 }
 

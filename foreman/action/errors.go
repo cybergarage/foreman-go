@@ -5,6 +5,7 @@
 package action
 
 const (
-	errorUnknownParameterType = "Unknown parameter type (%d)"
-	errorInvalidParameterType = "Invalid parameter type (%d != %d)"
+	errorUnknownParameterType     = "Unknown parameter type (%d)"
+	errorInvalidParameterType     = "Invalid parameter type (%d != %d)"
+	errorRouteDestinationNotFound = "Destination (%s) is not found"
 )

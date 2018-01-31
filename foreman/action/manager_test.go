@@ -4,10 +4,10 @@
 
 package action
 
-// ResultSet is an alias of Parameters
-type ResultSet = Parameters
+import (
+	"testing"
+)
 
-// NewResultSet returns a new result set.
-func NewResultSet() ResultSet {
-	return NewParameters()
+func TestNewManager(t *testing.T) {
+	NewManager()
 }

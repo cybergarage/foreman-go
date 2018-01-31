@@ -6,6 +6,5 @@ package action
 
 // ActionObject represents an abstract interface for the action.
 type ActionObject interface {
-	Object
-	ProcessEvent(e *Event) (ResultSet, error)
+	RootDestination
 }
