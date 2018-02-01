@@ -4,9 +4,7 @@
 
 package fql
 
-import (
-	"testing"
-)
-
-func TestNewParser(t *testing.T) {
+// Parser represents an parser interface for FQL.
+type Parser interface {
+	ParseString(fqlString string) (Queries, error)
 }

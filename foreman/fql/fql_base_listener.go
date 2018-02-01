@@ -1,4 +1,4 @@
-// Generated from FQL.g4 by ANTLR 4.6.
+// Generated from FQL.g4 by ANTLR 4.7.
 
 package fql // FQL
 import "github.com/antlr/antlr4/runtime/Go/antlr"
@@ -38,14 +38,20 @@ func (s *BaseFQLListener) EnterStatement(ctx *StatementContext) {}
 // ExitStatement is called when production statement is exited.
 func (s *BaseFQLListener) ExitStatement(ctx *StatementContext) {}
 
-// EnterSet_stmt is called when production set_stmt is entered.
-func (s *BaseFQLListener) EnterSet_stmt(ctx *Set_stmtContext) {}
+// EnterSet is called when production Set is entered.
+func (s *BaseFQLListener) EnterSet(ctx *SetContext) {}
 
-// ExitSet_stmt is called when production set_stmt is exited.
-func (s *BaseFQLListener) ExitSet_stmt(ctx *Set_stmtContext) {}
+// ExitSet is called when production Set is exited.
+func (s *BaseFQLListener) ExitSet(ctx *SetContext) {}
 
-// EnterQos_stmt is called when production qos_stmt is entered.
-func (s *BaseFQLListener) EnterQos_stmt(ctx *Qos_stmtContext) {}
+// EnterSelect is called when production Select is entered.
+func (s *BaseFQLListener) EnterSelect(ctx *SelectContext) {}
 
-// ExitQos_stmt is called when production qos_stmt is exited.
-func (s *BaseFQLListener) ExitQos_stmt(ctx *Qos_stmtContext) {}
+// ExitSelect is called when production Select is exited.
+func (s *BaseFQLListener) ExitSelect(ctx *SelectContext) {}
+
+// EnterTable is called when production table is entered.
+func (s *BaseFQLListener) EnterTable(ctx *TableContext) {}
+
+// ExitTable is called when production table is exited.
+func (s *BaseFQLListener) ExitTable(ctx *TableContext) {}
