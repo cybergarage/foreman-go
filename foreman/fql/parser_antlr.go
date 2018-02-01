@@ -19,16 +19,8 @@ func NewParser() Parser {
 	return parser
 }
 
-type treeShapeListener struct {
-	*BaseFQLListener
-}
-
-func newTreeShapeListener() *treeShapeListener {
-	return new(treeShapeListener)
-}
-
 // ParseString parses a specified FQL string.
-func (parser *ANTLRParser) ParseString(fqlString string) error {
+func (parser *ANTLRParser) ParseString(fqlString string) (Statements, error) {
 	input := antlr.NewInputStream(fqlString)
 	lexer := NewFQLLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
@@ -36,6 +28,7 @@ func (parser *ANTLRParser) ParseString(fqlString string) error {
 	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
 	p.BuildParseTrees = true
 	tree := p.Fql()
-	antlr.ParseTreeWalkerDefault.Walk(newTreeShapeListener(), tree)
-	return nil
+	l := newFQLTreeWalkListener()
+	antlr.ParseTreeWalkerDefault.Walk(l, tree)
+	return nil, nil
 }

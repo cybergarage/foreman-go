@@ -4,7 +4,10 @@
 
 package fql
 
-// Parser represents an parser interface for FQL.
-type Parser interface {
-	ParseString(fqlString string) (Statements, error)
+import (
+	"testing"
+)
+
+func TestNewNewStatements(t *testing.T) {
+	NewStatements()
 }
