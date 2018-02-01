@@ -3,11 +3,3 @@
 // license that can be found in the LICENSE file.
 
 package fql
-
-// StatementType defines statement types
-type StatementType int
-
-const (
-	StatementUnknownType StatementType = iota
-	StatementSelect
-)

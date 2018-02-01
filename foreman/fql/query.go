@@ -4,10 +4,18 @@
 
 package fql
 
-// Statement represents a statement interface.
-type Statement interface {
-	GetName() string
-	GetType() StatementType
+type QueryType int
+
+const (
+	QueryTypeUnknown QueryType = iota
+	QueryTypeSelect
+)
+
+// Query represents a query interface.
+type Query interface {
+	GetType() QueryType
+	AddParameter(param Parameter) error
 	GetParameters() Parameters
 	GetParameter(string) (Parameter, bool)
+	GetParameterString(string) (string, bool)
 }

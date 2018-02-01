@@ -8,19 +8,19 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
-// ANTLRParser represents a FQL parser based on ANTLR.
-type ANTLRParser struct {
+// antlrParser represents a FQL parser based on ANTLR.
+type antlrParser struct {
 	Parser
 }
 
 // NewParser returns a new parse.
 func NewParser() Parser {
-	parser := &ANTLRParser{}
+	parser := &antlrParser{}
 	return parser
 }
 
 // ParseString parses a specified FQL string.
-func (parser *ANTLRParser) ParseString(fqlString string) (Statements, error) {
+func (parser *antlrParser) ParseString(fqlString string) (Queries, error) {
 	input := antlr.NewInputStream(fqlString)
 	lexer := NewFQLLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
@@ -28,7 +28,8 @@ func (parser *ANTLRParser) ParseString(fqlString string) (Statements, error) {
 	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
 	p.BuildParseTrees = true
 	tree := p.Fql()
-	l := newFQLTreeWalkListener()
+	l := newANTLRParserListener()
+	//v := newANTLRParserVisitor()
 	antlr.ParseTreeWalkerDefault.Walk(l, tree)
 	return nil, nil
 }
