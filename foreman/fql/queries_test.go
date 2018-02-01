@@ -8,6 +8,6 @@ import (
 	"testing"
 )
 
-func TestNewNewStatements(t *testing.T) {
-	NewStatements()
+func TestNewQueries(t *testing.T) {
+	NewQueries()
 }

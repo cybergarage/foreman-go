@@ -18,3 +18,18 @@ func (params Parameters) AddParameter(param Parameter) error {
 	params[param.GetName()] = param
 	return nil
 }
+
+// GetParameter returns a specified parameter.
+func (params Parameters) GetParameter(name string) (Parameter, bool) {
+	param, ok := params[name]
+	return param, ok
+}
+
+// GetParameterString returns a string of the specified parameter.
+func (params Parameters) GetParameterString(name string) (string, bool) {
+	param, ok := params.GetParameter(name)
+	if !ok {
+		return "", false
+	}
+	return param.GetString()
+}

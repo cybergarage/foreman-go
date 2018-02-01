@@ -4,10 +4,13 @@
 
 package fql
 
+const (
+	parameterTable = "table"
+)
+
 // Parameter represents a parameter interface.
 type Parameter interface {
 	GetName() string
 	GetValue() interface{}
 	GetString() (string, bool)
-	String() string
 }

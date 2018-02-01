@@ -8,6 +8,8 @@ import (
 	"testing"
 )
 
-func TestNewStatement(t *testing.T) {
-	NewStatementWithName("", StatementUnknownType)
+func TestNewQuery(t *testing.T) {
+	newBaseQuery()
+
+	NewSelectQuery()
 }

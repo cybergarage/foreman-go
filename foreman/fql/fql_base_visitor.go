@@ -19,10 +19,14 @@ func (v *BaseFQLVisitor) VisitStatement(ctx *StatementContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseFQLVisitor) VisitSet_stmt(ctx *Set_stmtContext) interface{} {
+func (v *BaseFQLVisitor) VisitSet(ctx *SetContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseFQLVisitor) VisitQos_stmt(ctx *Qos_stmtContext) interface{} {
+func (v *BaseFQLVisitor) VisitSelect(ctx *SelectContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseFQLVisitor) VisitTable(ctx *TableContext) interface{} {
 	return v.VisitChildren(ctx)
 }

@@ -16,9 +16,12 @@ type FQLVisitor interface {
 	// Visit a parse tree produced by FQLParser#statement.
 	VisitStatement(ctx *StatementContext) interface{}
 
-	// Visit a parse tree produced by FQLParser#set_stmt.
-	VisitSet_stmt(ctx *Set_stmtContext) interface{}
+	// Visit a parse tree produced by FQLParser#Set.
+	VisitSet(ctx *SetContext) interface{}
 
-	// Visit a parse tree produced by FQLParser#qos_stmt.
-	VisitQos_stmt(ctx *Qos_stmtContext) interface{}
+	// Visit a parse tree produced by FQLParser#Select.
+	VisitSelect(ctx *SelectContext) interface{}
+
+	// Visit a parse tree produced by FQLParser#table.
+	VisitTable(ctx *TableContext) interface{}
 }
