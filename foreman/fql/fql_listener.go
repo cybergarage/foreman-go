@@ -1,4 +1,4 @@
-// Generated from FQL.g4 by ANTLR 4.6.
+// Generated from FQL.g4 by ANTLR 4.7.
 
 package fql // FQL
 import "github.com/antlr/antlr4/runtime/Go/antlr"
@@ -16,11 +16,14 @@ type FQLListener interface {
 	// EnterStatement is called when entering the statement production.
 	EnterStatement(c *StatementContext)
 
-	// EnterSet_stmt is called when entering the set_stmt production.
-	EnterSet_stmt(c *Set_stmtContext)
+	// EnterSet is called when entering the Set production.
+	EnterSet(c *SetContext)
 
-	// EnterQos_stmt is called when entering the qos_stmt production.
-	EnterQos_stmt(c *Qos_stmtContext)
+	// EnterSelect is called when entering the Select production.
+	EnterSelect(c *SelectContext)
+
+	// EnterTable is called when entering the table production.
+	EnterTable(c *TableContext)
 
 	// ExitFql is called when exiting the fql production.
 	ExitFql(c *FqlContext)
@@ -31,9 +34,12 @@ type FQLListener interface {
 	// ExitStatement is called when exiting the statement production.
 	ExitStatement(c *StatementContext)
 
-	// ExitSet_stmt is called when exiting the set_stmt production.
-	ExitSet_stmt(c *Set_stmtContext)
+	// ExitSet is called when exiting the Set production.
+	ExitSet(c *SetContext)
 
-	// ExitQos_stmt is called when exiting the qos_stmt production.
-	ExitQos_stmt(c *Qos_stmtContext)
+	// ExitSelect is called when exiting the Select production.
+	ExitSelect(c *SelectContext)
+
+	// ExitTable is called when exiting the table production.
+	ExitTable(c *TableContext)
 }
