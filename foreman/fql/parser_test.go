@@ -14,24 +14,40 @@ import (
 )
 
 const (
-	testFQLCaseFilename = "parser_test.csv"
+	testFQLSelectCaseFilename = "parser_test_select_case.csv"
 )
 
-func testFQLCase(t *testing.T, fqlString string) {
+type parserTestListener interface {
+	testCase(t *testing.T, q Query, corrects []string) error
+}
+
+type selectQueryTestListener struct{}
+
+func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	sq, _ := q.(*SelectQuery)
+	table, _ := sq.GetTable()
+	fmt.Printf("talbe = %s\n", table)
+	if table != corrects[0] {
+		t.Error(fmt.Errorf("%s != %s", table, corrects[0]))
+	}
+	return nil
+}
+
+func testFQLCase(t *testing.T, l parserTestListener, fqlString string, corrects []string) {
 	parser := NewParser()
 
-	_, err := parser.ParseString(fqlString)
+	queries, err := parser.ParseString(fqlString)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	fmt.Printf("%s\n", fqlString)
+	l.testCase(t, queries[0], corrects)
 }
 
-func TestFQLCases(t *testing.T) {
+func testCSVCases(t *testing.T, filename string, l parserTestListener) {
 
-	fqlStrings, err := ioutil.ReadFile(testFQLCaseFilename)
+	fqlStrings, err := ioutil.ReadFile(filename)
 	if err != nil {
 		t.Error(err)
 		return
@@ -51,7 +67,11 @@ func TestFQLCases(t *testing.T) {
 		}
 
 		fqlString := record[0]
-
-		testFQLCase(t, fqlString)
+		corrects := record[1:]
+		testFQLCase(t, l, fqlString, corrects)
 	}
+}
+
+func TestFQLCases(t *testing.T) {
+	testCSVCases(t, testFQLSelectCaseFilename, &selectQueryTestListener{})
 }

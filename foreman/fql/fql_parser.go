@@ -1,4 +1,4 @@
-// Generated from FQL.g4 by ANTLR 4.7.
+// Code generated from FQL.g4 by ANTLR 4.7.1. DO NOT EDIT.
 
 package fql // FQL
 import (
@@ -27,7 +27,7 @@ var parserATN = []uint16{
 	3, 2, 2, 2, 23, 21, 3, 2, 2, 2, 24, 27, 5, 8, 5, 2, 25, 27, 5, 10, 6, 2,
 	26, 24, 3, 2, 2, 2, 26, 25, 3, 2, 2, 2, 27, 7, 3, 2, 2, 2, 28, 29, 7, 6,
 	2, 2, 29, 9, 3, 2, 2, 2, 30, 31, 7, 3, 2, 2, 31, 32, 7, 9, 2, 2, 32, 33,
-	7, 8, 2, 2, 33, 34, 5, 12, 7, 2, 34, 11, 3, 2, 2, 2, 35, 36, 7, 25, 2,
+	7, 8, 2, 2, 33, 34, 5, 12, 7, 2, 34, 11, 3, 2, 2, 2, 35, 36, 7, 22, 2,
 	2, 36, 13, 3, 2, 2, 2, 4, 21, 26,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
@@ -40,7 +40,8 @@ var literalNames = []string{
 var symbolicNames = []string{
 	"", "SELECT", "INSERT", "DELETE", "SET", "EXPORT", "FROM", "ASTERISK",
 	"SINGLE_EQ", "DOUBLE_EQ", "OP_LT", "LE", "GT", "GE", "NOTEQ", "AND", "OR",
-	"COMMA", "SEMICOLON", "WS", "ID", "NUMBER", "FLOAT", "STRING", "CHAR",
+	"COMMA", "SEMICOLON", "WS", "IDENTIFIER", "NUMBER", "FLOAT", "STRING",
+	"CHAR",
 }
 
 var ruleNames = []string{
@@ -74,31 +75,31 @@ func NewFQLParser(input antlr.TokenStream) *FQLParser {
 
 // FQLParser tokens.
 const (
-	FQLParserEOF       = antlr.TokenEOF
-	FQLParserSELECT    = 1
-	FQLParserINSERT    = 2
-	FQLParserDELETE    = 3
-	FQLParserSET       = 4
-	FQLParserEXPORT    = 5
-	FQLParserFROM      = 6
-	FQLParserASTERISK  = 7
-	FQLParserSINGLE_EQ = 8
-	FQLParserDOUBLE_EQ = 9
-	FQLParserOP_LT     = 10
-	FQLParserLE        = 11
-	FQLParserGT        = 12
-	FQLParserGE        = 13
-	FQLParserNOTEQ     = 14
-	FQLParserAND       = 15
-	FQLParserOR        = 16
-	FQLParserCOMMA     = 17
-	FQLParserSEMICOLON = 18
-	FQLParserWS        = 19
-	FQLParserID        = 20
-	FQLParserNUMBER    = 21
-	FQLParserFLOAT     = 22
-	FQLParserSTRING    = 23
-	FQLParserCHAR      = 24
+	FQLParserEOF        = antlr.TokenEOF
+	FQLParserSELECT     = 1
+	FQLParserINSERT     = 2
+	FQLParserDELETE     = 3
+	FQLParserSET        = 4
+	FQLParserEXPORT     = 5
+	FQLParserFROM       = 6
+	FQLParserASTERISK   = 7
+	FQLParserSINGLE_EQ  = 8
+	FQLParserDOUBLE_EQ  = 9
+	FQLParserOP_LT      = 10
+	FQLParserLE         = 11
+	FQLParserGT         = 12
+	FQLParserGE         = 13
+	FQLParserNOTEQ      = 14
+	FQLParserAND        = 15
+	FQLParserOR         = 16
+	FQLParserCOMMA      = 17
+	FQLParserSEMICOLON  = 18
+	FQLParserWS         = 19
+	FQLParserIDENTIFIER = 20
+	FQLParserNUMBER     = 21
+	FQLParserFLOAT      = 22
+	FQLParserSTRING     = 23
+	FQLParserCHAR       = 24
 )
 
 // FQLParser rules.
@@ -764,8 +765,8 @@ func NewTableContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 
 func (s *TableContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *TableContext) STRING() antlr.TerminalNode {
-	return s.GetToken(FQLParserSTRING, 0)
+func (s *TableContext) IDENTIFIER() antlr.TerminalNode {
+	return s.GetToken(FQLParserIDENTIFIER, 0)
 }
 
 func (s *TableContext) GetRuleContext() antlr.RuleContext {
@@ -811,7 +812,7 @@ func (p *FQLParser) Table() (localctx ITableContext) {
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(33)
-		p.Match(FQLParserSTRING)
+		p.Match(FQLParserIDENTIFIER)
 	}
 
 	return localctx

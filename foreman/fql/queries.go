@@ -12,9 +12,3 @@ func NewQueries() Queries {
 	queries := make([]Query, 0)
 	return queries
 }
-
-// AddQuery adds a new query.
-func (queries Queries) AddQuery(q Query) error {
-	queries = append(queries, q)
-	return nil
-}
