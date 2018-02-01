@@ -56,7 +56,10 @@ version: ${VERSION_GO}
 format:
 	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${BINARY_NAME}
 
-build: format $(shell find . -type f -name '*.go')
+antlr:
+	pushd src/${GITHUB}/foreman/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
+
+build: format antlr $(shell find . -type f -name '*.go')
 	go build -v ${PACKAGES}
 
 test: build 
