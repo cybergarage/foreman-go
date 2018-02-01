@@ -47,5 +47,5 @@ fi
 # Update source files based on ANTLR 
 ########################################
 
-pushd src/github.com/cybergarage/foreman-go/foreman/fql && antlr4 -package fql -visitor -Dlanguage=Go FQL.g4 && popd
+pushd src/github.com/cybergarage/foreman-go/foreman/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
 
