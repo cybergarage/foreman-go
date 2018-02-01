@@ -4,22 +4,22 @@ package fql // FQL
 
 type antlrParserListener struct {
 	*BaseFQLListener
-	rank int
+	Queries
 }
 
 func newANTLRParserListener() *antlrParserListener {
 	l := &antlrParserListener{
 		BaseFQLListener: &BaseFQLListener{},
-		rank:            0,
+		Queries:         NewQueries(),
 	}
 	return l
 }
-
-var _ FQLListener = &BaseFQLListener{}
 
 // ExitSelect is called when production Select is exited.
 func (l *antlrParserListener) ExitSelect(ctx *SelectContext) {
 	q := NewSelectQuery()
 	p := NewParameterWithObject(parameterTable, ctx.Table().GetText())
 	q.AddParameter(p)
+
+	l.Queries = append(l.Queries, q)
 }

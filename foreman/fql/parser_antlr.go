@@ -25,11 +25,14 @@ func (parser *antlrParser) ParseString(fqlString string) (Queries, error) {
 	lexer := NewFQLLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 	p := NewFQLParser(stream)
-	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	el := newANTLRParserErrorListener()
+	p.AddErrorListener(el)
 	p.BuildParseTrees = true
 	tree := p.Fql()
-	l := newANTLRParserListener()
-	//v := newANTLRParserVisitor()
-	antlr.ParseTreeWalkerDefault.Walk(l, tree)
-	return nil, nil
+	pl := newANTLRParserListener()
+	antlr.ParseTreeWalkerDefault.Walk(pl, tree)
+	if !el.IsSuccess() {
+		return nil, el.GetError()
+	}
+	return pl.Queries, nil
 }
