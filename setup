@@ -42,10 +42,3 @@ else
   go get -u github.com/cybergarage/foreman-go.git/foreman
   pushd src && mv github.com/cybergarage/foreman-go.git ${foreman_go_path} && popd
 fi
-
-########################################
-# Update source files based on ANTLR 
-########################################
-
-pushd src/github.com/cybergarage/foreman-go/foreman/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
-
