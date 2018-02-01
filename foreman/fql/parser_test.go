@@ -20,7 +20,7 @@ const (
 func testFQLCase(t *testing.T, fqlString string) {
 	parser := NewParser()
 
-	err := parser.ParseString(fqlString)
+	_, err := parser.ParseString(fqlString)
 	if err != nil {
 		t.Error(err)
 		return

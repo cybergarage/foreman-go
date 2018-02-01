@@ -178,6 +178,16 @@ func (s *FqlContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *FqlContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case FQLVisitor:
+		return t.VisitFql(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *FQLParser) Fql() (localctx IFqlContext) {
 	localctx = NewFqlContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 0, FQLParserRULE_fql)
@@ -293,6 +303,16 @@ func (s *Statement_listContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *Statement_listContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
 		listenerT.ExitStatement_list(s)
+	}
+}
+
+func (s *Statement_listContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case FQLVisitor:
+		return t.VisitStatement_list(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -422,6 +442,16 @@ func (s *StatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *StatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case FQLVisitor:
+		return t.VisitStatement(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *FQLParser) Statement() (localctx IStatementContext) {
 	localctx = NewStatementContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 4, FQLParserRULE_statement)
@@ -529,6 +559,16 @@ func (s *Set_stmtContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *Set_stmtContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case FQLVisitor:
+		return t.VisitSet_stmt(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *FQLParser) Set_stmt() (localctx ISet_stmtContext) {
 	localctx = NewSet_stmtContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 6, FQLParserRULE_set_stmt)
@@ -629,6 +669,16 @@ func (s *Qos_stmtContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *Qos_stmtContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
 		listenerT.ExitQos_stmt(s)
+	}
+}
+
+func (s *Qos_stmtContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case FQLVisitor:
+		return t.VisitQos_stmt(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
