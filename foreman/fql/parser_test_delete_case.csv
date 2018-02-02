@@ -1,0 +1,4 @@
+# query; target; value
+DELETE abc FROM table;table;abc
+# QoS
+DELETE rule0 FROM QoS;QoS;rule0

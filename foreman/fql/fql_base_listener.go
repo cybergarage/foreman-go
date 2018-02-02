@@ -62,6 +62,12 @@ func (s *BaseFQLListener) EnterExportQuery(ctx *ExportQueryContext) {}
 // ExitExportQuery is called when production ExportQuery is exited.
 func (s *BaseFQLListener) ExitExportQuery(ctx *ExportQueryContext) {}
 
+// EnterDeleteQuery is called when production DeleteQuery is entered.
+func (s *BaseFQLListener) EnterDeleteQuery(ctx *DeleteQueryContext) {}
+
+// ExitDeleteQuery is called when production DeleteQuery is exited.
+func (s *BaseFQLListener) ExitDeleteQuery(ctx *DeleteQueryContext) {}
+
 // EnterTarget is called when production target is entered.
 func (s *BaseFQLListener) EnterTarget(ctx *TargetContext) {}
 

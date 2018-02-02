@@ -4,7 +4,8 @@
 
 package fql
 
-// Executor represents an interface to execute a query.
+// QueryExecutor represents an interface to execute a query.
 type QueryExecutor interface {
-	ExecuteQuery(Query) error
+	// ExecuteQuery must return the result as a standard array or map.
+	ExecuteQuery(Query) (interface{}, error)
 }

@@ -18,6 +18,7 @@ const (
 	testFQLSetCaseFilename    = "parser_test_set_case.csv"
 	testFQLSelectCaseFilename = "parser_test_select_case.csv"
 	testFQLExportCaseFilename = "parser_test_export_case.csv"
+	testFQLDeleteCaseFilename = "parser_test_delete_case.csv"
 )
 
 const (
@@ -82,6 +83,7 @@ func TestFQLCases(t *testing.T) {
 		testFQLSetCaseFilename:    &insertQueryTestListener{},
 		testFQLSelectCaseFilename: &selectQueryTestListener{},
 		testFQLExportCaseFilename: &selectQueryTestListener{},
+		testFQLDeleteCaseFilename: &deleteQueryTestListener{},
 	}
 
 	for filename, listener := range testCases {
@@ -97,7 +99,7 @@ type insertQueryTestListener struct{}
 func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
 	target, _ := q.GetTarget()
 	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[1])
+		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
 	}
 
 	values, _ := q.GetValues()
@@ -119,5 +121,27 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	if target != corrects[0] {
 		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
 	}
+	return nil
+}
+
+// Delete
+
+type deleteQueryTestListener struct{}
+
+func (l *deleteQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	target, _ := q.GetTarget()
+	if target != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
+	}
+
+	values, _ := q.GetValues()
+
+	if len(values) != 1 {
+		return fmt.Errorf(errorInvalidValueCount, len(values), 1)
+	}
+	if values[0] != corrects[1] {
+		return fmt.Errorf(errorInvalidValue, values[0], corrects[1])
+	}
+
 	return nil
 }

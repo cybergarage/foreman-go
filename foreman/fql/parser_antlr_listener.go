@@ -98,6 +98,25 @@ func (l *antlrParserListener) ExitExportQuery(ctx *ExportQueryContext) {
 }
 
 ////////////////////////////////////////
+// Delete
+////////////////////////////////////////
+
+// EnterDeleteQuery is called when production DeleteQuery is entered.
+func (l *antlrParserListener) EnterDeleteQuery(ctx *DeleteQueryContext) {
+	q := NewDeleteQuery()
+	l.PushObject(q)
+}
+
+// ExitDeleteQuery is called when production DeleteQuery is exited.
+func (l *antlrParserListener) ExitDeleteQuery(ctx *DeleteQueryContext) {
+	q, ok := l.PopObject().(*DeleteQuery)
+	if !ok {
+		return
+	}
+	l.Queries = append(l.Queries, q)
+}
+
+////////////////////////////////////////
 // Target
 ////////////////////////////////////////
 
