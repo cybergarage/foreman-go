@@ -4,9 +4,14 @@
 
 package qos
 
+import (
+	"github.com/cybergarage/foreman-go/foreman/fql"
+)
+
 // Manager represents a metric manager.
 type Manager struct {
 	*QoS
+	fql.QueryExecutor
 }
 
 // NewManager returns a new metric manager.
