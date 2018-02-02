@@ -1,18 +1,27 @@
-// Generated from FQL.g4 by ANTLR 4.7.
+// Copyright (C) 2017 Satoshi Konno. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
-package fql // FQL
+package fql
 
 type antlrParserListener struct {
 	*BaseFQLListener
 	Queries
+	*ParserObjectStack
 }
 
 func newANTLRParserListener() *antlrParserListener {
 	l := &antlrParserListener{
-		BaseFQLListener: &BaseFQLListener{},
-		Queries:         NewQueries(),
+		BaseFQLListener:   &BaseFQLListener{},
+		Queries:           NewQueries(),
+		ParserObjectStack: NewParserObjectStack(),
 	}
 	return l
+}
+
+// ExitSetQuery is called when production SetQuery is exited.
+func (l *antlrParserListener) ExitSetQuery(ctx *SetQueryContext) {
+
 }
 
 // ExitSelectQuery is called when production SelectQuery is exited.
