@@ -79,9 +79,9 @@ func testCSVQueries(t *testing.T, filename string, l parserTestListener) {
 func TestFQLCases(t *testing.T) {
 	testCases := map[string]parserTestListener{
 		testFQLInsertCaseFilename: &insertQueryTestListener{},
-		testFQLSetCaseFilename:    &setQueryTestListener{},
+		testFQLSetCaseFilename:    &insertQueryTestListener{},
 		testFQLSelectCaseFilename: &selectQueryTestListener{},
-		testFQLExportCaseFilename: &exportQueryTestListener{},
+		testFQLExportCaseFilename: &selectQueryTestListener{},
 	}
 
 	for filename, listener := range testCases {
@@ -95,38 +95,12 @@ func TestFQLCases(t *testing.T) {
 type insertQueryTestListener struct{}
 
 func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
-	sq, _ := q.(*InsertQuery)
-
-	target, _ := sq.GetTarget()
+	target, _ := q.GetTarget()
 	if target != corrects[0] {
 		return fmt.Errorf(errorInvalidTarget, target, corrects[1])
 	}
 
-	values, _ := sq.GetValues()
-	for n := 0; n < (len(corrects) - 1); n++ {
-		if values[n] != corrects[n+1] {
-			return fmt.Errorf(errorInvalidValue, values[n], corrects[n+1])
-		}
-	}
-
-	return nil
-}
-
-// Set
-
-type setQueryTestListener struct {
-	*insertQueryTestListener
-}
-
-func (l *setQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
-	sq, _ := q.(*SetQuery)
-
-	target, _ := sq.GetTarget()
-	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[1])
-	}
-
-	values, _ := sq.GetValues()
+	values, _ := q.GetValues()
 	for n := 0; n < (len(corrects) - 1); n++ {
 		if values[n] != corrects[n+1] {
 			return fmt.Errorf(errorInvalidValue, values[n], corrects[n+1])
@@ -141,21 +115,7 @@ func (l *setQueryTestListener) testCase(t *testing.T, q Query, corrects []string
 type selectQueryTestListener struct{}
 
 func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
-	sq, _ := q.(*SelectQuery)
-	target, _ := sq.GetTarget()
-	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
-	}
-	return nil
-}
-
-// Export
-
-type exportQueryTestListener struct{}
-
-func (l *exportQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
-	sq, _ := q.(*ExportQuery)
-	target, _ := sq.GetTarget()
+	target, _ := q.GetTarget()
 	if target != corrects[0] {
 		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
 	}

@@ -6,18 +6,14 @@ package fql
 
 // SetQuery represents a set query.
 type SetQuery struct {
-	*baseQuery
+	*InsertQuery
 }
 
 // NewSetQuery returns a new set query.
 func NewSetQuery() Query {
+	sq, _ := NewInsertQuery().(*InsertQuery)
 	q := &SetQuery{
-		baseQuery: newBaseQuery(),
+		InsertQuery: sq,
 	}
 	return q
-}
-
-// GetType returns a stored type.
-func (q *SetQuery) GetType() QueryType {
-	return QueryTypeSet
 }
