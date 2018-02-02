@@ -4,15 +4,10 @@
 
 package fql
 
-import (
-	"testing"
-)
+// Values is a value array of of FQL.
+type Values = []string
 
-func TestNewQuery(t *testing.T) {
-	newBaseQuery()
-
-	NewInsertQuery()
-	NewSetQuery()
-	NewSelectQuery()
-	NewExportQuery()
+// NewValues returns a new value array.
+func NewValues() Values {
+	return make(Values, 0)
 }

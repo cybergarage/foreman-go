@@ -8,13 +8,15 @@ type QueryType int
 
 const (
 	QueryTypeUnknown QueryType = iota
+	QueryTypeInsert
+	QueryTypeSet
 	QueryTypeSelect
 )
 
 // Query represents a query interface.
 type Query interface {
 	GetType() QueryType
-	AddParameter(param Parameter) error
+	SetParameter(param Parameter) error
 	GetParameters() Parameters
 	GetParameter(string) (Parameter, bool)
 	GetParameterString(string) (string, bool)

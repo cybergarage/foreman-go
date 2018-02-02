@@ -1,2 +1,2 @@
-# QoS
+# query,target
 SELECT * FROM QoS,QoS

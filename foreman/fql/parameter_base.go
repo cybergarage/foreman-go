@@ -23,6 +23,18 @@ func NewParameterWithObject(name string, value interface{}) *BaseParameter {
 	return param
 }
 
+// SetName sets a specified name into the object.
+func (param *BaseParameter) SetName(name string) error {
+	param.Name = name
+	return nil
+}
+
+// SetValue sets a specified value into the object.
+func (param *BaseParameter) SetValue(value interface{}) error {
+	param.Value = value
+	return nil
+}
+
 // GetName returns a stored name.
 func (param *BaseParameter) GetName() string {
 	return param.Name
@@ -33,7 +45,7 @@ func (param *BaseParameter) GetValue() interface{} {
 	return param.Value
 }
 
-// GetString returns a stored string value.
+// GetString returns a stored value as a string.
 func (param *BaseParameter) GetString() (string, bool) {
 	value, ok := param.Value.(string)
 	return value, ok

@@ -18,12 +18,48 @@ func newBaseQuery() *baseQuery {
 	return q
 }
 
-// GetType returns a stored type.
+// GetType returns a stored type in the query.
 func (q *baseQuery) GetType() QueryType {
 	return QueryTypeUnknown
 }
 
-// GetParameters returns all parameters
-func (q *baseQuery) GetParameters() Parameters {
-	return q.Parameters
+// GetTarget returns the target in the query.
+func (q *baseQuery) GetTarget() (Target, bool) {
+	return q.GetParameterString(parameterTable)
+}
+
+// AddValue adds a specified value into the query.
+func (q *baseQuery) AddValue(value Value) bool {
+	var values Values
+	param, ok := q.GetParameter(parameterValues)
+	if ok {
+		values, ok = param.GetValue().(Values)
+		if !ok {
+			values = NewValues()
+		}
+	} else {
+		values = NewValues()
+	}
+	err := param.SetValue(values)
+	if err != nil {
+		return false
+	}
+	err = q.SetParameter(param)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+// GetValues returns the values in the query.
+func (q *baseQuery) GetValues() (Values, bool) {
+	param, ok := q.GetParameter(parameterValues)
+	if !ok {
+		return nil, false
+	}
+	values, ok := param.GetValue().(Values)
+	if !ok {
+		return nil, false
+	}
+	return values, true
 }

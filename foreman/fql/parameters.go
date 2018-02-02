@@ -13,10 +13,15 @@ func NewParameters() Parameters {
 	return params
 }
 
-// AddParameter adds a new parameter.
-func (params Parameters) AddParameter(param Parameter) error {
+// SetParameter sets a new parameter.
+func (params Parameters) SetParameter(param Parameter) error {
 	params[param.GetName()] = param
 	return nil
+}
+
+// GetParameters returns all parameters in the query.
+func (params Parameters) GetParameters() Parameters {
+	return params
 }
 
 // GetParameter returns a specified parameter.

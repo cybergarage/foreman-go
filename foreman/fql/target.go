@@ -4,15 +4,5 @@
 
 package fql
 
-import (
-	"testing"
-)
-
-func TestNewQuery(t *testing.T) {
-	newBaseQuery()
-
-	NewInsertQuery()
-	NewSetQuery()
-	NewSelectQuery()
-	NewExportQuery()
-}
+// Target is a destination or source target of FQL.
+type Target = string
