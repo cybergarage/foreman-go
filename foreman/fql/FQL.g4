@@ -29,6 +29,7 @@ statement_list
 statement
 	: set_stmt
 	| select_stmt
+	| select_stmt
 	;
 
 /*------------------------------------------------------------------
@@ -44,14 +45,22 @@ set_stmt
  *------------------------------------------------------------------*/
 
 select_stmt
-	: SELECT ASTERISK FROM table # Select
+	: SELECT ASTERISK FROM target # Select
 	;
 
 /*------------------------------------------------------------------
- * Table
+ * EXPORT (Alias for SELECT *)
  *------------------------------------------------------------------*/
 
-table
+export_stmt
+	: EXPORT target # Export
+	;
+
+/*------------------------------------------------------------------
+ * Target
+ *------------------------------------------------------------------*/
+
+target
 	: IDENTIFIER
 	;
 
@@ -293,45 +302,14 @@ NUMBER
 	: '0'..'9'+
 	;
 
-FLOAT
+REAL
 	:   ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
 	|   '.' ('0'..'9')+ EXPONENT?
 	|   ('0'..'9')+ EXPONENT
 	;
-
-STRING
-	:  '"' ( EscapeSequence | ~('\\'| '"') )* '"' 
-	;
-
-fragment
-EscapeSequence
-	:   '\\' ('\"'|'\''|'\\')
-	;
-
-CHAR:  '\'' ( ESC_SEQ | ~('\''|'\\') ) '\''
-    ;
 
 fragment
 EXPONENT : ('e'|'E') ('+'|'-')? ('0'..'9')+ ;
 
 fragment
 HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ;
-
-fragment
-ESC_SEQ
-    :   '\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
-    |   UNICODE_ESC
-    |   OCTAL_ESC
-    ;
-
-fragment
-OCTAL_ESC
-    :   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
-    |   '\\' ('0'..'7') ('0'..'7')
-    |   '\\' ('0'..'7')
-    ;
-
-fragment
-UNICODE_ESC
-    :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
-    ;
