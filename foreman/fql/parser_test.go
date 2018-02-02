@@ -58,6 +58,7 @@ func testCSVQueries(t *testing.T, filename string, l parserTestListener) {
 	r.Comma = ';'
 	r.Comment = '#'
 	r.LazyQuotes = true
+	r.FieldsPerRecord = -1
 
 	for {
 		record, err := r.Read()
@@ -113,22 +114,23 @@ func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 
 // Set
 
-type setQueryTestListener struct{}
+type setQueryTestListener struct {
+	*insertQueryTestListener
+}
 
 func (l *setQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
 	sq, _ := q.(*SetQuery)
 
-	values, _ := sq.GetValues()
-	if len(values) != 1 {
-		return fmt.Errorf(errorInvalidValueCount, len(values), 1)
-	}
-	if values[0] != corrects[0] {
-		return fmt.Errorf(errorInvalidValue, values[0], corrects[0])
+	target, _ := sq.GetTarget()
+	if target != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target, corrects[1])
 	}
 
-	target, _ := sq.GetTarget()
-	if target != corrects[1] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[1])
+	values, _ := sq.GetValues()
+	for n := 0; n < (len(corrects) - 1); n++ {
+		if values[n] != corrects[n+1] {
+			return fmt.Errorf(errorInvalidValue, values[n], corrects[n+1])
+		}
 	}
 
 	return nil
