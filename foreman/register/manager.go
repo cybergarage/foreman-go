@@ -23,6 +23,11 @@ func NewManager() *Manager {
 	return mgr
 }
 
+// GetStore returns an internal store
+func (mgr *Manager) GetStore() Store {
+	return mgr.Store
+}
+
 // Start starts the manager.
 func (mgr *Manager) Start() error {
 	err := mgr.Store.Open()
