@@ -22,7 +22,7 @@ const (
 
 const (
 	errorInvalidTarget     = "Invalid target %s != %s"
-	errorInvalidValue      = "Invalid value%s != %s"
+	errorInvalidValue      = "Invalid value %s != %s"
 	errorInvalidValueCount = "Invalid value count %d != %d"
 )
 
@@ -93,6 +93,20 @@ func TestFQLCases(t *testing.T) {
 type insertQueryTestListener struct{}
 
 func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	sq, _ := q.(*InsertQuery)
+
+	target, _ := sq.GetTarget()
+	if target != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target, corrects[1])
+	}
+
+	values, _ := sq.GetValues()
+	for n := 0; n < (len(corrects) - 1); n++ {
+		if values[n] != corrects[n+1] {
+			return fmt.Errorf(errorInvalidValue, values[n], corrects[n+1])
+		}
+	}
+
 	return nil
 }
 
