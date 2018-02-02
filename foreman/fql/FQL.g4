@@ -38,7 +38,7 @@ statement
  *------------------------------------------------------------------*/
 
 insert_stmt
-	: INSERT INTO target VALUES '(' values ')'# InsertQuery
+	: INSERT INTO target VALUES '(' values ')' # InsertQuery
 	;
 
 /*------------------------------------------------------------------
@@ -46,7 +46,7 @@ insert_stmt
  *------------------------------------------------------------------*/
 
 set_stmt
-	: SET value INTO target # SetQuery
+	: SET '(' values ')' INTO target # SetQuery
 	;
 
 /*------------------------------------------------------------------
@@ -74,7 +74,8 @@ target
 	;
 
 value
-	: STRING
+	: IDENTIFIER
+	| STRING
 	| NUMBER
 	| REAL
 	;
