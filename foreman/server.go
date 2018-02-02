@@ -14,6 +14,7 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/kb"
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	"github.com/cybergarage/foreman-go/foreman/qos"
+	"github.com/cybergarage/foreman-go/foreman/register"
 	"github.com/cybergarage/foreman-go/foreman/registry"
 )
 
@@ -27,27 +28,30 @@ type Server struct {
 	metric.RegisterListener
 	kb.RuleListener
 
-	graphite      *graphite.Server
-	registryStore *registry.Store
-	qosMgr        *qos.Manager
-	metricMgr     *metric.Manager
-	actionMgr     *action.Manager
+	graphite    *graphite.Server
+	registerMgr *register.Manager
+	registryMgr *registry.Manager
+	qosMgr      *qos.Manager
+	metricMgr   *metric.Manager
+	actionMgr   *action.Manager
 }
 
 // NewServer returns a new Server.
 func NewServer() *Server {
 	server := &Server{
-		graphite:      graphite.NewServer(),
-		registryStore: registry.NewStore(),
-		qosMgr:        qos.NewManager(),
-		metricMgr:     metric.NewManager(),
-		actionMgr:     action.NewManager(),
+		graphite:    graphite.NewServer(),
+		registryMgr: registry.NewManager(),
+		registerMgr: register.NewManager(),
+		qosMgr:      qos.NewManager(),
+		metricMgr:   metric.NewManager(),
+		actionMgr:   action.NewManager(),
 	}
 
 	server.graphite.CarbonListener = server
 	server.graphite.RenderListener = server
 	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
 
+	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
 	server.metricMgr.SetRegisterListener(server)
 
 	return server
@@ -82,19 +86,25 @@ func (server *Server) Start() error {
 		return err
 	}
 
-	err = server.registryStore.Open()
+	err = server.registryMgr.Open()
 	if err != nil {
 		server.Stop()
 		return err
 	}
 
-	err = server.qosMgr.Start()
+	err = server.registerMgr.Open()
 	if err != nil {
 		server.Stop()
 		return err
 	}
 
 	err = server.metricMgr.Start()
+	if err != nil {
+		server.Stop()
+		return err
+	}
+
+	err = server.qosMgr.Start()
 	if err != nil {
 		server.Stop()
 		return err
@@ -110,17 +120,22 @@ func (server *Server) Stop() error {
 		return err
 	}
 
-	err = server.registryStore.Close()
+	err = server.registryMgr.Close()
 	if err != nil {
 		return err
 	}
 
-	err = server.qosMgr.Stop()
+	err = server.registerMgr.Close()
 	if err != nil {
 		return err
 	}
 
 	err = server.metricMgr.Stop()
+	if err != nil {
+		return err
+	}
+
+	err = server.qosMgr.Stop()
 	if err != nil {
 		return err
 	}

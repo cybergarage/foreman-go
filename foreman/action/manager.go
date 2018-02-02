@@ -7,12 +7,15 @@ package action
 
 import (
 	"fmt"
+
+	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
 // Manager represents an action manager.
 type Manager struct {
 	*ScriptManager
 	*RouteManager
+	fql.QueryExecutor
 }
 
 // NewManager returns a new action manager.
