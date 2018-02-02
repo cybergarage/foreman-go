@@ -5,11 +5,14 @@
 package fql
 
 const (
-	parameterTable = "table"
+	parameterTable  = "table"
+	parameterValues = "values"
 )
 
 // Parameter represents a parameter interface.
 type Parameter interface {
+	SetName(string) error
+	SetValue(interface{}) error
 	GetName() string
 	GetValue() interface{}
 	GetString() (string, bool)
