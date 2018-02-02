@@ -1,4 +1,4 @@
-// Code generated from FQL.g4 by ANTLR 4.7.1. DO NOT EDIT.
+// Generated from FQL.g4 by ANTLR 4.7.
 
 package fql // FQL
 import "github.com/antlr/antlr4/runtime/Go/antlr"
@@ -50,8 +50,14 @@ func (s *BaseFQLListener) EnterSelect(ctx *SelectContext) {}
 // ExitSelect is called when production Select is exited.
 func (s *BaseFQLListener) ExitSelect(ctx *SelectContext) {}
 
-// EnterTable is called when production table is entered.
-func (s *BaseFQLListener) EnterTable(ctx *TableContext) {}
+// EnterExport is called when production Export is entered.
+func (s *BaseFQLListener) EnterExport(ctx *ExportContext) {}
 
-// ExitTable is called when production table is exited.
-func (s *BaseFQLListener) ExitTable(ctx *TableContext) {}
+// ExitExport is called when production Export is exited.
+func (s *BaseFQLListener) ExitExport(ctx *ExportContext) {}
+
+// EnterTarget is called when production target is entered.
+func (s *BaseFQLListener) EnterTarget(ctx *TargetContext) {}
+
+// ExitTarget is called when production target is exited.
+func (s *BaseFQLListener) ExitTarget(ctx *TargetContext) {}

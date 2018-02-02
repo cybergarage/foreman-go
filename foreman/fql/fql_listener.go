@@ -1,4 +1,4 @@
-// Code generated from FQL.g4 by ANTLR 4.7.1. DO NOT EDIT.
+// Generated from FQL.g4 by ANTLR 4.7.
 
 package fql // FQL
 import "github.com/antlr/antlr4/runtime/Go/antlr"
@@ -22,8 +22,11 @@ type FQLListener interface {
 	// EnterSelect is called when entering the Select production.
 	EnterSelect(c *SelectContext)
 
-	// EnterTable is called when entering the table production.
-	EnterTable(c *TableContext)
+	// EnterExport is called when entering the Export production.
+	EnterExport(c *ExportContext)
+
+	// EnterTarget is called when entering the target production.
+	EnterTarget(c *TargetContext)
 
 	// ExitFql is called when exiting the fql production.
 	ExitFql(c *FqlContext)
@@ -40,6 +43,9 @@ type FQLListener interface {
 	// ExitSelect is called when exiting the Select production.
 	ExitSelect(c *SelectContext)
 
-	// ExitTable is called when exiting the table production.
-	ExitTable(c *TableContext)
+	// ExitExport is called when exiting the Export production.
+	ExitExport(c *ExportContext)
+
+	// ExitTarget is called when exiting the target production.
+	ExitTarget(c *TargetContext)
 }
