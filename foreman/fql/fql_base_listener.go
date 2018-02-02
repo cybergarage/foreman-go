@@ -44,17 +44,17 @@ func (s *BaseFQLListener) EnterSet(ctx *SetContext) {}
 // ExitSet is called when production Set is exited.
 func (s *BaseFQLListener) ExitSet(ctx *SetContext) {}
 
-// EnterSelect is called when production Select is entered.
-func (s *BaseFQLListener) EnterSelect(ctx *SelectContext) {}
+// EnterSelectQuery is called when production SelectQuery is entered.
+func (s *BaseFQLListener) EnterSelectQuery(ctx *SelectQueryContext) {}
 
-// ExitSelect is called when production Select is exited.
-func (s *BaseFQLListener) ExitSelect(ctx *SelectContext) {}
+// ExitSelectQuery is called when production SelectQuery is exited.
+func (s *BaseFQLListener) ExitSelectQuery(ctx *SelectQueryContext) {}
 
-// EnterExport is called when production Export is entered.
-func (s *BaseFQLListener) EnterExport(ctx *ExportContext) {}
+// EnterExportQuery is called when production ExportQuery is entered.
+func (s *BaseFQLListener) EnterExportQuery(ctx *ExportQueryContext) {}
 
-// ExitExport is called when production Export is exited.
-func (s *BaseFQLListener) ExitExport(ctx *ExportContext) {}
+// ExitExportQuery is called when production ExportQuery is exited.
+func (s *BaseFQLListener) ExitExportQuery(ctx *ExportQueryContext) {}
 
 // EnterTarget is called when production target is entered.
 func (s *BaseFQLListener) EnterTarget(ctx *TargetContext) {}

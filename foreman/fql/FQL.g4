@@ -29,7 +29,7 @@ statement_list
 statement
 	: set_stmt
 	| select_stmt
-	| select_stmt
+	| export_stmt
 	;
 
 /*------------------------------------------------------------------
@@ -45,7 +45,7 @@ set_stmt
  *------------------------------------------------------------------*/
 
 select_stmt
-	: SELECT ASTERISK FROM target # Select
+	: SELECT ASTERISK FROM target # SelectQuery
 	;
 
 /*------------------------------------------------------------------
@@ -53,7 +53,7 @@ select_stmt
  *------------------------------------------------------------------*/
 
 export_stmt
-	: EXPORT target # Export
+	: EXPORT target # ExportQuery
 	;
 
 /*------------------------------------------------------------------
