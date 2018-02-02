@@ -4,6 +4,8 @@
 
 package fql
 
+import "strings"
+
 type antlrParserListener struct {
 	*BaseFQLListener
 	Queries
@@ -118,5 +120,6 @@ func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
 	if !ok {
 		return
 	}
-	q.AddValue(ctx.GetText())
+	value := strings.Trim(ctx.GetText(), "\"")
+	q.AddValue(value)
 }
