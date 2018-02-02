@@ -6,8 +6,10 @@ package metric
 
 import (
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/register"
 )
 
 func TestNewRegister(t *testing.T) {
-	NewRegister()
+	NewRegisterWithStore(register.NewStore())
 }

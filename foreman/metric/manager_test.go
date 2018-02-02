@@ -6,11 +6,13 @@ package metric
 
 import (
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/register"
 )
 
 func TestNewManager(t *testing.T) {
 	mgr := NewManager()
-
+	mgr.SetRegisterStore(register.NewManager().GetStore())
 	err := mgr.Start()
 	if err != nil {
 		t.Error(err)
