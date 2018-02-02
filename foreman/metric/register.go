@@ -25,10 +25,10 @@ type Register struct {
 	Listener RegisterListener
 }
 
-// NewRegister returns a new store instance.
-func NewRegister() *Register {
+// NewRegisterWithStore returns a new store instance.
+func NewRegisterWithStore(store register.Store) *Register {
 	reg := &Register{
-		Store:    register.NewStore(),
+		Store:    store,
 		Listener: nil,
 	}
 	return reg

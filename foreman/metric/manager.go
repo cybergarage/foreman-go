@@ -4,33 +4,44 @@
 
 package metric
 
+import (
+	"fmt"
+
+	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/register"
+)
+
 // Manager represents a metric manager.
 type Manager struct {
 	*Store
 	*Register
+	fql.QueryExecutor
 }
 
 // NewManager returns a new metric manager.
 func NewManager() *Manager {
 	mgr := &Manager{
 		Store:    NewStore(),
-		Register: NewRegister(),
+		Register: nil,
 	}
-
-	mgr.Store.SetStoreListener(mgr.Register)
 
 	return mgr
 }
 
+// SetRegisterStore sets a raw register store.
+func (mgr *Manager) SetRegisterStore(store register.Store) error {
+	mgr.Register = NewRegisterWithStore(store)
+	mgr.Store.SetStoreListener(mgr.Register)
+	return nil
+}
+
 // Start starts the manager.
 func (mgr *Manager) Start() error {
-	err := mgr.Store.Open()
-	if err != nil {
-		mgr.Stop()
-		return err
+	if mgr.Register == nil {
+		return fmt.Errorf(errorNullRegisterStore)
 	}
 
-	err = mgr.Register.Open()
+	err := mgr.Store.Open()
 	if err != nil {
 		mgr.Stop()
 		return err
@@ -42,11 +53,6 @@ func (mgr *Manager) Start() error {
 // Stop stops the manager.
 func (mgr *Manager) Stop() error {
 	err := mgr.Store.Close()
-	if err != nil {
-		return err
-	}
-
-	err = mgr.Register.Close()
 	if err != nil {
 		return err
 	}

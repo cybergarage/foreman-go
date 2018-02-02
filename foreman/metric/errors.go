@@ -6,6 +6,7 @@
 package metric
 
 const (
+	errorNullRegisterStore      = "Invalid register store : (null)"
 	errorInvalidMetric          = "Invalid metric : %v"
 	errorStoreCouldNotOpen      = "Couldn't open : %s"
 	errorStoreCouldNotClose     = "Couldn't close : %s"
