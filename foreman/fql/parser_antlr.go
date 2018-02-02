@@ -5,6 +5,8 @@
 package fql
 
 import (
+	"fmt"
+
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
@@ -32,7 +34,7 @@ func (parser *antlrParser) ParseString(fqlString string) (Queries, error) {
 	pl := newANTLRParserListener()
 	antlr.ParseTreeWalkerDefault.Walk(pl, tree)
 	if !el.IsSuccess() {
-		return nil, el.GetError()
+		return nil, fmt.Errorf("%s (%s)", fqlString, el.GetError().Error())
 	}
 	return pl.Queries, nil
 }

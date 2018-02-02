@@ -4,15 +4,11 @@
 
 package fql
 
-import (
-	"testing"
-)
+// Value is a value of of FQL.
+type Value = string
 
-func TestNewQuery(t *testing.T) {
-	newBaseQuery()
-
-	NewInsertQuery()
-	NewSetQuery()
-	NewSelectQuery()
-	NewExportQuery()
+// NewValue returns a new value.
+func NewValue() Value {
+	var value Value
+	return value
 }

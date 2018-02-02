@@ -16,8 +16,11 @@ type FQLListener interface {
 	// EnterStatement is called when entering the statement production.
 	EnterStatement(c *StatementContext)
 
-	// EnterSet is called when entering the Set production.
-	EnterSet(c *SetContext)
+	// EnterInsertQuery is called when entering the InsertQuery production.
+	EnterInsertQuery(c *InsertQueryContext)
+
+	// EnterSetQuery is called when entering the SetQuery production.
+	EnterSetQuery(c *SetQueryContext)
 
 	// EnterSelectQuery is called when entering the SelectQuery production.
 	EnterSelectQuery(c *SelectQueryContext)
@@ -28,6 +31,12 @@ type FQLListener interface {
 	// EnterTarget is called when entering the target production.
 	EnterTarget(c *TargetContext)
 
+	// EnterValue is called when entering the value production.
+	EnterValue(c *ValueContext)
+
+	// EnterValues is called when entering the values production.
+	EnterValues(c *ValuesContext)
+
 	// ExitFql is called when exiting the fql production.
 	ExitFql(c *FqlContext)
 
@@ -37,8 +46,11 @@ type FQLListener interface {
 	// ExitStatement is called when exiting the statement production.
 	ExitStatement(c *StatementContext)
 
-	// ExitSet is called when exiting the Set production.
-	ExitSet(c *SetContext)
+	// ExitInsertQuery is called when exiting the InsertQuery production.
+	ExitInsertQuery(c *InsertQueryContext)
+
+	// ExitSetQuery is called when exiting the SetQuery production.
+	ExitSetQuery(c *SetQueryContext)
 
 	// ExitSelectQuery is called when exiting the SelectQuery production.
 	ExitSelectQuery(c *SelectQueryContext)
@@ -48,4 +60,10 @@ type FQLListener interface {
 
 	// ExitTarget is called when exiting the target production.
 	ExitTarget(c *TargetContext)
+
+	// ExitValue is called when exiting the value production.
+	ExitValue(c *ValueContext)
+
+	// ExitValues is called when exiting the values production.
+	ExitValues(c *ValuesContext)
 }

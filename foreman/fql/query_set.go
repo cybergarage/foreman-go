@@ -4,20 +4,20 @@
 
 package fql
 
-// SelectQuery represents a select query.
-type SelectQuery struct {
+// SetQuery represents a set query.
+type SetQuery struct {
 	*baseQuery
 }
 
-// NewSelectQuery returns a new select query.
-func NewSelectQuery() Query {
-	q := &SelectQuery{
+// NewSetQuery returns a new set query.
+func NewSetQuery() Query {
+	q := &SetQuery{
 		baseQuery: newBaseQuery(),
 	}
 	return q
 }
 
 // GetType returns a stored type.
-func (q *SelectQuery) GetType() QueryType {
-	return QueryTypeSelect
+func (q *SetQuery) GetType() QueryType {
+	return QueryTypeSet
 }

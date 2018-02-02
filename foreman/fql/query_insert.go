@@ -4,20 +4,20 @@
 
 package fql
 
-// SelectQuery represents a select query.
-type SelectQuery struct {
+// InsertQuery represents an insert query.
+type InsertQuery struct {
 	*baseQuery
 }
 
-// NewSelectQuery returns a new select query.
-func NewSelectQuery() Query {
-	q := &SelectQuery{
+// NewInsertQuery returns a new insert query.
+func NewInsertQuery() Query {
+	q := &InsertQuery{
 		baseQuery: newBaseQuery(),
 	}
 	return q
 }
 
 // GetType returns a stored type.
-func (q *SelectQuery) GetType() QueryType {
-	return QueryTypeSelect
+func (q *InsertQuery) GetType() QueryType {
+	return QueryTypeInsert
 }
