@@ -20,4 +20,11 @@ type Query interface {
 	GetParameters() Parameters
 	GetParameter(string) (Parameter, bool)
 	GetParameterString(string) (string, bool)
+
+	SetTarget(Target) error
+	GetTarget() (Target, bool)
+
+	SetValues(values Values) error
+	AddValue(Value) error
+	GetValues() (Values, bool)
 }
