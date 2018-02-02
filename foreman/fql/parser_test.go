@@ -55,7 +55,8 @@ func testCSVQueries(t *testing.T, filename string, l parserTestListener) {
 	}
 
 	r := csv.NewReader(strings.NewReader(string(fqlStrings)))
-	r.Comment = rune('#')
+	r.Comma = ';'
+	r.Comment = '#'
 
 	for {
 		record, err := r.Read()
@@ -75,6 +76,7 @@ func testCSVQueries(t *testing.T, filename string, l parserTestListener) {
 
 func TestFQLCases(t *testing.T) {
 	testCases := map[string]parserTestListener{
+		testFQLInsertCaseFilename: &insertQueryTestListener{},
 		testFQLSetCaseFilename:    &setQueryTestListener{},
 		testFQLSelectCaseFilename: &selectQueryTestListener{},
 		testFQLExportCaseFilename: &exportQueryTestListener{},

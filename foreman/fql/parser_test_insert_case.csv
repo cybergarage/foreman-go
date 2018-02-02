@@ -1,2 +1,2 @@
-# QoS
-EXPORT QoS,QoS
+# query; target; value_1; ...; value_n
+INSERT INTO abc VALUES (a,b,c);abc;a;b;c

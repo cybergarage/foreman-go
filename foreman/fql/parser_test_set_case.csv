@@ -1,2 +1,2 @@
-# query,value,target
-SET abc INTO QoS,abc,QoS
+# query; value; target
+SET abc INTO QoS;abc;QoS
