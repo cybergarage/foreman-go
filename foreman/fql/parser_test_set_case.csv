@@ -1,2 +1,5 @@
 # query; value; target
-SET abc INTO QoS;abc;QoS
+SET "abc" INTO table;abc;table
+# QoS
+SET "(x1 < 1)" INTO QoS;(x1 < 1);QoS
+SET "((x1 < 1) & (x2 == 1)) | ((x3 < 1) & (x4 == 1))" INTO QoS;((x1 < 1) & (x2 == 1)) | ((x3 < 1) & (x4 == 1));QoS

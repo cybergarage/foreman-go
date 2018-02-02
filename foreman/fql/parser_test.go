@@ -57,6 +57,7 @@ func testCSVQueries(t *testing.T, filename string, l parserTestListener) {
 	r := csv.NewReader(strings.NewReader(string(fqlStrings)))
 	r.Comma = ';'
 	r.Comment = '#'
+	r.LazyQuotes = true
 
 	for {
 		record, err := r.Read()

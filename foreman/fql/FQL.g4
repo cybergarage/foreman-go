@@ -74,7 +74,9 @@ target
 	;
 
 value
-	: IDENTIFIER
+	: STRING
+	| NUMBER
+	| REAL
 	;
 
 values
@@ -195,7 +197,7 @@ IDENTIFIER
     ;
 
 STRING  
-	: [a-zA-Z_] [a-zA-Z_0-9]*
+	: '"' ('""'|~'"')* '"'
     ;
 
 NUMBER 

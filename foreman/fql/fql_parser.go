@@ -23,25 +23,25 @@ var parserATN = []uint16{
 	3, 6, 3, 6, 3, 6, 3, 6, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 8, 3, 8, 3, 8,
 	3, 9, 3, 9, 3, 10, 3, 10, 3, 11, 3, 11, 3, 11, 7, 11, 67, 10, 11, 12, 11,
 	14, 11, 70, 11, 11, 3, 11, 2, 2, 12, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
-	2, 2, 2, 66, 2, 22, 3, 2, 2, 2, 4, 24, 3, 2, 2, 2, 6, 36, 3, 2, 2, 2, 8,
-	38, 3, 2, 2, 2, 10, 46, 3, 2, 2, 2, 12, 51, 3, 2, 2, 2, 14, 56, 3, 2, 2,
-	2, 16, 59, 3, 2, 2, 2, 18, 61, 3, 2, 2, 2, 20, 63, 3, 2, 2, 2, 22, 23,
-	5, 4, 3, 2, 23, 3, 3, 2, 2, 2, 24, 29, 5, 6, 4, 2, 25, 26, 7, 24, 2, 2,
-	26, 28, 5, 6, 4, 2, 27, 25, 3, 2, 2, 2, 28, 31, 3, 2, 2, 2, 29, 27, 3,
-	2, 2, 2, 29, 30, 3, 2, 2, 2, 30, 5, 3, 2, 2, 2, 31, 29, 3, 2, 2, 2, 32,
-	37, 5, 8, 5, 2, 33, 37, 5, 10, 6, 2, 34, 37, 5, 12, 7, 2, 35, 37, 5, 14,
-	8, 2, 36, 32, 3, 2, 2, 2, 36, 33, 3, 2, 2, 2, 36, 34, 3, 2, 2, 2, 36, 35,
-	3, 2, 2, 2, 37, 7, 3, 2, 2, 2, 38, 39, 7, 6, 2, 2, 39, 40, 7, 10, 2, 2,
-	40, 41, 5, 16, 9, 2, 41, 42, 7, 12, 2, 2, 42, 43, 7, 3, 2, 2, 43, 44, 5,
-	20, 11, 2, 44, 45, 7, 4, 2, 2, 45, 9, 3, 2, 2, 2, 46, 47, 7, 8, 2, 2, 47,
-	48, 5, 18, 10, 2, 48, 49, 7, 10, 2, 2, 49, 50, 5, 16, 9, 2, 50, 11, 3,
-	2, 2, 2, 51, 52, 7, 5, 2, 2, 52, 53, 7, 13, 2, 2, 53, 54, 7, 11, 2, 2,
-	54, 55, 5, 16, 9, 2, 55, 13, 3, 2, 2, 2, 56, 57, 7, 9, 2, 2, 57, 58, 5,
-	16, 9, 2, 58, 15, 3, 2, 2, 2, 59, 60, 7, 26, 2, 2, 60, 17, 3, 2, 2, 2,
-	61, 62, 7, 26, 2, 2, 62, 19, 3, 2, 2, 2, 63, 68, 5, 18, 10, 2, 64, 65,
-	7, 23, 2, 2, 65, 67, 5, 18, 10, 2, 66, 64, 3, 2, 2, 2, 67, 70, 3, 2, 2,
-	2, 68, 66, 3, 2, 2, 2, 68, 69, 3, 2, 2, 2, 69, 21, 3, 2, 2, 2, 70, 68,
-	3, 2, 2, 2, 5, 29, 36, 68,
+	2, 3, 3, 2, 27, 29, 2, 66, 2, 22, 3, 2, 2, 2, 4, 24, 3, 2, 2, 2, 6, 36,
+	3, 2, 2, 2, 8, 38, 3, 2, 2, 2, 10, 46, 3, 2, 2, 2, 12, 51, 3, 2, 2, 2,
+	14, 56, 3, 2, 2, 2, 16, 59, 3, 2, 2, 2, 18, 61, 3, 2, 2, 2, 20, 63, 3,
+	2, 2, 2, 22, 23, 5, 4, 3, 2, 23, 3, 3, 2, 2, 2, 24, 29, 5, 6, 4, 2, 25,
+	26, 7, 24, 2, 2, 26, 28, 5, 6, 4, 2, 27, 25, 3, 2, 2, 2, 28, 31, 3, 2,
+	2, 2, 29, 27, 3, 2, 2, 2, 29, 30, 3, 2, 2, 2, 30, 5, 3, 2, 2, 2, 31, 29,
+	3, 2, 2, 2, 32, 37, 5, 8, 5, 2, 33, 37, 5, 10, 6, 2, 34, 37, 5, 12, 7,
+	2, 35, 37, 5, 14, 8, 2, 36, 32, 3, 2, 2, 2, 36, 33, 3, 2, 2, 2, 36, 34,
+	3, 2, 2, 2, 36, 35, 3, 2, 2, 2, 37, 7, 3, 2, 2, 2, 38, 39, 7, 6, 2, 2,
+	39, 40, 7, 10, 2, 2, 40, 41, 5, 16, 9, 2, 41, 42, 7, 12, 2, 2, 42, 43,
+	7, 3, 2, 2, 43, 44, 5, 20, 11, 2, 44, 45, 7, 4, 2, 2, 45, 9, 3, 2, 2, 2,
+	46, 47, 7, 8, 2, 2, 47, 48, 5, 18, 10, 2, 48, 49, 7, 10, 2, 2, 49, 50,
+	5, 16, 9, 2, 50, 11, 3, 2, 2, 2, 51, 52, 7, 5, 2, 2, 52, 53, 7, 13, 2,
+	2, 53, 54, 7, 11, 2, 2, 54, 55, 5, 16, 9, 2, 55, 13, 3, 2, 2, 2, 56, 57,
+	7, 9, 2, 2, 57, 58, 5, 16, 9, 2, 58, 15, 3, 2, 2, 2, 59, 60, 7, 26, 2,
+	2, 60, 17, 3, 2, 2, 2, 61, 62, 9, 2, 2, 2, 62, 19, 3, 2, 2, 2, 63, 68,
+	5, 18, 10, 2, 64, 65, 7, 23, 2, 2, 65, 67, 5, 18, 10, 2, 66, 64, 3, 2,
+	2, 2, 67, 70, 3, 2, 2, 2, 68, 66, 3, 2, 2, 2, 68, 69, 3, 2, 2, 2, 69, 21,
+	3, 2, 2, 2, 70, 68, 3, 2, 2, 2, 5, 29, 36, 68,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -1241,8 +1241,16 @@ func NewValueContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 
 func (s *ValueContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *ValueContext) IDENTIFIER() antlr.TerminalNode {
-	return s.GetToken(FQLParserIDENTIFIER, 0)
+func (s *ValueContext) STRING() antlr.TerminalNode {
+	return s.GetToken(FQLParserSTRING, 0)
+}
+
+func (s *ValueContext) NUMBER() antlr.TerminalNode {
+	return s.GetToken(FQLParserNUMBER, 0)
+}
+
+func (s *ValueContext) REAL() antlr.TerminalNode {
+	return s.GetToken(FQLParserREAL, 0)
 }
 
 func (s *ValueContext) GetRuleContext() antlr.RuleContext {
@@ -1268,6 +1276,7 @@ func (s *ValueContext) ExitRule(listener antlr.ParseTreeListener) {
 func (p *FQLParser) Value() (localctx IValueContext) {
 	localctx = NewValueContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 16, FQLParserRULE_value)
+	var _la int
 
 	defer func() {
 		p.ExitRule()
@@ -1286,9 +1295,14 @@ func (p *FQLParser) Value() (localctx IValueContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	{
-		p.SetState(59)
-		p.Match(FQLParserIDENTIFIER)
+	p.SetState(59)
+	_la = p.GetTokenStream().LA(1)
+
+	if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<FQLParserSTRING)|(1<<FQLParserNUMBER)|(1<<FQLParserREAL))) != 0) {
+		p.GetErrorHandler().RecoverInline(p)
+	} else {
+		p.GetErrorHandler().ReportMatch(p)
+		p.Consume()
 	}
 
 	return localctx
