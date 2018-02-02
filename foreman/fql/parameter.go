@@ -5,7 +5,7 @@
 package fql
 
 const (
-	parameterTable  = "table"
+	parameterTarget = "target"
 	parameterValues = "values"
 )
 

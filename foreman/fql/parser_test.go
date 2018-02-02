@@ -6,6 +6,7 @@ package fql
 
 import (
 	"encoding/csv"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"strings"
@@ -21,15 +22,15 @@ const (
 
 const (
 	errorInvalidTarget     = "Invalid target %s != %s"
-	errorInvalidValue      = "%s != %s"
-	errorInvalidValueCount = "%d != %d"
+	errorInvalidValue      = "Invalid value%s != %s"
+	errorInvalidValueCount = "Invalid value count %d != %d"
 )
 
 type parserTestListener interface {
 	testCase(t *testing.T, q Query, corrects []string) error
 }
 
-func testFQLCase(t *testing.T, l parserTestListener, fqlString string, corrects []string) {
+func testQuery(t *testing.T, l parserTestListener, fqlString string, corrects []string) {
 	parser := NewParser()
 
 	queries, err := parser.ParseString(fqlString)
@@ -38,10 +39,14 @@ func testFQLCase(t *testing.T, l parserTestListener, fqlString string, corrects 
 		return
 	}
 
-	l.testCase(t, queries[0], corrects)
+	err = l.testCase(t, queries[0], corrects)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 }
 
-func testCSVCases(t *testing.T, filename string, l parserTestListener) {
+func testCSVQueries(t *testing.T, filename string, l parserTestListener) {
 
 	fqlStrings, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -64,7 +69,7 @@ func testCSVCases(t *testing.T, filename string, l parserTestListener) {
 
 		fqlString := record[0]
 		corrects := record[1:]
-		testFQLCase(t, l, fqlString, corrects)
+		testQuery(t, l, fqlString, corrects)
 	}
 }
 
@@ -76,7 +81,7 @@ func TestFQLCases(t *testing.T) {
 	}
 
 	for filename, listener := range testCases {
-		testCSVCases(t, filename, listener)
+		testCSVQueries(t, filename, listener)
 	}
 
 }
@@ -98,15 +103,15 @@ func (l *setQueryTestListener) testCase(t *testing.T, q Query, corrects []string
 
 	values, _ := sq.GetValues()
 	if len(values) != 1 {
-		t.Errorf(errorInvalidValueCount, len(values), 1)
+		return fmt.Errorf(errorInvalidValueCount, len(values), 1)
 	}
 	if values[0] != corrects[0] {
-		t.Errorf(errorInvalidValue, values[0], corrects[0])
+		return fmt.Errorf(errorInvalidValue, values[0], corrects[0])
 	}
 
 	target, _ := sq.GetTarget()
 	if target != corrects[1] {
-		t.Errorf(errorInvalidTarget, target, corrects[1])
+		return fmt.Errorf(errorInvalidTarget, target, corrects[1])
 	}
 
 	return nil
@@ -120,7 +125,7 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	sq, _ := q.(*SelectQuery)
 	target, _ := sq.GetTarget()
 	if target != corrects[0] {
-		t.Errorf(errorInvalidTarget, target, corrects[0])
+		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
 	}
 	return nil
 }
@@ -133,7 +138,7 @@ func (l *exportQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	sq, _ := q.(*ExportQuery)
 	target, _ := sq.GetTarget()
 	if target != corrects[0] {
-		t.Errorf(errorInvalidTarget, target, corrects[0])
+		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
 	}
 	return nil
 }

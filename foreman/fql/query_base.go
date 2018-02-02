@@ -23,13 +23,25 @@ func (q *baseQuery) GetType() QueryType {
 	return QueryTypeUnknown
 }
 
+// SetTarget sets a specified target into the query.
+func (q *baseQuery) SetTarget(target Target) error {
+	param := NewParameterWithObject(parameterTarget, target)
+	return q.SetParameter(param)
+}
+
 // GetTarget returns the target in the query.
 func (q *baseQuery) GetTarget() (Target, bool) {
-	return q.GetParameterString(parameterTable)
+	return q.GetParameterString(parameterTarget)
+}
+
+// SetValues sets a specified values intp the query.
+func (q *baseQuery) SetValues(values Values) error {
+	param := NewParameterWithObject(parameterValues, values)
+	return q.SetParameter(param)
 }
 
 // AddValue adds a specified value into the query.
-func (q *baseQuery) AddValue(value Value) bool {
+func (q *baseQuery) AddValue(value Value) error {
 	var values Values
 	param, ok := q.GetParameter(parameterValues)
 	if ok {
@@ -40,15 +52,8 @@ func (q *baseQuery) AddValue(value Value) bool {
 	} else {
 		values = NewValues()
 	}
-	err := param.SetValue(values)
-	if err != nil {
-		return false
-	}
-	err = q.SetParameter(param)
-	if err != nil {
-		return false
-	}
-	return true
+	values = append(values, value)
+	return q.SetValues(values)
 }
 
 // GetValues returns the values in the query.
