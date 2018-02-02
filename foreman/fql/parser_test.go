@@ -15,22 +15,11 @@ import (
 
 const (
 	testFQLSelectCaseFilename = "parser_test_select_case.csv"
+	testFQLExportCaseFilename = "parser_test_export_case.csv"
 )
 
 type parserTestListener interface {
 	testCase(t *testing.T, q Query, corrects []string) error
-}
-
-type selectQueryTestListener struct{}
-
-func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
-	sq, _ := q.(*SelectQuery)
-	table, _ := sq.GetTable()
-	fmt.Printf("talbe = %s\n", table)
-	if table != corrects[0] {
-		t.Error(fmt.Errorf("%s != %s", table, corrects[0]))
-	}
-	return nil
 }
 
 func testFQLCase(t *testing.T, l parserTestListener, fqlString string, corrects []string) {
@@ -73,5 +62,39 @@ func testCSVCases(t *testing.T, filename string, l parserTestListener) {
 }
 
 func TestFQLCases(t *testing.T) {
-	testCSVCases(t, testFQLSelectCaseFilename, &selectQueryTestListener{})
+	testCases := map[string]parserTestListener{
+		testFQLSelectCaseFilename: &selectQueryTestListener{},
+		testFQLExportCaseFilename: &exportQueryTestListener{},
+	}
+
+	for filename, listener := range testCases {
+		testCSVCases(t, filename, listener)
+	}
+
+}
+
+// Select
+
+type selectQueryTestListener struct{}
+
+func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	sq, _ := q.(*SelectQuery)
+	table, _ := sq.GetTarget()
+	if table != corrects[0] {
+		t.Error(fmt.Errorf("%s != %s", table, corrects[0]))
+	}
+	return nil
+}
+
+// Export
+
+type exportQueryTestListener struct{}
+
+func (l *exportQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	sq, _ := q.(*ExportQuery)
+	table, _ := sq.GetTarget()
+	if table != corrects[0] {
+		t.Error(fmt.Errorf("%s != %s", table, corrects[0]))
+	}
+	return nil
 }

@@ -25,8 +25,8 @@ var parserATN = []uint16{
 	3, 2, 2, 2, 16, 17, 5, 4, 3, 2, 17, 3, 3, 2, 2, 2, 18, 23, 5, 6, 4, 2,
 	19, 20, 7, 20, 2, 2, 20, 22, 5, 6, 4, 2, 21, 19, 3, 2, 2, 2, 22, 25, 3,
 	2, 2, 2, 23, 21, 3, 2, 2, 2, 23, 24, 3, 2, 2, 2, 24, 5, 3, 2, 2, 2, 25,
-	23, 3, 2, 2, 2, 26, 30, 5, 8, 5, 2, 27, 30, 5, 10, 6, 2, 28, 30, 5, 10,
-	6, 2, 29, 26, 3, 2, 2, 2, 29, 27, 3, 2, 2, 2, 29, 28, 3, 2, 2, 2, 30, 7,
+	23, 3, 2, 2, 2, 26, 30, 5, 8, 5, 2, 27, 30, 5, 10, 6, 2, 28, 30, 5, 12,
+	7, 2, 29, 26, 3, 2, 2, 2, 29, 27, 3, 2, 2, 2, 29, 28, 3, 2, 2, 2, 30, 7,
 	3, 2, 2, 2, 31, 32, 7, 6, 2, 2, 32, 9, 3, 2, 2, 2, 33, 34, 7, 3, 2, 2,
 	34, 35, 7, 9, 2, 2, 35, 36, 7, 8, 2, 2, 36, 37, 5, 14, 8, 2, 37, 11, 3,
 	2, 2, 2, 38, 39, 7, 7, 2, 2, 39, 40, 5, 14, 8, 2, 40, 13, 3, 2, 2, 2, 41,
@@ -405,6 +405,16 @@ func (s *StatementContext) Select_stmt() ISelect_stmtContext {
 	return t.(ISelect_stmtContext)
 }
 
+func (s *StatementContext) Export_stmt() IExport_stmtContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IExport_stmtContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExport_stmtContext)
+}
+
 func (s *StatementContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -447,28 +457,31 @@ func (p *FQLParser) Statement() (localctx IStatementContext) {
 
 	p.SetState(27)
 	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext()) {
-	case 1:
+
+	switch p.GetTokenStream().LA(1) {
+	case FQLParserSET:
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(24)
 			p.Set_stmt()
 		}
 
-	case 2:
+	case FQLParserSELECT:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(25)
 			p.Select_stmt()
 		}
 
-	case 3:
+	case FQLParserEXPORT:
 		p.EnterOuterAlt(localctx, 3)
 		{
 			p.SetState(26)
-			p.Select_stmt()
+			p.Export_stmt()
 		}
 
+	default:
+		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 
 	return localctx
@@ -638,12 +651,12 @@ func (s *Select_stmtContext) ToStringTree(ruleNames []string, recog antlr.Recogn
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-type SelectContext struct {
+type SelectQueryContext struct {
 	*Select_stmtContext
 }
 
-func NewSelectContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SelectContext {
-	var p = new(SelectContext)
+func NewSelectQueryContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SelectQueryContext {
+	var p = new(SelectQueryContext)
 
 	p.Select_stmtContext = NewEmptySelect_stmtContext()
 	p.parser = parser
@@ -652,23 +665,23 @@ func NewSelectContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SelectC
 	return p
 }
 
-func (s *SelectContext) GetRuleContext() antlr.RuleContext {
+func (s *SelectQueryContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *SelectContext) SELECT() antlr.TerminalNode {
+func (s *SelectQueryContext) SELECT() antlr.TerminalNode {
 	return s.GetToken(FQLParserSELECT, 0)
 }
 
-func (s *SelectContext) ASTERISK() antlr.TerminalNode {
+func (s *SelectQueryContext) ASTERISK() antlr.TerminalNode {
 	return s.GetToken(FQLParserASTERISK, 0)
 }
 
-func (s *SelectContext) FROM() antlr.TerminalNode {
+func (s *SelectQueryContext) FROM() antlr.TerminalNode {
 	return s.GetToken(FQLParserFROM, 0)
 }
 
-func (s *SelectContext) Target() ITargetContext {
+func (s *SelectQueryContext) Target() ITargetContext {
 	var t = s.GetTypedRuleContext(reflect.TypeOf((*ITargetContext)(nil)).Elem(), 0)
 
 	if t == nil {
@@ -678,15 +691,15 @@ func (s *SelectContext) Target() ITargetContext {
 	return t.(ITargetContext)
 }
 
-func (s *SelectContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *SelectQueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
-		listenerT.EnterSelect(s)
+		listenerT.EnterSelectQuery(s)
 	}
 }
 
-func (s *SelectContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *SelectQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
-		listenerT.ExitSelect(s)
+		listenerT.ExitSelectQuery(s)
 	}
 }
 
@@ -710,7 +723,7 @@ func (p *FQLParser) Select_stmt() (localctx ISelect_stmtContext) {
 		}
 	}()
 
-	localctx = NewSelectContext(p, localctx)
+	localctx = NewSelectQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(31)
@@ -782,12 +795,12 @@ func (s *Export_stmtContext) ToStringTree(ruleNames []string, recog antlr.Recogn
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-type ExportContext struct {
+type ExportQueryContext struct {
 	*Export_stmtContext
 }
 
-func NewExportContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ExportContext {
-	var p = new(ExportContext)
+func NewExportQueryContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ExportQueryContext {
+	var p = new(ExportQueryContext)
 
 	p.Export_stmtContext = NewEmptyExport_stmtContext()
 	p.parser = parser
@@ -796,15 +809,15 @@ func NewExportContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ExportC
 	return p
 }
 
-func (s *ExportContext) GetRuleContext() antlr.RuleContext {
+func (s *ExportQueryContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *ExportContext) EXPORT() antlr.TerminalNode {
+func (s *ExportQueryContext) EXPORT() antlr.TerminalNode {
 	return s.GetToken(FQLParserEXPORT, 0)
 }
 
-func (s *ExportContext) Target() ITargetContext {
+func (s *ExportQueryContext) Target() ITargetContext {
 	var t = s.GetTypedRuleContext(reflect.TypeOf((*ITargetContext)(nil)).Elem(), 0)
 
 	if t == nil {
@@ -814,15 +827,15 @@ func (s *ExportContext) Target() ITargetContext {
 	return t.(ITargetContext)
 }
 
-func (s *ExportContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *ExportQueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
-		listenerT.EnterExport(s)
+		listenerT.EnterExportQuery(s)
 	}
 }
 
-func (s *ExportContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *ExportQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
-		listenerT.ExitExport(s)
+		listenerT.ExitExportQuery(s)
 	}
 }
 
@@ -846,7 +859,7 @@ func (p *FQLParser) Export_stmt() (localctx IExport_stmtContext) {
 		}
 	}()
 
-	localctx = NewExportContext(p, localctx)
+	localctx = NewExportQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(36)

@@ -22,7 +22,7 @@ func (q *SelectQuery) GetType() QueryType {
 	return QueryTypeSelect
 }
 
-// GetTable returns the table name.
-func (q *SelectQuery) GetTable() (string, bool) {
+// GetTarget returns the target name.
+func (q *SelectQuery) GetTarget() (string, bool) {
 	return q.GetParameterString(parameterTable)
 }

@@ -19,11 +19,11 @@ type FQLListener interface {
 	// EnterSet is called when entering the Set production.
 	EnterSet(c *SetContext)
 
-	// EnterSelect is called when entering the Select production.
-	EnterSelect(c *SelectContext)
+	// EnterSelectQuery is called when entering the SelectQuery production.
+	EnterSelectQuery(c *SelectQueryContext)
 
-	// EnterExport is called when entering the Export production.
-	EnterExport(c *ExportContext)
+	// EnterExportQuery is called when entering the ExportQuery production.
+	EnterExportQuery(c *ExportQueryContext)
 
 	// EnterTarget is called when entering the target production.
 	EnterTarget(c *TargetContext)
@@ -40,11 +40,11 @@ type FQLListener interface {
 	// ExitSet is called when exiting the Set production.
 	ExitSet(c *SetContext)
 
-	// ExitSelect is called when exiting the Select production.
-	ExitSelect(c *SelectContext)
+	// ExitSelectQuery is called when exiting the SelectQuery production.
+	ExitSelectQuery(c *SelectQueryContext)
 
-	// ExitExport is called when exiting the Export production.
-	ExitExport(c *ExportContext)
+	// ExitExportQuery is called when exiting the ExportQuery production.
+	ExitExportQuery(c *ExportQueryContext)
 
 	// ExitTarget is called when exiting the target production.
 	ExitTarget(c *TargetContext)
