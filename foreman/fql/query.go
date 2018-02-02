@@ -9,8 +9,8 @@ type QueryType int
 const (
 	QueryTypeUnknown QueryType = iota
 	QueryTypeInsert
-	QueryTypeSet
 	QueryTypeSelect
+	QueryTypeDelete
 )
 
 // Query represents a query interface.
