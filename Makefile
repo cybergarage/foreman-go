@@ -40,6 +40,7 @@ PACKAGES=\
 	${PACKAGE_ID}/rpc/graphite \
 	${PACKAGE_ID}/rpc/json
 
+SOURCE_DIR=src/${GITHUB}/foreman
 BINARY_ID=${GITHUB}/${BINARY_NAME}
 BINARYIES=${BINARY_ID}
 
@@ -57,10 +58,14 @@ version: ${VERSION_GO}
 format:
 	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${BINARY_NAME}
 
+const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
+	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go  && popd
+	pushd ${SOURCE_DIR} && ./errors.go.gen > errors.go  && popd
+	
 antlr:
-	pushd src/${GITHUB}/foreman/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
+	pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
 
-build: format antlr $(shell find . -type f -name '*.go')
+build: const antlr format $(shell find ${SOURCE_DIR} -type f -name '*.go')
 	go build -v ${PACKAGES}
 
 test: build 
