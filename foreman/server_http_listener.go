@@ -7,6 +7,14 @@ package foreman
 
 import (
 	"net/http"
+
+	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
+)
+
+const (
+	httpRequestQueryParam   = "q"
+	httpResponseContentType = "application/json"
 )
 
 // HTTPRequestReceived is a listener for FQL
@@ -22,6 +30,29 @@ func (server *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter
 
 // fqlRequestReceived handles FQL requests
 func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter) {
+	queryString := r.FormValue(httpRequestQueryParam)
+	parser := fql.NewParser()
+	queries, err := parser.ParseString(queryString)
+	if err != nil {
+		server.badRequestReceived(r, w)
+		return
+	}
+
+	query := queries[0]
+
+	resultObj, err := server.ExecuteQuery(query)
+	if err != nil {
+		server.badRequestReceived(r, w)
+		return
+	}
+
+	e := json.NewEncorder()
+	_, err = e.Encode(resultObj)
+	if err != nil {
+		server.badRequestReceived(r, w)
+		return
+	}
+
 	server.badRequestReceived(r, w)
 }
 

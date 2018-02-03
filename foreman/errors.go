@@ -4,7 +4,4 @@
 
 package foreman
 
-const (
-	ProductName       = "foreman"
-	DefaultServerHost = "localhost"
-)
+const ()
