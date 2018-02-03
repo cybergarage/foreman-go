@@ -10,5 +10,6 @@ const (
 	errorStoreCouldNotClose = "Couldn't close : %s"
 	errorStoreCouldNotClear = "Couldn't clear : %s"
 
+	errorCategoryNotFound    = "Not found category (%s)"
 	errorInvalidPropertyData = "Invalid property data : %s"
 )
