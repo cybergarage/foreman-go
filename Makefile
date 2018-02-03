@@ -37,7 +37,8 @@ PACKAGES=\
 	${PACKAGE_ID}/kb \
 	${PACKAGE_ID}/qos \
 	${PACKAGE_ID}/fql \
-	${PACKAGE_ID}/rpc/graphite
+	${PACKAGE_ID}/rpc/graphite \
+	${PACKAGE_ID}/rpc/json
 
 BINARY_ID=${GITHUB}/${BINARY_NAME}
 BINARYIES=${BINARY_ID}
