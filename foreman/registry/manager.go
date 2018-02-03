@@ -5,6 +5,8 @@
 package registry
 
 import (
+	"fmt"
+
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
@@ -21,6 +23,39 @@ func NewManager() *Manager {
 	}
 
 	return mgr
+}
+
+// CreateCategoryObject create the specified category object under the root.
+func (mgr *Manager) CreateCategoryObject(name string) error {
+	obj := NewObject()
+	obj.ParentID = RootObjectID
+	obj.Name = name
+
+	err := mgr.CreateObject(obj)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// GetCategoryObject returns a specified category object.
+func (mgr *Manager) GetCategoryObject(name string) (*Object, error) {
+	q := NewQuery()
+	q.ParentID = RootObjectID
+
+	objs, err := mgr.Browse(q)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, obj := range objs {
+		if obj.IsName(name) {
+			return obj, nil
+		}
+	}
+
+	return nil, fmt.Errorf(errorCategoryNotFound, name)
 }
 
 // Start starts the manager.
