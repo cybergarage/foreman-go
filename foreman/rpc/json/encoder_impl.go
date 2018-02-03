@@ -39,6 +39,7 @@ func (e *baseEncorder) objectToString(obj interface{}) (string, error) {
 func (e *baseEncorder) appendObject(buf *bytes.Buffer, indent int, obj interface{}) error {
 	switch obj.(type) {
 	case map[string]interface{}:
+		// FIXME : any interfaces such as map[string]string are not matched
 		objMap := obj.(map[string]interface{})
 		objLastIdx := len(objMap) - 1
 		n := 0
@@ -62,6 +63,7 @@ func (e *baseEncorder) appendObject(buf *bytes.Buffer, indent int, obj interface
 		}
 		buf.WriteString("}")
 	case []interface{}:
+		// FIXME : any interfaces such as []string are not matched
 		objArray := obj.([]interface{})
 		objLastIdx := len(objArray) - 1
 		buf.WriteString("[")
