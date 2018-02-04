@@ -17,22 +17,33 @@ type Error struct {
 	DetailMessage string
 }
 
-// NewErrorWithCodeAndMessage returns a new error.
-func NewErrorWithCodeAndMessage(code int, msg string) *Error {
+// NewError returns a new error.
+func NewError() *Error {
 	err := &Error{
-		Code:          code,
-		Message:       msg,
+		Code:          0,
+		Message:       "",
 		DetailCode:    0,
 		DetailMessage: "",
 	}
 	return err
 }
 
-// NewError returns a new error.
-func NewError() *Error {
+// NewErrorWithCode returns a new error with the specified code.
+func NewErrorWithCode(code int) *Error {
 	err := &Error{
-		Code:          0,
-		Message:       "",
+		Code:          code,
+		Message:       ErrorCodeToString(code),
+		DetailCode:    0,
+		DetailMessage: "",
+	}
+	return err
+}
+
+// NewErrorWithCodeAndMessage returns a new error with the specified code and message.
+func NewErrorWithCodeAndMessage(code int, msg string) *Error {
+	err := &Error{
+		Code:          code,
+		Message:       msg,
 		DetailCode:    0,
 		DetailMessage: "",
 	}
