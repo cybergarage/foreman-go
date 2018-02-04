@@ -2,13 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package errors
+package json
 
-import (
-	"testing"
+const (
+	errorUnknownObjectType = "Unknown object type : %s"
 )
-
-func TestNewError(t *testing.T) {
-	err := NewError()
-	err.Error()
-}

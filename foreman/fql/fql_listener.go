@@ -1,4 +1,4 @@
-// Generated from FQL.g4 by ANTLR 4.7.
+// Code generated from FQL.g4 by ANTLR 4.7.1. DO NOT EDIT.
 
 package fql // FQL
 import "github.com/antlr/antlr4/runtime/Go/antlr"

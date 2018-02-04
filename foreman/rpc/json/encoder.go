@@ -2,13 +2,9 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package errors
+package json
 
-import (
-	"testing"
-)
-
-func TestNewError(t *testing.T) {
-	err := NewError()
-	err.Error()
+// Encorder represents an encorder for JSON
+type Encorder interface {
+	Encode(obj interface{}) (string, error)
 }

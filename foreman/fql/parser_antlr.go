@@ -22,8 +22,12 @@ func NewParser() Parser {
 }
 
 // ParseString parses a specified FQL string.
-func (parser *antlrParser) ParseString(fqlString string) (Queries, error) {
-	input := antlr.NewInputStream(fqlString)
+func (parser *antlrParser) ParseString(queryString string) (Queries, error) {
+	if len(queryString) <= 0 {
+		return nil, fmt.Errorf(errorParserEmptyQuery)
+	}
+
+	input := antlr.NewInputStream(queryString)
 	lexer := NewFQLLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
 	p := NewFQLParser(stream)
@@ -34,7 +38,8 @@ func (parser *antlrParser) ParseString(fqlString string) (Queries, error) {
 	pl := newANTLRParserListener()
 	antlr.ParseTreeWalkerDefault.Walk(pl, tree)
 	if !el.IsSuccess() {
-		return nil, fmt.Errorf("%s (%s)", fqlString, el.GetError().Error())
+		return nil, fmt.Errorf("%s (%s)", queryString, el.GetError().Error())
 	}
+
 	return pl.Queries, nil
 }
