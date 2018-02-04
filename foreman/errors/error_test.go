@@ -9,5 +9,7 @@ import (
 )
 
 func TestNewError(t *testing.T) {
-	NewError()
+	err := NewError()
+	err.Error()
+	err.JSONError()
 }
