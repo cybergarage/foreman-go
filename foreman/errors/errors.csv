@@ -1,0 +1,11 @@
+# Copyright (C) 2017 Satoshi Konno. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+########################################
+# Query (1000)
+########################################
+
+error_code_query_invalid,1000,"Invalid query"
+error_code_query_method_not_found,1001,"Not supported query method"
+error_code_query_target_not_found,1010,"Not found query target"
