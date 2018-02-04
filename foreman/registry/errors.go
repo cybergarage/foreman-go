@@ -10,5 +10,6 @@ const (
 	errorStoreCouldNotClose = "Couldn't close : %s"
 	errorStoreCouldNotClear = "Couldn't clear : %s"
 
+	errorNotFoundChild       = "Not found child object (%s)"
 	errorInvalidPropertyData = "Invalid property data : %s"
 )

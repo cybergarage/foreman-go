@@ -60,11 +60,11 @@ func (store *cgoStore) Clear() error {
 
 // SetObject sets a object into the store.
 func (store *cgoStore) SetObject(obj Object) error {
-	cErr := C.foreman_error_new()
-	defer C.foreman_error_delete(cErr)
+	cerr := C.foreman_error_new()
+	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_register_store_setobject(store.cStore, obj.GetCObject(), cErr) {
-		return errors.NewWithCObject(cErr)
+	if !C.foreman_register_store_setobject(store.cStore, obj.GetCObject(), cerr) {
+		return errors.NewWithCObject(cerr).Error()
 	}
 
 	return nil

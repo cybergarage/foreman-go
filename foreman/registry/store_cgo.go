@@ -76,7 +76,7 @@ func (store *cgoStore) CreateObject(obj *Object) error {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_registry_store_createobject(store.cStore, cobj, cerr) {
-		return errors.NewWithCObject(cerr)
+		return errors.NewWithCObject(cerr).Error()
 	}
 
 	var cID *C.char
@@ -103,7 +103,7 @@ func (store *cgoStore) UpdateObject(obj *Object) error {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_registry_store_updateobject(store.cStore, cobj, cerr) {
-		return errors.NewWithCObject(cerr)
+		return errors.NewWithCObject(cerr).Error()
 	}
 
 	return nil
@@ -122,7 +122,7 @@ func (store *cgoStore) GetObject(objID string) (*Object, error) {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_registry_store_getobject(store.cStore, C.CString(objID), cobj, cerr) {
-		return nil, errors.NewWithCObject(cerr)
+		return nil, errors.NewWithCObject(cerr).Error()
 	}
 
 	return newObjectWithCObject(cobj), nil
@@ -138,7 +138,7 @@ func (store *cgoStore) DeleteObject(objID string) error {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_registry_store_deleteobject(store.cStore, C.CString(objID), cerr) {
-		return errors.NewWithCObject(cerr)
+		return errors.NewWithCObject(cerr).Error()
 	}
 
 	return nil
@@ -163,7 +163,7 @@ func (store *cgoStore) Browse(q *Query) ([]*Object, error) {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_registry_store_browse(store.cStore, cq, cobjs, cerr) {
-		return nil, errors.NewWithCObject(cerr)
+		return nil, errors.NewWithCObject(cerr).Error()
 	}
 
 	return newObjectsWithCObjects(cobjs), nil
@@ -188,7 +188,7 @@ func (store *cgoStore) Search(q *Query) ([]*Object, error) {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_registry_store_search(store.cStore, cq, cobjs, cerr) {
-		return nil, errors.NewWithCObject(cerr)
+		return nil, errors.NewWithCObject(cerr).Error()
 	}
 
 	return newObjectsWithCObjects(cobjs), nil

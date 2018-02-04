@@ -1,4 +1,4 @@
-// Generated from FQL.g4 by ANTLR 4.7.
+// Code generated from FQL.g4 by ANTLR 4.7.1. DO NOT EDIT.
 
 package fql // FQL
 import (
@@ -1479,14 +1479,16 @@ func (p *FQLParser) Value() (localctx IValueContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(69)
-	_la = p.GetTokenStream().LA(1)
+	{
+		p.SetState(69)
+		_la = p.GetTokenStream().LA(1)
 
-	if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<FQLParserIDENTIFIER)|(1<<FQLParserSTRING)|(1<<FQLParserNUMBER)|(1<<FQLParserREAL))) != 0) {
-		p.GetErrorHandler().RecoverInline(p)
-	} else {
-		p.GetErrorHandler().ReportMatch(p)
-		p.Consume()
+		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<FQLParserIDENTIFIER)|(1<<FQLParserSTRING)|(1<<FQLParserNUMBER)|(1<<FQLParserREAL))) != 0) {
+			p.GetErrorHandler().RecoverInline(p)
+		} else {
+			p.GetErrorHandler().ReportMatch(p)
+			p.Consume()
+		}
 	}
 
 	return localctx

@@ -45,7 +45,7 @@ func (mgr *cgoScriptManager) AddMethod(method *Method) error {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_action_manager_addmethod(mgr.cManager, cmethod, cerr) {
-		err = errors.NewWithCObject(cerr)
+		err = errors.NewWithCObject(cerr).Error()
 		return err
 	}
 
@@ -69,7 +69,7 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_action_manager_execmethod(mgr.cManager, C.CString(name), cparams, cresults, cerr) {
-		err = errors.NewWithCObject(cerr)
+		err = errors.NewWithCObject(cerr).Error()
 		return nil, err
 	}
 

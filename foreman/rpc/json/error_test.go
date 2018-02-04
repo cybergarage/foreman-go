@@ -2,13 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package errors
+package json
 
 import (
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
 func TestNewError(t *testing.T) {
-	err := NewError()
-	err.Error()
+	err := errors.NewError()
+	NewErrorWithError(err)
 }

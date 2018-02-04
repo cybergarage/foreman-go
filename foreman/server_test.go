@@ -19,6 +19,7 @@ func TestNewServer(t *testing.T) {
 	err = server.Start()
 	if err != nil {
 		t.Error(err)
+		return
 	}
 
 	err = server.Stop()
