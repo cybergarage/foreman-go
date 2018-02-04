@@ -6,13 +6,11 @@ package json
 
 import (
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
 func TestNewError(t *testing.T) {
-	errObj := NewError(0, "")
-	encorder := NewEncorder()
-	_, err := encorder.Encode(errObj)
-	if err != nil {
-		t.Error(err)
-	}
+	err := errors.NewError()
+	NewErrorWithError(err)
 }
