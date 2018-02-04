@@ -16,5 +16,8 @@
 # ANTLR
 *.interp
 
+# Visual Code
+debug
+
 # MacOSX
 .DS_Store
