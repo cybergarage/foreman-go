@@ -7,8 +7,6 @@ package errors
 import (
 	"errors"
 	"fmt"
-
-	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
 // Error represents an error.
@@ -62,9 +60,4 @@ func (err *Error) String() string {
 // Error returns a error
 func (err *Error) Error() error {
 	return errors.New(err.String())
-}
-
-// JSONError returns a JSON error
-func (err *Error) JSONError() interface{} {
-	return json.NewError(err.Code, err.Message)
 }
