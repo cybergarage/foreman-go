@@ -96,5 +96,21 @@ func (config *Config) GetInt(key string) (int, error) {
 
 // ExecuteQuery must return the result as a standard array or map.
 func (config *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
-	return nil, errors.NewError()
+	if q.GetType() != fql.QueryTypeSelect {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotFound)
+	}
+
+	configMap := map[string]string{}
+
+	configObj, err := config.GetCategoryObject(ConfigCategoryKey)
+	if err == nil {
+		objs, err := config.GetChildObjects(configObj.ID)
+		if err == nil {
+			for _, obj := range objs {
+				configMap[obj.Name] = obj.Data
+			}
+		}
+	}
+
+	return configMap, nil
 }
