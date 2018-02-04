@@ -43,11 +43,19 @@ func NewError() *Error {
 
 // String returns a string description of the instance
 func (err *Error) String() string {
-	errMsg := fmt.Sprintf("[%d] %s", err.Code, err.Message)
-	if (err.DetailCode <= 0) || (len(err.DetailMessage) <= 0) {
-		return errMsg
+	var errMsg string
+	if 0 < err.Code {
+		errMsg += fmt.Sprintf("[%d] ", err.Code)
 	}
-	errMsg += fmt.Sprintf(" [%d] %s", err.DetailCode, err.DetailMessage)
+	if 0 < len(err.Message) {
+		errMsg += fmt.Sprintf("[%s] ", err.Message)
+	}
+	if 0 < err.DetailCode {
+		errMsg += fmt.Sprintf("[%d] ", err.DetailCode)
+	}
+	if 0 < len(err.DetailMessage) {
+		errMsg += fmt.Sprintf("[%s] ", err.DetailMessage)
+	}
 	return errMsg
 }
 
