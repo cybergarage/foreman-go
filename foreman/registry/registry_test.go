@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	testStoreLoopCount         = 100
+	testregLoopCount           = 100
 	testObjectNameFormat       = "name%d"
 	testObjectDataFormat       = "data%d"
 	testObjectUpdateNameFormat = "new_name%d"
@@ -23,7 +23,7 @@ func TestPathSpecialSplit(t *testing.T) {
 	specialPaths := []string{"", "/", "/0"}
 	specialPathCounts := []int{0, 0, 1}
 	for n, path := range specialPaths {
-		name, err := getStorePathStrings(path)
+		name, err := registryGetPathStrings(path)
 		if err != nil {
 			t.Error(err)
 		}
@@ -34,7 +34,7 @@ func TestPathSpecialSplit(t *testing.T) {
 }
 
 func TestPathSplit(t *testing.T) {
-	for n := 0; n < testStoreLoopCount; n++ {
+	for n := 0; n < testregLoopCount; n++ {
 		path := ""
 		names := make([]string, n)
 		for i := 0; i < n; i++ {
@@ -43,7 +43,7 @@ func TestPathSplit(t *testing.T) {
 			path += fmt.Sprintf("%s%s", PathDelim, name)
 		}
 
-		parseNames, err := getStorePathStrings(path)
+		parseNames, err := registryGetPathStrings(path)
 		if err != nil {
 			t.Error(err)
 		}
@@ -59,8 +59,8 @@ func TestPathSplit(t *testing.T) {
 	}
 }
 
-func ceateRootObjects(t *testing.T, store *Store) {
-	for n := 0; n < testStoreLoopCount; n++ {
+func ceateRootObjects(t *testing.T, reg *Registry) {
+	for n := 0; n < testregLoopCount; n++ {
 		name := fmt.Sprintf(testObjectNameFormat, n)
 		data := fmt.Sprintf(testObjectDataFormat, n)
 
@@ -68,21 +68,21 @@ func ceateRootObjects(t *testing.T, store *Store) {
 		obj.ParentID = RootObjectID
 		obj.Name = name
 		obj.Data = data
-		err := store.CreateObject(obj)
+		err := reg.CreateObject(obj)
 		if err != nil {
 			t.Error(err)
 		}
 	}
 }
 
-func testCreateRootObjects(t *testing.T, store *Store) {
-	err := store.Clear()
+func testCreateRootObjects(t *testing.T, reg *Registry) {
+	err := reg.Clear()
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	objs, err := store.GetRootObjects()
+	objs, err := reg.GetRootObjects()
 	if len(objs) != 0 {
 		t.Errorf("%d != %d", len(objs), 0)
 		return
@@ -90,20 +90,20 @@ func testCreateRootObjects(t *testing.T, store *Store) {
 
 	// Insert
 
-	ceateRootObjects(t, store)
+	ceateRootObjects(t, reg)
 
 	// Get
 
-	objs, err = store.GetRootObjects()
-	if len(objs) != testStoreLoopCount {
-		t.Errorf("%d != %d", len(objs), testStoreLoopCount)
+	objs, err = reg.GetRootObjects()
+	if len(objs) != testregLoopCount {
+		t.Errorf("%d != %d", len(objs), testregLoopCount)
 		return
 	}
 
-	for n := 0; n < testStoreLoopCount; n++ {
+	for n := 0; n < testregLoopCount; n++ {
 		obj := objs[n]
 
-		fetchObj, err := store.GetObject(obj.ID)
+		fetchObj, err := reg.GetObject(obj.ID)
 		if err != nil {
 			t.Error(err)
 		}
@@ -115,25 +115,25 @@ func testCreateRootObjects(t *testing.T, store *Store) {
 
 	// Update
 
-	objs, err = store.GetRootObjects()
-	if len(objs) != testStoreLoopCount {
-		t.Errorf("%d != %d", len(objs), testStoreLoopCount)
+	objs, err = reg.GetRootObjects()
+	if len(objs) != testregLoopCount {
+		t.Errorf("%d != %d", len(objs), testregLoopCount)
 		return
 	}
 
-	for n := 0; n < testStoreLoopCount; n++ {
+	for n := 0; n < testregLoopCount; n++ {
 		obj := objs[n]
 
 		name := fmt.Sprintf(testObjectUpdateNameFormat, n)
 		data := fmt.Sprintf(testObjectUpdateDataFormat, n)
 		obj.Name = name
 		obj.Data = data
-		err := store.UpdateObject(obj)
+		err := reg.UpdateObject(obj)
 		if err != nil {
 			t.Error(err)
 		}
 
-		fetchObj, err := store.GetObject(obj.ID)
+		fetchObj, err := reg.GetObject(obj.ID)
 		if err != nil {
 			t.Error(err)
 		}
@@ -145,36 +145,36 @@ func testCreateRootObjects(t *testing.T, store *Store) {
 
 	// Delete
 
-	objs, err = store.GetRootObjects()
-	if len(objs) != testStoreLoopCount {
-		t.Errorf("%d != %d", len(objs), testStoreLoopCount)
+	objs, err = reg.GetRootObjects()
+	if len(objs) != testregLoopCount {
+		t.Errorf("%d != %d", len(objs), testregLoopCount)
 		return
 	}
 
-	for n := 0; n < testStoreLoopCount; n++ {
+	for n := 0; n < testregLoopCount; n++ {
 		obj := objs[n]
-		err := store.DeleteObject(obj.ID)
+		err := reg.DeleteObject(obj.ID)
 		if err != nil {
 			t.Errorf("Could not remove [%s]", obj.ID)
 		}
 	}
 
-	objs, err = store.GetRootObjects()
+	objs, err = reg.GetRootObjects()
 	if len(objs) != 0 {
 		t.Errorf("%d != %d", len(objs), 0)
 		return
 	}
 }
 
-func createHierarchicalObjects(t *testing.T, store *Store) {
+func createHierarchicalObjects(t *testing.T, reg *Registry) {
 	parentID := RootObjectID
-	for n := 0; n < testStoreLoopCount; n++ {
+	for n := 0; n < testregLoopCount; n++ {
 		obj := NewObject()
 		obj.ParentID = parentID
 		obj.Name = fmt.Sprintf(testObjectNameFormat, n)
 		obj.Data = fmt.Sprintf(testObjectDataFormat, n)
 
-		err := store.CreateObject(obj)
+		err := reg.CreateObject(obj)
 		if err != nil {
 			t.Error(err)
 		}
@@ -183,13 +183,13 @@ func createHierarchicalObjects(t *testing.T, store *Store) {
 	}
 }
 
-func testHierarchicalObjects(t *testing.T, store *Store) {
-	err := store.Clear()
+func testHierarchicalObjects(t *testing.T, reg *Registry) {
+	err := reg.Clear()
 	if err != nil {
 		t.Error(err)
 	}
 
-	objs, err := store.GetRootObjects()
+	objs, err := reg.GetRootObjects()
 	if len(objs) != 0 {
 		t.Errorf("%d != %d", len(objs), 0)
 		return
@@ -197,13 +197,13 @@ func testHierarchicalObjects(t *testing.T, store *Store) {
 
 	// Insert
 
-	createHierarchicalObjects(t, store)
+	createHierarchicalObjects(t, reg)
 
 	// Get
 
 	parentID := RootObjectID
-	for n := 0; n < testStoreLoopCount; n++ {
-		objs, err := store.GetChildObjects(parentID)
+	for n := 0; n < testregLoopCount; n++ {
+		objs, err := reg.GetChildObjects(parentID)
 		if err != nil {
 			t.Error(err)
 		}
@@ -223,14 +223,14 @@ func testHierarchicalObjects(t *testing.T, store *Store) {
 	// Get (Path)
 
 	path := ""
-	for n := 0; n < testStoreLoopCount; n++ {
+	for n := 0; n < testregLoopCount; n++ {
 		var objs []*Object
 		var err error
 
 		if n == 0 {
-			objs, err = store.GetRootObjects()
+			objs, err = reg.GetRootObjects()
 		} else {
-			objs, err = store.GetChildObjectsByNamePath(path)
+			objs, err = reg.GetChildObjectsByPath(path)
 		}
 
 		if err != nil {
@@ -251,27 +251,27 @@ func testHierarchicalObjects(t *testing.T, store *Store) {
 
 	// Clean
 
-	err = store.Clear()
+	err = reg.Clear()
 	if err != nil {
 		t.Error(err)
 	}
 }
 
-func testStore(t *testing.T, store *Store) {
-	err := store.Open()
+func testreg(t *testing.T, reg *Registry) {
+	err := reg.Open()
 	if err != nil {
 		t.Error(err)
 	}
 
-	testCreateRootObjects(t, store)
-	testHierarchicalObjects(t, store)
+	testCreateRootObjects(t, reg)
+	testHierarchicalObjects(t, reg)
 
-	err = store.Close()
+	err = reg.Close()
 	if err != nil {
 		t.Error(err)
 	}
 }
 
-func TestNewSQLiteStore(t *testing.T) {
-	testStore(t, NewSQLiteStore())
+func TestNewRgistry(t *testing.T) {
+	testreg(t, NewRegistry())
 }
