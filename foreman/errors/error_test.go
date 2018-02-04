@@ -11,5 +11,4 @@ import (
 func TestNewError(t *testing.T) {
 	err := NewError()
 	err.Error()
-	err.JSONError()
 }
