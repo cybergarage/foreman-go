@@ -10,14 +10,13 @@ package errors
 import "C"
 
 import (
-	"errors"
 	"fmt"
 	"unsafe"
 )
 
 // NewWithCObject creates a error object from the clang object.
-func NewWithCObject(cobj unsafe.Pointer) error {
-	errMsg := ""
+func NewWithCObject(cobj unsafe.Pointer) *Error {
+	var errMsg string
 
 	// Source code infomation
 
@@ -34,7 +33,7 @@ func NewWithCObject(cobj unsafe.Pointer) error {
 	lineno := (int)(cLineNo)
 
 	if 0 < len(filename) || 0 < len(funcname) {
-		errMsg += fmt.Sprintf("%s (%d)", funcname, lineno)
+		errMsg += fmt.Sprintf("%s (%d) ", funcname, lineno)
 	}
 
 	// Basic infomation
@@ -48,9 +47,7 @@ func NewWithCObject(cobj unsafe.Pointer) error {
 	C.foreman_error_getcode(cobj, &cCode)
 	code := (int)(cCode)
 
-	if 0 < len(msg) {
-		errMsg += fmt.Sprintf(" : [%d] %s", code, msg)
-	}
+	errMsg += msg
 
 	// Extra infomation
 
@@ -63,9 +60,10 @@ func NewWithCObject(cobj unsafe.Pointer) error {
 	C.foreman_error_getdetailcode(cobj, &cDetailCode)
 	detailCode := (int)(cDetailCode)
 
-	if 0 < len(detailMsg) {
-		errMsg += fmt.Sprintf(" ([%d] %s)", detailCode, detailMsg)
+	return &Error{
+		Code:          code,
+		Message:       errMsg,
+		DetailCode:    detailCode,
+		DetailMessage: detailMsg,
 	}
-
-	return errors.New(errMsg)
 }
