@@ -7,6 +7,7 @@ package foreman
 
 import (
 	"os"
+	"runtime"
 
 	"github.com/cybergarage/go-graphite/net/graphite"
 
@@ -16,11 +17,6 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/qos"
 	"github.com/cybergarage/foreman-go/foreman/register"
 	"github.com/cybergarage/foreman-go/foreman/registry"
-)
-
-const (
-	serverFQLPath       = "/fql"
-	serverFQLQueryParam = "q"
 )
 
 // Server represents a Foreman Server.
@@ -34,6 +30,8 @@ type Server struct {
 	qosMgr      *qos.Manager
 	metricMgr   *metric.Manager
 	actionMgr   *action.Manager
+
+	config *Config
 }
 
 // NewServer returns a new Server.
@@ -45,11 +43,18 @@ func NewServer() *Server {
 		qosMgr:      qos.NewManager(),
 		metricMgr:   metric.NewManager(),
 		actionMgr:   action.NewManager(),
+		config:      nil,
 	}
 
+	server.initialize()
+	runtime.SetFinalizer(server, serverFinalizer)
+
+	server.config = NewConfigWithRegistry(server.registryMgr)
+
 	server.graphite.CarbonListener = server
+
 	server.graphite.RenderListener = server
-	server.graphite.SetHTTPRequestListener(serverFQLPath, server)
+	server.graphite.SetHTTPRequestListener(HttpServerFqlPath, server)
 
 	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
 	server.metricMgr.SetRegisterListener(server)
@@ -64,35 +69,63 @@ func (server *Server) GetHostname() (string, error) {
 
 // LoadConfig loads a specified configuration file.
 func (server *Server) LoadConfig(filename string) error {
-	config, err := NewConfigFromFile(filename)
+	err := server.config.LoadFile(filename)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// initialize initialize the server.
+func (server *Server) initialize() error {
+	err := server.registryMgr.Start()
 	if err != nil {
 		return err
 	}
 
-	return server.setConfig(config)
+	return nil
 }
 
-// setConfig sets the specified configuration to the server.
-func (server *Server) setConfig(config *Config) error {
-	// FIXE : Not Implemented yet
-	return nil
+// serverFinalizer closes all managers.
+func serverFinalizer(server *Server) {
+	server.registryMgr.Stop()
+}
+
+// updateConfig sets latest configurations.
+func (server *Server) updateConfig() error {
+	// Set latest network configurations
+
+	port, err := server.config.GetInt(ConfigCarbonPortKey)
+	if err != nil {
+		return err
+	}
+	server.graphite.Carbon.Port = port
+
+	port, err = server.config.GetInt(ConfigHttpPortKey)
+	if err != nil {
+		return err
+	}
+	server.graphite.Render.Port = port
+
+	return err
 }
 
 // Start starts the server.
 func (server *Server) Start() error {
-	err := server.graphite.Start()
+	err := server.updateConfig()
+	if err != nil {
+		return err
+	}
+
+	// Start all managers without the register manager
+
+	err = server.graphite.Start()
 	if err != nil {
 		server.Stop()
 		return err
 	}
 
-	err = server.registryMgr.Open()
-	if err != nil {
-		server.Stop()
-		return err
-	}
-
-	err = server.registerMgr.Open()
+	err = server.registerMgr.Start()
 	if err != nil {
 		server.Stop()
 		return err
@@ -115,17 +148,14 @@ func (server *Server) Start() error {
 
 // Stop stops the server.
 func (server *Server) Stop() error {
+	// Stop all managers without the register manager
+
 	err := server.graphite.Stop()
 	if err != nil {
 		return err
 	}
 
-	err = server.registryMgr.Close()
-	if err != nil {
-		return err
-	}
-
-	err = server.registerMgr.Close()
+	err = server.registerMgr.Stop()
 	if err != nil {
 		return err
 	}

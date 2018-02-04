@@ -7,12 +7,15 @@ package foreman
 import (
 	"strconv"
 
+	"github.com/cybergarage/foreman-go/foreman/errors"
+	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/registry"
 )
 
 // Config represents a Config for Foreman.
 type Config struct {
 	*registry.Manager
+	fql.QueryExecutor
 }
 
 // NewConfigWithRegistry returns a new Config with the specified registry.
@@ -89,4 +92,9 @@ func (config *Config) GetInt(key string) (int, error) {
 		return 0, err
 	}
 	return int(value64), nil
+}
+
+// ExecuteQuery must return the result as a standard array or map.
+func (config *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
+	return nil, errors.NewError()
 }
