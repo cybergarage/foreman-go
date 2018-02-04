@@ -27,7 +27,6 @@ GO_GRAPHITE_PACKAGES=${GO_GRAPHITE_PACKAGE_ID}
 GITHUB_ID=${GITHUB}.git/${PACKAGE_NAME}
 PACKAGE_ID=${GITHUB}/${PACKAGE_NAME}
 PACKAGES=\
-	${PACKAGE_ID} \
 	${PACKAGE_ID}/log \
 	${PACKAGE_ID}/errors \
 	${PACKAGE_ID}/registry \
@@ -38,13 +37,14 @@ PACKAGES=\
 	${PACKAGE_ID}/qos \
 	${PACKAGE_ID}/fql \
 	${PACKAGE_ID}/rpc/graphite \
-	${PACKAGE_ID}/rpc/json
+	${PACKAGE_ID}/rpc/json \
+	${PACKAGE_ID}
 
 SOURCE_DIR=src/${GITHUB}/foreman
 BINARY_ID=${GITHUB}/${BINARY_NAME}
 BINARYIES=${BINARY_ID}
 
-.PHONY: setup
+.PHONY: version
 
 all: test
 
@@ -65,7 +65,7 @@ const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 antlr:
 	pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
 
-build: const antlr format $(shell find ${SOURCE_DIR} -type f -name '*.go')
+build: version const antlr format $(shell find ${SOURCE_DIR} -type f -name '*.go')
 	go build -v ${PACKAGES}
 
 test: build 
