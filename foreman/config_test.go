@@ -31,6 +31,9 @@ func TestConfigInitialKeys(t *testing.T) {
 	initialKeys := []string{
 		ConfigProductKey,
 		ConfigVersionKey,
+		ConfigHostKey,
+		ConfigCarbonPortKey,
+		ConfigHttpPortKey,
 	}
 
 	for _, key := range initialKeys {

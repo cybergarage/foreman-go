@@ -4,8 +4,12 @@
 
 package fql
 
+import (
+	"github.com/cybergarage/foreman-go/foreman/errors"
+)
+
 // QueryExecutor represents an interface to execute a query.
 type QueryExecutor interface {
 	// ExecuteQuery must return the result as a standard array or map.
-	ExecuteQuery(Query) (interface{}, error)
+	ExecuteQuery(Query) (interface{}, *errors.Error)
 }
