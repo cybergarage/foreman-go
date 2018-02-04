@@ -60,7 +60,7 @@ format:
 
 const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go  && popd
-	pushd ${SOURCE_DIR} && ./errors.go.gen > errors.go  && popd
+	pushd ${SOURCE_DIR}/errors && ./errors.go.gen > errors.go  && popd
 	
 antlr:
 	pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
