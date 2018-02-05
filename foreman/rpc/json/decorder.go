@@ -4,12 +4,28 @@
 
 package json
 
+import (
+	"encoding/json"
+)
+
 // Decorder represents a decorder for JSON
-type Decorder interface {
-	Decode(json string) error
-	GetRootObject() (interface{}, error)
-	GetPathObject(path string) (interface{}, error)
-	GetPathString(path string) (string, error)
-	GetPathInteger(path string) (int, error)
-	GetPathFloat(path string) (float64, error)
+type Decorder struct {
+	*Path
+}
+
+// NewDecorder return a JSON Decorder.
+func NewDecorder() *Decorder {
+	d := &Decorder{
+		Path: newPath(),
+	}
+	return d
+}
+
+// Decode decordes the specified JSON string.
+func (d *Decorder) Decode(jsonString string) (interface{}, error) {
+	err := json.Unmarshal([]byte(jsonString), &d.Path.rootObject)
+	if err != nil {
+		return nil, err
+	}
+	return d.Path.rootObject, nil
 }

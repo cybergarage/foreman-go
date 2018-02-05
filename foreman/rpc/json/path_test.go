@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestJSONMapDencode(t *testing.T) {
+func TestJSONPath(t *testing.T) {
 	age := "33"
 	name := "John Smith"
 
@@ -29,13 +29,14 @@ func TestJSONMapDencode(t *testing.T) {
 	}
 
 	d := NewDecorder()
-	_, err = d.Decode(encStr)
+	rootObj, err := d.Decode(encStr)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	jsonAge, err := d.GetPathString("person/age")
+	path := NewPathWithObject(rootObj)
+	jsonAge, err := path.GetPathString("person/age")
 	if err != nil {
 		t.Error(err)
 	}
@@ -43,7 +44,7 @@ func TestJSONMapDencode(t *testing.T) {
 		t.Errorf("%s != %s", age, jsonAge)
 	}
 
-	jsonName, err := d.GetPathString("person/name")
+	jsonName, err := path.GetPathString("person/name")
 	if err != nil {
 		t.Error(err)
 	}
