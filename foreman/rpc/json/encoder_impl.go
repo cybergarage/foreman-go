@@ -15,7 +15,7 @@ type baseEncorder struct {
 	Encorder
 }
 
-// objectToString returns the string reprensation.
+// objectToString returns the string representation.
 func (e *baseEncorder) objectToString(obj interface{}) (string, error) {
 	switch obj.(type) {
 	case string:
@@ -32,7 +32,7 @@ func (e *baseEncorder) objectToString(obj interface{}) (string, error) {
 		return fmt.Sprintf("%d", obj.(int)), nil
 	}
 
-	return "", fmt.Errorf(errorUnknownObjectType, obj)
+	return "", fmt.Errorf(errorEncorderUnknownObjectType, obj)
 }
 
 // appendObject appends a encorded string of the specified object.
@@ -84,7 +84,7 @@ func (e *baseEncorder) appendObject(buf *bytes.Buffer, indent int, obj interface
 		}
 		buf.WriteString("]")
 	default:
-		return fmt.Errorf(errorUnknownObjectType, obj)
+		return fmt.Errorf(errorEncorderUnknownObjectType, obj)
 	}
 	return nil
 }
