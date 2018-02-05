@@ -2,10 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package foreman provides interfaces for Foreman.
 package foreman
 
 import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	rpc "github.com/cybergarage/foreman-go/foreman/rpc/graphite"
 	"github.com/cybergarage/go-graphite/net/graphite"
@@ -14,6 +17,7 @@ import (
 // Client represents a client for the server.
 type Client struct {
 	Host     string
+	HTTPPort int
 	graphite *graphite.Client
 }
 
@@ -21,18 +25,21 @@ type Client struct {
 func NewClient() *Client {
 	client := &Client{
 		Host:     DefaultServerHost,
+		HTTPPort: DefaultHttpPort,
 		graphite: graphite.NewClient(),
 	}
 	return client
 }
 
-// Dial tries to connect to the specified host.
-func (client *Client) Dial(host string) error {
+// SetHost sets the specified host into the client.
+func (client *Client) SetHost(host string) error {
+	client.Host = host
 	return nil
 }
 
-// SendMetric send a new metric.
-func (client *Client) SendMetric(host string, m *metric.Metric) error {
+// SetHTTPPort sets the specified point into the client.
+func (client *Client) SetHTTPPort(port int) error {
+	client.HTTPPort = port
 	return nil
 }
 
@@ -51,23 +58,27 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 	return nil
 }
 
-// QueryMetrics posts a query over Graphite interface
-func (client *Client) QueryMetrics(q *metric.Query) (metric.ResultSet, error) {
+// PostQuery posts a query string over Graphite interface
+func (client *Client) PostQuery(queryString string) (interface{}, error) {
+	url := fmt.Sprintf("http://%s:%d%s?%s=%s",
+		client.Host,
+		client.HTTPPort,
+		HttpServerFqlPath,
+		HttpServerFqlQuery,
+		queryString)
 
-	gq, err := rpc.NewGraphiteQueryWithMetricQuery(q)
+	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
 	}
 
-	gms, err := client.graphite.PostQuery(gq)
+	jsonResBytes, err := ioutil.ReadAll(res.Body)
+	res.Body.Close()
 	if err != nil {
 		return nil, err
 	}
 
-	rs, err := rpc.NewResultSetWithGraphiteMetrics(gms)
-	if err != nil {
-		return nil, err
-	}
+	fmt.Printf(string(jsonResBytes))
 
-	return rs, nil
+	return nil, nil
 }

@@ -21,13 +21,24 @@ func testClientDial(t *testing.T, client *Client) {
 		t.Error(err)
 	}
 
+	testQueries := []string{
+		"EXPORT%20CONFIG",
+	}
+
+	for _, query := range testQueries {
+		_, err := client.PostQuery(query)
+		if err != nil {
+			t.Error(err)
+		}
+	}
+
 	err = server.Stop()
 	if err != nil {
 		t.Error(err)
 	}
 }
 
-func TestNewClient(t *testing.T) {
+func TestClientQueries(t *testing.T) {
 	client := NewClient()
 	testClientDial(t, client)
 }
