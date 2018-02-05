@@ -110,6 +110,16 @@ func (server *Server) updateConfig() error {
 	return err
 }
 
+// GetGraphitePort returns the graphite carbon port.
+func (server *Server) GetGraphitePort() int {
+	return server.graphite.Carbon.Port
+}
+
+// GetHTTPPort returns the graphite HTTP port.
+func (server *Server) GetHTTPPort() int {
+	return server.graphite.Render.Port
+}
+
 // Start starts the server.
 func (server *Server) Start() error {
 	err := server.updateConfig()
