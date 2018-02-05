@@ -5,5 +5,9 @@
 package json
 
 const (
-	errorUnknownObjectType = "Unknown object type : %s"
+	errorEncorderUnknownObjectType    = "Unknown object type : %s"
+	errorDecorderEmptyKey             = "Empty path"
+	errorDecorderEmptyRootObject      = "Empty root object"
+	errorDecorderNotFoundKey          = "Key (%s) is not found"
+	errorDecorderInvalidKeyObjectType = "Key (%s) object type is invalid"
 )

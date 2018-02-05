@@ -19,7 +19,7 @@ func NewEncorder() Encorder {
 	return e
 }
 
-// Encode returns a encorded string of the specified object.
+// Encode returns an encoded string of the specified object.
 func (e *goEncorder) Encode(obj interface{}) (string, error) {
 	b, err := json.Marshal(obj)
 	if err != nil {
