@@ -11,6 +11,7 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	rpc "github.com/cybergarage/foreman-go/foreman/rpc/graphite"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 	"github.com/cybergarage/go-graphite/net/graphite"
 )
 
@@ -78,7 +79,11 @@ func (client *Client) PostQuery(queryString string) (interface{}, error) {
 		return nil, err
 	}
 
-	fmt.Printf(string(jsonResBytes))
+	dec := json.NewDecorder()
+	rootObj, err := dec.Decode(string(jsonResBytes))
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	return rootObj, nil
 }
