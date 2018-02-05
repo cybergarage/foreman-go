@@ -7,7 +7,7 @@ package json
 const (
 	errorEncorderUnknownObjectType    = "Unknown object type : %s"
 	errorDecorderEmptyKey             = "Empty path"
-	errorDecorderEmptyRootObject      = "Empty root object"
+	errorPathEmptyRootObject          = "Empty root object"
 	errorDecorderNotFoundKey          = "Key (%s) is not found"
 	errorDecorderInvalidKeyObjectType = "Key (%s) object type is invalid"
 )
