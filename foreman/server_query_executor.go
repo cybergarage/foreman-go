@@ -20,11 +20,11 @@ const (
 func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 
 	executors := map[string]fql.QueryExecutor{
-		QueryTargetQos:      server.qosMgr,
-		QueryTargetConfig:   server.config,
-		QueryTargetMetric:   server.metricMgr,
-		QueryTargetRegister: server.registerMgr,
-		QueryTargetRegistry: server.registryMgr,
+		fql.QueryTargetQos:      server.qosMgr,
+		fql.QueryTargetConfig:   server.config,
+		fql.QueryTargetMetrics:  server.metricMgr,
+		fql.QueryTargetRegister: server.registerMgr,
+		fql.QueryTargetRegistry: server.registryMgr,
 	}
 
 	target, ok := q.GetTarget()

@@ -17,9 +17,4 @@ const (
 	ConfigHostKey       = "host"
 	ConfigCarbonPortKey = "carbon_port"
 	ConfigHttpPortKey   = "http_port"
-	QueryTargetQos      = "QOS"
-	QueryTargetConfig   = "CONFIG"
-	QueryTargetMetric   = "METRIC"
-	QueryTargetRegister = "REGISTER"
-	QueryTargetRegistry = "REGISTRY"
 )

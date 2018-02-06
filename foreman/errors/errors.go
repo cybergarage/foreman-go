@@ -5,17 +5,14 @@
 package errors
 
 const (
+	ErrorInternalServerError     = 500
 	ErrorCodeQueryInvalid        = 1000
 	ErrorCodeQueryMethodNotFound = 1001
 	ErrorCodeQueryTargetNotFound = 1010
 )
 
 func ErrorCodeToString(code int) string {
-	errorMap := map[int]string{
-		ErrorCodeQueryInvalid:        "Invalid query",
-		ErrorCodeQueryMethodNotFound: "Not supported query method",
-		ErrorCodeQueryTargetNotFound: "Not found query target",
-	}
+	errorMap := map[int]string{}
 	errMsg, ok := errorMap[code]
 	if !ok {
 		return ""

@@ -5,40 +5,68 @@
 package foreman
 
 import (
+	"strings"
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
-func testClientDial(t *testing.T, client *Client) {
-	server := NewServer()
-
-	err := server.Start()
-	if err != nil {
-		t.Error(err)
+func testClientExportQuery(t *testing.T, server *Server, client *Client) {
+	testTargets := []string{
+		fql.QueryTargetConfig,
+		fql.QueryTargetRegistry,
 	}
 
-	_, err = server.GetHostname()
-	if err != nil {
-		t.Error(err)
-	}
-
-	testQueries := []string{
-		"EXPORT%20CONFIG",
-	}
-
-	for _, query := range testQueries {
+	for _, target := range testTargets {
+		query := "EXPORT%20" + target
 		_, err := client.PostQuery(query)
 		if err != nil {
 			t.Error(err)
 		}
 	}
+}
+
+func testClientConfigQuery(t *testing.T, server *Server, client *Client) {
+	configObj, err := client.PostQuery("EXPORT%20CONFIG")
+	if err != nil {
+		t.Error(err)
+	}
+
+	configs := map[string]string{
+		ConfigProductKey: ProductName,
+		ConfigVersionKey: Version,
+	}
+
+	path := json.NewPathWithObject(configObj)
+	for key, value := range configs {
+		keyPath := json.NewPathStringWithStrings([]string{strings.ToLower(fql.QueryTargetConfig), key})
+		configValue, err := path.GetPathString(keyPath)
+		if err != nil {
+			t.Error(err)
+		}
+		if configValue != value {
+			t.Errorf("[%s] %s != %s", keyPath, configValue, value)
+		}
+	}
+
+}
+
+func TestClientQueries(t *testing.T) {
+	server := NewServer()
+
+	err := server.Start()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	client := NewClient()
+	testClientExportQuery(t, server, client)
+	testClientConfigQuery(t, server, client)
 
 	err = server.Stop()
 	if err != nil {
 		t.Error(err)
 	}
-}
-
-func TestClientQueries(t *testing.T) {
-	client := NewClient()
-	testClientDial(t, client)
 }

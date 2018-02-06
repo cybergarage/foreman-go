@@ -1,2 +1,2 @@
-# query; target
-EXPORT QoS;QoS
+# query; target; value_count; condition_count
+EXPORT QoS;QoS;0;0

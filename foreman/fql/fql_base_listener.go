@@ -56,6 +56,36 @@ func (s *BaseFQLListener) EnterSelectQuery(ctx *SelectQueryContext) {}
 // ExitSelectQuery is called when production SelectQuery is exited.
 func (s *BaseFQLListener) ExitSelectQuery(ctx *SelectQueryContext) {}
 
+// EnterConditions is called when production conditions is entered.
+func (s *BaseFQLListener) EnterConditions(ctx *ConditionsContext) {}
+
+// ExitConditions is called when production conditions is exited.
+func (s *BaseFQLListener) ExitConditions(ctx *ConditionsContext) {}
+
+// EnterCondition is called when production condition is entered.
+func (s *BaseFQLListener) EnterCondition(ctx *ConditionContext) {}
+
+// ExitCondition is called when production condition is exited.
+func (s *BaseFQLListener) ExitCondition(ctx *ConditionContext) {}
+
+// EnterOperator is called when production operator is entered.
+func (s *BaseFQLListener) EnterOperator(ctx *OperatorContext) {}
+
+// ExitOperator is called when production operator is exited.
+func (s *BaseFQLListener) ExitOperator(ctx *OperatorContext) {}
+
+// EnterLeftOperand is called when production leftOperand is entered.
+func (s *BaseFQLListener) EnterLeftOperand(ctx *LeftOperandContext) {}
+
+// ExitLeftOperand is called when production leftOperand is exited.
+func (s *BaseFQLListener) ExitLeftOperand(ctx *LeftOperandContext) {}
+
+// EnterRightOperand is called when production rightOperand is entered.
+func (s *BaseFQLListener) EnterRightOperand(ctx *RightOperandContext) {}
+
+// ExitRightOperand is called when production rightOperand is exited.
+func (s *BaseFQLListener) ExitRightOperand(ctx *RightOperandContext) {}
+
 // EnterExportQuery is called when production ExportQuery is entered.
 func (s *BaseFQLListener) EnterExportQuery(ctx *ExportQueryContext) {}
 

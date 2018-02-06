@@ -16,10 +16,14 @@ const (
 // Query represents a query interface.
 type Query interface {
 	GetType() QueryType
+
 	SetParameter(param Parameter) error
 	GetParameters() Parameters
 	GetParameter(string) (Parameter, bool)
 	GetParameterString(string) (string, bool)
+
+	AddCondition(*Condition) error
+	GetConditions() Conditions
 
 	SetTarget(Target) error
 	GetTarget() (Target, bool)

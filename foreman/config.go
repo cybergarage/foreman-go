@@ -6,6 +6,7 @@ package foreman
 
 import (
 	"strconv"
+	"strings"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
@@ -112,5 +113,8 @@ func (config *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		}
 	}
 
-	return configMap, nil
+	configContainer := map[string]interface{}{}
+	configContainer[strings.ToLower(fql.QueryTargetConfig)] = configMap
+
+	return configContainer, nil
 }
