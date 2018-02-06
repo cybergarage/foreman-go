@@ -25,21 +25,6 @@ type FQLListener interface {
 	// EnterSelectQuery is called when entering the selectQuery production.
 	EnterSelectQuery(c *SelectQueryContext)
 
-	// EnterConditions is called when entering the conditions production.
-	EnterConditions(c *ConditionsContext)
-
-	// EnterCondition is called when entering the condition production.
-	EnterCondition(c *ConditionContext)
-
-	// EnterOperator is called when entering the operator production.
-	EnterOperator(c *OperatorContext)
-
-	// EnterLeftOperand is called when entering the leftOperand production.
-	EnterLeftOperand(c *LeftOperandContext)
-
-	// EnterRightOperand is called when entering the rightOperand production.
-	EnterRightOperand(c *RightOperandContext)
-
 	// EnterExportQuery is called when entering the exportQuery production.
 	EnterExportQuery(c *ExportQueryContext)
 
@@ -54,6 +39,21 @@ type FQLListener interface {
 
 	// EnterValues is called when entering the values production.
 	EnterValues(c *ValuesContext)
+
+	// EnterConditions is called when entering the conditions production.
+	EnterConditions(c *ConditionsContext)
+
+	// EnterCondition is called when entering the condition production.
+	EnterCondition(c *ConditionContext)
+
+	// EnterOperator is called when entering the operator production.
+	EnterOperator(c *OperatorContext)
+
+	// EnterLeftOperand is called when entering the leftOperand production.
+	EnterLeftOperand(c *LeftOperandContext)
+
+	// EnterRightOperand is called when entering the rightOperand production.
+	EnterRightOperand(c *RightOperandContext)
 
 	// ExitFql is called when exiting the fql production.
 	ExitFql(c *FqlContext)
@@ -73,21 +73,6 @@ type FQLListener interface {
 	// ExitSelectQuery is called when exiting the selectQuery production.
 	ExitSelectQuery(c *SelectQueryContext)
 
-	// ExitConditions is called when exiting the conditions production.
-	ExitConditions(c *ConditionsContext)
-
-	// ExitCondition is called when exiting the condition production.
-	ExitCondition(c *ConditionContext)
-
-	// ExitOperator is called when exiting the operator production.
-	ExitOperator(c *OperatorContext)
-
-	// ExitLeftOperand is called when exiting the leftOperand production.
-	ExitLeftOperand(c *LeftOperandContext)
-
-	// ExitRightOperand is called when exiting the rightOperand production.
-	ExitRightOperand(c *RightOperandContext)
-
 	// ExitExportQuery is called when exiting the exportQuery production.
 	ExitExportQuery(c *ExportQueryContext)
 
@@ -102,4 +87,19 @@ type FQLListener interface {
 
 	// ExitValues is called when exiting the values production.
 	ExitValues(c *ValuesContext)
+
+	// ExitConditions is called when exiting the conditions production.
+	ExitConditions(c *ConditionsContext)
+
+	// ExitCondition is called when exiting the condition production.
+	ExitCondition(c *ConditionContext)
+
+	// ExitOperator is called when exiting the operator production.
+	ExitOperator(c *OperatorContext)
+
+	// ExitLeftOperand is called when exiting the leftOperand production.
+	ExitLeftOperand(c *LeftOperandContext)
+
+	// ExitRightOperand is called when exiting the rightOperand production.
+	ExitRightOperand(c *RightOperandContext)
 }
