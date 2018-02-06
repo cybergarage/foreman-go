@@ -25,19 +25,19 @@ type FQLListener interface {
 	// EnterSelectQuery is called when entering the SelectQuery production.
 	EnterSelectQuery(c *SelectQueryContext)
 
-	// EnterCondition is called when entering the Condition production.
-	EnterCondition(c *ConditionContext)
+	// EnterConditions is called when entering the conditions production.
+	EnterConditions(c *ConditionsContext)
 
-	// EnterSelect_condition is called when entering the select_condition production.
-	EnterSelect_condition(c *Select_conditionContext)
+	// EnterCondition is called when entering the condition production.
+	EnterCondition(c *ConditionContext)
 
 	// EnterOperator is called when entering the operator production.
 	EnterOperator(c *OperatorContext)
 
-	// EnterLeftOperand is called when entering the LeftOperand production.
+	// EnterLeftOperand is called when entering the leftOperand production.
 	EnterLeftOperand(c *LeftOperandContext)
 
-	// EnterRightOperand is called when entering the RightOperand production.
+	// EnterRightOperand is called when entering the rightOperand production.
 	EnterRightOperand(c *RightOperandContext)
 
 	// EnterExportQuery is called when entering the ExportQuery production.
@@ -73,19 +73,19 @@ type FQLListener interface {
 	// ExitSelectQuery is called when exiting the SelectQuery production.
 	ExitSelectQuery(c *SelectQueryContext)
 
-	// ExitCondition is called when exiting the Condition production.
-	ExitCondition(c *ConditionContext)
+	// ExitConditions is called when exiting the conditions production.
+	ExitConditions(c *ConditionsContext)
 
-	// ExitSelect_condition is called when exiting the select_condition production.
-	ExitSelect_condition(c *Select_conditionContext)
+	// ExitCondition is called when exiting the condition production.
+	ExitCondition(c *ConditionContext)
 
 	// ExitOperator is called when exiting the operator production.
 	ExitOperator(c *OperatorContext)
 
-	// ExitLeftOperand is called when exiting the LeftOperand production.
+	// ExitLeftOperand is called when exiting the leftOperand production.
 	ExitLeftOperand(c *LeftOperandContext)
 
-	// ExitRightOperand is called when exiting the RightOperand production.
+	// ExitRightOperand is called when exiting the rightOperand production.
 	ExitRightOperand(c *RightOperandContext)
 
 	// ExitExportQuery is called when exiting the ExportQuery production.

@@ -55,7 +55,32 @@ set_stmt
  *------------------------------------------------------------------*/
 
 select_stmt
-	: SELECT ASTERISK FROM target # SelectQuery
+	: SELECT ASTERISK FROM target (WHERE conditions)? # SelectQuery
+	;
+
+conditions
+	: condition (AND condition)*
+	;
+
+condition
+	: leftOperand operator rightOperand
+	;
+
+operator
+	: DOUBLE_EQ
+	| OP_LT
+	| LE
+	| GT
+	| GE	
+	| NOTEQ
+	;
+
+leftOperand
+	: IDENTIFIER
+	;
+
+rightOperand
+	: IDENTIFIER
 	;
 
 /*------------------------------------------------------------------
@@ -63,7 +88,7 @@ select_stmt
  *------------------------------------------------------------------*/
 
 export_stmt
-	: EXPORT target # ExportQuery
+	: EXPORT target (WHERE conditions)? # ExportQuery
 	;
 
 /*------------------------------------------------------------------
