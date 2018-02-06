@@ -15,7 +15,7 @@ func ErrorCodeToString(code int) string {
 	errorMap := map[int]string{
 		ErrorInternalServerError:     "Internal Server Error",
 		ErrorCodeQueryInvalid:        "Invalid Query",
-		ErrorCodeQueryMethodNotFound: "Not Ssupported Query Method",
+		ErrorCodeQueryMethodNotFound: "Not Supported Query Method",
 		ErrorCodeQueryTargetNotFound: "Not Found Query Target",
 	}
 	errMsg, ok := errorMap[code]
