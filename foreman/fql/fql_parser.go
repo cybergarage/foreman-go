@@ -76,9 +76,9 @@ var symbolicNames = []string{
 }
 
 var ruleNames = []string{
-	"fql", "statement_list", "statement", "insert_stmt", "set_stmt", "select_stmt",
-	"conditions", "condition", "operator", "leftOperand", "rightOperand", "export_stmt",
-	"del_stmt", "target", "value", "values",
+	"fql", "queryList", "query", "insertQuery", "setQuery", "selectQuery",
+	"conditions", "condition", "operator", "leftOperand", "rightOperand", "exportQuery",
+	"deleteQuery", "target", "value", "values",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
 
@@ -141,22 +141,22 @@ const (
 
 // FQLParser rules.
 const (
-	FQLParserRULE_fql            = 0
-	FQLParserRULE_statement_list = 1
-	FQLParserRULE_statement      = 2
-	FQLParserRULE_insert_stmt    = 3
-	FQLParserRULE_set_stmt       = 4
-	FQLParserRULE_select_stmt    = 5
-	FQLParserRULE_conditions     = 6
-	FQLParserRULE_condition      = 7
-	FQLParserRULE_operator       = 8
-	FQLParserRULE_leftOperand    = 9
-	FQLParserRULE_rightOperand   = 10
-	FQLParserRULE_export_stmt    = 11
-	FQLParserRULE_del_stmt       = 12
-	FQLParserRULE_target         = 13
-	FQLParserRULE_value          = 14
-	FQLParserRULE_values         = 15
+	FQLParserRULE_fql          = 0
+	FQLParserRULE_queryList    = 1
+	FQLParserRULE_query        = 2
+	FQLParserRULE_insertQuery  = 3
+	FQLParserRULE_setQuery     = 4
+	FQLParserRULE_selectQuery  = 5
+	FQLParserRULE_conditions   = 6
+	FQLParserRULE_condition    = 7
+	FQLParserRULE_operator     = 8
+	FQLParserRULE_leftOperand  = 9
+	FQLParserRULE_rightOperand = 10
+	FQLParserRULE_exportQuery  = 11
+	FQLParserRULE_deleteQuery  = 12
+	FQLParserRULE_target       = 13
+	FQLParserRULE_value        = 14
+	FQLParserRULE_values       = 15
 )
 
 // IFqlContext is an interface to support dynamic dispatch.
@@ -197,14 +197,14 @@ func NewFqlContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoking
 
 func (s *FqlContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *FqlContext) Statement_list() IStatement_listContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IStatement_listContext)(nil)).Elem(), 0)
+func (s *FqlContext) QueryList() IQueryListContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IQueryListContext)(nil)).Elem(), 0)
 
 	if t == nil {
 		return nil
 	}
 
-	return t.(IStatement_listContext)
+	return t.(IQueryListContext)
 }
 
 func (s *FqlContext) GetRuleContext() antlr.RuleContext {
@@ -250,104 +250,104 @@ func (p *FQLParser) Fql() (localctx IFqlContext) {
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(32)
-		p.Statement_list()
+		p.QueryList()
 	}
 
 	return localctx
 }
 
-// IStatement_listContext is an interface to support dynamic dispatch.
-type IStatement_listContext interface {
+// IQueryListContext is an interface to support dynamic dispatch.
+type IQueryListContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsStatement_listContext differentiates from other interfaces.
-	IsStatement_listContext()
+	// IsQueryListContext differentiates from other interfaces.
+	IsQueryListContext()
 }
 
-type Statement_listContext struct {
+type QueryListContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyStatement_listContext() *Statement_listContext {
-	var p = new(Statement_listContext)
+func NewEmptyQueryListContext() *QueryListContext {
+	var p = new(QueryListContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = FQLParserRULE_statement_list
+	p.RuleIndex = FQLParserRULE_queryList
 	return p
 }
 
-func (*Statement_listContext) IsStatement_listContext() {}
+func (*QueryListContext) IsQueryListContext() {}
 
-func NewStatement_listContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Statement_listContext {
-	var p = new(Statement_listContext)
+func NewQueryListContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *QueryListContext {
+	var p = new(QueryListContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = FQLParserRULE_statement_list
+	p.RuleIndex = FQLParserRULE_queryList
 
 	return p
 }
 
-func (s *Statement_listContext) GetParser() antlr.Parser { return s.parser }
+func (s *QueryListContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *Statement_listContext) AllStatement() []IStatementContext {
-	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*IStatementContext)(nil)).Elem())
-	var tst = make([]IStatementContext, len(ts))
+func (s *QueryListContext) AllQuery() []IQueryContext {
+	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*IQueryContext)(nil)).Elem())
+	var tst = make([]IQueryContext, len(ts))
 
 	for i, t := range ts {
 		if t != nil {
-			tst[i] = t.(IStatementContext)
+			tst[i] = t.(IQueryContext)
 		}
 	}
 
 	return tst
 }
 
-func (s *Statement_listContext) Statement(i int) IStatementContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IStatementContext)(nil)).Elem(), i)
+func (s *QueryListContext) Query(i int) IQueryContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IQueryContext)(nil)).Elem(), i)
 
 	if t == nil {
 		return nil
 	}
 
-	return t.(IStatementContext)
+	return t.(IQueryContext)
 }
 
-func (s *Statement_listContext) AllSEMICOLON() []antlr.TerminalNode {
+func (s *QueryListContext) AllSEMICOLON() []antlr.TerminalNode {
 	return s.GetTokens(FQLParserSEMICOLON)
 }
 
-func (s *Statement_listContext) SEMICOLON(i int) antlr.TerminalNode {
+func (s *QueryListContext) SEMICOLON(i int) antlr.TerminalNode {
 	return s.GetToken(FQLParserSEMICOLON, i)
 }
 
-func (s *Statement_listContext) GetRuleContext() antlr.RuleContext {
+func (s *QueryListContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *Statement_listContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *QueryListContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Statement_listContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *QueryListContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
-		listenerT.EnterStatement_list(s)
+		listenerT.EnterQueryList(s)
 	}
 }
 
-func (s *Statement_listContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *QueryListContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
-		listenerT.ExitStatement_list(s)
+		listenerT.ExitQueryList(s)
 	}
 }
 
-func (p *FQLParser) Statement_list() (localctx IStatement_listContext) {
-	localctx = NewStatement_listContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 2, FQLParserRULE_statement_list)
+func (p *FQLParser) QueryList() (localctx IQueryListContext) {
+	localctx = NewQueryListContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 2, FQLParserRULE_queryList)
 	var _la int
 
 	defer func() {
@@ -369,7 +369,7 @@ func (p *FQLParser) Statement_list() (localctx IStatement_listContext) {
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(34)
-		p.Statement()
+		p.Query()
 	}
 	p.SetState(39)
 	p.GetErrorHandler().Sync(p)
@@ -382,7 +382,7 @@ func (p *FQLParser) Statement_list() (localctx IStatement_listContext) {
 		}
 		{
 			p.SetState(36)
-			p.Statement()
+			p.Query()
 		}
 
 		p.SetState(41)
@@ -393,117 +393,117 @@ func (p *FQLParser) Statement_list() (localctx IStatement_listContext) {
 	return localctx
 }
 
-// IStatementContext is an interface to support dynamic dispatch.
-type IStatementContext interface {
+// IQueryContext is an interface to support dynamic dispatch.
+type IQueryContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsStatementContext differentiates from other interfaces.
-	IsStatementContext()
+	// IsQueryContext differentiates from other interfaces.
+	IsQueryContext()
 }
 
-type StatementContext struct {
+type QueryContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyStatementContext() *StatementContext {
-	var p = new(StatementContext)
+func NewEmptyQueryContext() *QueryContext {
+	var p = new(QueryContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = FQLParserRULE_statement
+	p.RuleIndex = FQLParserRULE_query
 	return p
 }
 
-func (*StatementContext) IsStatementContext() {}
+func (*QueryContext) IsQueryContext() {}
 
-func NewStatementContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *StatementContext {
-	var p = new(StatementContext)
+func NewQueryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *QueryContext {
+	var p = new(QueryContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = FQLParserRULE_statement
+	p.RuleIndex = FQLParserRULE_query
 
 	return p
 }
 
-func (s *StatementContext) GetParser() antlr.Parser { return s.parser }
+func (s *QueryContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *StatementContext) Insert_stmt() IInsert_stmtContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IInsert_stmtContext)(nil)).Elem(), 0)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IInsert_stmtContext)
-}
-
-func (s *StatementContext) Set_stmt() ISet_stmtContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISet_stmtContext)(nil)).Elem(), 0)
+func (s *QueryContext) InsertQuery() IInsertQueryContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IInsertQueryContext)(nil)).Elem(), 0)
 
 	if t == nil {
 		return nil
 	}
 
-	return t.(ISet_stmtContext)
+	return t.(IInsertQueryContext)
 }
 
-func (s *StatementContext) Select_stmt() ISelect_stmtContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISelect_stmtContext)(nil)).Elem(), 0)
+func (s *QueryContext) SetQuery() ISetQueryContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISetQueryContext)(nil)).Elem(), 0)
 
 	if t == nil {
 		return nil
 	}
 
-	return t.(ISelect_stmtContext)
+	return t.(ISetQueryContext)
 }
 
-func (s *StatementContext) Export_stmt() IExport_stmtContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IExport_stmtContext)(nil)).Elem(), 0)
+func (s *QueryContext) SelectQuery() ISelectQueryContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISelectQueryContext)(nil)).Elem(), 0)
 
 	if t == nil {
 		return nil
 	}
 
-	return t.(IExport_stmtContext)
+	return t.(ISelectQueryContext)
 }
 
-func (s *StatementContext) Del_stmt() IDel_stmtContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IDel_stmtContext)(nil)).Elem(), 0)
+func (s *QueryContext) ExportQuery() IExportQueryContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IExportQueryContext)(nil)).Elem(), 0)
 
 	if t == nil {
 		return nil
 	}
 
-	return t.(IDel_stmtContext)
+	return t.(IExportQueryContext)
 }
 
-func (s *StatementContext) GetRuleContext() antlr.RuleContext {
+func (s *QueryContext) DeleteQuery() IDeleteQueryContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IDeleteQueryContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IDeleteQueryContext)
+}
+
+func (s *QueryContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *StatementContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *QueryContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *StatementContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *QueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
-		listenerT.EnterStatement(s)
+		listenerT.EnterQuery(s)
 	}
 }
 
-func (s *StatementContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *QueryContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
-		listenerT.ExitStatement(s)
+		listenerT.ExitQuery(s)
 	}
 }
 
-func (p *FQLParser) Statement() (localctx IStatementContext) {
-	localctx = NewStatementContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, FQLParserRULE_statement)
+func (p *FQLParser) Query() (localctx IQueryContext) {
+	localctx = NewQueryContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 4, FQLParserRULE_query)
 
 	defer func() {
 		p.ExitRule()
@@ -529,35 +529,35 @@ func (p *FQLParser) Statement() (localctx IStatementContext) {
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(42)
-			p.Insert_stmt()
+			p.InsertQuery()
 		}
 
 	case FQLParserSET:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(43)
-			p.Set_stmt()
+			p.SetQuery()
 		}
 
 	case FQLParserSELECT:
 		p.EnterOuterAlt(localctx, 3)
 		{
 			p.SetState(44)
-			p.Select_stmt()
+			p.SelectQuery()
 		}
 
 	case FQLParserEXPORT:
 		p.EnterOuterAlt(localctx, 4)
 		{
 			p.SetState(45)
-			p.Export_stmt()
+			p.ExportQuery()
 		}
 
 	case FQLParserDELETE:
 		p.EnterOuterAlt(localctx, 5)
 		{
 			p.SetState(46)
-			p.Del_stmt()
+			p.DeleteQuery()
 		}
 
 	default:
@@ -567,73 +567,43 @@ func (p *FQLParser) Statement() (localctx IStatementContext) {
 	return localctx
 }
 
-// IInsert_stmtContext is an interface to support dynamic dispatch.
-type IInsert_stmtContext interface {
+// IInsertQueryContext is an interface to support dynamic dispatch.
+type IInsertQueryContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsInsert_stmtContext differentiates from other interfaces.
-	IsInsert_stmtContext()
+	// IsInsertQueryContext differentiates from other interfaces.
+	IsInsertQueryContext()
 }
 
-type Insert_stmtContext struct {
+type InsertQueryContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyInsert_stmtContext() *Insert_stmtContext {
-	var p = new(Insert_stmtContext)
+func NewEmptyInsertQueryContext() *InsertQueryContext {
+	var p = new(InsertQueryContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = FQLParserRULE_insert_stmt
+	p.RuleIndex = FQLParserRULE_insertQuery
 	return p
 }
 
-func (*Insert_stmtContext) IsInsert_stmtContext() {}
+func (*InsertQueryContext) IsInsertQueryContext() {}
 
-func NewInsert_stmtContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Insert_stmtContext {
-	var p = new(Insert_stmtContext)
+func NewInsertQueryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *InsertQueryContext {
+	var p = new(InsertQueryContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = FQLParserRULE_insert_stmt
+	p.RuleIndex = FQLParserRULE_insertQuery
 
 	return p
 }
 
-func (s *Insert_stmtContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *Insert_stmtContext) CopyFrom(ctx *Insert_stmtContext) {
-	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
-}
-
-func (s *Insert_stmtContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *Insert_stmtContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-type InsertQueryContext struct {
-	*Insert_stmtContext
-}
-
-func NewInsertQueryContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *InsertQueryContext {
-	var p = new(InsertQueryContext)
-
-	p.Insert_stmtContext = NewEmptyInsert_stmtContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*Insert_stmtContext))
-
-	return p
-}
-
-func (s *InsertQueryContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
+func (s *InsertQueryContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *InsertQueryContext) INSERT() antlr.TerminalNode {
 	return s.GetToken(FQLParserINSERT, 0)
@@ -667,6 +637,14 @@ func (s *InsertQueryContext) Values() IValuesContext {
 	return t.(IValuesContext)
 }
 
+func (s *InsertQueryContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *InsertQueryContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
 func (s *InsertQueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
 		listenerT.EnterInsertQuery(s)
@@ -679,9 +657,9 @@ func (s *InsertQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
-func (p *FQLParser) Insert_stmt() (localctx IInsert_stmtContext) {
-	localctx = NewInsert_stmtContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, FQLParserRULE_insert_stmt)
+func (p *FQLParser) InsertQuery() (localctx IInsertQueryContext) {
+	localctx = NewInsertQueryContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 6, FQLParserRULE_insertQuery)
 
 	defer func() {
 		p.ExitRule()
@@ -699,7 +677,6 @@ func (p *FQLParser) Insert_stmt() (localctx IInsert_stmtContext) {
 		}
 	}()
 
-	localctx = NewInsertQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(49)
@@ -733,73 +710,43 @@ func (p *FQLParser) Insert_stmt() (localctx IInsert_stmtContext) {
 	return localctx
 }
 
-// ISet_stmtContext is an interface to support dynamic dispatch.
-type ISet_stmtContext interface {
+// ISetQueryContext is an interface to support dynamic dispatch.
+type ISetQueryContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsSet_stmtContext differentiates from other interfaces.
-	IsSet_stmtContext()
+	// IsSetQueryContext differentiates from other interfaces.
+	IsSetQueryContext()
 }
 
-type Set_stmtContext struct {
+type SetQueryContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptySet_stmtContext() *Set_stmtContext {
-	var p = new(Set_stmtContext)
+func NewEmptySetQueryContext() *SetQueryContext {
+	var p = new(SetQueryContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = FQLParserRULE_set_stmt
+	p.RuleIndex = FQLParserRULE_setQuery
 	return p
 }
 
-func (*Set_stmtContext) IsSet_stmtContext() {}
+func (*SetQueryContext) IsSetQueryContext() {}
 
-func NewSet_stmtContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Set_stmtContext {
-	var p = new(Set_stmtContext)
+func NewSetQueryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *SetQueryContext {
+	var p = new(SetQueryContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = FQLParserRULE_set_stmt
+	p.RuleIndex = FQLParserRULE_setQuery
 
 	return p
 }
 
-func (s *Set_stmtContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *Set_stmtContext) CopyFrom(ctx *Set_stmtContext) {
-	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
-}
-
-func (s *Set_stmtContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *Set_stmtContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-type SetQueryContext struct {
-	*Set_stmtContext
-}
-
-func NewSetQueryContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SetQueryContext {
-	var p = new(SetQueryContext)
-
-	p.Set_stmtContext = NewEmptySet_stmtContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*Set_stmtContext))
-
-	return p
-}
-
-func (s *SetQueryContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
+func (s *SetQueryContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *SetQueryContext) SET() antlr.TerminalNode {
 	return s.GetToken(FQLParserSET, 0)
@@ -829,6 +776,14 @@ func (s *SetQueryContext) Target() ITargetContext {
 	return t.(ITargetContext)
 }
 
+func (s *SetQueryContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SetQueryContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
 func (s *SetQueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
 		listenerT.EnterSetQuery(s)
@@ -841,9 +796,9 @@ func (s *SetQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
-func (p *FQLParser) Set_stmt() (localctx ISet_stmtContext) {
-	localctx = NewSet_stmtContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, FQLParserRULE_set_stmt)
+func (p *FQLParser) SetQuery() (localctx ISetQueryContext) {
+	localctx = NewSetQueryContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 8, FQLParserRULE_setQuery)
 
 	defer func() {
 		p.ExitRule()
@@ -861,7 +816,6 @@ func (p *FQLParser) Set_stmt() (localctx ISet_stmtContext) {
 		}
 	}()
 
-	localctx = NewSetQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(57)
@@ -891,73 +845,43 @@ func (p *FQLParser) Set_stmt() (localctx ISet_stmtContext) {
 	return localctx
 }
 
-// ISelect_stmtContext is an interface to support dynamic dispatch.
-type ISelect_stmtContext interface {
+// ISelectQueryContext is an interface to support dynamic dispatch.
+type ISelectQueryContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsSelect_stmtContext differentiates from other interfaces.
-	IsSelect_stmtContext()
+	// IsSelectQueryContext differentiates from other interfaces.
+	IsSelectQueryContext()
 }
 
-type Select_stmtContext struct {
+type SelectQueryContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptySelect_stmtContext() *Select_stmtContext {
-	var p = new(Select_stmtContext)
+func NewEmptySelectQueryContext() *SelectQueryContext {
+	var p = new(SelectQueryContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = FQLParserRULE_select_stmt
+	p.RuleIndex = FQLParserRULE_selectQuery
 	return p
 }
 
-func (*Select_stmtContext) IsSelect_stmtContext() {}
+func (*SelectQueryContext) IsSelectQueryContext() {}
 
-func NewSelect_stmtContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Select_stmtContext {
-	var p = new(Select_stmtContext)
+func NewSelectQueryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *SelectQueryContext {
+	var p = new(SelectQueryContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = FQLParserRULE_select_stmt
+	p.RuleIndex = FQLParserRULE_selectQuery
 
 	return p
 }
 
-func (s *Select_stmtContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *Select_stmtContext) CopyFrom(ctx *Select_stmtContext) {
-	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
-}
-
-func (s *Select_stmtContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *Select_stmtContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-type SelectQueryContext struct {
-	*Select_stmtContext
-}
-
-func NewSelectQueryContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *SelectQueryContext {
-	var p = new(SelectQueryContext)
-
-	p.Select_stmtContext = NewEmptySelect_stmtContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*Select_stmtContext))
-
-	return p
-}
-
-func (s *SelectQueryContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
+func (s *SelectQueryContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *SelectQueryContext) SELECT() antlr.TerminalNode {
 	return s.GetToken(FQLParserSELECT, 0)
@@ -995,6 +919,14 @@ func (s *SelectQueryContext) Conditions() IConditionsContext {
 	return t.(IConditionsContext)
 }
 
+func (s *SelectQueryContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *SelectQueryContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
 func (s *SelectQueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
 		listenerT.EnterSelectQuery(s)
@@ -1007,9 +939,9 @@ func (s *SelectQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
-func (p *FQLParser) Select_stmt() (localctx ISelect_stmtContext) {
-	localctx = NewSelect_stmtContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, FQLParserRULE_select_stmt)
+func (p *FQLParser) SelectQuery() (localctx ISelectQueryContext) {
+	localctx = NewSelectQueryContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 10, FQLParserRULE_selectQuery)
 	var _la int
 
 	defer func() {
@@ -1028,7 +960,6 @@ func (p *FQLParser) Select_stmt() (localctx ISelect_stmtContext) {
 		}
 	}()
 
-	localctx = NewSelectQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(64)
@@ -1628,73 +1559,43 @@ func (p *FQLParser) RightOperand() (localctx IRightOperandContext) {
 	return localctx
 }
 
-// IExport_stmtContext is an interface to support dynamic dispatch.
-type IExport_stmtContext interface {
+// IExportQueryContext is an interface to support dynamic dispatch.
+type IExportQueryContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsExport_stmtContext differentiates from other interfaces.
-	IsExport_stmtContext()
+	// IsExportQueryContext differentiates from other interfaces.
+	IsExportQueryContext()
 }
 
-type Export_stmtContext struct {
+type ExportQueryContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyExport_stmtContext() *Export_stmtContext {
-	var p = new(Export_stmtContext)
+func NewEmptyExportQueryContext() *ExportQueryContext {
+	var p = new(ExportQueryContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = FQLParserRULE_export_stmt
+	p.RuleIndex = FQLParserRULE_exportQuery
 	return p
 }
 
-func (*Export_stmtContext) IsExport_stmtContext() {}
+func (*ExportQueryContext) IsExportQueryContext() {}
 
-func NewExport_stmtContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Export_stmtContext {
-	var p = new(Export_stmtContext)
+func NewExportQueryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ExportQueryContext {
+	var p = new(ExportQueryContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = FQLParserRULE_export_stmt
+	p.RuleIndex = FQLParserRULE_exportQuery
 
 	return p
 }
 
-func (s *Export_stmtContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *Export_stmtContext) CopyFrom(ctx *Export_stmtContext) {
-	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
-}
-
-func (s *Export_stmtContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *Export_stmtContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-type ExportQueryContext struct {
-	*Export_stmtContext
-}
-
-func NewExportQueryContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ExportQueryContext {
-	var p = new(ExportQueryContext)
-
-	p.Export_stmtContext = NewEmptyExport_stmtContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*Export_stmtContext))
-
-	return p
-}
-
-func (s *ExportQueryContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
+func (s *ExportQueryContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *ExportQueryContext) EXPORT() antlr.TerminalNode {
 	return s.GetToken(FQLParserEXPORT, 0)
@@ -1724,6 +1625,14 @@ func (s *ExportQueryContext) Conditions() IConditionsContext {
 	return t.(IConditionsContext)
 }
 
+func (s *ExportQueryContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ExportQueryContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
 func (s *ExportQueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
 		listenerT.EnterExportQuery(s)
@@ -1736,9 +1645,9 @@ func (s *ExportQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
-func (p *FQLParser) Export_stmt() (localctx IExport_stmtContext) {
-	localctx = NewExport_stmtContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 22, FQLParserRULE_export_stmt)
+func (p *FQLParser) ExportQuery() (localctx IExportQueryContext) {
+	localctx = NewExportQueryContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 22, FQLParserRULE_exportQuery)
 	var _la int
 
 	defer func() {
@@ -1757,7 +1666,6 @@ func (p *FQLParser) Export_stmt() (localctx IExport_stmtContext) {
 		}
 	}()
 
-	localctx = NewExportQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(90)
@@ -1786,73 +1694,43 @@ func (p *FQLParser) Export_stmt() (localctx IExport_stmtContext) {
 	return localctx
 }
 
-// IDel_stmtContext is an interface to support dynamic dispatch.
-type IDel_stmtContext interface {
+// IDeleteQueryContext is an interface to support dynamic dispatch.
+type IDeleteQueryContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// IsDel_stmtContext differentiates from other interfaces.
-	IsDel_stmtContext()
+	// IsDeleteQueryContext differentiates from other interfaces.
+	IsDeleteQueryContext()
 }
 
-type Del_stmtContext struct {
+type DeleteQueryContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 }
 
-func NewEmptyDel_stmtContext() *Del_stmtContext {
-	var p = new(Del_stmtContext)
+func NewEmptyDeleteQueryContext() *DeleteQueryContext {
+	var p = new(DeleteQueryContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = FQLParserRULE_del_stmt
+	p.RuleIndex = FQLParserRULE_deleteQuery
 	return p
 }
 
-func (*Del_stmtContext) IsDel_stmtContext() {}
+func (*DeleteQueryContext) IsDeleteQueryContext() {}
 
-func NewDel_stmtContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Del_stmtContext {
-	var p = new(Del_stmtContext)
+func NewDeleteQueryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *DeleteQueryContext {
+	var p = new(DeleteQueryContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = FQLParserRULE_del_stmt
+	p.RuleIndex = FQLParserRULE_deleteQuery
 
 	return p
 }
 
-func (s *Del_stmtContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *Del_stmtContext) CopyFrom(ctx *Del_stmtContext) {
-	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
-}
-
-func (s *Del_stmtContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
-
-func (s *Del_stmtContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
-	return antlr.TreesStringTree(s, ruleNames, recog)
-}
-
-type DeleteQueryContext struct {
-	*Del_stmtContext
-}
-
-func NewDeleteQueryContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *DeleteQueryContext {
-	var p = new(DeleteQueryContext)
-
-	p.Del_stmtContext = NewEmptyDel_stmtContext()
-	p.parser = parser
-	p.CopyFrom(ctx.(*Del_stmtContext))
-
-	return p
-}
-
-func (s *DeleteQueryContext) GetRuleContext() antlr.RuleContext {
-	return s
-}
+func (s *DeleteQueryContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *DeleteQueryContext) DELETE() antlr.TerminalNode {
 	return s.GetToken(FQLParserDELETE, 0)
@@ -1882,6 +1760,14 @@ func (s *DeleteQueryContext) Target() ITargetContext {
 	return t.(ITargetContext)
 }
 
+func (s *DeleteQueryContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *DeleteQueryContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
 func (s *DeleteQueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
 		listenerT.EnterDeleteQuery(s)
@@ -1894,9 +1780,9 @@ func (s *DeleteQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
-func (p *FQLParser) Del_stmt() (localctx IDel_stmtContext) {
-	localctx = NewDel_stmtContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 24, FQLParserRULE_del_stmt)
+func (p *FQLParser) DeleteQuery() (localctx IDeleteQueryContext) {
+	localctx = NewDeleteQueryContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 24, FQLParserRULE_deleteQuery)
 
 	defer func() {
 		p.ExitRule()
@@ -1914,7 +1800,6 @@ func (p *FQLParser) Del_stmt() (localctx IDel_stmtContext) {
 		}
 	}()
 
-	localctx = NewDeleteQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(96)

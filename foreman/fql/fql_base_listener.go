@@ -26,34 +26,34 @@ func (s *BaseFQLListener) EnterFql(ctx *FqlContext) {}
 // ExitFql is called when production fql is exited.
 func (s *BaseFQLListener) ExitFql(ctx *FqlContext) {}
 
-// EnterStatement_list is called when production statement_list is entered.
-func (s *BaseFQLListener) EnterStatement_list(ctx *Statement_listContext) {}
+// EnterQueryList is called when production queryList is entered.
+func (s *BaseFQLListener) EnterQueryList(ctx *QueryListContext) {}
 
-// ExitStatement_list is called when production statement_list is exited.
-func (s *BaseFQLListener) ExitStatement_list(ctx *Statement_listContext) {}
+// ExitQueryList is called when production queryList is exited.
+func (s *BaseFQLListener) ExitQueryList(ctx *QueryListContext) {}
 
-// EnterStatement is called when production statement is entered.
-func (s *BaseFQLListener) EnterStatement(ctx *StatementContext) {}
+// EnterQuery is called when production query is entered.
+func (s *BaseFQLListener) EnterQuery(ctx *QueryContext) {}
 
-// ExitStatement is called when production statement is exited.
-func (s *BaseFQLListener) ExitStatement(ctx *StatementContext) {}
+// ExitQuery is called when production query is exited.
+func (s *BaseFQLListener) ExitQuery(ctx *QueryContext) {}
 
-// EnterInsertQuery is called when production InsertQuery is entered.
+// EnterInsertQuery is called when production insertQuery is entered.
 func (s *BaseFQLListener) EnterInsertQuery(ctx *InsertQueryContext) {}
 
-// ExitInsertQuery is called when production InsertQuery is exited.
+// ExitInsertQuery is called when production insertQuery is exited.
 func (s *BaseFQLListener) ExitInsertQuery(ctx *InsertQueryContext) {}
 
-// EnterSetQuery is called when production SetQuery is entered.
+// EnterSetQuery is called when production setQuery is entered.
 func (s *BaseFQLListener) EnterSetQuery(ctx *SetQueryContext) {}
 
-// ExitSetQuery is called when production SetQuery is exited.
+// ExitSetQuery is called when production setQuery is exited.
 func (s *BaseFQLListener) ExitSetQuery(ctx *SetQueryContext) {}
 
-// EnterSelectQuery is called when production SelectQuery is entered.
+// EnterSelectQuery is called when production selectQuery is entered.
 func (s *BaseFQLListener) EnterSelectQuery(ctx *SelectQueryContext) {}
 
-// ExitSelectQuery is called when production SelectQuery is exited.
+// ExitSelectQuery is called when production selectQuery is exited.
 func (s *BaseFQLListener) ExitSelectQuery(ctx *SelectQueryContext) {}
 
 // EnterConditions is called when production conditions is entered.
@@ -86,16 +86,16 @@ func (s *BaseFQLListener) EnterRightOperand(ctx *RightOperandContext) {}
 // ExitRightOperand is called when production rightOperand is exited.
 func (s *BaseFQLListener) ExitRightOperand(ctx *RightOperandContext) {}
 
-// EnterExportQuery is called when production ExportQuery is entered.
+// EnterExportQuery is called when production exportQuery is entered.
 func (s *BaseFQLListener) EnterExportQuery(ctx *ExportQueryContext) {}
 
-// ExitExportQuery is called when production ExportQuery is exited.
+// ExitExportQuery is called when production exportQuery is exited.
 func (s *BaseFQLListener) ExitExportQuery(ctx *ExportQueryContext) {}
 
-// EnterDeleteQuery is called when production DeleteQuery is entered.
+// EnterDeleteQuery is called when production deleteQuery is entered.
 func (s *BaseFQLListener) EnterDeleteQuery(ctx *DeleteQueryContext) {}
 
-// ExitDeleteQuery is called when production DeleteQuery is exited.
+// ExitDeleteQuery is called when production deleteQuery is exited.
 func (s *BaseFQLListener) ExitDeleteQuery(ctx *DeleteQueryContext) {}
 
 // EnterTarget is called when production target is entered.
