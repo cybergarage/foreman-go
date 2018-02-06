@@ -5,6 +5,7 @@
 package foreman
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
@@ -36,13 +37,13 @@ func testClientConfigQuery(t *testing.T, server *Server, client *Client) {
 
 	path := json.NewPathWithObject(configObj)
 	for key, value := range configs {
-		configValue, err := path.GetPathString(key)
+		keyPath := json.NewPathStringWithStrings([]string{strings.ToLower(QueryTargetConfig), key})
+		configValue, err := path.GetPathString(keyPath)
 		if err != nil {
 			t.Error(err)
-			continue
 		}
 		if configValue != value {
-			t.Errorf("[%s] %s != %s", key, configValue, value)
+			t.Errorf("[%s] %s != %s", keyPath, configValue, value)
 		}
 	}
 
