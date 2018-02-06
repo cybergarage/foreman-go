@@ -1,20 +1,2 @@
-#!/usr/bin/perl
-print<<HEADER;
-// Copyright (C) 2017 Satoshi Konno. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-package foreman
-
-const ( 
-HEADER
-@const_lines = `more constants.csv | awk '/./' | awk '\$0 !~ /^#/{print \$0}'`;
-foreach $const_line (@const_lines) {
-  @const = split(/,/, $const_line);
-  $const[0] =~ s/_([a-z])/\u$1/g;
-  $const[0] =~ s/^([a-z])/\u$1/;
-  print $const[0] . " = " . $const[1];
-}
-print<<FOTTER;
-)
-FOTTER
+#!/bin/bash
+../common/constants.go.gen foreman ../common/constants.csv '^(?!query)'

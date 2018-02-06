@@ -42,7 +42,7 @@ func (p *Path) GetRootObject() (interface{}, error) {
 
 // GetPathObject returns an object by the given p.
 func (p *Path) GetPathObject(path string) (interface{}, error) {
-	paths := strings.Split(path, PathSep)
+	paths := strings.Split(trimPathStrings(path), PathSep)
 	if len(paths) <= 0 {
 		return "", errors.New(errorDecorderEmptyKey)
 	}

@@ -28,6 +28,17 @@ func NewError() *Error {
 	return err
 }
 
+// NewErrorWithError returns a new error with the specified standard error.
+func NewErrorWithError(goErr error) *Error {
+	err := &Error{
+		Code:          ErrorInternalServerError,
+		Message:       goErr.Error(),
+		DetailCode:    0,
+		DetailMessage: "",
+	}
+	return err
+}
+
 // NewErrorWithCode returns a new error with the specified code.
 func NewErrorWithCode(code int) *Error {
 	err := &Error{
