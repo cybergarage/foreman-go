@@ -25,6 +25,21 @@ type FQLListener interface {
 	// EnterSelectQuery is called when entering the SelectQuery production.
 	EnterSelectQuery(c *SelectQueryContext)
 
+	// EnterCondition is called when entering the Condition production.
+	EnterCondition(c *ConditionContext)
+
+	// EnterSelect_condition is called when entering the select_condition production.
+	EnterSelect_condition(c *Select_conditionContext)
+
+	// EnterOperator is called when entering the operator production.
+	EnterOperator(c *OperatorContext)
+
+	// EnterLeftOperand is called when entering the LeftOperand production.
+	EnterLeftOperand(c *LeftOperandContext)
+
+	// EnterRightOperand is called when entering the RightOperand production.
+	EnterRightOperand(c *RightOperandContext)
+
 	// EnterExportQuery is called when entering the ExportQuery production.
 	EnterExportQuery(c *ExportQueryContext)
 
@@ -57,6 +72,21 @@ type FQLListener interface {
 
 	// ExitSelectQuery is called when exiting the SelectQuery production.
 	ExitSelectQuery(c *SelectQueryContext)
+
+	// ExitCondition is called when exiting the Condition production.
+	ExitCondition(c *ConditionContext)
+
+	// ExitSelect_condition is called when exiting the select_condition production.
+	ExitSelect_condition(c *Select_conditionContext)
+
+	// ExitOperator is called when exiting the operator production.
+	ExitOperator(c *OperatorContext)
+
+	// ExitLeftOperand is called when exiting the LeftOperand production.
+	ExitLeftOperand(c *LeftOperandContext)
+
+	// ExitRightOperand is called when exiting the RightOperand production.
+	ExitRightOperand(c *RightOperandContext)
 
 	// ExitExportQuery is called when exiting the ExportQuery production.
 	ExitExportQuery(c *ExportQueryContext)
