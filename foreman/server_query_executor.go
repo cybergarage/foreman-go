@@ -27,12 +27,12 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		fql.QueryTargetRegistry: server.registryMgr,
 	}
 
-	target, ok := q.GetTarget()
+	targetObj, ok := q.GetTarget()
 	if !ok {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryTargetNotFound)
 	}
 
-	target = strings.ToUpper(target)
+	target := strings.ToUpper(targetObj.GetValue())
 	executor, ok := executors[target]
 	if !ok {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryTargetNotFound)

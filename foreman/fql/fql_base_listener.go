@@ -86,6 +86,18 @@ func (s *BaseFQLListener) EnterValues(ctx *ValuesContext) {}
 // ExitValues is called when production values is exited.
 func (s *BaseFQLListener) ExitValues(ctx *ValuesContext) {}
 
+// EnterColumn is called when production column is entered.
+func (s *BaseFQLListener) EnterColumn(ctx *ColumnContext) {}
+
+// ExitColumn is called when production column is exited.
+func (s *BaseFQLListener) ExitColumn(ctx *ColumnContext) {}
+
+// EnterColumns is called when production columns is entered.
+func (s *BaseFQLListener) EnterColumns(ctx *ColumnsContext) {}
+
+// ExitColumns is called when production columns is exited.
+func (s *BaseFQLListener) ExitColumns(ctx *ColumnsContext) {}
+
 // EnterConditions is called when production conditions is entered.
 func (s *BaseFQLListener) EnterConditions(ctx *ConditionsContext) {}
 
