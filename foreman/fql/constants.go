@@ -3,3 +3,11 @@
 // license that can be found in the LICENSE file.
 
 package fql
+
+const (
+	QueryTargetQos      = "QOS"
+	QueryTargetConfig   = "CONFIG"
+	QueryTargetMetrics  = "METRICS"
+	QueryTargetRegister = "REGISTER"
+	QueryTargetRegistry = "REGISTRY"
+)

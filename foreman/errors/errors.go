@@ -12,12 +12,7 @@ const (
 )
 
 func ErrorCodeToString(code int) string {
-	errorMap := map[int]string{
-		ErrorInternalServerError:     "Internal Server Error",
-		ErrorCodeQueryInvalid:        "Invalid Query",
-		ErrorCodeQueryMethodNotFound: "Not Supported Query Method",
-		ErrorCodeQueryTargetNotFound: "Not Found Query Target",
-	}
+	errorMap := map[int]string{}
 	errMsg, ok := errorMap[code]
 	if !ok {
 		return ""
