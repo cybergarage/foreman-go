@@ -11,51 +11,51 @@
 grammar FQL;
 
 /*------------------------------------------------------------------
- * Statement
+ * query
  *------------------------------------------------------------------*/
 
 fql
-   : statement_list
+   : queryList
    ;
 
 /*------------------------------------------------------------------
- * Statement
+ * query
  *------------------------------------------------------------------*/
 
-statement_list
-	: statement (SEMICOLON statement)*
+queryList
+	: query (SEMICOLON query)*
 	;	
 
-statement
-	: insert_stmt
-	| set_stmt
-	| select_stmt
-	| export_stmt
-	| del_stmt
+query
+	: insertQuery
+	| setQuery
+	| selectQuery
+	| exportQuery
+	| deleteQuery
 	;
 
 /*------------------------------------------------------------------
  * INSERT
  *------------------------------------------------------------------*/
 
-insert_stmt
-	: INSERT INTO target VALUES '(' values ')' # InsertQuery
+insertQuery
+	: INSERT INTO target VALUES '(' values ')'
 	;
 
 /*------------------------------------------------------------------
  * SET (Alias of 'INSERT INTO target VALUES')
  *------------------------------------------------------------------*/
 
-set_stmt
-	: SET '(' values ')' INTO target # SetQuery
+setQuery
+	: SET '(' values ')' INTO target
 	;
 
 /*------------------------------------------------------------------
  * SELECT
  *------------------------------------------------------------------*/
 
-select_stmt
-	: SELECT ASTERISK FROM target (WHERE conditions)? # SelectQuery
+selectQuery
+	: SELECT ASTERISK FROM target (WHERE conditions)?
 	;
 
 conditions
@@ -87,16 +87,16 @@ rightOperand
  * EXPORT (Alias of 'SELECT *')
  *------------------------------------------------------------------*/
 
-export_stmt
-	: EXPORT target (WHERE conditions)? # ExportQuery
+exportQuery
+	: EXPORT target (WHERE conditions)?
 	;
 
 /*------------------------------------------------------------------
  * DELETE
  *------------------------------------------------------------------*/
 
-del_stmt
-	: DELETE value FROM target # DeleteQuery
+deleteQuery
+	: DELETE value FROM target
 	;
 
 /*------------------------------------------------------------------

@@ -147,7 +147,7 @@ func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
 // Condition (Set/Select)
 ////////////////////////////////////////
 
-// ExitCondition is called when production Condition is exited.
+// ExitCondition is called when production condition is exited.
 func (l *antlrParserListener) ExitCondition(ctx *ConditionContext) {
 	q, ok := l.PeekObject().(Query)
 	if !ok {

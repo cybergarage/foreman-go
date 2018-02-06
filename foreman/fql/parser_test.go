@@ -156,7 +156,7 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	conds := q.GetConditions()
 	if len(conds) != condCnt {
 		// FIXME
-		//return fmt.Errorf(errorInvalidValueCount, len(conds), condCnt)
+		return fmt.Errorf(errorInvalidValueCount, len(conds), condCnt)
 	}
 	for _, cond := range conds {
 		opeType := cond.GetOperator().GetType()

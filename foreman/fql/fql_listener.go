@@ -10,19 +10,19 @@ type FQLListener interface {
 	// EnterFql is called when entering the fql production.
 	EnterFql(c *FqlContext)
 
-	// EnterStatement_list is called when entering the statement_list production.
-	EnterStatement_list(c *Statement_listContext)
+	// EnterQueryList is called when entering the queryList production.
+	EnterQueryList(c *QueryListContext)
 
-	// EnterStatement is called when entering the statement production.
-	EnterStatement(c *StatementContext)
+	// EnterQuery is called when entering the query production.
+	EnterQuery(c *QueryContext)
 
-	// EnterInsertQuery is called when entering the InsertQuery production.
+	// EnterInsertQuery is called when entering the insertQuery production.
 	EnterInsertQuery(c *InsertQueryContext)
 
-	// EnterSetQuery is called when entering the SetQuery production.
+	// EnterSetQuery is called when entering the setQuery production.
 	EnterSetQuery(c *SetQueryContext)
 
-	// EnterSelectQuery is called when entering the SelectQuery production.
+	// EnterSelectQuery is called when entering the selectQuery production.
 	EnterSelectQuery(c *SelectQueryContext)
 
 	// EnterConditions is called when entering the conditions production.
@@ -40,10 +40,10 @@ type FQLListener interface {
 	// EnterRightOperand is called when entering the rightOperand production.
 	EnterRightOperand(c *RightOperandContext)
 
-	// EnterExportQuery is called when entering the ExportQuery production.
+	// EnterExportQuery is called when entering the exportQuery production.
 	EnterExportQuery(c *ExportQueryContext)
 
-	// EnterDeleteQuery is called when entering the DeleteQuery production.
+	// EnterDeleteQuery is called when entering the deleteQuery production.
 	EnterDeleteQuery(c *DeleteQueryContext)
 
 	// EnterTarget is called when entering the target production.
@@ -58,19 +58,19 @@ type FQLListener interface {
 	// ExitFql is called when exiting the fql production.
 	ExitFql(c *FqlContext)
 
-	// ExitStatement_list is called when exiting the statement_list production.
-	ExitStatement_list(c *Statement_listContext)
+	// ExitQueryList is called when exiting the queryList production.
+	ExitQueryList(c *QueryListContext)
 
-	// ExitStatement is called when exiting the statement production.
-	ExitStatement(c *StatementContext)
+	// ExitQuery is called when exiting the query production.
+	ExitQuery(c *QueryContext)
 
-	// ExitInsertQuery is called when exiting the InsertQuery production.
+	// ExitInsertQuery is called when exiting the insertQuery production.
 	ExitInsertQuery(c *InsertQueryContext)
 
-	// ExitSetQuery is called when exiting the SetQuery production.
+	// ExitSetQuery is called when exiting the setQuery production.
 	ExitSetQuery(c *SetQueryContext)
 
-	// ExitSelectQuery is called when exiting the SelectQuery production.
+	// ExitSelectQuery is called when exiting the selectQuery production.
 	ExitSelectQuery(c *SelectQueryContext)
 
 	// ExitConditions is called when exiting the conditions production.
@@ -88,10 +88,10 @@ type FQLListener interface {
 	// ExitRightOperand is called when exiting the rightOperand production.
 	ExitRightOperand(c *RightOperandContext)
 
-	// ExitExportQuery is called when exiting the ExportQuery production.
+	// ExitExportQuery is called when exiting the exportQuery production.
 	ExitExportQuery(c *ExportQueryContext)
 
-	// ExitDeleteQuery is called when exiting the DeleteQuery production.
+	// ExitDeleteQuery is called when exiting the deleteQuery production.
 	ExitDeleteQuery(c *DeleteQueryContext)
 
 	// ExitTarget is called when exiting the target production.
