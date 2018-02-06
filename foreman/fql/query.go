@@ -17,18 +17,12 @@ const (
 type Query interface {
 	GetType() QueryType
 
-	SetParameter(param Parameter) error
-	GetParameters() Parameters
-	GetParameter(string) (Parameter, bool)
-	GetParameterString(string) (string, bool)
-
 	AddCondition(*Condition) error
 	GetConditions() Conditions
 
-	SetTarget(Target) error
-	GetTarget() (Target, bool)
+	SetTarget(*Target) error
+	GetTarget() (*Target, bool)
 
-	SetValues(values Values) error
-	AddValue(Value) error
+	AddValue(*Value) error
 	GetValues() (Values, bool)
 }

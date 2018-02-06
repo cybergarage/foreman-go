@@ -104,16 +104,16 @@ func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
+	if target.GetValue() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.GetValue(), corrects[0])
 	}
 
 	// Values
 
 	values, _ := q.GetValues()
 	for n := 0; n < (len(corrects) - 1); n++ {
-		if values[n] != corrects[n+1] {
-			return fmt.Errorf(errorInvalidValue, values[n], corrects[n+1])
+		if values[n].GetValue() != corrects[n+1] {
+			return fmt.Errorf(errorInvalidValue, values[n].GetValue(), corrects[n+1])
 		}
 	}
 
@@ -132,8 +132,8 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
+	if target.GetValue() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.GetValue(), corrects[0])
 	}
 
 	// Values
@@ -179,8 +179,8 @@ func (l *deleteQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
+	if target.GetValue() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.GetValue(), corrects[0])
 	}
 
 	// Values
@@ -190,8 +190,8 @@ func (l *deleteQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	if len(values) != 1 {
 		return fmt.Errorf(errorInvalidValueCount, len(values), 1)
 	}
-	if values[0] != corrects[1] {
-		return fmt.Errorf(errorInvalidValue, values[0], corrects[1])
+	if values[0].GetValue() != corrects[1] {
+		return fmt.Errorf(errorInvalidValue, values[0].GetValue(), corrects[1])
 	}
 
 	return nil

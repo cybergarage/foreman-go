@@ -126,7 +126,7 @@ func (l *antlrParserListener) ExitTarget(ctx *TargetContext) {
 	if !ok {
 		return
 	}
-	q.SetTarget(ctx.GetText())
+	q.SetTarget(NewTargetWithString(ctx.GetText()))
 }
 
 ////////////////////////////////////////
@@ -140,7 +140,7 @@ func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
 		return
 	}
 	value := strings.Trim(ctx.GetText(), "\"")
-	q.AddValue(value)
+	q.AddValue(NewValueWithString(value))
 }
 
 ////////////////////////////////////////

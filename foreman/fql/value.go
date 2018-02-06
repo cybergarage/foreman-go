@@ -5,10 +5,19 @@
 package fql
 
 // Value is a value of of FQL.
-type Value = string
+type Value struct {
+	Value string
+}
 
-// NewValue returns a new value.
-func NewValue() Value {
-	var value Value
-	return value
+// NewValueWithString returns a new value with the specified string.
+func NewValueWithString(valString string) *Value {
+	v := &Value{
+		Value: valString,
+	}
+	return v
+}
+
+// GetValue returns the value.
+func (v *Value) GetValue() string {
+	return v.Value
 }

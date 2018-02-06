@@ -55,7 +55,7 @@ setQuery
  *------------------------------------------------------------------*/
 
 selectQuery
-	: SELECT ASTERISK FROM target (WHERE conditions)?
+	: SELECT (ASTERISK|('(' columns ')')) FROM target (WHERE conditions)?
 	;
 
 /*------------------------------------------------------------------
@@ -91,6 +91,14 @@ value
 
 values
 	: value (',' value)*
+	;
+
+column
+	: IDENTIFIER
+	;
+
+columns
+	: column (',' column)*
 	;
 
 conditions
