@@ -8,12 +8,15 @@ package fql
 type baseQuery struct {
 	token string
 	Parameters
+	Conditions
 }
 
 // newQueryWithToken returns a new query with the specified string.
 func newBaseQuery() *baseQuery {
 	q := &baseQuery{
+		token:      "",
 		Parameters: NewParameters(),
+		Conditions: NewConditions(),
 	}
 	return q
 }
@@ -21,6 +24,17 @@ func newBaseQuery() *baseQuery {
 // GetType returns a stored type in the query.
 func (q *baseQuery) GetType() QueryType {
 	return QueryTypeUnknown
+}
+
+// AddCondition adds a new condition.
+func (q *baseQuery) AddCondition(c *Condition) error {
+	q.Conditions = append(q.Conditions, c)
+	return nil
+}
+
+// GetConditions retusn all conditions.
+func (q *baseQuery) GetConditions() Conditions {
+	return q.Conditions
 }
 
 // SetTarget sets a specified target into the query.

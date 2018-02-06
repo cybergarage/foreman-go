@@ -5,9 +5,15 @@
 package fql
 
 const (
-	QueryTargetQos      = "QOS"
-	QueryTargetConfig   = "CONFIG"
-	QueryTargetMetrics  = "METRICS"
-	QueryTargetRegister = "REGISTER"
-	QueryTargetRegistry = "REGISTRY"
+	QueryTargetQos            = "QOS"
+	QueryTargetConfig         = "CONFIG"
+	QueryTargetMetrics        = "METRICS"
+	QueryTargetRegister       = "REGISTER"
+	QueryTargetRegistry       = "REGISTRY"
+	QueryConditionOperatorLt  = "<"
+	QueryConditionOperatorLe  = "<="
+	QueryConditionOperatorGt  = ">"
+	QueryConditionOperatorGe  = ">="
+	QueryConditionOperatorEq  = "=="
+	QueryConditionOperatorNeq = "!="
 )

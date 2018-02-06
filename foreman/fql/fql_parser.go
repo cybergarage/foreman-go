@@ -15,37 +15,49 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 29, 82, 4,
-	2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7, 4,
-	8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 3, 2, 3,
-	2, 3, 3, 3, 3, 3, 3, 7, 3, 30, 10, 3, 12, 3, 14, 3, 33, 11, 3, 3, 4, 3,
-	4, 3, 4, 3, 4, 3, 4, 5, 4, 40, 10, 4, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 30, 113,
+	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
+	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 4, 13,
+	9, 13, 4, 14, 9, 14, 4, 15, 9, 15, 4, 16, 9, 16, 4, 17, 9, 17, 3, 2, 3,
+	2, 3, 3, 3, 3, 3, 3, 7, 3, 40, 10, 3, 12, 3, 14, 3, 43, 11, 3, 3, 4, 3,
+	4, 3, 4, 3, 4, 3, 4, 5, 4, 50, 10, 4, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3,
 	5, 3, 5, 3, 5, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 7, 3, 7, 3,
-	7, 3, 7, 3, 7, 3, 8, 3, 8, 3, 8, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 10, 3,
-	10, 3, 11, 3, 11, 3, 12, 3, 12, 3, 12, 7, 12, 77, 10, 12, 12, 12, 14, 12,
-	80, 11, 12, 3, 12, 2, 2, 13, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 2,
-	3, 3, 2, 26, 29, 2, 76, 2, 24, 3, 2, 2, 2, 4, 26, 3, 2, 2, 2, 6, 39, 3,
-	2, 2, 2, 8, 41, 3, 2, 2, 2, 10, 49, 3, 2, 2, 2, 12, 56, 3, 2, 2, 2, 14,
-	61, 3, 2, 2, 2, 16, 64, 3, 2, 2, 2, 18, 69, 3, 2, 2, 2, 20, 71, 3, 2, 2,
-	2, 22, 73, 3, 2, 2, 2, 24, 25, 5, 4, 3, 2, 25, 3, 3, 2, 2, 2, 26, 31, 5,
-	6, 4, 2, 27, 28, 7, 24, 2, 2, 28, 30, 5, 6, 4, 2, 29, 27, 3, 2, 2, 2, 30,
-	33, 3, 2, 2, 2, 31, 29, 3, 2, 2, 2, 31, 32, 3, 2, 2, 2, 32, 5, 3, 2, 2,
-	2, 33, 31, 3, 2, 2, 2, 34, 40, 5, 8, 5, 2, 35, 40, 5, 10, 6, 2, 36, 40,
-	5, 12, 7, 2, 37, 40, 5, 14, 8, 2, 38, 40, 5, 16, 9, 2, 39, 34, 3, 2, 2,
-	2, 39, 35, 3, 2, 2, 2, 39, 36, 3, 2, 2, 2, 39, 37, 3, 2, 2, 2, 39, 38,
-	3, 2, 2, 2, 40, 7, 3, 2, 2, 2, 41, 42, 7, 6, 2, 2, 42, 43, 7, 10, 2, 2,
-	43, 44, 5, 18, 10, 2, 44, 45, 7, 12, 2, 2, 45, 46, 7, 3, 2, 2, 46, 47,
-	5, 22, 12, 2, 47, 48, 7, 4, 2, 2, 48, 9, 3, 2, 2, 2, 49, 50, 7, 8, 2, 2,
-	50, 51, 7, 3, 2, 2, 51, 52, 5, 22, 12, 2, 52, 53, 7, 4, 2, 2, 53, 54, 7,
-	10, 2, 2, 54, 55, 5, 18, 10, 2, 55, 11, 3, 2, 2, 2, 56, 57, 7, 5, 2, 2,
-	57, 58, 7, 13, 2, 2, 58, 59, 7, 11, 2, 2, 59, 60, 5, 18, 10, 2, 60, 13,
-	3, 2, 2, 2, 61, 62, 7, 9, 2, 2, 62, 63, 5, 18, 10, 2, 63, 15, 3, 2, 2,
-	2, 64, 65, 7, 7, 2, 2, 65, 66, 5, 20, 11, 2, 66, 67, 7, 11, 2, 2, 67, 68,
-	5, 18, 10, 2, 68, 17, 3, 2, 2, 2, 69, 70, 7, 26, 2, 2, 70, 19, 3, 2, 2,
-	2, 71, 72, 9, 2, 2, 2, 72, 21, 3, 2, 2, 2, 73, 78, 5, 20, 11, 2, 74, 75,
-	7, 23, 2, 2, 75, 77, 5, 20, 11, 2, 76, 74, 3, 2, 2, 2, 77, 80, 3, 2, 2,
-	2, 78, 76, 3, 2, 2, 2, 78, 79, 3, 2, 2, 2, 79, 23, 3, 2, 2, 2, 80, 78,
-	3, 2, 2, 2, 5, 31, 39, 78,
+	7, 3, 7, 3, 7, 3, 7, 5, 7, 73, 10, 7, 3, 8, 3, 8, 3, 8, 7, 8, 78, 10, 8,
+	12, 8, 14, 8, 81, 11, 8, 3, 9, 3, 9, 3, 9, 3, 9, 3, 10, 3, 10, 3, 11, 3,
+	11, 3, 12, 3, 12, 3, 13, 3, 13, 3, 13, 3, 14, 3, 14, 3, 14, 3, 14, 3, 14,
+	3, 15, 3, 15, 3, 16, 3, 16, 3, 17, 3, 17, 3, 17, 7, 17, 108, 10, 17, 12,
+	17, 14, 17, 111, 11, 17, 3, 17, 2, 2, 18, 2, 4, 6, 8, 10, 12, 14, 16, 18,
+	20, 22, 24, 26, 28, 30, 32, 2, 4, 3, 2, 15, 20, 3, 2, 26, 29, 2, 104, 2,
+	34, 3, 2, 2, 2, 4, 36, 3, 2, 2, 2, 6, 49, 3, 2, 2, 2, 8, 51, 3, 2, 2, 2,
+	10, 59, 3, 2, 2, 2, 12, 66, 3, 2, 2, 2, 14, 74, 3, 2, 2, 2, 16, 82, 3,
+	2, 2, 2, 18, 86, 3, 2, 2, 2, 20, 88, 3, 2, 2, 2, 22, 90, 3, 2, 2, 2, 24,
+	92, 3, 2, 2, 2, 26, 95, 3, 2, 2, 2, 28, 100, 3, 2, 2, 2, 30, 102, 3, 2,
+	2, 2, 32, 104, 3, 2, 2, 2, 34, 35, 5, 4, 3, 2, 35, 3, 3, 2, 2, 2, 36, 41,
+	5, 6, 4, 2, 37, 38, 7, 24, 2, 2, 38, 40, 5, 6, 4, 2, 39, 37, 3, 2, 2, 2,
+	40, 43, 3, 2, 2, 2, 41, 39, 3, 2, 2, 2, 41, 42, 3, 2, 2, 2, 42, 5, 3, 2,
+	2, 2, 43, 41, 3, 2, 2, 2, 44, 50, 5, 8, 5, 2, 45, 50, 5, 10, 6, 2, 46,
+	50, 5, 12, 7, 2, 47, 50, 5, 24, 13, 2, 48, 50, 5, 26, 14, 2, 49, 44, 3,
+	2, 2, 2, 49, 45, 3, 2, 2, 2, 49, 46, 3, 2, 2, 2, 49, 47, 3, 2, 2, 2, 49,
+	48, 3, 2, 2, 2, 50, 7, 3, 2, 2, 2, 51, 52, 7, 6, 2, 2, 52, 53, 7, 10, 2,
+	2, 53, 54, 5, 28, 15, 2, 54, 55, 7, 12, 2, 2, 55, 56, 7, 3, 2, 2, 56, 57,
+	5, 32, 17, 2, 57, 58, 7, 4, 2, 2, 58, 9, 3, 2, 2, 2, 59, 60, 7, 8, 2, 2,
+	60, 61, 7, 3, 2, 2, 61, 62, 5, 32, 17, 2, 62, 63, 7, 4, 2, 2, 63, 64, 7,
+	10, 2, 2, 64, 65, 5, 28, 15, 2, 65, 11, 3, 2, 2, 2, 66, 67, 7, 5, 2, 2,
+	67, 68, 7, 13, 2, 2, 68, 69, 7, 11, 2, 2, 69, 72, 5, 28, 15, 2, 70, 71,
+	7, 30, 2, 2, 71, 73, 5, 14, 8, 2, 72, 70, 3, 2, 2, 2, 72, 73, 3, 2, 2,
+	2, 73, 13, 3, 2, 2, 2, 74, 79, 5, 16, 9, 2, 75, 76, 7, 21, 2, 2, 76, 78,
+	5, 16, 9, 2, 77, 75, 3, 2, 2, 2, 78, 81, 3, 2, 2, 2, 79, 77, 3, 2, 2, 2,
+	79, 80, 3, 2, 2, 2, 80, 15, 3, 2, 2, 2, 81, 79, 3, 2, 2, 2, 82, 83, 5,
+	20, 11, 2, 83, 84, 5, 18, 10, 2, 84, 85, 5, 22, 12, 2, 85, 17, 3, 2, 2,
+	2, 86, 87, 9, 2, 2, 2, 87, 19, 3, 2, 2, 2, 88, 89, 7, 26, 2, 2, 89, 21,
+	3, 2, 2, 2, 90, 91, 7, 26, 2, 2, 91, 23, 3, 2, 2, 2, 92, 93, 7, 9, 2, 2,
+	93, 94, 5, 28, 15, 2, 94, 25, 3, 2, 2, 2, 95, 96, 7, 7, 2, 2, 96, 97, 5,
+	30, 16, 2, 97, 98, 7, 11, 2, 2, 98, 99, 5, 28, 15, 2, 99, 27, 3, 2, 2,
+	2, 100, 101, 7, 26, 2, 2, 101, 29, 3, 2, 2, 2, 102, 103, 9, 3, 2, 2, 103,
+	31, 3, 2, 2, 2, 104, 109, 5, 30, 16, 2, 105, 106, 7, 23, 2, 2, 106, 108,
+	5, 30, 16, 2, 107, 105, 3, 2, 2, 2, 108, 111, 3, 2, 2, 2, 109, 107, 3,
+	2, 2, 2, 109, 110, 3, 2, 2, 2, 110, 33, 3, 2, 2, 2, 111, 109, 3, 2, 2,
+	2, 7, 41, 49, 72, 79, 109,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -58,11 +70,12 @@ var symbolicNames = []string{
 	"", "", "", "SELECT", "INSERT", "DELETE", "SET", "EXPORT", "INTO", "FROM",
 	"VALUES", "ASTERISK", "SINGLE_EQ", "DOUBLE_EQ", "OP_LT", "LE", "GT", "GE",
 	"NOTEQ", "AND", "OR", "COMMA", "SEMICOLON", "WS", "IDENTIFIER", "STRING",
-	"NUMBER", "REAL",
+	"NUMBER", "REAL", "WHERE",
 }
 
 var ruleNames = []string{
 	"fql", "statement_list", "statement", "insert_stmt", "set_stmt", "select_stmt",
+	"select_conditions", "select_condition", "operator", "left_operand", "right_operand",
 	"export_stmt", "del_stmt", "target", "value", "values",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
@@ -121,21 +134,27 @@ const (
 	FQLParserSTRING     = 25
 	FQLParserNUMBER     = 26
 	FQLParserREAL       = 27
+	FQLParserWHERE      = 28
 )
 
 // FQLParser rules.
 const (
-	FQLParserRULE_fql            = 0
-	FQLParserRULE_statement_list = 1
-	FQLParserRULE_statement      = 2
-	FQLParserRULE_insert_stmt    = 3
-	FQLParserRULE_set_stmt       = 4
-	FQLParserRULE_select_stmt    = 5
-	FQLParserRULE_export_stmt    = 6
-	FQLParserRULE_del_stmt       = 7
-	FQLParserRULE_target         = 8
-	FQLParserRULE_value          = 9
-	FQLParserRULE_values         = 10
+	FQLParserRULE_fql               = 0
+	FQLParserRULE_statement_list    = 1
+	FQLParserRULE_statement         = 2
+	FQLParserRULE_insert_stmt       = 3
+	FQLParserRULE_set_stmt          = 4
+	FQLParserRULE_select_stmt       = 5
+	FQLParserRULE_select_conditions = 6
+	FQLParserRULE_select_condition  = 7
+	FQLParserRULE_operator          = 8
+	FQLParserRULE_left_operand      = 9
+	FQLParserRULE_right_operand     = 10
+	FQLParserRULE_export_stmt       = 11
+	FQLParserRULE_del_stmt          = 12
+	FQLParserRULE_target            = 13
+	FQLParserRULE_value             = 14
+	FQLParserRULE_values            = 15
 )
 
 // IFqlContext is an interface to support dynamic dispatch.
@@ -228,7 +247,7 @@ func (p *FQLParser) Fql() (localctx IFqlContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(22)
+		p.SetState(32)
 		p.Statement_list()
 	}
 
@@ -347,24 +366,24 @@ func (p *FQLParser) Statement_list() (localctx IStatement_listContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(24)
+		p.SetState(34)
 		p.Statement()
 	}
-	p.SetState(29)
+	p.SetState(39)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == FQLParserSEMICOLON {
 		{
-			p.SetState(25)
+			p.SetState(35)
 			p.Match(FQLParserSEMICOLON)
 		}
 		{
-			p.SetState(26)
+			p.SetState(36)
 			p.Statement()
 		}
 
-		p.SetState(31)
+		p.SetState(41)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -500,42 +519,42 @@ func (p *FQLParser) Statement() (localctx IStatementContext) {
 		}
 	}()
 
-	p.SetState(37)
+	p.SetState(47)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case FQLParserINSERT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(32)
+			p.SetState(42)
 			p.Insert_stmt()
 		}
 
 	case FQLParserSET:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(33)
+			p.SetState(43)
 			p.Set_stmt()
 		}
 
 	case FQLParserSELECT:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(34)
+			p.SetState(44)
 			p.Select_stmt()
 		}
 
 	case FQLParserEXPORT:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(35)
+			p.SetState(45)
 			p.Export_stmt()
 		}
 
 	case FQLParserDELETE:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(36)
+			p.SetState(46)
 			p.Del_stmt()
 		}
 
@@ -681,31 +700,31 @@ func (p *FQLParser) Insert_stmt() (localctx IInsert_stmtContext) {
 	localctx = NewInsertQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(39)
+		p.SetState(49)
 		p.Match(FQLParserINSERT)
 	}
 	{
-		p.SetState(40)
+		p.SetState(50)
 		p.Match(FQLParserINTO)
 	}
 	{
-		p.SetState(41)
+		p.SetState(51)
 		p.Target()
 	}
 	{
-		p.SetState(42)
+		p.SetState(52)
 		p.Match(FQLParserVALUES)
 	}
 	{
-		p.SetState(43)
+		p.SetState(53)
 		p.Match(FQLParserT__0)
 	}
 	{
-		p.SetState(44)
+		p.SetState(54)
 		p.Values()
 	}
 	{
-		p.SetState(45)
+		p.SetState(55)
 		p.Match(FQLParserT__1)
 	}
 
@@ -843,27 +862,27 @@ func (p *FQLParser) Set_stmt() (localctx ISet_stmtContext) {
 	localctx = NewSetQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(47)
+		p.SetState(57)
 		p.Match(FQLParserSET)
 	}
 	{
-		p.SetState(48)
+		p.SetState(58)
 		p.Match(FQLParserT__0)
 	}
 	{
-		p.SetState(49)
+		p.SetState(59)
 		p.Values()
 	}
 	{
-		p.SetState(50)
+		p.SetState(60)
 		p.Match(FQLParserT__1)
 	}
 	{
-		p.SetState(51)
+		p.SetState(61)
 		p.Match(FQLParserINTO)
 	}
 	{
-		p.SetState(52)
+		p.SetState(62)
 		p.Target()
 	}
 
@@ -960,6 +979,20 @@ func (s *SelectQueryContext) Target() ITargetContext {
 	return t.(ITargetContext)
 }
 
+func (s *SelectQueryContext) WHERE() antlr.TerminalNode {
+	return s.GetToken(FQLParserWHERE, 0)
+}
+
+func (s *SelectQueryContext) Select_conditions() ISelect_conditionsContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISelect_conditionsContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISelect_conditionsContext)
+}
+
 func (s *SelectQueryContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(FQLListener); ok {
 		listenerT.EnterSelectQuery(s)
@@ -975,6 +1008,7 @@ func (s *SelectQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 func (p *FQLParser) Select_stmt() (localctx ISelect_stmtContext) {
 	localctx = NewSelect_stmtContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 10, FQLParserRULE_select_stmt)
+	var _la int
 
 	defer func() {
 		p.ExitRule()
@@ -995,20 +1029,667 @@ func (p *FQLParser) Select_stmt() (localctx ISelect_stmtContext) {
 	localctx = NewSelectQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(54)
+		p.SetState(64)
 		p.Match(FQLParserSELECT)
 	}
 	{
-		p.SetState(55)
+		p.SetState(65)
 		p.Match(FQLParserASTERISK)
 	}
 	{
-		p.SetState(56)
+		p.SetState(66)
 		p.Match(FQLParserFROM)
 	}
 	{
-		p.SetState(57)
+		p.SetState(67)
 		p.Target()
+	}
+	p.SetState(70)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == FQLParserWHERE {
+		{
+			p.SetState(68)
+			p.Match(FQLParserWHERE)
+		}
+		{
+			p.SetState(69)
+			p.Select_conditions()
+		}
+
+	}
+
+	return localctx
+}
+
+// ISelect_conditionsContext is an interface to support dynamic dispatch.
+type ISelect_conditionsContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsSelect_conditionsContext differentiates from other interfaces.
+	IsSelect_conditionsContext()
+}
+
+type Select_conditionsContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptySelect_conditionsContext() *Select_conditionsContext {
+	var p = new(Select_conditionsContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = FQLParserRULE_select_conditions
+	return p
+}
+
+func (*Select_conditionsContext) IsSelect_conditionsContext() {}
+
+func NewSelect_conditionsContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Select_conditionsContext {
+	var p = new(Select_conditionsContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = FQLParserRULE_select_conditions
+
+	return p
+}
+
+func (s *Select_conditionsContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Select_conditionsContext) CopyFrom(ctx *Select_conditionsContext) {
+	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
+}
+
+func (s *Select_conditionsContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Select_conditionsContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+type ConditionContext struct {
+	*Select_conditionsContext
+}
+
+func NewConditionContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *ConditionContext {
+	var p = new(ConditionContext)
+
+	p.Select_conditionsContext = NewEmptySelect_conditionsContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*Select_conditionsContext))
+
+	return p
+}
+
+func (s *ConditionContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ConditionContext) AllSelect_condition() []ISelect_conditionContext {
+	var ts = s.GetTypedRuleContexts(reflect.TypeOf((*ISelect_conditionContext)(nil)).Elem())
+	var tst = make([]ISelect_conditionContext, len(ts))
+
+	for i, t := range ts {
+		if t != nil {
+			tst[i] = t.(ISelect_conditionContext)
+		}
+	}
+
+	return tst
+}
+
+func (s *ConditionContext) Select_condition(i int) ISelect_conditionContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*ISelect_conditionContext)(nil)).Elem(), i)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ISelect_conditionContext)
+}
+
+func (s *ConditionContext) AllAND() []antlr.TerminalNode {
+	return s.GetTokens(FQLParserAND)
+}
+
+func (s *ConditionContext) AND(i int) antlr.TerminalNode {
+	return s.GetToken(FQLParserAND, i)
+}
+
+func (s *ConditionContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.EnterCondition(s)
+	}
+}
+
+func (s *ConditionContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.ExitCondition(s)
+	}
+}
+
+func (p *FQLParser) Select_conditions() (localctx ISelect_conditionsContext) {
+	localctx = NewSelect_conditionsContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 12, FQLParserRULE_select_conditions)
+	var _la int
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	localctx = NewConditionContext(p, localctx)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(72)
+		p.Select_condition()
+	}
+	p.SetState(77)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	for _la == FQLParserAND {
+		{
+			p.SetState(73)
+			p.Match(FQLParserAND)
+		}
+		{
+			p.SetState(74)
+			p.Select_condition()
+		}
+
+		p.SetState(79)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+	}
+
+	return localctx
+}
+
+// ISelect_conditionContext is an interface to support dynamic dispatch.
+type ISelect_conditionContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsSelect_conditionContext differentiates from other interfaces.
+	IsSelect_conditionContext()
+}
+
+type Select_conditionContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptySelect_conditionContext() *Select_conditionContext {
+	var p = new(Select_conditionContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = FQLParserRULE_select_condition
+	return p
+}
+
+func (*Select_conditionContext) IsSelect_conditionContext() {}
+
+func NewSelect_conditionContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Select_conditionContext {
+	var p = new(Select_conditionContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = FQLParserRULE_select_condition
+
+	return p
+}
+
+func (s *Select_conditionContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Select_conditionContext) Left_operand() ILeft_operandContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*ILeft_operandContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ILeft_operandContext)
+}
+
+func (s *Select_conditionContext) Operator() IOperatorContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IOperatorContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IOperatorContext)
+}
+
+func (s *Select_conditionContext) Right_operand() IRight_operandContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IRight_operandContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IRight_operandContext)
+}
+
+func (s *Select_conditionContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Select_conditionContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Select_conditionContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.EnterSelect_condition(s)
+	}
+}
+
+func (s *Select_conditionContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.ExitSelect_condition(s)
+	}
+}
+
+func (p *FQLParser) Select_condition() (localctx ISelect_conditionContext) {
+	localctx = NewSelect_conditionContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 14, FQLParserRULE_select_condition)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(80)
+		p.Left_operand()
+	}
+	{
+		p.SetState(81)
+		p.Operator()
+	}
+	{
+		p.SetState(82)
+		p.Right_operand()
+	}
+
+	return localctx
+}
+
+// IOperatorContext is an interface to support dynamic dispatch.
+type IOperatorContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsOperatorContext differentiates from other interfaces.
+	IsOperatorContext()
+}
+
+type OperatorContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyOperatorContext() *OperatorContext {
+	var p = new(OperatorContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = FQLParserRULE_operator
+	return p
+}
+
+func (*OperatorContext) IsOperatorContext() {}
+
+func NewOperatorContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *OperatorContext {
+	var p = new(OperatorContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = FQLParserRULE_operator
+
+	return p
+}
+
+func (s *OperatorContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *OperatorContext) DOUBLE_EQ() antlr.TerminalNode {
+	return s.GetToken(FQLParserDOUBLE_EQ, 0)
+}
+
+func (s *OperatorContext) OP_LT() antlr.TerminalNode {
+	return s.GetToken(FQLParserOP_LT, 0)
+}
+
+func (s *OperatorContext) LE() antlr.TerminalNode {
+	return s.GetToken(FQLParserLE, 0)
+}
+
+func (s *OperatorContext) GT() antlr.TerminalNode {
+	return s.GetToken(FQLParserGT, 0)
+}
+
+func (s *OperatorContext) GE() antlr.TerminalNode {
+	return s.GetToken(FQLParserGE, 0)
+}
+
+func (s *OperatorContext) NOTEQ() antlr.TerminalNode {
+	return s.GetToken(FQLParserNOTEQ, 0)
+}
+
+func (s *OperatorContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *OperatorContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *OperatorContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.EnterOperator(s)
+	}
+}
+
+func (s *OperatorContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.ExitOperator(s)
+	}
+}
+
+func (p *FQLParser) Operator() (localctx IOperatorContext) {
+	localctx = NewOperatorContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 16, FQLParserRULE_operator)
+	var _la int
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(84)
+		_la = p.GetTokenStream().LA(1)
+
+		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<FQLParserDOUBLE_EQ)|(1<<FQLParserOP_LT)|(1<<FQLParserLE)|(1<<FQLParserGT)|(1<<FQLParserGE)|(1<<FQLParserNOTEQ))) != 0) {
+			p.GetErrorHandler().RecoverInline(p)
+		} else {
+			p.GetErrorHandler().ReportMatch(p)
+			p.Consume()
+		}
+	}
+
+	return localctx
+}
+
+// ILeft_operandContext is an interface to support dynamic dispatch.
+type ILeft_operandContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsLeft_operandContext differentiates from other interfaces.
+	IsLeft_operandContext()
+}
+
+type Left_operandContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyLeft_operandContext() *Left_operandContext {
+	var p = new(Left_operandContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = FQLParserRULE_left_operand
+	return p
+}
+
+func (*Left_operandContext) IsLeft_operandContext() {}
+
+func NewLeft_operandContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Left_operandContext {
+	var p = new(Left_operandContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = FQLParserRULE_left_operand
+
+	return p
+}
+
+func (s *Left_operandContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Left_operandContext) CopyFrom(ctx *Left_operandContext) {
+	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
+}
+
+func (s *Left_operandContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Left_operandContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+type LeftOperandContext struct {
+	*Left_operandContext
+}
+
+func NewLeftOperandContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *LeftOperandContext {
+	var p = new(LeftOperandContext)
+
+	p.Left_operandContext = NewEmptyLeft_operandContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*Left_operandContext))
+
+	return p
+}
+
+func (s *LeftOperandContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *LeftOperandContext) IDENTIFIER() antlr.TerminalNode {
+	return s.GetToken(FQLParserIDENTIFIER, 0)
+}
+
+func (s *LeftOperandContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.EnterLeftOperand(s)
+	}
+}
+
+func (s *LeftOperandContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.ExitLeftOperand(s)
+	}
+}
+
+func (p *FQLParser) Left_operand() (localctx ILeft_operandContext) {
+	localctx = NewLeft_operandContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 18, FQLParserRULE_left_operand)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	localctx = NewLeftOperandContext(p, localctx)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(86)
+		p.Match(FQLParserIDENTIFIER)
+	}
+
+	return localctx
+}
+
+// IRight_operandContext is an interface to support dynamic dispatch.
+type IRight_operandContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsRight_operandContext differentiates from other interfaces.
+	IsRight_operandContext()
+}
+
+type Right_operandContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyRight_operandContext() *Right_operandContext {
+	var p = new(Right_operandContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = FQLParserRULE_right_operand
+	return p
+}
+
+func (*Right_operandContext) IsRight_operandContext() {}
+
+func NewRight_operandContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Right_operandContext {
+	var p = new(Right_operandContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = FQLParserRULE_right_operand
+
+	return p
+}
+
+func (s *Right_operandContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Right_operandContext) CopyFrom(ctx *Right_operandContext) {
+	s.BaseParserRuleContext.CopyFrom(ctx.BaseParserRuleContext)
+}
+
+func (s *Right_operandContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Right_operandContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+type RightOperandContext struct {
+	*Right_operandContext
+}
+
+func NewRightOperandContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *RightOperandContext {
+	var p = new(RightOperandContext)
+
+	p.Right_operandContext = NewEmptyRight_operandContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*Right_operandContext))
+
+	return p
+}
+
+func (s *RightOperandContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *RightOperandContext) IDENTIFIER() antlr.TerminalNode {
+	return s.GetToken(FQLParserIDENTIFIER, 0)
+}
+
+func (s *RightOperandContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.EnterRightOperand(s)
+	}
+}
+
+func (s *RightOperandContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.ExitRightOperand(s)
+	}
+}
+
+func (p *FQLParser) Right_operand() (localctx IRight_operandContext) {
+	localctx = NewRight_operandContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 20, FQLParserRULE_right_operand)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	localctx = NewRightOperandContext(p, localctx)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(88)
+		p.Match(FQLParserIDENTIFIER)
 	}
 
 	return localctx
@@ -1110,7 +1791,7 @@ func (s *ExportQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Export_stmt() (localctx IExport_stmtContext) {
 	localctx = NewExport_stmtContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, FQLParserRULE_export_stmt)
+	p.EnterRule(localctx, 22, FQLParserRULE_export_stmt)
 
 	defer func() {
 		p.ExitRule()
@@ -1131,11 +1812,11 @@ func (p *FQLParser) Export_stmt() (localctx IExport_stmtContext) {
 	localctx = NewExportQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(59)
+		p.SetState(90)
 		p.Match(FQLParserEXPORT)
 	}
 	{
-		p.SetState(60)
+		p.SetState(91)
 		p.Target()
 	}
 
@@ -1252,7 +1933,7 @@ func (s *DeleteQueryContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Del_stmt() (localctx IDel_stmtContext) {
 	localctx = NewDel_stmtContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, FQLParserRULE_del_stmt)
+	p.EnterRule(localctx, 24, FQLParserRULE_del_stmt)
 
 	defer func() {
 		p.ExitRule()
@@ -1273,19 +1954,19 @@ func (p *FQLParser) Del_stmt() (localctx IDel_stmtContext) {
 	localctx = NewDeleteQueryContext(p, localctx)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(62)
+		p.SetState(93)
 		p.Match(FQLParserDELETE)
 	}
 	{
-		p.SetState(63)
+		p.SetState(94)
 		p.Value()
 	}
 	{
-		p.SetState(64)
+		p.SetState(95)
 		p.Match(FQLParserFROM)
 	}
 	{
-		p.SetState(65)
+		p.SetState(96)
 		p.Target()
 	}
 
@@ -1356,7 +2037,7 @@ func (s *TargetContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Target() (localctx ITargetContext) {
 	localctx = NewTargetContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, FQLParserRULE_target)
+	p.EnterRule(localctx, 26, FQLParserRULE_target)
 
 	defer func() {
 		p.ExitRule()
@@ -1376,7 +2057,7 @@ func (p *FQLParser) Target() (localctx ITargetContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(67)
+		p.SetState(98)
 		p.Match(FQLParserIDENTIFIER)
 	}
 
@@ -1459,7 +2140,7 @@ func (s *ValueContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Value() (localctx IValueContext) {
 	localctx = NewValueContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, FQLParserRULE_value)
+	p.EnterRule(localctx, 28, FQLParserRULE_value)
 	var _la int
 
 	defer func() {
@@ -1480,7 +2161,7 @@ func (p *FQLParser) Value() (localctx IValueContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(69)
+		p.SetState(100)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<FQLParserIDENTIFIER)|(1<<FQLParserSTRING)|(1<<FQLParserNUMBER)|(1<<FQLParserREAL))) != 0) {
@@ -1577,7 +2258,7 @@ func (s *ValuesContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Values() (localctx IValuesContext) {
 	localctx = NewValuesContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 20, FQLParserRULE_values)
+	p.EnterRule(localctx, 30, FQLParserRULE_values)
 	var _la int
 
 	defer func() {
@@ -1598,24 +2279,24 @@ func (p *FQLParser) Values() (localctx IValuesContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(71)
+		p.SetState(102)
 		p.Value()
 	}
-	p.SetState(76)
+	p.SetState(107)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == FQLParserCOMMA {
 		{
-			p.SetState(72)
+			p.SetState(103)
 			p.Match(FQLParserCOMMA)
 		}
 		{
-			p.SetState(73)
+			p.SetState(104)
 			p.Value()
 		}
 
-		p.SetState(78)
+		p.SetState(109)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
