@@ -130,6 +130,19 @@ func (l *antlrParserListener) ExitTarget(ctx *TargetContext) {
 }
 
 ////////////////////////////////////////
+// Column (Set/Select)
+////////////////////////////////////////
+
+// ExitColumn is called when production column is exited.
+func (l *antlrParserListener) ExitColumn(ctx *ColumnContext) {
+	q, ok := l.PeekObject().(Query)
+	if !ok {
+		return
+	}
+	q.AddColumn(NewColumnWithString(ctx.GetText()))
+}
+
+////////////////////////////////////////
 // Value (Set/Select)
 ////////////////////////////////////////
 

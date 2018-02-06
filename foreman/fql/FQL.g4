@@ -39,7 +39,7 @@ query
  *------------------------------------------------------------------*/
 
 insertQuery
-	: INSERT INTO target VALUES '(' values ')'
+	: INSERT INTO target ('(' columns ')')? VALUES '(' values ')'
 	;
 
 /*------------------------------------------------------------------

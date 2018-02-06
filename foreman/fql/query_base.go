@@ -7,6 +7,7 @@ package fql
 // baseQuery represents a parameter.
 type baseQuery struct {
 	*Target
+	Columns
 	Values
 	Conditions
 }
@@ -15,6 +16,7 @@ type baseQuery struct {
 func newBaseQuery() *baseQuery {
 	q := &baseQuery{
 		Target:     nil,
+		Columns:    NewColumns(),
 		Values:     NewValues(),
 		Conditions: NewConditions(),
 	}
@@ -24,17 +26,6 @@ func newBaseQuery() *baseQuery {
 // GetType returns a stored type in the query.
 func (q *baseQuery) GetType() QueryType {
 	return QueryTypeUnknown
-}
-
-// AddCondition adds a new condition.
-func (q *baseQuery) AddCondition(c *Condition) error {
-	q.Conditions = append(q.Conditions, c)
-	return nil
-}
-
-// GetConditions retusn all conditions.
-func (q *baseQuery) GetConditions() Conditions {
-	return q.Conditions
 }
 
 // SetTarget sets a specified target into the query.
@@ -51,6 +42,20 @@ func (q *baseQuery) GetTarget() (*Target, bool) {
 	return q.Target, true
 }
 
+// AddColumn adds a specified column into the query.
+func (q *baseQuery) AddColumn(column *Column) error {
+	q.Columns = append(q.Columns, column)
+	return nil
+}
+
+// GetColumns returns the columns in the query.
+func (q *baseQuery) GetColumns() (Columns, bool) {
+	if len(q.Columns) <= 0 {
+		return q.Columns, false
+	}
+	return q.Columns, true
+}
+
 // AddValue adds a specified value into the query.
 func (q *baseQuery) AddValue(value *Value) error {
 	q.Values = append(q.Values, value)
@@ -60,7 +65,21 @@ func (q *baseQuery) AddValue(value *Value) error {
 // GetValues returns the values in the query.
 func (q *baseQuery) GetValues() (Values, bool) {
 	if len(q.Values) <= 0 {
-		return nil, false
+		return q.Values, false
 	}
 	return q.Values, true
+}
+
+// AddCondition adds a new condition.
+func (q *baseQuery) AddCondition(c *Condition) error {
+	q.Conditions = append(q.Conditions, c)
+	return nil
+}
+
+// GetConditions retusn all conditions.
+func (q *baseQuery) GetConditions() (Conditions, bool) {
+	if len(q.Conditions) <= 0 {
+		return q.Conditions, false
+	}
+	return q.Conditions, true
 }
