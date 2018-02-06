@@ -52,7 +52,6 @@ VERSION_GO="./foreman/version.go"
 
 ${VERSION_GO}: ./foreman/version.gen
 	$< > $@
-	git commit -m "Updated version." $@
 
 version: ${VERSION_GO}
 
