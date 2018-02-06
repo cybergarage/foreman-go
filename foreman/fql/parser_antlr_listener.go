@@ -142,3 +142,22 @@ func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
 	value := strings.Trim(ctx.GetText(), "\"")
 	q.AddValue(value)
 }
+
+////////////////////////////////////////
+// Condition (Set/Select)
+////////////////////////////////////////
+
+// ExitCondition is called when production Condition is exited.
+func (l *antlrParserListener) ExitCondition(ctx *ConditionContext) {
+	q, ok := l.PeekObject().(Query)
+	if !ok {
+		return
+	}
+	condString := []string{
+		ctx.LeftOperand().GetText(),
+		ctx.Operator().GetText(),
+		ctx.RightOperand().GetText(),
+	}
+	cond := NewConditionWithObjects(condString)
+	q.AddCondition(cond)
+}

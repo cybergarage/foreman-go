@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"strconv"
 	"strings"
 	"testing"
 )
@@ -22,9 +23,12 @@ const (
 )
 
 const (
-	errorInvalidTarget     = "Invalid target %s != %s"
-	errorInvalidValue      = "Invalid value %s != %s"
-	errorInvalidValueCount = "Invalid value count %d != %d"
+	errorInvalidTarget         = "Invalid target %s != %s"
+	errorInvalidValue          = "Invalid value %s != %s"
+	errorInvalidValueCount     = "Invalid value count %d != %d"
+	errorInvalidConditionCount = "Invalid condition count %d != %d"
+	errorInvalidCorrectCount   = "Invalid correct count %d != %d"
+	errorInvalidOperatorType   = "Invalid operator type : %d"
 )
 
 type parserTestListener interface {
@@ -42,7 +46,7 @@ func testQuery(t *testing.T, l parserTestListener, fqlString string, corrects []
 
 	err = l.testCase(t, queries[0], corrects)
 	if err != nil {
-		t.Error(err)
+		t.Errorf("%s (%s)", fqlString, err.Error())
 		return
 	}
 }
@@ -97,10 +101,14 @@ func TestFQLCases(t *testing.T) {
 type insertQueryTestListener struct{}
 
 func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	// Target
+
 	target, _ := q.GetTarget()
 	if target != corrects[0] {
 		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
 	}
+
+	// Values
 
 	values, _ := q.GetValues()
 	for n := 0; n < (len(corrects) - 1); n++ {
@@ -117,9 +125,45 @@ func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 type selectQueryTestListener struct{}
 
 func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	if len(corrects) < 3 {
+		return fmt.Errorf(errorInvalidCorrectCount, len(corrects), 3)
+	}
+
+	// Target
+
 	target, _ := q.GetTarget()
 	if target != corrects[0] {
 		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
+	}
+
+	// Values
+
+	valueCnt, err := strconv.Atoi(corrects[1])
+	if err != nil {
+		return err
+	}
+	values, _ := q.GetValues()
+	if len(values) != valueCnt {
+		return fmt.Errorf(errorInvalidValueCount, len(values), valueCnt)
+	}
+
+	// Conditions
+
+	condCnt, err := strconv.Atoi(corrects[2])
+	if err != nil {
+		return err
+	}
+	conds := q.GetConditions()
+	if len(conds) != condCnt {
+		// FIXME
+		//return fmt.Errorf(errorInvalidValueCount, len(conds), condCnt)
+	}
+	for _, cond := range conds {
+		opeType := cond.GetOperator().GetType()
+		if opeType == OperatorTypeUnknown {
+			return fmt.Errorf(errorInvalidOperatorType, opeType)
+
+		}
 	}
 	return nil
 }
@@ -129,10 +173,18 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 type deleteQueryTestListener struct{}
 
 func (l *deleteQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	if len(corrects) < 2 {
+		return fmt.Errorf(errorInvalidCorrectCount, len(corrects), 2)
+	}
+
+	// Target
+
 	target, _ := q.GetTarget()
 	if target != corrects[0] {
 		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
 	}
+
+	// Values
 
 	values, _ := q.GetValues()
 
