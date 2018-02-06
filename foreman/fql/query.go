@@ -17,12 +17,15 @@ const (
 type Query interface {
 	GetType() QueryType
 
-	AddCondition(*Condition) error
-	GetConditions() Conditions
-
 	SetTarget(*Target) error
 	GetTarget() (*Target, bool)
 
+	AddColumn(*Column) error
+	GetColumns() (Columns, bool)
+
 	AddValue(*Value) error
 	GetValues() (Values, bool)
+
+	AddCondition(*Condition) error
+	GetConditions() (Conditions, bool)
 }
