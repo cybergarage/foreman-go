@@ -8,13 +8,14 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
 func testClientExportQuery(t *testing.T, server *Server, client *Client) {
 	testTargets := []string{
-		QueryTargetConfig,
-		QueryTargetRegistry,
+		fql.QueryTargetConfig,
+		fql.QueryTargetRegistry,
 	}
 
 	for _, target := range testTargets {
@@ -39,7 +40,7 @@ func testClientConfigQuery(t *testing.T, server *Server, client *Client) {
 
 	path := json.NewPathWithObject(configObj)
 	for key, value := range configs {
-		keyPath := json.NewPathStringWithStrings([]string{strings.ToLower(QueryTargetConfig), key})
+		keyPath := json.NewPathStringWithStrings([]string{strings.ToLower(fql.QueryTargetConfig), key})
 		configValue, err := path.GetPathString(keyPath)
 		if err != nil {
 			t.Error(err)

@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+if (@ARGV < 2){
+  print $0, " <package> <filename> [pattern]\n";
+  exit 1;
+}
+my $package = $ARGV[0];
+my $filename = $ARGV[1];
+my $pattern;
+if (2 < @ARGV) { 
+  $pattern = $ARGV[2];
+}
+
+print<<HEADER;
+// Copyright (C) 2017 Satoshi Konno. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+HEADER
+print "package " . $package . "\n";
+print<<HEADER;
+
+const ( 
+HEADER
+@const_lines = `more $filename | awk '/./' | awk '\$0 !~ /^#/{print \$0}'`;
+foreach $const_line (@const_lines) {
+  @const = split(/,/, $const_line);
+  if (0< length($pattern)) {
+    if ($const[0] !~ $pattern) {
+      next;
+    }
+  }
+  $const[0] =~ s/_([a-z])/\u$1/g;
+  $const[0] =~ s/^([a-z])/\u$1/;
+  print $const[0] . " = " . $const[1];
+}
+print<<FOTTER;
+)
+FOTTER

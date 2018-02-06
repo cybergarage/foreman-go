@@ -114,7 +114,7 @@ func (config *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	}
 
 	configContainer := map[string]interface{}{}
-	configContainer[strings.ToLower(QueryTargetConfig)] = configMap
+	configContainer[strings.ToLower(fql.QueryTargetConfig)] = configMap
 
 	return configContainer, nil
 }
