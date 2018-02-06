@@ -9,5 +9,5 @@ error_internal_server_error,500,"Internal Server Error"
 ########################################
 
 error_code_query_invalid,1000,"Invalid Query"
-error_code_query_method_not_found,1001,"Not Ssupported Query Method"
+error_code_query_method_not_found,1001,"Not Supported Query Method"
 error_code_query_target_not_found,1010,"Not Found Query Target"

@@ -11,12 +11,14 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
-func testClientQueries(t *testing.T, server *Server, client *Client) {
-	testQueries := []string{
-		"EXPORT%20CONFIG",
+func testClientExportQuery(t *testing.T, server *Server, client *Client) {
+	testTargets := []string{
+		QueryTargetConfig,
+		QueryTargetRegistry,
 	}
 
-	for _, query := range testQueries {
+	for _, target := range testTargets {
+		query := "EXPORT%20" + target
 		_, err := client.PostQuery(query)
 		if err != nil {
 			t.Error(err)
@@ -59,7 +61,7 @@ func TestClientQueries(t *testing.T) {
 	}
 
 	client := NewClient()
-	testClientQueries(t, server, client)
+	testClientExportQuery(t, server, client)
 	testClientConfigQuery(t, server, client)
 
 	err = server.Stop()
