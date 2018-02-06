@@ -4,6 +4,10 @@
 
 package json
 
+import (
+	"strings"
+)
+
 // NewPathStringWithStrings a joined string of the specified strings.
 func NewPathStringWithStrings(paths []string) string {
 	pathString := PathSep
@@ -14,4 +18,9 @@ func NewPathStringWithStrings(paths []string) string {
 		pathString += path
 	}
 	return pathString
+}
+
+// trimPathStrings trims PathSep from the specified path string.
+func trimPathStrings(pathString string) string {
+	return strings.Trim(pathString, PathSep)
 }
