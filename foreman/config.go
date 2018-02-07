@@ -98,7 +98,7 @@ func (config *Config) GetInt(key string) (int, error) {
 // ExecuteQuery must return the result as a standard array or map.
 func (config *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	if q.GetType() != fql.QueryTypeSelect {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotFound)
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 	}
 
 	configMap := map[string]string{}
