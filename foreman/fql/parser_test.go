@@ -165,6 +165,7 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 
 		}
 	}
+
 	return nil
 }
 
@@ -184,15 +185,22 @@ func (l *deleteQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 		return fmt.Errorf(errorInvalidTarget, target.GetValue(), corrects[0])
 	}
 
-	// Values
+	// Conditions
 
-	values, _ := q.GetValues()
-
-	if len(values) != 1 {
-		return fmt.Errorf(errorInvalidValueCount, len(values), 1)
+	condCnt, err := strconv.Atoi(corrects[1])
+	if err != nil {
+		return err
 	}
-	if values[0].GetValue() != corrects[1] {
-		return fmt.Errorf(errorInvalidValue, values[0].GetValue(), corrects[1])
+	conds, _ := q.GetConditions()
+	if len(conds) != condCnt {
+		return fmt.Errorf(errorInvalidConditionCount, len(conds), condCnt)
+	}
+	for _, cond := range conds {
+		opeType := cond.GetOperator().GetType()
+		if opeType == OperatorTypeUnknown {
+			return fmt.Errorf(errorInvalidOperatorType, opeType)
+
+		}
 	}
 
 	return nil
