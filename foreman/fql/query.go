@@ -22,6 +22,8 @@ type Query interface {
 
 	AddColumn(*Column) error
 	GetColumns() (Columns, bool)
+	HasColumn(string) bool
+	HasOnlyColumn(string) bool
 
 	AddValue(*Value) error
 	GetValues() (Values, bool)

@@ -56,6 +56,27 @@ func (q *baseQuery) GetColumns() (Columns, bool) {
 	return q.Columns, true
 }
 
+// HasColumn returns the columns in the query.
+func (q *baseQuery) HasColumn(name string) bool {
+	for _, c := range q.Columns {
+		if c.String() == name {
+			return true
+		}
+	}
+	return false
+}
+
+// HasOnlyColumn returns the columns in the query.
+func (q *baseQuery) HasOnlyColumn(name string) bool {
+	if len(q.Columns) != 1 {
+		return false
+	}
+	if q.Columns[0].String() != name {
+		return false
+	}
+	return true
+}
+
 // AddValue adds a specified value into the query.
 func (q *baseQuery) AddValue(value *Value) error {
 	q.Values = append(q.Values, value)
