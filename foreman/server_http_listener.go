@@ -33,6 +33,8 @@ func (server *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter
 // fqlRequestReceived handles FQL requests
 func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter) {
 	queryString := r.FormValue(httpRequestQueryParam)
+	server.Info(queryString)
+
 	parser := fql.NewParser()
 	queries, err := parser.ParseString(queryString)
 	if err != nil {
