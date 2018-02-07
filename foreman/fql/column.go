@@ -17,7 +17,7 @@ func NewColumnWithString(columnString string) *Column {
 	return col
 }
 
-// GetValue returns the value.
-func (col *Column) GetValue() string {
+// String returns the value.
+func (col *Column) String() string {
 	return col.Value
 }

@@ -105,16 +105,16 @@ func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target.GetValue() != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target.GetValue(), corrects[0])
+	if target.String() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.String(), corrects[0])
 	}
 
 	// Values
 
 	values, _ := q.GetValues()
 	for n := 0; n < (len(corrects) - 1); n++ {
-		if values[n].GetValue() != corrects[n+1] {
-			return fmt.Errorf(errorInvalidValue, values[n].GetValue(), corrects[n+1])
+		if values[n].String() != corrects[n+1] {
+			return fmt.Errorf(errorInvalidValue, values[n].String(), corrects[n+1])
 		}
 	}
 
@@ -133,8 +133,8 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target.GetValue() != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target.GetValue(), corrects[0])
+	if target.String() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.String(), corrects[0])
 	}
 
 	// Columns
@@ -181,8 +181,8 @@ func (l *deleteQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target.GetValue() != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target.GetValue(), corrects[0])
+	if target.String() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.String(), corrects[0])
 	}
 
 	// Conditions

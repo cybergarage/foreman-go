@@ -17,7 +17,7 @@ func NewValueWithString(valString string) *Value {
 	return v
 }
 
-// GetValue returns the value.
-func (v *Value) GetValue() string {
+// String returns the value.
+func (v *Value) String() string {
 	return v.Value
 }
