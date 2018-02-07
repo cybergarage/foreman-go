@@ -13,5 +13,5 @@ func NewMethodWithLanguage(lang string) *Method {
 
 // NewPythonMethod returns a new Python method.
 func NewPythonMethod() *Method {
-	return NewMethodWithLanguage(PythonEngine)
+	return NewMethodWithLanguage(ActionLanguagePython)
 }

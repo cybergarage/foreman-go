@@ -23,11 +23,13 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		fql.QueryTargetMetrics:  server.metricMgr,
 		fql.QueryTargetRegister: server.registerMgr,
 		fql.QueryTargetRegistry: server.registryMgr,
+		fql.QueryTargetAction:   server.actionMgr,
+		fql.QueryTargetRoute:    server.actionMgr,
 	}
 
 	targetObj, ok := q.GetTarget()
 	if !ok {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryTargetNotSupported)
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryEmptyTarget)
 	}
 
 	target := targetObj.String()

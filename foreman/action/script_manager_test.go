@@ -53,8 +53,8 @@ func echoExecutionTest(t *testing.T, mgr *ScriptManager, method *Method, params 
 func TestPythonEngine(t *testing.T) {
 	mgr := NewScriptManager()
 
-	if !mgr.HasEngine(PythonEngine) {
-		t.Errorf(errorEngineNotFound, PythonEngine)
+	if !mgr.HasEngine(ActionLanguagePython) {
+		t.Errorf(errorEngineNotFound, ActionLanguagePython)
 		return
 	}
 

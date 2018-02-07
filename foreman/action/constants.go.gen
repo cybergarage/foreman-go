@@ -1,0 +1,2 @@
+#!/bin/bash
+../../common/constants.go.gen action ../../common/constants.csv '^(action)'

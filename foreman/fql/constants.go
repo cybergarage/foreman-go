@@ -10,6 +10,8 @@ const (
 	QueryTargetMetrics        = "METRICS"
 	QueryTargetRegister       = "REGISTER"
 	QueryTargetRegistry       = "REGISTRY"
+	QueryTargetAction         = "ACTION"
+	QueryTargetRoute          = "ROUTE"
 	QueryConditionOperatorLt  = "<"
 	QueryConditionOperatorLe  = "<="
 	QueryConditionOperatorGt  = ">"

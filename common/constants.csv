@@ -31,6 +31,14 @@ config_carbon_port_key,"carbon_port"
 config_http_port_key,"http_port"
 
 ########################################
+# Action 
+########################################
+
+action_encoding_base64,"base64"
+action_language_python,"python"
+action_language_lua,"lua"
+
+########################################
 # FQL
 ########################################
 
@@ -39,6 +47,8 @@ query_target_config,"CONFIG"
 query_target_metrics,"METRICS"
 query_target_register,"REGISTER"
 query_target_registry,"REGISTRY"
+query_target_action,"ACTION"
+query_target_route,"ROUTE"
 
 query_condition_operator_lt,"<"
 query_condition_operator_le,"<="
@@ -51,3 +61,11 @@ query_column_name,"name"
 query_column_id,"id"
 query_column_timestamp,"ts"
 query_column_value,"value"
+
+########################################
+# Graphite Compatibility
+########################################
+
+graphite_response_target,"target"
+graphite_response_entries,"entries"
+graphite_response_datapoints,"datapoints"
