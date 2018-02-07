@@ -5,11 +5,74 @@
 package metric
 
 import (
+	"strconv"
+	"time"
+
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
+func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error) {
+	values, ok := q.GetValues()
+	if !ok || len(values) < 3 {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
+	}
+
+	name := values[0].String()
+	value, valueErr := strconv.ParseFloat(values[1].String(), 64)
+	ts, tsErr := strconv.ParseInt(values[2].String(), 10, 64)
+	if len(name) < 0 || valueErr != nil || tsErr != nil {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
+	}
+
+	m := NewMetricWithName(name)
+	m.Value = value
+	m.Timestamp = time.Unix(ts, 0)
+
+	err := mgr.AddMetric(m)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	return nil, nil
+}
+
+func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error) {
+	/*
+		whereName, ope, ok := q.GetConditionByColumn(fql.QueryColumnName)
+		if ok {
+			if ope.GetType() != fql.QueryConditionOperatorEq {
+				ok = false
+			}
+		}
+
+		var ruleMap map[string]string
+		for _, rule := range mgr.GetRules() {
+			ruleName := rule.GetName()
+			if ok {
+				if ruleName != whereName {
+					continue
+				}
+			}
+			ruleMap[ruleName] = rule.String()
+		}
+
+		qosContainer := map[string]interface{}{}
+		qosContainer[strings.ToLower(fql.QueryTargetQos)] = ruleMap
+
+		return qosContainer, nil
+	*/
+	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
+}
+
 // ExecuteQuery must return the result as a standard array or map.
 func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
-	return nil, errors.NewError()
+	switch q.GetType() {
+	case fql.QueryTypeInsert:
+		return mgr.executeInsertQuery(q)
+	case fql.QueryTypeSelect:
+		return mgr.executeSelectQuery(q)
+	}
+
+	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 }

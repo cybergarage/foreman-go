@@ -5,6 +5,7 @@
 package action
 
 const (
-	PythonEngine = "python"
-	LuaEngine    = "lua"
+	ActionEncodingBase64 = "base64"
+	ActionLanguagePython = "python"
+	ActionLanguageLua    = "lua"
 )

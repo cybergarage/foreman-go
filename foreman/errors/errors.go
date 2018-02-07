@@ -8,10 +8,11 @@ const (
 	ErrorInternalServerError         = 500
 	ErrorCodeQueryInvalid            = 1000
 	ErrorCodeQueryMethodNotSupported = 1001
-	ErrorCodeQueryTargetNotSupported = 1010
-	ErrorCodeQueryInvalidValues      = 1011
-	ErrorCodeQueryInvalidColumns     = 1012
-	ErrorCodeQueryInvalidConditions  = 1013
+	ErrorCodeQueryEmptyTarget        = 1010
+	ErrorCodeQueryTargetNotSupported = 1011
+	ErrorCodeQueryInvalidValues      = 1012
+	ErrorCodeQueryInvalidColumns     = 1013
+	ErrorCodeQueryInvalidConditions  = 1014
 )
 
 func ErrorCodeToString(code int) string {

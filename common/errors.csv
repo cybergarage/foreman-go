@@ -10,8 +10,9 @@ error_internal_server_error,500,"Internal Server Error"
 
 error_code_query_invalid,1000,"Invalid Query"
 error_code_query_method_not_supported,1001,"Query method not supported"
-error_code_query_target_not_supported,1010,"Query target not supported"
-error_code_query_invalid_values,1011,"Invalid query values"
-error_code_query_invalid_columns,1012,"Invalid query columns"
-error_code_query_invalid_conditions,1013,"Invalid query conditions"
+error_code_query_empty_target,1010,"Empty query target"
+error_code_query_target_not_supported,1011,"Query target not supported"
+error_code_query_invalid_values,1012,"Invalid query values"
+error_code_query_invalid_columns,1013,"Invalid query columns"
+error_code_query_invalid_conditions,1014,"Invalid query conditions"
 
