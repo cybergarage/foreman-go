@@ -5,7 +5,7 @@
 package fql
 
 // Values is a value array of of FQL.
-type Values = []string
+type Values = []*Value
 
 // NewValues returns a new value array.
 func NewValues() Values {

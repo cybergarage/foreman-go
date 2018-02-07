@@ -25,6 +25,7 @@ const (
 const (
 	errorInvalidTarget         = "Invalid target %s != %s"
 	errorInvalidValue          = "Invalid value %s != %s"
+	errorInvalidColumnCount    = "Invalid column count %d != %d"
 	errorInvalidValueCount     = "Invalid value count %d != %d"
 	errorInvalidConditionCount = "Invalid condition count %d != %d"
 	errorInvalidCorrectCount   = "Invalid correct count %d != %d"
@@ -104,16 +105,16 @@ func (l *insertQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
+	if target.String() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.String(), corrects[0])
 	}
 
 	// Values
 
 	values, _ := q.GetValues()
 	for n := 0; n < (len(corrects) - 1); n++ {
-		if values[n] != corrects[n+1] {
-			return fmt.Errorf(errorInvalidValue, values[n], corrects[n+1])
+		if values[n].String() != corrects[n+1] {
+			return fmt.Errorf(errorInvalidValue, values[n].String(), corrects[n+1])
 		}
 	}
 
@@ -132,19 +133,19 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
+	if target.String() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.String(), corrects[0])
 	}
 
-	// Values
+	// Columns
 
-	valueCnt, err := strconv.Atoi(corrects[1])
+	columnsCnt, err := strconv.Atoi(corrects[1])
 	if err != nil {
 		return err
 	}
-	values, _ := q.GetValues()
-	if len(values) != valueCnt {
-		return fmt.Errorf(errorInvalidValueCount, len(values), valueCnt)
+	columns, _ := q.GetColumns()
+	if len(columns) != columnsCnt {
+		return fmt.Errorf(errorInvalidColumnCount, len(columns), columnsCnt)
 	}
 
 	// Conditions
@@ -153,10 +154,9 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	if err != nil {
 		return err
 	}
-	conds := q.GetConditions()
+	conds, _ := q.GetConditions()
 	if len(conds) != condCnt {
-		// FIXME
-		return fmt.Errorf(errorInvalidValueCount, len(conds), condCnt)
+		return fmt.Errorf(errorInvalidConditionCount, len(conds), condCnt)
 	}
 	for _, cond := range conds {
 		opeType := cond.GetOperator().GetType()
@@ -165,6 +165,7 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 
 		}
 	}
+
 	return nil
 }
 
@@ -180,19 +181,26 @@ func (l *deleteQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 	// Target
 
 	target, _ := q.GetTarget()
-	if target != corrects[0] {
-		return fmt.Errorf(errorInvalidTarget, target, corrects[0])
+	if target.String() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.String(), corrects[0])
 	}
 
-	// Values
+	// Conditions
 
-	values, _ := q.GetValues()
-
-	if len(values) != 1 {
-		return fmt.Errorf(errorInvalidValueCount, len(values), 1)
+	condCnt, err := strconv.Atoi(corrects[1])
+	if err != nil {
+		return err
 	}
-	if values[0] != corrects[1] {
-		return fmt.Errorf(errorInvalidValue, values[0], corrects[1])
+	conds, _ := q.GetConditions()
+	if len(conds) != condCnt {
+		return fmt.Errorf(errorInvalidConditionCount, len(conds), condCnt)
+	}
+	for _, cond := range conds {
+		opeType := cond.GetOperator().GetType()
+		if opeType == OperatorTypeUnknown {
+			return fmt.Errorf(errorInvalidOperatorType, opeType)
+
+		}
 	}
 
 	return nil

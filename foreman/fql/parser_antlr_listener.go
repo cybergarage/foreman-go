@@ -126,7 +126,20 @@ func (l *antlrParserListener) ExitTarget(ctx *TargetContext) {
 	if !ok {
 		return
 	}
-	q.SetTarget(ctx.GetText())
+	q.SetTarget(NewTargetWithString(strings.ToUpper(ctx.GetText())))
+}
+
+////////////////////////////////////////
+// Column (Set/Select)
+////////////////////////////////////////
+
+// ExitColumn is called when production column is exited.
+func (l *antlrParserListener) ExitColumn(ctx *ColumnContext) {
+	q, ok := l.PeekObject().(Query)
+	if !ok {
+		return
+	}
+	q.AddColumn(NewColumnWithString(strings.ToLower(ctx.GetText())))
 }
 
 ////////////////////////////////////////
@@ -140,7 +153,7 @@ func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
 		return
 	}
 	value := strings.Trim(ctx.GetText(), "\"")
-	q.AddValue(value)
+	q.AddValue(NewValueWithString(value))
 }
 
 ////////////////////////////////////////

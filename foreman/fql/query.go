@@ -17,18 +17,18 @@ const (
 type Query interface {
 	GetType() QueryType
 
-	SetParameter(param Parameter) error
-	GetParameters() Parameters
-	GetParameter(string) (Parameter, bool)
-	GetParameterString(string) (string, bool)
+	SetTarget(*Target) error
+	GetTarget() (*Target, bool)
+
+	AddColumn(*Column) error
+	GetColumns() (Columns, bool)
+	HasColumn(string) bool
+	HasOnlyColumn(string) bool
+
+	AddValue(*Value) error
+	GetValues() (Values, bool)
 
 	AddCondition(*Condition) error
-	GetConditions() Conditions
-
-	SetTarget(Target) error
-	GetTarget() (Target, bool)
-
-	SetValues(values Values) error
-	AddValue(Value) error
-	GetValues() (Values, bool)
+	GetConditions() (Conditions, bool)
+	GetConditionByColumn(leftOpe string) (*Operator, string, bool)
 }

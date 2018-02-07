@@ -5,4 +5,24 @@
 package fql
 
 // Target is a destination or source target of FQL.
-type Target = string
+type Target struct {
+	Value string
+}
+
+// NewTargetWithString returns a new target with the specified string.
+func NewTargetWithString(targetString string) *Target {
+	t := &Target{
+		Value: targetString,
+	}
+	return t
+}
+
+// NewTarget returns a new target.
+func NewTarget() *Target {
+	return NewTargetWithString("")
+}
+
+// String returns the target value.
+func (t *Target) String() string {
+	return t.Value
+}

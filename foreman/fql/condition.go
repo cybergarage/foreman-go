@@ -5,8 +5,8 @@
 package fql
 
 const (
-	OperatorLeft  = 0
-	OperatorRight = 1
+	operatorLeft  = 0
+	operatorRight = 1
 )
 
 // Condition represents a condition in query.
@@ -36,14 +36,14 @@ func NewConditionWithObjects(condStrings []string) *Condition {
 	return c
 }
 
-// GetLeftOperand returns the left operand string.
-func (c *Condition) GetLeftOperand() string {
-	return c.Operands[OperatorLeft]
+// GetColumn returns the left operand string.
+func (c *Condition) GetColumn() string {
+	return c.Operands[operatorLeft]
 }
 
-// GetRightOperand returns the right operand string.
-func (c *Condition) GetRightOperand() string {
-	return c.Operands[OperatorRight]
+// GetOperand returns the right operand string.
+func (c *Condition) GetOperand() string {
+	return c.Operands[operatorRight]
 }
 
 // GetOperator returns the operator.
