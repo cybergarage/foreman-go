@@ -126,7 +126,7 @@ func (l *antlrParserListener) ExitTarget(ctx *TargetContext) {
 	if !ok {
 		return
 	}
-	q.SetTarget(NewTargetWithString(ctx.GetText()))
+	q.SetTarget(NewTargetWithString(strings.ToUpper(ctx.GetText())))
 }
 
 ////////////////////////////////////////
@@ -139,7 +139,7 @@ func (l *antlrParserListener) ExitColumn(ctx *ColumnContext) {
 	if !ok {
 		return
 	}
-	q.AddColumn(NewColumnWithString(ctx.GetText()))
+	q.AddColumn(NewColumnWithString(strings.ToLower(ctx.GetText())))
 }
 
 ////////////////////////////////////////

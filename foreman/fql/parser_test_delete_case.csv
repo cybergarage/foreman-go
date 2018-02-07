@@ -1,4 +1,4 @@
 # query; target; condition_count
-SELECT * FROM QoS;QoS;0
-SELECT * FROM QoS WHERE x > 1;QoS;1
-SELECT * FROM QoS WHERE x > 1 AND y < 1;QoS;2
+SELECT * FROM QoS;QOS;0
+SELECT * FROM QoS WHERE x > 1;QOS;1
+SELECT * FROM QoS WHERE x > 1 AND y < 1;QOS;2
