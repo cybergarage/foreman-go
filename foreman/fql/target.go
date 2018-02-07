@@ -22,7 +22,7 @@ func NewTarget() *Target {
 	return NewTargetWithString("")
 }
 
-// GetValue returns the target value.
-func (t *Target) GetValue() string {
+// String returns the target value.
+func (t *Target) String() string {
 	return t.Value
 }
