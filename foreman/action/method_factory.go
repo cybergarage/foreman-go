@@ -4,11 +4,14 @@
 
 package action
 
-import "C"
+// NewMethodWithLanguage returns a new method with the specified language.
+func NewMethodWithLanguage(lang string) *Method {
+	m := NewMethod()
+	m.Language = lang
+	return m
+}
 
 // NewPythonMethod returns a new Python method.
 func NewPythonMethod() *Method {
-	m := NewMethod()
-	m.Language = PythonEngine
-	return m
+	return NewMethodWithLanguage(PythonEngine)
 }
