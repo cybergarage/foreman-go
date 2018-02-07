@@ -71,7 +71,7 @@ exportQuery
  *------------------------------------------------------------------*/
 
 deleteQuery
-	: DELETE value FROM target
+	: DELETE FROM target (WHERE conditions)?
 	;
 
 /*------------------------------------------------------------------

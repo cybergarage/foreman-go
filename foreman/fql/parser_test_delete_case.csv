@@ -1,4 +1,4 @@
-# query; target; value
-DELETE abc FROM table;table;abc
-# QoS
-DELETE rule0 FROM QoS;QoS;rule0
+# query; target; condition_count
+SELECT * FROM QoS;QoS;0
+SELECT * FROM QoS WHERE x > 1;QoS;1
+SELECT * FROM QoS WHERE x > 1 AND y < 1;QoS;2
