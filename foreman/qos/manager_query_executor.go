@@ -38,25 +38,13 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	return nil, nil
 }
 
-func (mgr *Manager) getNameCondition(q fql.Query) (string, bool) {
-	wheres, ok := q.GetConditions()
-	if !ok || len(wheres) < 1 {
-		return "", false
-	}
-	where := wheres[0]
-	if where.GetLeftOperand() != fql.QueryColumnName {
-		return "", false
-	}
-	name := where.GetRightOperand()
-	if !mgr.RemoveRule(name) {
-		return "", false
-	}
-
-	return name, true
-}
-
 func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error) {
-	whereName, ok := mgr.getNameCondition(q)
+	ope, whereName, ok := q.GetConditionByColumn(fql.QueryColumnName)
+	if ok {
+		if ope.GetType() != fql.OperatorTypeEQ {
+			ok = false
+		}
+	}
 
 	var ruleMap map[string]string
 	for _, rule := range mgr.GetRules() {
@@ -76,9 +64,15 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeDeleteQuery(q fql.Query) (interface{}, *errors.Error) {
+	ope, whereName, ok := q.GetConditionByColumn(fql.QueryColumnName)
+	if ok {
+		if ope.GetType() != fql.OperatorTypeEQ {
+			ok = false
+		}
+	}
+
 	// Delete only a specified rule
 
-	whereName, ok := mgr.getNameCondition(q)
 	if ok {
 		if !mgr.RemoveRule(whereName) {
 			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
