@@ -83,3 +83,13 @@ func (q *baseQuery) GetConditions() (Conditions, bool) {
 	}
 	return q.Conditions, true
 }
+
+// GetConditionByColumnName retusn the operator and right operand of the specified left operator.
+func (q *baseQuery) GetConditionByColumn(leftOpe string) (*Operator, string, bool) {
+	for _, c := range q.Conditions {
+		if c.GetColumn() == leftOpe {
+			return c.GetOperator(), c.GetOperand(), true
+		}
+	}
+	return nil, "", false
+}
