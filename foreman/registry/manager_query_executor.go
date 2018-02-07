@@ -40,6 +40,10 @@ func (mgr *Manager) collectChildRegistryObjects(parentMap map[string]interface{}
 
 // ExecuteQuery must return the result as a standard array or map.
 func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
+	if q.GetType() != fql.QueryTypeSelect {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
+	}
+
 	regMap := map[string]interface{}{}
 
 	err := mgr.collectChildRegistryObjects(regMap, RootObjectID)

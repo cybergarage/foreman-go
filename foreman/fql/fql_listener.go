@@ -40,6 +40,12 @@ type FQLListener interface {
 	// EnterValues is called when entering the values production.
 	EnterValues(c *ValuesContext)
 
+	// EnterColumn is called when entering the column production.
+	EnterColumn(c *ColumnContext)
+
+	// EnterColumns is called when entering the columns production.
+	EnterColumns(c *ColumnsContext)
+
 	// EnterConditions is called when entering the conditions production.
 	EnterConditions(c *ConditionsContext)
 
@@ -87,6 +93,12 @@ type FQLListener interface {
 
 	// ExitValues is called when exiting the values production.
 	ExitValues(c *ValuesContext)
+
+	// ExitColumn is called when exiting the column production.
+	ExitColumn(c *ColumnContext)
+
+	// ExitColumns is called when exiting the columns production.
+	ExitColumns(c *ColumnsContext)
 
 	// ExitConditions is called when exiting the conditions production.
 	ExitConditions(c *ConditionsContext)

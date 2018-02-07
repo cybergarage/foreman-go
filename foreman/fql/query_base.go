@@ -6,16 +6,18 @@ package fql
 
 // baseQuery represents a parameter.
 type baseQuery struct {
-	token string
-	Parameters
+	*Target
+	Columns
+	Values
 	Conditions
 }
 
 // newQueryWithToken returns a new query with the specified string.
 func newBaseQuery() *baseQuery {
 	q := &baseQuery{
-		token:      "",
-		Parameters: NewParameters(),
+		Target:     nil,
+		Columns:    NewColumns(),
+		Values:     NewValues(),
 		Conditions: NewConditions(),
 	}
 	return q
@@ -26,6 +28,69 @@ func (q *baseQuery) GetType() QueryType {
 	return QueryTypeUnknown
 }
 
+// SetTarget sets a specified target into the query.
+func (q *baseQuery) SetTarget(target *Target) error {
+	q.Target = target
+	return nil
+}
+
+// GetTarget returns the target in the query.
+func (q *baseQuery) GetTarget() (*Target, bool) {
+	if q.Target == nil {
+		return nil, false
+	}
+	return q.Target, true
+}
+
+// AddColumn adds a specified column into the query.
+func (q *baseQuery) AddColumn(column *Column) error {
+	q.Columns = append(q.Columns, column)
+	return nil
+}
+
+// GetColumns returns the columns in the query.
+func (q *baseQuery) GetColumns() (Columns, bool) {
+	if len(q.Columns) <= 0 {
+		return q.Columns, false
+	}
+	return q.Columns, true
+}
+
+// HasColumn returns the columns in the query.
+func (q *baseQuery) HasColumn(name string) bool {
+	for _, c := range q.Columns {
+		if c.String() == name {
+			return true
+		}
+	}
+	return false
+}
+
+// HasOnlyColumn returns the columns in the query.
+func (q *baseQuery) HasOnlyColumn(name string) bool {
+	if len(q.Columns) != 1 {
+		return false
+	}
+	if q.Columns[0].String() != name {
+		return false
+	}
+	return true
+}
+
+// AddValue adds a specified value into the query.
+func (q *baseQuery) AddValue(value *Value) error {
+	q.Values = append(q.Values, value)
+	return nil
+}
+
+// GetValues returns the values in the query.
+func (q *baseQuery) GetValues() (Values, bool) {
+	if len(q.Values) <= 0 {
+		return q.Values, false
+	}
+	return q.Values, true
+}
+
 // AddCondition adds a new condition.
 func (q *baseQuery) AddCondition(c *Condition) error {
 	q.Conditions = append(q.Conditions, c)
@@ -33,52 +98,19 @@ func (q *baseQuery) AddCondition(c *Condition) error {
 }
 
 // GetConditions retusn all conditions.
-func (q *baseQuery) GetConditions() Conditions {
-	return q.Conditions
+func (q *baseQuery) GetConditions() (Conditions, bool) {
+	if len(q.Conditions) <= 0 {
+		return q.Conditions, false
+	}
+	return q.Conditions, true
 }
 
-// SetTarget sets a specified target into the query.
-func (q *baseQuery) SetTarget(target Target) error {
-	param := NewParameterWithObject(parameterTarget, target)
-	return q.SetParameter(param)
-}
-
-// GetTarget returns the target in the query.
-func (q *baseQuery) GetTarget() (Target, bool) {
-	return q.GetParameterString(parameterTarget)
-}
-
-// SetValues sets a specified values intp the query.
-func (q *baseQuery) SetValues(values Values) error {
-	param := NewParameterWithObject(parameterValues, values)
-	return q.SetParameter(param)
-}
-
-// AddValue adds a specified value into the query.
-func (q *baseQuery) AddValue(value Value) error {
-	var values Values
-	param, ok := q.GetParameter(parameterValues)
-	if ok {
-		values, ok = param.GetValue().(Values)
-		if !ok {
-			values = NewValues()
+// GetConditionByColumnName retusn the operator and right operand of the specified left operator.
+func (q *baseQuery) GetConditionByColumn(leftOpe string) (*Operator, string, bool) {
+	for _, c := range q.Conditions {
+		if c.GetColumn() == leftOpe {
+			return c.GetOperator(), c.GetOperand(), true
 		}
-	} else {
-		values = NewValues()
 	}
-	values = append(values, value)
-	return q.SetValues(values)
-}
-
-// GetValues returns the values in the query.
-func (q *baseQuery) GetValues() (Values, bool) {
-	param, ok := q.GetParameter(parameterValues)
-	if !ok {
-		return nil, false
-	}
-	values, ok := param.GetValue().(Values)
-	if !ok {
-		return nil, false
-	}
-	return values, true
+	return nil, "", false
 }

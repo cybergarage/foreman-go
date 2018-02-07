@@ -84,6 +84,16 @@ func (kb *KnowledgeBase) GetRules() []Rule {
 	return rules
 }
 
+// RemoveRule deletes a rule of the specified name.
+func (kb *KnowledgeBase) RemoveRule(name string) bool {
+	_, ok := kb.Rules[name]
+	if !ok {
+		return false
+	}
+	delete(kb.Rules, name)
+	return true
+}
+
 // SetRuleString parses a specified rule string.
 func (kb *KnowledgeBase) SetRuleString(factory Factory, ruleName string, ruleString string) error {
 	rule, err := kb.ParseRuleString(factory, ruleString)

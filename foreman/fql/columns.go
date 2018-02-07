@@ -4,10 +4,10 @@
 
 package fql
 
-import (
-	"testing"
-)
+// Columns is a column array of of FQL.
+type Columns = []*Column
 
-func TestNewStringParameter(t *testing.T) {
-	NewParameterWithObject("", "")
+// NewColumns returns a new Column array.
+func NewColumns() Columns {
+	return make(Columns, 0)
 }

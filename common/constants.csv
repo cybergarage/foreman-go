@@ -46,3 +46,8 @@ query_condition_operator_gt,">"
 query_condition_operator_ge,">="
 query_condition_operator_eq,"=="
 query_condition_operator_neq,"!="
+
+query_column_name,"name"
+query_column_id,"id"
+query_column_timestamp,"ts"
+query_column_value,"value"

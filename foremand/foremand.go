@@ -49,11 +49,18 @@ func main() {
 	// Command Line Option
 
 	//	foreground := flag.Bool("f", false, "Foreground mode.")
-	//	verbose := flag.Int("v", 0, "Output log level.")
+	verbose := flag.Int("v", 0, "Output log level.")
 	configFile := flag.String("c", ConfigFile, "Path to an configuration file")
 	flag.Parse()
 
 	server := foreman.NewServer()
+
+	// Log Level
+
+	logLevel := log.LoggerLevelInfo
+	if 0 < *verbose {
+		logLevel = log.LoggerLevelTrace
+	}
 
 	// Load configuration
 
@@ -61,18 +68,13 @@ func main() {
 		err := server.LoadConfig(*configFile)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
-			//os.Exit(1)
+			os.Exit(1)
 		}
+	} else {
+		log.SetSharedLogger(log.NewStdoutLogger(logLevel))
 	}
 
 	/*
-		// Log Level
-
-		logLevel := log.LoggerLevelInfo
-		if 0 < *verbose {
-			logLevel = log.LoggerLevelTrace
-		}
-
 		// Setup logger
 
 		logFile, err := config.GetKeyStringByPath(ConfigRoot + "/" + ConfigLogFile)

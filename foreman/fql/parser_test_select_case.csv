@@ -1,4 +1,8 @@
-# query; target; value_count; condition_count
-SELECT * FROM QoS;QoS;0;0
-SELECT * FROM QoS WHERE x > 1;QoS;0;1
-SELECT * FROM QoS WHERE x > 1 AND y < 1;QoS;0;2
+# query; target; column_count; condition_count
+SELECT * FROM QoS;QOS;0;0
+SELECT * FROM QoS WHERE x > 1;QOS;0;1
+SELECT * FROM QoS WHERE x > 1 AND y < 1;QOS;0;2
+SELECT (id1) FROM QoS;QOS;1;0
+SELECT (id1,id2) FROM QoS;QOS;2;0
+SELECT (id1) FROM QoS WHERE x > 1;QOS;1;1
+SELECT (id1,id2) FROM QoS WHERE x > 1 AND y < 1;QOS;2;2
