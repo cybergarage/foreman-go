@@ -45,8 +45,39 @@ func (mgr *cgoScriptManager) AddMethod(method *Method) error {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_action_manager_addmethod(mgr.cManager, cmethod, cerr) {
-		err = errors.NewWithCObject(cerr).Error()
-		return err
+		return errors.NewWithCObject(cerr).Error()
+	}
+
+	return nil
+}
+
+// RemoveMethod removes the specified method.
+func (mgr *cgoScriptManager) RemoveMethod(name string) error {
+	if mgr.cManager == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	cerr := C.foreman_error_new()
+	defer C.foreman_error_delete(cerr)
+
+	if !C.foreman_action_manager_removemethod(mgr.cManager, C.CString(name), cerr) {
+		return errors.NewWithCObject(cerr).Error()
+	}
+
+	return nil
+}
+
+// RemoveAllMethods removes the all methods.
+func (mgr *cgoScriptManager) RemoveAllMethods() error {
+	if mgr.cManager == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	cerr := C.foreman_error_new()
+	defer C.foreman_error_delete(cerr)
+
+	if !C.foreman_action_manager_removeallmethods(mgr.cManager, cerr) {
+		return errors.NewWithCObject(cerr).Error()
 	}
 
 	return nil
@@ -54,6 +85,10 @@ func (mgr *cgoScriptManager) AddMethod(method *Method) error {
 
 // ExecMethod executes a specified method with the parameters.
 func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Parameters, error) {
+	if mgr.cManager == nil {
+		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
 	cparams, err := params.CObject()
 	if err != nil {
 		return nil, err
@@ -79,4 +114,37 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 	}
 
 	return results, nil
+}
+
+// GetFirstMethod retrun a first method in the manager.
+func (mgr *cgoScriptManager) GetFirstMethod() *Method {
+	if mgr.cManager == nil {
+		return nil
+	}
+
+	cMethod := C.foreman_action_manager_getfirstmethod(mgr.cManager)
+	if cMethod == nil {
+		return nil
+	}
+
+	return NewMethodWithCObject(cMethod)
+}
+
+// ExecMethod retrun a first method in the manager.
+func (mgr *cgoScriptManager) GetNextMethod(method *Method) *Method {
+	if mgr.cManager == nil {
+		return nil
+	}
+
+	cobj, err := method.CObject()
+	if err != nil {
+		return nil
+	}
+
+	cMethod := C.foreman_action_manager_nextmethod(mgr.cManager, cobj)
+	if cMethod == nil {
+		return nil
+	}
+
+	return NewMethodWithCObject(cMethod)
 }

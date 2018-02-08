@@ -14,6 +14,33 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
+// NewMethodWithCObject returns a new method of the specified object.
+func NewMethodWithCObject(cObject unsafe.Pointer) *Method {
+	method := NewMethod()
+
+	var cname *C.char
+	if C.foreman_action_method_getname(cObject, &cname) {
+		method.Name = C.GoString(cname)
+	}
+
+	var clang *C.char
+	if C.foreman_action_method_getlanguage(cObject, &clang) {
+		method.Language = C.GoString(clang)
+	}
+
+	var ccode *C.char
+	if C.foreman_action_method_getstringcode(cObject, &ccode) {
+		method.Code = []byte(C.GoString(ccode))
+	}
+
+	var cencType C.int
+	if C.foreman_action_method_getencoding(cObject, &cencType) {
+		method.Encoding = int(cencType)
+	}
+
+	return method
+}
+
 // CObject returns a method objectfor foreman-cc.
 func (method *Method) CObject() (unsafe.Pointer, error) {
 	cmethod := C.foreman_action_method_new(C.CString(method.Language))
