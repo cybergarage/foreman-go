@@ -52,23 +52,23 @@ func (server *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*gr
 	mCount := rs.GetDataPointCount()
 	m := make([]*graphite.Metric, mCount)
 
-	dps := rs.GetFirstDataPoints()
+	ms := rs.GetFirstMetrics()
 	for n := 0; n < mCount; n++ {
 		m[n] = graphite.NewMetric()
-		if dps == nil {
+		if ms == nil {
 			break
 		}
-		m[n].Name = dps.Name
-		dpCount := len(dps.Values)
+		m[n].Name = ms.Name
+		dpCount := len(ms.Values)
 		m[n].DataPoints = graphite.NewDataPoints(dpCount)
 		for i := 0; i < dpCount; i++ {
 			dp := graphite.NewDataPoint()
-			dp.Timestamp = dps.Values[i].Timestamp
-			dp.Value = dps.Values[i].Value
+			dp.Timestamp = ms.Values[i].Timestamp
+			dp.Value = ms.Values[i].Value
 			m[n].DataPoints[i] = dp
 		}
 
-		dps = rs.GetNextDataPoints()
+		ms = rs.GetNextMetrics()
 	}
 
 	return m, nil
