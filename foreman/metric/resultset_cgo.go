@@ -44,30 +44,30 @@ func (rs *cgoResultSet) GetDataPointCount() int {
 	return int(C.foreman_metric_resultset_getdatapointcount(rs.cObject))
 }
 
-// GetFirstDataPoints returns a first data points.
-func (rs *cgoResultSet) GetFirstDataPoints() *DataPoints {
+// GetFirstMetrics returns a first data points.
+func (rs *cgoResultSet) GetFirstMetrics() *Metrics {
 	if rs.cObject == nil {
 		return nil
 	}
 
-	cDpsObject := C.foreman_metric_resultset_firstdatapoints(rs.cObject)
-	if cDpsObject == nil {
+	cmsObject := C.foreman_metric_resultset_getfirstmetrics(rs.cObject)
+	if cmsObject == nil {
 		return nil
 	}
 
-	return NewDataPointsWithCObject(cDpsObject)
+	return NewMetricsWithCObject(cmsObject)
 }
 
-// GetNextDataPoints returns a first data points.
-func (rs *cgoResultSet) GetNextDataPoints() *DataPoints {
+// GetNextMetrics returns a first data points.
+func (rs *cgoResultSet) GetNextMetrics() *Metrics {
 	if rs.cObject == nil {
 		return nil
 	}
 
-	cDpsObject := C.foreman_metric_resultset_nextdatapoints(rs.cObject)
-	if cDpsObject == nil {
+	cmsObject := C.foreman_metric_resultset_getnextmetrics(rs.cObject)
+	if cmsObject == nil {
 		return nil
 	}
 
-	return NewDataPointsWithCObject(cDpsObject)
+	return NewMetricsWithCObject(cmsObject)
 }

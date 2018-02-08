@@ -13,11 +13,11 @@ import (
 func NewResultSetWithGraphiteMetrics(gms []*graphite.Metric) (metric.ResultSet, error) {
 	rs := metric.NewResultSet()
 	for _, gm := range gms {
-		dps, err := NewDataPointsWithGraphiteMetric(gm)
+		ms, err := NewDataPointsWithGraphiteMetric(gm)
 		if err != nil {
 			return nil, err
 		}
-		err = rs.AddDataPoints(dps)
+		err = rs.AddMetrics(ms)
 		if err != nil {
 			return nil, err
 		}

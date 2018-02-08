@@ -7,14 +7,14 @@ package metric
 // ResultSet represents an abstract interface of metric store for Foreman.
 type ResultSet interface {
 	GetDataPointCount() int
-	GetFirstDataPoints() *DataPoints
-	GetNextDataPoints() *DataPoints
+	GetFirstMetrics() *Metrics
+	GetNextMetrics() *Metrics
 }
 
 // goResultSet represents a result set.
 type goResultSet struct {
 	ResultSet
-	dataPoints  []*DataPoints
+	Metrics     []*Metrics
 	iteratorPos int
 }
 
@@ -26,35 +26,35 @@ func NewResultSet() *goResultSet {
 // NewResultSetWithSize returns a new result set with the specified size.
 func NewResultSetWithSize(size int) *goResultSet {
 	rs := &goResultSet{
-		dataPoints:  make([]*DataPoints, size),
+		Metrics:     make([]*Metrics, size),
 		iteratorPos: 0,
 	}
 	return rs
 }
 
-// AddDataPoints adds a new data point.
-func (rs *goResultSet) AddDataPoints(dp *DataPoints) error {
-	rs.dataPoints = append(rs.dataPoints, dp)
+// AddMetrics adds a new data point.
+func (rs *goResultSet) AddMetrics(dp *Metrics) error {
+	rs.Metrics = append(rs.Metrics, dp)
 	return nil
 }
 
 // GetDataPointCount returns a number of the data points.
 func (rs *goResultSet) GetDataPointCount() int {
-	return len(rs.dataPoints)
+	return len(rs.Metrics)
 }
 
-// GetFirstDataPoints returns a first data points.
-func (rs *goResultSet) GetFirstDataPoints() *DataPoints {
+// GetFirstMetrics returns a first data points.
+func (rs *goResultSet) GetFirstMetrics() *Metrics {
 	rs.iteratorPos = 0
-	return rs.GetNextDataPoints()
+	return rs.GetNextMetrics()
 }
 
-// GetNextDataPoints returns a first data points.
-func (rs *goResultSet) GetNextDataPoints() *DataPoints {
-	if len(rs.dataPoints) <= rs.iteratorPos {
+// GetNextMetrics returns a first data points.
+func (rs *goResultSet) GetNextMetrics() *Metrics {
+	if len(rs.Metrics) <= rs.iteratorPos {
 		return nil
 	}
-	dp := rs.dataPoints[rs.iteratorPos]
+	dp := rs.Metrics[rs.iteratorPos]
 	rs.iteratorPos++
 	return dp
 }
