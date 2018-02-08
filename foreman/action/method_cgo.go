@@ -33,11 +33,6 @@ func NewMethodWithCObject(cObject unsafe.Pointer) *Method {
 		method.Code = []byte(C.GoString(ccode))
 	}
 
-	var cencType C.int
-	if C.foreman_action_method_getencoding(cObject, &cencType) {
-		method.Encoding = int(cencType)
-	}
-
 	return method
 }
 
@@ -51,7 +46,6 @@ func (method *Method) CObject() (unsafe.Pointer, error) {
 	C.foreman_action_method_setname(cmethod, C.CString(method.Name))
 	C.foreman_action_method_setlanguage(cmethod, C.CString(method.Language))
 	C.foreman_action_method_setstringcode(cmethod, C.CString(string(method.Code)))
-	C.foreman_action_method_setencoding(cmethod, C.int(method.Encoding))
 
 	return cmethod, nil
 }

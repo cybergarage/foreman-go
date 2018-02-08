@@ -17,13 +17,10 @@ type Method struct {
 	Language string
 	Name     string
 	Code     []byte
-	Encoding int
 }
 
 // NewMethod returns a new method.
 func NewMethod() *Method {
-	m := &Method{
-		Encoding: EncodingNone,
-	}
+	m := &Method{}
 	return m
 }

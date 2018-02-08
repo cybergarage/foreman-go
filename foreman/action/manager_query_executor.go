@@ -5,6 +5,7 @@
 package action
 
 import (
+	"encoding/base64"
 	"strings"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
@@ -24,10 +25,15 @@ func (mgr *Manager) executeInsertAction(q fql.Query) (interface{}, *errors.Error
 
 	m := NewMethodWithLanguage(lang)
 	m.Name = name
-	m.Code = []byte(code)
-	m.Encoding = EncodingNone
+	m.Language = lang
 	if enc == ActionEncodingBase64 {
-		m.Encoding = EncodingBase64
+		code, err := base64.StdEncoding.DecodeString(code)
+		if err != nil {
+			return nil, errors.NewErrorWithError(err)
+		}
+		m.Code = code
+	} else {
+		m.Code = []byte(code)
 	}
 
 	err := mgr.AddMethod(m)
@@ -46,7 +52,8 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 		}
 	}
 
-	var actionMap map[string]interface{}
+	var methods []interface{}
+
 	method := mgr.GetFirstMethod()
 	for method != nil {
 		method = mgr.GetNextMethod(method)
@@ -55,8 +62,17 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 				continue
 			}
 		}
+		var methodMap map[string]interface{}
+		methodMap[ActionColumnName] = method.Name
+		methodMap[ActionColumnLanguage] = method.Language
+		methodMap[ActionColumnCode] = base64.StdEncoding.EncodeToString(method.Code)
+		methodMap[ActionColumnEncoding] = ActionEncodingBase64
+
+		methods = append(methods, methodMap)
 	}
 
+	var actionMap map[string]interface{}
+	actionMap[ActionColumnMethods] = methods
 	actionContainer := map[string]interface{}{}
 	actionContainer[strings.ToLower(fql.QueryTargetAction)] = actionMap
 
