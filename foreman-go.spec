@@ -15,23 +15,28 @@ The Go component of the Foreman system.
 
 
 %prep
+export GOPATH="$PWD"
 find . -mindepth 1 -delete
 cp -af %{SOURCEURL0}/. .
+rm -rf src/github.com/cybergarage/foreman-go
+mkdir -p src/github.com/cybergarage
+ln -s "$PWD" src/github.com/cybergarage/foreman-go
+go get ./... || true
+./setup || true
 
 %build
-export GOPATH="$PWD"
-make build %{?_smp_mflags}
-
 
 %install
+export GOPATH="$PWD"
 make install DESTDIR=%{buildroot}
+mkdir -p %{buildroot}/usr/sbin
 cp -a bin/foremand %{buildroot}/usr/sbin
 
 %files
 %defattr(755,root,root,755)
 /usr/sbin/foremand
-#%defattr(755,root,root,755)
-#/etc/foreman/foremand.conf
+%defattr(644,root,root,755)
+/etc/foreman
 
 %changelog
 * Thu Jan 25 2018 Satoshi Konno <skonno@cybergarage.org>

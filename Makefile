@@ -17,7 +17,7 @@ GOPATH=$(shell pwd)
 GITHUB_ROOT=github.com/cybergarage
 
 PACKAGE_NAME=foreman
-DEAMON_NAME=foremand
+DAEMON_NAME=foremand
 TESTING_NAME=foremantest
 
 GITHUB=${GITHUB_ROOT}/foreman-go
@@ -31,7 +31,8 @@ GO_GRAPHITE_PACKAGES=${GO_GRAPHITE_PACKAGE_ID}
 GITHUB_ID=${GITHUB}.git/${PACKAGE_NAME}
 PACKAGE_ID=${GITHUB}/${PACKAGE_NAME}
 PACKAGES=\
-	${PACKAGE_ID}/log \
+	${PACKAGE_ID} \
+	${PACKAGE_ID}/logging \
 	${PACKAGE_ID}/errors \
 	${PACKAGE_ID}/registry \
 	${PACKAGE_ID}/metric \
