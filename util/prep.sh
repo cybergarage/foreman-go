@@ -3,3 +3,5 @@
 tag=$(git describe --abbrev=0 --tags)
 curl -sLO "https://https://raw.github.com/cybergarage/foreman-cc/releases/download/$tag/foreman-cc_$tag-1_amd64.deb"
 dpkg -i "foreman-cc_$tag-1_amd64.deb"
+mkdir -p src/github.com/cybergarage
+ln -s "$PWD" src/github.com/cybergarage/foreman-go
