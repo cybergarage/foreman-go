@@ -39,7 +39,7 @@ func (mgr *Manager) executeInsertAction(q fql.Query) (interface{}, *errors.Error
 }
 
 func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error) {
-	ope /*whereName*/, _, ok := q.GetConditionByColumn(fql.QueryColumnName)
+	ope, whereName, ok := q.GetConditionByColumn(fql.QueryColumnName)
 	if ok {
 		if ope.GetType() != fql.OperatorTypeEQ {
 			ok = false
@@ -47,18 +47,15 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 	}
 
 	var actionMap map[string]interface{}
-	/*
-		FIXME : Update foraman-cc
-		for _, rule := range mgr.GetRules() {
-			ruleName := rule.GetName()
-			if ok {
-				if ruleName != whereName {
-					continue
-				}
+	method := mgr.GetFirstMethod()
+	for method != nil {
+		method = mgr.GetNextMethod(method)
+		if ok {
+			if method.Name != whereName {
+				continue
 			}
-			actioMap[ruleName] = rule.String()
 		}
-	*/
+	}
 
 	actionContainer := map[string]interface{}{}
 	actionContainer[strings.ToLower(fql.QueryTargetAction)] = actionMap
@@ -67,7 +64,7 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 }
 
 func (mgr *Manager) executeDeleteAction(q fql.Query) (interface{}, *errors.Error) {
-	ope /*whereName*/, _, ok := q.GetConditionByColumn(fql.QueryColumnName)
+	ope, whereName, ok := q.GetConditionByColumn(fql.QueryColumnName)
 	if ok {
 		if ope.GetType() != fql.OperatorTypeEQ {
 			ok = false
@@ -76,25 +73,20 @@ func (mgr *Manager) executeDeleteAction(q fql.Query) (interface{}, *errors.Error
 
 	// Delete only a specified rule
 
-	/*
-		FIXME : Update foraman-cc
-		if ok {
-			if !mgr.De. RemoveRule(whereName) {
-				return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
-			}
-			return nil, nil
+	if ok {
+		err := mgr.RemoveMethod(whereName)
+		if err != nil {
+			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 		}
-	*/
+		return nil, nil
+	}
 
 	// Delete all rules
 
-	/*
-		FIXME : Update foraman-cc
-		err := mgr.Clear()
-		if err != nil {
-			return nil, errors.NewErrorWithError(err)
-		}
-	*/
+	err := mgr.RemoveAllMethods()
+	if err != nil {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
+	}
 
 	return nil, nil
 }
