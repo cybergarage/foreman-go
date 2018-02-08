@@ -1,0 +1,14 @@
+Source: foreman-go
+Priority: optional
+Maintainer: Muru <skonno@cybergarage.org>
+Build-Depends: debhelper (>=9), foreman-cc
+Standards-Version: 3.9.6
+Homepage: https://github.com/cybergarage/foreman-go
+#Vcs-Git: git://anonscm.debian.org/collab-maint/foreman-go.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/foreman-go.git
+
+Package: foreman-go
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: The Foreman Go demon
+ The Go component of the Foreman system.
