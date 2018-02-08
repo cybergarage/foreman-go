@@ -15,30 +15,30 @@ go get github.com/antlr/antlr4/runtime/Go/antlr
 # Get latest source codes.
 ########################################
 
-git pull
+git pull || true
 
 if [ ! -d src ]; then
-  mkdir -p src
-#else
-#  rm -rf src/github.com/cybergarage
+	mkdir -p src
+else
+	: #  rm -rf src/github.com/cybergarage
 fi
 
 # go-graphite
 go_graphite_path="github.com/cybergarage/go-graphite"
 go_graphite_dir="src/${go_graphite_path}"
-if [ -d ${go_graphite_dir} ]; then
-  pushd ${go_graphite_dir} && git pull && popd
+if [ -d "${go_graphite_dir}" ]; then
+	(pushd "${go_graphite_dir}"; git pull)
 else
-  go get -u github.com/cybergarage/go-graphite.git/net/graphite
-  pushd src && mv github.com/cybergarage/go-graphite.git ${go_graphite_path} && popd
+	go get -u github.com/cybergarage/go-graphite.git/net/graphite
+	(pushd src && mv github.com/cybergarage/go-graphite.git "${go_graphite_path}")
 fi
 
 # foreman-go
 foreman_go_path="github.com/cybergarage/foreman-go"
 foreman_go_dir="src/${foreman_go_path}"
-if [ -d ${foreman_go_dir} ]; then
-  pushd ${foreman_go_dir} && git pull && popd
+if [ -d "${foreman_go_dir}" ]; then
+	(pushd "${foreman_go_dir}"; git pull)
 else
-  go get -u github.com/cybergarage/foreman-go.git/foreman
-  pushd src && mv github.com/cybergarage/foreman-go.git ${foreman_go_path} && popd
+	go get -u github.com/cybergarage/foreman-go.git/foreman
+	(pushd src && mv github.com/cybergarage/foreman-go.git "${foreman_go_path}")
 fi
