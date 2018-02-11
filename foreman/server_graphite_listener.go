@@ -49,7 +49,7 @@ func (server *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*gr
 		return nil, err
 	}
 
-	mCount := rs.GetDataPointCount()
+	mCount := rs.GetMetricsCount()
 	m := make([]*graphite.Metric, mCount)
 
 	ms := rs.GetFirstMetrics()

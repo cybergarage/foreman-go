@@ -6,7 +6,7 @@ package metric
 
 // ResultSet represents an abstract interface of metric store for Foreman.
 type ResultSet interface {
-	GetDataPointCount() int
+	GetMetricsCount() int
 	GetFirstMetrics() *Metrics
 	GetNextMetrics() *Metrics
 }
@@ -38,8 +38,8 @@ func (rs *goResultSet) AddMetrics(dp *Metrics) error {
 	return nil
 }
 
-// GetDataPointCount returns a number of the data points.
-func (rs *goResultSet) GetDataPointCount() int {
+// GetMetricsCount returns a number of the data points.
+func (rs *goResultSet) GetMetricsCount() int {
 	return len(rs.Metrics)
 }
 
