@@ -138,7 +138,7 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 
 	crs := C.foreman_metric_resultset_new()
 
-	if !C.foreman_metric_store_query(store.cStore, cq, crs) {
+	if !C.foreman_metric_store_querydata(store.cStore, cq, crs) {
 		C.foreman_metric_resultset_delete(crs)
 		return nil, fmt.Errorf(errorStoreCouldNotAddMetric, q.String())
 	}
