@@ -9,6 +9,6 @@ import (
 	"testing"
 )
 
-func TestNewDataPoints(t *testing.T) {
-	NewDataPoints(0)
+func TestNewMetrics(t *testing.T) {
+	NewMetrics()
 }

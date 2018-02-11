@@ -13,13 +13,13 @@ import (
 func TestNewResultSet(t *testing.T) {
 	rs := NewResultSet()
 
-	dpsCount := rs.GetDataPointCount()
+	dpsCount := rs.GetMetricsCount()
 	if dpsCount != 0 {
 		t.Error(fmt.Errorf("DataPoints is found : %d", dpsCount))
 	}
 
-	dps := rs.GetFirstDataPoints()
-	if dps != nil {
+	ms := rs.GetFirstMetrics()
+	if ms != nil {
 		t.Error(fmt.Errorf("DataPoints is not nil"))
 		return
 	}
