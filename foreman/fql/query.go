@@ -31,4 +31,6 @@ type Query interface {
 	AddCondition(*Condition) error
 	GetConditions() (Conditions, bool)
 	GetConditionByColumn(leftOpe string) (*Operator, string, bool)
+
+	String() string
 }

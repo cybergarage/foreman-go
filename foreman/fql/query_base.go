@@ -4,6 +4,10 @@
 
 package fql
 
+import (
+	"fmt"
+)
+
 // baseQuery represents a parameter.
 type baseQuery struct {
 	*Target
@@ -113,4 +117,92 @@ func (q *baseQuery) GetConditionByColumn(leftOpe string) (*Operator, string, boo
 		}
 	}
 	return nil, "", false
+}
+
+// String returns a string description of the instance
+func (q *baseQuery) String() string {
+
+	var queryString string
+
+	queryTypeStrings := map[QueryType]string{
+		QueryTypeInsert: QueryInsertString,
+		QueryTypeSelect: QuerySelectString,
+		QueryTypeDelete: QueryDeleteString,
+	}
+	queryTypeString, ok := queryTypeStrings[q.GetType()]
+	if ok {
+		queryString += fmt.Sprintf("%s", queryTypeString)
+	}
+
+	// Columns (Select)
+
+	if q.GetType() == QueryTypeSelect {
+		columns, ok := q.GetColumns()
+		if ok {
+			queryString += "("
+			for n, column := range columns {
+				if 0 < n {
+					queryString += ", "
+				}
+				queryString += column.String()
+			}
+			queryString += ")"
+		}
+	}
+
+	// Target
+
+	target, ok := q.GetTarget()
+	if ok {
+		switch q.GetType() {
+		case QueryTypeInsert:
+			queryString += fmt.Sprintf("INTO %s", target)
+		case QueryTypeSelect, QueryTypeDelete:
+			queryString += fmt.Sprintf("FROM %s", target)
+		}
+	}
+
+	// Columns (Insert)
+
+	if q.GetType() == QueryTypeInsert {
+		columns, ok := q.GetColumns()
+		if ok {
+			queryString += "("
+			for n, column := range columns {
+				if 0 < n {
+					queryString += ", "
+				}
+				queryString += column.String()
+			}
+			queryString += ")"
+		}
+	}
+
+	// Values (Insert)
+
+	if q.GetType() == QueryTypeInsert {
+		values, ok := q.GetValues()
+		if ok {
+			queryString += "VALUES ("
+			for n, value := range values {
+				if 0 < n {
+					queryString += ", "
+				}
+				queryString += value.String()
+			}
+			queryString += ")"
+		}
+	}
+
+	// Conditions
+
+	conditions, ok := q.GetConditions()
+	if ok {
+		queryString += "WHERE "
+		for _, condition := range conditions {
+			queryString += fmt.Sprintf("%s ", condition.String())
+		}
+	}
+
+	return queryString
 }
