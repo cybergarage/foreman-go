@@ -4,6 +4,10 @@
 
 package fql
 
+import (
+	"fmt"
+)
+
 const (
 	operatorLeft  = 0
 	operatorRight = 1
@@ -49,4 +53,9 @@ func (c *Condition) GetOperand() string {
 // GetOperator returns the operator.
 func (c *Condition) GetOperator() *Operator {
 	return c.Operator
+}
+
+// String returns a string description of the instance
+func (c *Condition) String() string {
+	return fmt.Sprintf("%s %s %s", c.Operands[0], c.Operator.String(), c.Operands[1])
 }

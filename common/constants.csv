@@ -45,8 +45,12 @@ action_column_encoding,"encoding"
 action_column_language,"language"
 
 ########################################
-# FQL
+# Query
 ########################################
+
+query_insert_string,"INSERT"
+query_select_string,"SELECT"
+query_delete_string,"DELETE"
 
 query_target_qos,"QOS"
 query_target_config,"CONFIG"
@@ -73,5 +77,4 @@ query_column_value,"value"
 ########################################
 
 graphite_response_target,"target"
-graphite_response_entries,"entries"
 graphite_response_datapoints,"datapoints"
