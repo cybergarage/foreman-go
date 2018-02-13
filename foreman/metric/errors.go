@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package metric provides query interfaces for metric store.
 package metric
 
 const (
@@ -11,6 +10,5 @@ const (
 	errorStoreCouldNotOpen      = "Couldn't open : %s"
 	errorStoreCouldNotClose     = "Couldn't close : %s"
 	errorStoreCouldNotAddMetric = "Couldn't add a metric : %s"
-	errorStoreCouldNotQuery     = "Couldn't get the specified metric : %s"
-	errorResultSetCouldGetValue = "Couldn't get the specified index value : %d"
+	errorStoreInvalidQuery      = "Invalid query : %s"
 )

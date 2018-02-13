@@ -37,31 +37,22 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	return nil, nil
 }
 
-func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error) {
-	/*
-		whereName, ope, ok := q.GetConditionByColumn(fql.QueryColumnName)
-		if ok {
-			if ope.GetType() != fql.QueryConditionOperatorEq {
-				ok = false
-			}
-		}
+func (mgr *Manager) executeSelectQuery(fq fql.Query) (interface{}, *errors.Error) {
+	q, err := NewQueryWithQuery(fq)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
 
-		var ruleMap map[string]string
-		for _, rule := range mgr.GetRules() {
-			ruleName := rule.GetName()
-			if ok {
-				if ruleName != whereName {
-					continue
-				}
-			}
-			ruleMap[ruleName] = rule.String()
-		}
+	rs, err := mgr.Query(q)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
 
-		qosContainer := map[string]interface{}{}
-		qosContainer[strings.ToLower(fql.QueryTargetQos)] = ruleMap
+	ms := rs.GetFirstMetrics()
+	for ms != nil {
+		ms = rs.GetNextMetrics()
+	}
 
-		return qosContainer, nil
-	*/
 	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 }
 
