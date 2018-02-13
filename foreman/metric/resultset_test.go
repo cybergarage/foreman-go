@@ -18,7 +18,7 @@ func TestNewResultSet(t *testing.T) {
 		t.Error(fmt.Errorf("DataPoints is found : %d", dpsCount))
 	}
 
-	dps := rs.GetFirstDataPoints()
+	dps := rs.GetFirstMetrics()
 	if dps != nil {
 		t.Error(fmt.Errorf("DataPoints is not nil"))
 		return

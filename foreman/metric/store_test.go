@@ -67,7 +67,7 @@ func testStore(t *testing.T, store *Store) {
 			t.Error(fmt.Errorf("ResultSet is invalid : %d", rsCount))
 		}
 
-		dps := rs.GetFirstDataPoints()
+		dps := rs.GetFirstMetrics()
 		if dps == nil {
 			t.Error(fmt.Errorf("DataPoint is not found"))
 			return
