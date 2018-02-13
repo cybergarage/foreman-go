@@ -2,31 +2,103 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package metric provides query interfaces for metric store.
 package metric
 
 import (
 	"fmt"
+	"strconv"
 	"time"
+
+	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
-// Query represents a Foreman Query.
+type QuerySourceType int
+
+const (
+	QuerySourceTypeUnknown QuerySourceType = iota
+	QuerySourceTypeMetric
+	QuerySourceTypeData
+)
+
+// Query represents a query for the metric store.
 type Query struct {
+	Source   QuerySourceType
 	Target   string
 	From     *time.Time
 	Until    *time.Time
 	Interval time.Duration
 }
 
-// NewQuery returns a new Query.
-func NewQuery() *Query {
+// NewQueryWithSource returns a new query of the specified type.
+func NewQueryWithSource(srcType QuerySourceType) *Query {
 	q := &Query{
+		Source:   srcType,
+		Target:   "",
 		From:     nil,
 		Until:    nil,
 		Interval: 0,
 	}
-
 	return q
+}
+
+// NewMetricQuery returns a new metric query.
+func NewMetricQuery() *Query {
+	return NewQueryWithSource(QuerySourceTypeMetric)
+}
+
+// NewDataQuery returns a new metric query.
+func NewDataQuery() *Query {
+	return NewQueryWithSource(QuerySourceTypeData)
+}
+
+// NewQueryWithQuery returns a new query of the specified query.
+func NewQueryWithQuery(fq fql.Query) (*Query, error) {
+	if fq.GetType() != fql.QueryTypeSelect {
+		return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())
+	}
+
+	var q *Query = nil
+	if fq.HasOnlyColumn(fql.QueryColumnId) {
+		q = NewMetricQuery()
+	} else {
+		q = NewDataQuery()
+	}
+
+	// Where
+
+	wheres, ok := fq.GetConditions()
+	if ok {
+		for _, where := range wheres {
+			switch where.GetColumn() {
+			case fql.QueryColumnId:
+				switch where.GetOperator().GetType() {
+				case fql.OperatorTypeEQ:
+					q.Target = where.GetOperand()
+				default:
+					return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())
+				}
+			case fql.QueryColumnTimestamp:
+				ts, err := strconv.ParseInt(where.GetOperand(), 10, 64)
+				if err != nil {
+					return nil, err
+				}
+				switch where.GetOperator().GetType() {
+				case fql.OperatorTypeGT, fql.OperatorTypeGE:
+					t := time.Unix(ts, 0)
+					q.From = &t
+				case fql.OperatorTypeLT, fql.OperatorTypeLE:
+					t := time.Unix(ts, 0)
+					q.Until = &t
+				default:
+					return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())
+				}
+			default:
+				return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())
+			}
+		}
+	}
+
+	return q, nil
 }
 
 // String returns a string description of the instance
