@@ -10,6 +10,7 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
 func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error) {
@@ -37,31 +38,70 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	return nil, nil
 }
 
-func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error) {
-	/*
-		whereName, ope, ok := q.GetConditionByColumn(fql.QueryColumnName)
-		if ok {
-			if ope.GetType() != fql.QueryConditionOperatorEq {
-				ok = false
-			}
+func (mgr *Manager) executeSelectMetricsQuery(q *Query) (interface{}, *errors.Error) {
+	rs, err := mgr.Query(q)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	// See : Graphite HTTP API (http://graphite-api.readthedocs.io/en/latest/api.html)
+
+	msArray := []string{}
+
+	ms := rs.GetFirstMetrics()
+	for ms != nil {
+		msArray = append(msArray, ms.Name)
+		ms = rs.GetNextMetrics()
+	}
+
+	return msArray, nil
+}
+
+func (mgr *Manager) executeSelectMetricsDataQuery(q *Query) (interface{}, *errors.Error) {
+	rs, err := mgr.Query(q)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	// See : Graphite Render URL API (http://graphite.readthedocs.io/en/latest/render_api.html)
+
+	rootContainer := []interface{}{}
+
+	ms := rs.GetFirstMetrics()
+	for ms != nil {
+		msMap := map[string]interface{}{}
+		msMap[json.GraphiteResponseTarget] = ms.Name
+
+		dps := []interface{}{}
+		for _, v := range ms.Values {
+			dp := []interface{}{}
+			dp = append(dp, v.Value)
+			dp = append(dp, v.Timestamp.Unix())
+			dps = append(dps, dp)
 		}
+		msMap[json.GraphiteResponseDatapoints] = dps
 
-		var ruleMap map[string]string
-		for _, rule := range mgr.GetRules() {
-			ruleName := rule.GetName()
-			if ok {
-				if ruleName != whereName {
-					continue
-				}
-			}
-			ruleMap[ruleName] = rule.String()
-		}
+		rootContainer = append(rootContainer, msMap)
 
-		qosContainer := map[string]interface{}{}
-		qosContainer[strings.ToLower(fql.QueryTargetQos)] = ruleMap
+		ms = rs.GetNextMetrics()
+	}
 
-		return qosContainer, nil
-	*/
+	return rootContainer, nil
+}
+
+func (mgr *Manager) executeSelectQuery(fq fql.Query) (interface{}, *errors.Error) {
+	q, err := NewQueryWithQuery(fq)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	switch q.Source {
+	case QuerySourceMetricType:
+		return mgr.executeSelectMetricsQuery(q)
+	case QuerySourceDataType:
+		return mgr.executeSelectMetricsDataQuery(q)
+	}
+
 	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 }
 

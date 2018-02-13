@@ -39,7 +39,7 @@ func (server *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*gr
 	}
 
 	// graphite.Query to foreman.Query
-	fq := metric.NewQuery()
+	fq := metric.NewMetricQuery()
 	fq.Target = gq.Target
 	fq.From = gq.From
 	fq.Until = gq.Until

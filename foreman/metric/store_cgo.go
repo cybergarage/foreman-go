@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package metric provides query interfaces for metric store.
 package metric
 
 // #include <foreman/foreman-c.h>
@@ -136,11 +135,23 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 		return nil, err
 	}
 
+	if q.Source == QuerySourceUnknownType {
+		return nil, fmt.Errorf(errorStoreInvalidQuery, q.String())
+	}
+
 	crs := C.foreman_metric_resultset_new()
 
-	if !C.foreman_metric_store_querydata(store.cStore, cq, crs) {
+	executed := false
+	switch q.Source {
+	case QuerySourceMetricType:
+		executed = bool(C.foreman_metric_store_querymetric(store.cStore, cq, crs))
+	case QuerySourceDataType:
+		executed = bool(C.foreman_metric_store_querydata(store.cStore, cq, crs))
+	}
+
+	if !executed {
 		C.foreman_metric_resultset_delete(crs)
-		return nil, fmt.Errorf(errorStoreCouldNotAddMetric, q.String())
+		return nil, fmt.Errorf(errorStoreInvalidQuery, q.String())
 	}
 
 	return NewResultSetWithCObject(crs), nil

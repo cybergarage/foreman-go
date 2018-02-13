@@ -10,5 +10,6 @@ import (
 )
 
 func TestNewQuery(t *testing.T) {
-	NewQuery()
+	NewMetricQuery()
+	NewDataQuery()
 }
