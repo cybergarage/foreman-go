@@ -27,13 +27,15 @@ type RootDestination interface {
 
 // Route represents a route.
 type Route struct {
+	Name        string
 	Source      RootSource
 	Destination RootDestination
 }
 
 // NewRouteWithObjects returns a new boolean parameter.
-func NewRouteWithObjects(srcObj RootSource, destObj RootDestination) *Route {
+func NewRouteWithObjects(name string, srcObj RootSource, destObj RootDestination) *Route {
 	route := &Route{
+		Name:        name,
 		Source:      srcObj,
 		Destination: destObj,
 	}
@@ -50,5 +52,5 @@ func (route *Route) Equals(other *Route) bool {
 
 // String returns a string description
 func (route *Route) String() string {
-	return fmt.Sprintf("%s TO %s", route.Source.String(), route.Destination.String())
+	return fmt.Sprintf("%s : %s TO %s", route.Name, route.Source.String(), route.Destination.String())
 }

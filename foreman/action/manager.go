@@ -28,7 +28,7 @@ func NewManager() *Manager {
 }
 
 // CreateRoute tries to creat a new route with the specified route names.
-func (mgr *Manager) CreateRoute(srcName string, destName string) error {
+func (mgr *Manager) CreateRoute(name string, srcName string, destName string) error {
 
 	// Find a target method of the specified destination name.
 
@@ -44,7 +44,8 @@ func (mgr *Manager) CreateRoute(srcName string, destName string) error {
 
 	// Added a new route
 
-	route := NewRouteWithObjects(srcObj, destMethod)
+	route := NewRouteWithObjects(name, srcObj, destMethod)
+
 	err := mgr.RouteManager.AddRoute(route)
 	if err != nil {
 		return err
