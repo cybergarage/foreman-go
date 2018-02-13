@@ -14,13 +14,13 @@ type RouteObject interface {
 	String() string
 }
 
-// RootSource represents an abstract interface for the route source object.
-type RootSource interface {
+// RouteSource represents an abstract interface for the route source object.
+type RouteSource interface {
 	RouteObject
 }
 
-// RootDestination represents an abstract interface for the route destination object.
-type RootDestination interface {
+// RouteDestination represents an abstract interface for the route destination object.
+type RouteDestination interface {
 	RouteObject
 	ProcessEvent(e *Event) (ResultSet, error)
 }
@@ -28,12 +28,12 @@ type RootDestination interface {
 // Route represents a route.
 type Route struct {
 	Name        string
-	Source      RootSource
-	Destination RootDestination
+	Source      RouteSource
+	Destination RouteDestination
 }
 
 // NewRouteWithObjects returns a new boolean parameter.
-func NewRouteWithObjects(name string, srcObj RootSource, destObj RootDestination) *Route {
+func NewRouteWithObjects(name string, srcObj RouteSource, destObj RouteDestination) *Route {
 	route := &Route{
 		Name:        name,
 		Source:      srcObj,

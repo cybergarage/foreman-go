@@ -6,5 +6,5 @@ package action
 
 // ActionObject represents an abstract interface for the action.
 type ActionObject interface {
-	RootDestination
+	RouteDestination
 }
