@@ -1,2 +1,0 @@
-#!/bin/bash
-../../../common/constants.go.gen fql ../../../common/constants.csv '^(graphite)'
