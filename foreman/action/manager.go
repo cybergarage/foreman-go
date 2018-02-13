@@ -15,16 +15,27 @@ import (
 type Manager struct {
 	*ScriptManager
 	*RouteManager
+	routeContainers []RouteContainer
 	fql.QueryExecutor
 }
 
 // NewManager returns a new action manager.
 func NewManager() *Manager {
 	mgr := &Manager{
-		ScriptManager: NewScriptManager(),
-		RouteManager:  NewRouteManager(),
+		ScriptManager:   NewScriptManager(),
+		RouteManager:    NewRouteManager(),
+		routeContainers: make([]RouteContainer, 0),
 	}
+
+	mgr.AddRouteContainer(mgr.ScriptManager)
+
 	return mgr
+}
+
+// AddRouteContainer adds a route container.
+func (mgr *Manager) AddRouteContainer(c RouteContainer) error {
+	mgr.routeContainers = append(mgr.routeContainers, c)
+	return nil
 }
 
 // CreateRoute tries to creat a new route with the specified route names.

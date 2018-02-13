@@ -116,6 +116,20 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 	return results, nil
 }
 
+// GetMethod retrun a method with the specified name.
+func (mgr *cgoScriptManager) GetMethod(name string) *Method {
+	if mgr.cManager == nil {
+		return nil
+	}
+
+	cMethod := C.foreman_action_manager_getmethod(mgr.cManager, C.CString(name))
+	if cMethod == nil {
+		return nil
+	}
+
+	return NewMethodWithCObject(cMethod)
+}
+
 // GetFirstMethod retrun a first method in the manager.
 func (mgr *cgoScriptManager) GetFirstMethod() *Method {
 	if mgr.cManager == nil {
