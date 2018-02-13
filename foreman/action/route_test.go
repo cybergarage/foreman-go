@@ -9,7 +9,7 @@ import (
 )
 
 func TestNewRoute(t *testing.T) {
-	NewRouteWithObjects(nil, nil)
+	NewRouteWithObjects("", nil, nil)
 	newRouteSourceWithName("")
 	newRouteSourceWithScriptManagerAndName(nil, "")
 }
