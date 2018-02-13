@@ -51,3 +51,13 @@ func NewOperatorWithString(opeStr string) *Operator {
 func (op *Operator) GetType() OperatorType {
 	return op.operatorType
 }
+
+// String returns a string description of the instance
+func (op *Operator) String() string {
+	for opeStr, opeType := range operatorMap {
+		if op.GetType() == opeType {
+			return opeStr
+		}
+	}
+	return ""
+}

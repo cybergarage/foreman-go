@@ -5,6 +5,9 @@
 package fql
 
 const (
+	QueryInsertString         = "INSERT"
+	QuerySelectString         = "SELECT"
+	QueryDeleteString         = "DELETE"
 	QueryTargetQos            = "QOS"
 	QueryTargetConfig         = "CONFIG"
 	QueryTargetMetrics        = "METRICS"
