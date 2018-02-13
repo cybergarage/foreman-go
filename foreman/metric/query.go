@@ -15,9 +15,9 @@ import (
 type QuerySourceType int
 
 const (
-	QuerySourceTypeUnknown QuerySourceType = iota
-	QuerySourceTypeMetric
-	QuerySourceTypeData
+	QuerySourceUnknownType QuerySourceType = iota
+	QuerySourceMetricType
+	QuerySourceDataType
 )
 
 // Query represents a query for the metric store.
@@ -43,12 +43,12 @@ func NewQueryWithSource(srcType QuerySourceType) *Query {
 
 // NewMetricQuery returns a new metric query.
 func NewMetricQuery() *Query {
-	return NewQueryWithSource(QuerySourceTypeMetric)
+	return NewQueryWithSource(QuerySourceMetricType)
 }
 
 // NewDataQuery returns a new metric query.
 func NewDataQuery() *Query {
-	return NewQueryWithSource(QuerySourceTypeData)
+	return NewQueryWithSource(QuerySourceDataType)
 }
 
 // NewQueryWithQuery returns a new query of the specified query.
