@@ -59,6 +59,8 @@ func NewServer() *Server {
 	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
 	server.metricMgr.SetRegisterListener(server)
 
+	server.actionMgr.AddRouteContainer(server.qosMgr)
+
 	return server
 }
 
