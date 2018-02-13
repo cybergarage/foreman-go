@@ -5,7 +5,7 @@
 package action
 
 type routeMethod struct {
-	RootDestination
+	RouteDestination
 	*ScriptManager
 	Name string
 }

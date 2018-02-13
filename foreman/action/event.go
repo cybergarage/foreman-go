@@ -8,7 +8,7 @@ import "time"
 
 // EventObject represents an interface of the event object.
 type EventObject interface {
-	RootSource
+	RouteSource
 }
 
 // Event represents an event object.

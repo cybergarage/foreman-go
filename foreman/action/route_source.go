@@ -5,7 +5,7 @@
 package action
 
 type routeSource struct {
-	RootSource
+	RouteSource
 	Name string
 }
 

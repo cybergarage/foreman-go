@@ -78,6 +78,6 @@ func (mgr RouteManager) FindRoutesBySourceRegKey(regKey string) []*Route {
 }
 
 // FindRoutesBySourceObject returns the target routes for the specified source objects.
-func (mgr RouteManager) FindRoutesBySourceObject(srcObject RootSource) []*Route {
+func (mgr RouteManager) FindRoutesBySourceObject(srcObject RouteSource) []*Route {
 	return mgr.FindRoutesBySourceRegKey(srcObject.GetName())
 }
