@@ -5,6 +5,7 @@
 package metric
 
 import (
+	"math"
 	"strconv"
 	"time"
 
@@ -74,6 +75,12 @@ func (mgr *Manager) executeSelectMetricsDataQuery(q *Query) (interface{}, *error
 
 		dps := []interface{}{}
 		for _, v := range ms.Values {
+			if v == nil {
+				continue
+			}
+			if math.IsNaN(v.Value) {
+				continue
+			}
 			dp := []interface{}{}
 			dp = append(dp, v.Value)
 			dp = append(dp, v.Timestamp.Unix())
