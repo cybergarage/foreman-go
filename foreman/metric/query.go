@@ -103,5 +103,20 @@ func NewQueryWithQuery(fq fql.Query) (*Query, error) {
 
 // String returns a string description of the instance
 func (q *Query) String() string {
-	return fmt.Sprintf("%s [%s - %s]", q.Target, q.From.String(), q.Until.String())
+	target := ""
+	if 0 < len(q.Target) {
+		target = q.Target
+	}
+
+	from := ""
+	if q.From != nil {
+		from = q.From.String()
+	}
+
+	until := ""
+	if q.Until != nil {
+		until = q.Until.String()
+	}
+
+	return fmt.Sprintf("%s [%s - %s]", target, from, until)
 }
