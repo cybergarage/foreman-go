@@ -13,7 +13,7 @@ import (
 const (
 	testStoreMetricsCount       = 100
 	testStoreMetricsPrefix      = "path"
-	testStoreMetricsInterval    = DefaultRetiontionInterval
+	testStoreMetricsInterval    = DefaultRetentionInterval
 	testStoreMetricsPeriodCount = 10
 )
 
