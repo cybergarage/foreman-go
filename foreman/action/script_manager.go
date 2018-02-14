@@ -26,12 +26,11 @@ type ScriptManager struct {
 	RouteContainer
 }
 
-// FindRouteSource searches a source object with the specified regex name.
-func (mgr *Manager) FindRouteSource(name string) RouteSource {
-	return nil
-}
-
-// FindRouteDestination searches a destination object with the specified regex name.
-func (mgr *Manager) FindRouteDestination(name string) RouteSource {
-	return nil
+// FindRouteDestination returns a destination object with the specified name.
+func (mgr *ScriptManager) FindRouteDestination(name string) RouteDestination {
+	method := mgr.GetMethod(name)
+	if method == nil {
+		return nil
+	}
+	return newRouteDestinationMethod(mgr, method.GetName())
 }

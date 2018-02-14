@@ -45,9 +45,9 @@ func (mgr *Manager) executeSelectRoute(q fql.Query) (interface{}, *errors.Error)
 			}
 		}
 		var routeMap map[string]string
-		routeMap[RouteColumnName] = route.Name
-		routeMap[RouteColumnSource] = route.Source.GetName()
-		routeMap[RouteColumnDestination] = route.Destination.GetName()
+		routeMap[RouteColumnName] = route.GetName()
+		routeMap[RouteColumnSource] = route.GetSource()
+		routeMap[RouteColumnDestination] = route.GetDestination()
 		routes = append(routes, routeMap)
 	}
 
