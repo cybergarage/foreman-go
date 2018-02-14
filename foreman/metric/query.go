@@ -29,10 +29,10 @@ type Query struct {
 	Interval time.Duration
 }
 
-// NewQueryWithSource returns a new query of the specified type.
-func NewQueryWithSource(srcType QuerySourceType) *Query {
+// NewMetricQuery returns a new metric query.
+func NewMetricQuery() *Query {
 	q := &Query{
-		Source:   srcType,
+		Source:   QuerySourceMetricType,
 		Target:   "",
 		From:     nil,
 		Until:    nil,
@@ -41,14 +41,18 @@ func NewQueryWithSource(srcType QuerySourceType) *Query {
 	return q
 }
 
-// NewMetricQuery returns a new metric query.
-func NewMetricQuery() *Query {
-	return NewQueryWithSource(QuerySourceMetricType)
-}
-
 // NewDataQuery returns a new metric query.
 func NewDataQuery() *Query {
-	return NewQueryWithSource(QuerySourceDataType)
+	now := time.Now()
+	from := now.Add(QueryDefaultFromOffset)
+	q := &Query{
+		Source:   QuerySourceDataType,
+		Target:   "",
+		From:     &from,
+		Until:    &now,
+		Interval: 0,
+	}
+	return q
 }
 
 // NewQueryWithQuery returns a new query of the specified query.
