@@ -46,5 +46,7 @@ func NewSQLiteStore() *Store {
 
 // NewStore returns a new Store.
 func NewStore() *Store {
-	return NewSQLiteStore()
+	store := NewSQLiteStore()
+	store.SetRetentionInterval(DefaultRetentionInterval)
+	return store
 }
