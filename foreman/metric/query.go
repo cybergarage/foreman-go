@@ -112,15 +112,23 @@ func (q *Query) String() string {
 		target = q.Target
 	}
 
-	from := ""
+	from := int64(0)
 	if q.From != nil {
-		from = q.From.String()
+		from = q.From.Unix()
 	}
 
-	until := ""
+	until := int64(0)
 	if q.Until != nil {
-		until = q.Until.String()
+		until = q.Until.Unix()
 	}
 
-	return fmt.Sprintf("%s [%s - %s]", target, from, until)
+	return fmt.Sprintf("%s FROM %s WHERE %s == %s AND %s >= %d AND %s <= %d",
+		fql.QuerySelectString,
+		fql.QueryTargetMetrics,
+		fql.QueryColumnId,
+		target,
+		fql.QueryColumnTimestamp,
+		from,
+		fql.QueryColumnTimestamp,
+		until)
 }
