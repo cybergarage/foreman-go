@@ -36,8 +36,8 @@ func resultSetFinalizer(rs *cgoResultSet) {
 	}
 }
 
-// GetDataPointCount returns a number of the data points.
-func (rs *cgoResultSet) GetDataPointCount() int {
+// GetMetricsCount returns a number of the data points.
+func (rs *cgoResultSet) GetMetricsCount() int {
 	if rs.cObject == nil {
 		return 0
 	}
