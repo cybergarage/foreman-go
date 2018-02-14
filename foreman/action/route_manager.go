@@ -19,7 +19,7 @@ func NewRouteManager() *RouteManager {
 
 // AddRoute adds a new route.
 func (mgr RouteManager) AddRoute(route *Route) error {
-	key := route.Source.GetName()
+	key := route.GetSource()
 	routes, ok := mgr.routeMap[key]
 	if !ok {
 		routes = make([]*Route, 0)

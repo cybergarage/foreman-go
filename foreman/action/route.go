@@ -14,6 +14,11 @@ type RouteObject interface {
 	String() string
 }
 
+// ActionObject represents an abstract interface for the action.
+type ActionObject interface {
+	ProcessEvent(e *Event) (ResultSet, error)
+}
+
 // RouteSource represents an abstract interface for the route source object.
 type RouteSource interface {
 	RouteObject
@@ -22,24 +27,39 @@ type RouteSource interface {
 // RouteDestination represents an abstract interface for the route destination object.
 type RouteDestination interface {
 	RouteObject
-	ProcessEvent(e *Event) (ResultSet, error)
+	ActionObject
 }
 
 // Route represents a route.
 type Route struct {
 	Name        string
-	Source      RouteSource
-	Destination RouteDestination
+	Source      string
+	Destination string
 }
 
-// NewRouteWithObjects returns a new boolean parameter.
-func NewRouteWithObjects(name string, srcObj RouteSource, destObj RouteDestination) *Route {
+// NewRouteWithStrings returns a new route with the specified string parameters.
+func NewRouteWithStrings(name string, src string, dest string) *Route {
 	route := &Route{
 		Name:        name,
-		Source:      srcObj,
-		Destination: destObj,
+		Source:      src,
+		Destination: dest,
 	}
 	return route
+}
+
+// GetSource returns the source name
+func (route *Route) GetSource() string {
+	return route.Source
+}
+
+// GetDestination returns the destination name
+func (route *Route) GetDestination() string {
+	return route.Destination
+}
+
+// GetName returns the name
+func (route *Route) GetName() string {
+	return route.Name
 }
 
 // Equals returns true when the specified routes aresame, otherwise false.
@@ -52,5 +72,5 @@ func (route *Route) Equals(other *Route) bool {
 
 // String returns a string description
 func (route *Route) String() string {
-	return fmt.Sprintf("%s : %s TO %s", route.Name, route.Source.String(), route.Destination.String())
+	return fmt.Sprintf("%s : %s TO %s", route.Name, route.Source, route.Destination)
 }

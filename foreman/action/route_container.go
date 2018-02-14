@@ -6,8 +6,6 @@ package action
 
 // RouteContainer represents an abstract interface for the route container.
 type RouteContainer interface {
-	// FindRouteSource searches a source object with the specified regex name.
-	FindRouteSource(name string) RouteSource
-	// FindRouteDestination searches a destination object with the specified regex name.
-	FindRouteDestination(name string) RouteSource
+	// FindRouteDestination returns a destination object with the specified name.
+	FindRouteDestination(name string) RouteDestination
 }
