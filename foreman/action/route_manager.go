@@ -4,8 +4,6 @@
 
 package action
 
-import "regexp"
-
 // RouteManager represents a route map.
 type RouteManager struct {
 	routeMap map[string][]*Route
@@ -62,22 +60,4 @@ func (mgr RouteManager) RemoveRoute(name string) bool {
 func (mgr RouteManager) RemoveAllRoutes() bool {
 	mgr.routeMap = make(map[string][]*Route)
 	return true
-}
-
-// FindRoutesBySourceRegKey returns a route lists by the specified regex key.
-func (mgr RouteManager) FindRoutesBySourceRegKey(regKey string) []*Route {
-	r := regexp.MustCompile(regKey)
-	foundRoutes := make([]*Route, 0)
-	for key, routes := range mgr.routeMap {
-		if !r.MatchString(key) {
-			continue
-		}
-		foundRoutes = append(foundRoutes, routes...)
-	}
-	return foundRoutes
-}
-
-// FindRoutesBySourceObject returns the target routes for the specified source objects.
-func (mgr RouteManager) FindRoutesBySourceObject(srcObject RouteSource) []*Route {
-	return mgr.FindRoutesBySourceRegKey(srcObject.GetName())
 }
