@@ -10,6 +10,7 @@ import (
 )
 
 const (
-	RetiontionIntervalFiveMinute = time.Duration(5) * time.Minute
-	DefaultRetiontionInterval    = RetiontionIntervalFiveMinute
+	RetentionIntervalFiveMinute = time.Duration(5) * time.Minute
+	DefaultRetentionInterval    = RetentionIntervalFiveMinute
+	QueryDefaultFromOffset      = -time.Duration(60) * time.Minute
 )

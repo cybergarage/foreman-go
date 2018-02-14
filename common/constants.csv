@@ -44,6 +44,11 @@ action_column_code,"code"
 action_column_encoding,"encoding"
 action_column_language,"language"
 
+route_column_routes,"routes"
+route_column_name,"name"
+route_column_source,"src"
+route_column_destination,"dest"
+
 ########################################
 # Query
 ########################################

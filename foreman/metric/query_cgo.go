@@ -2,8 +2,11 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package metric provides query interfaces for metric store.
 package metric
+
+// #include <foreman/foreman-c.h>
+// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
+import "C"
 
 import (
 	"fmt"
@@ -11,10 +14,6 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
-
-// #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
-import "C"
 
 // CQuery returns a Query object for foreman-cc.
 func (q *Query) CQuery() (unsafe.Pointer, error) {

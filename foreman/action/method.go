@@ -24,3 +24,18 @@ func NewMethod() *Method {
 	m := &Method{}
 	return m
 }
+
+// GetName returns the name.
+func (m *Method) GetName() string {
+	return m.Name
+}
+
+// GetLanguage returns the language.
+func (m *Method) GetLanguage() string {
+	return m.Language
+}
+
+// GetCode returns the code.
+func (m *Method) GetCode() []byte {
+	return m.Code
+}

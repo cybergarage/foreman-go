@@ -29,10 +29,10 @@ type Query struct {
 	Interval time.Duration
 }
 
-// NewQueryWithSource returns a new query of the specified type.
-func NewQueryWithSource(srcType QuerySourceType) *Query {
+// NewMetricQuery returns a new metric query.
+func NewMetricQuery() *Query {
 	q := &Query{
-		Source:   srcType,
+		Source:   QuerySourceMetricType,
 		Target:   "",
 		From:     nil,
 		Until:    nil,
@@ -41,14 +41,18 @@ func NewQueryWithSource(srcType QuerySourceType) *Query {
 	return q
 }
 
-// NewMetricQuery returns a new metric query.
-func NewMetricQuery() *Query {
-	return NewQueryWithSource(QuerySourceMetricType)
-}
-
 // NewDataQuery returns a new metric query.
 func NewDataQuery() *Query {
-	return NewQueryWithSource(QuerySourceDataType)
+	now := time.Now()
+	from := now.Add(QueryDefaultFromOffset)
+	q := &Query{
+		Source:   QuerySourceDataType,
+		Target:   "",
+		From:     &from,
+		Until:    &now,
+		Interval: 0,
+	}
+	return q
 }
 
 // NewQueryWithQuery returns a new query of the specified query.
@@ -103,5 +107,28 @@ func NewQueryWithQuery(fq fql.Query) (*Query, error) {
 
 // String returns a string description of the instance
 func (q *Query) String() string {
-	return fmt.Sprintf("%s [%s - %s]", q.Target, q.From.String(), q.Until.String())
+	target := ""
+	if 0 < len(q.Target) {
+		target = q.Target
+	}
+
+	from := int64(0)
+	if q.From != nil {
+		from = q.From.Unix()
+	}
+
+	until := int64(0)
+	if q.Until != nil {
+		until = q.Until.Unix()
+	}
+
+	return fmt.Sprintf("%s FROM %s WHERE %s == %s AND %s >= %d AND %s <= %d",
+		fql.QuerySelectString,
+		fql.QueryTargetMetrics,
+		fql.QueryColumnId,
+		target,
+		fql.QueryColumnTimestamp,
+		from,
+		fql.QueryColumnTimestamp,
+		until)
 }

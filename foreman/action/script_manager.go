@@ -13,6 +13,7 @@ type Scripting interface {
 	HasMethod(method string) bool
 	RemoveAllMethods() error
 
+	GetMethod(name string) *Method
 	GetFirstMethod() *Method
 	GetNextMethod(method *Method) *Method
 
@@ -22,4 +23,14 @@ type Scripting interface {
 // ScriptManager represents an interface of the script manager
 type ScriptManager struct {
 	Scripting
+	RouteContainer
+}
+
+// FindRouteDestination returns a destination object with the specified name.
+func (mgr *ScriptManager) FindRouteDestination(name string) RouteDestination {
+	method := mgr.GetMethod(name)
+	if method == nil {
+		return nil
+	}
+	return newRouteDestinationMethod(mgr, method.GetName())
 }

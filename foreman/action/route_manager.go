@@ -4,8 +4,6 @@
 
 package action
 
-import "regexp"
-
 // RouteManager represents a route map.
 type RouteManager struct {
 	routeMap map[string][]*Route
@@ -21,7 +19,7 @@ func NewRouteManager() *RouteManager {
 
 // AddRoute adds a new route.
 func (mgr RouteManager) AddRoute(route *Route) error {
-	key := route.Source.GetName()
+	key := route.GetSource()
 	routes, ok := mgr.routeMap[key]
 	if !ok {
 		routes = make([]*Route, 0)
@@ -36,20 +34,30 @@ func (mgr RouteManager) GetRoutes(key string) ([]*Route, bool) {
 	return routes, ok
 }
 
-// FindRoutesBySourceRegKey returns a route lists by the specified regex key.
-func (mgr RouteManager) FindRoutesBySourceRegKey(regKey string) []*Route {
-	r := regexp.MustCompile(regKey)
-	foundRoutes := make([]*Route, 0)
-	for key, routes := range mgr.routeMap {
-		if !r.MatchString(key) {
-			continue
-		}
-		foundRoutes = append(foundRoutes, routes...)
+// GetAllRoutes returns all routes.
+func (mgr RouteManager) GetAllRoutes() []*Route {
+	allRoutes := make([]*Route, 0)
+	for _, routes := range mgr.routeMap {
+		allRoutes = append(allRoutes, routes...)
 	}
-	return foundRoutes
+	return allRoutes
 }
 
-// FindRoutesBySourceObject returns the target routes for the specified source objects.
-func (mgr RouteManager) FindRoutesBySourceObject(srcObject RootSource) []*Route {
-	return mgr.FindRoutesBySourceRegKey(srcObject.GetName())
+// RemoveRoute deletes a route with the specified route name.
+func (mgr RouteManager) RemoveRoute(name string) bool {
+	for key, routes := range mgr.routeMap {
+		for n, route := range routes {
+			if route.Name == name {
+				mgr.routeMap[key] = append(routes[:n], routes[n+1:]...)
+				return true
+			}
+		}
+	}
+	return true
+}
+
+// RemoveAllRoutes deletes all routes.
+func (mgr RouteManager) RemoveAllRoutes() bool {
+	mgr.routeMap = make(map[string][]*Route)
+	return true
 }
