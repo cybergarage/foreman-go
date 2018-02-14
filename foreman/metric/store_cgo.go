@@ -124,11 +124,13 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	duration, err := store.GetRetentionInterval()
-	if err != nil {
-		return nil, err
+	if q.Interval == 0 {
+		duration, err := store.GetRetentionInterval()
+		if err != nil {
+			return nil, err
+		}
+		q.Interval = duration
 	}
-	q.Interval = duration
 
 	cq, err := q.CQuery()
 	if err != nil {
