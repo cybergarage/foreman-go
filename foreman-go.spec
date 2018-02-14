@@ -28,9 +28,9 @@ go get ./... || true
 
 %install
 export GOPATH="$PWD"
-make install DESTDIR=%{buildroot}
-mkdir -p %{buildroot}/usr/sbin
-cp -a bin/foremand %{buildroot}/usr/sbin
+GOBIN=%{buildroot}/usr/sbin make install
+mkdir -p %{buildroot}/etc/foreman
+cp debian/foremand.conf %{buildroot}/etc/foreman/foremand.conf
 
 %files
 %defattr(755,root,root,755)
