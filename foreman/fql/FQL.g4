@@ -123,7 +123,8 @@ leftOperand
 	;
 
 rightOperand
-	: STRING
+	: IDENTIFIER
+	| STRING
 	| NUMBER
 	| REAL
 	;
