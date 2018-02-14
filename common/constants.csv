@@ -53,8 +53,6 @@ route_column_destination,"dest"
 # Query
 ########################################
 
-query_default_from_offset,3600
-
 query_insert_string,"INSERT"
 query_select_string,"SELECT"
 query_delete_string,"DELETE"
