@@ -4,7 +4,7 @@
 
 package json
 
-const ( 
-GraphiteResponseTarget = "target"
-GraphiteResponseDatapoints = "datapoints"
+const (
+	GraphiteResponseTarget     = "target"
+	GraphiteResponseDatapoints = "datapoints"
 )
