@@ -58,7 +58,7 @@ func testStore(t *testing.T, store *Store) {
 		if err != nil {
 			t.Error(err)
 		}
-		rsCount := rs.GetDataPointCount()
+		rsCount := rs.GetMetricsCount()
 		if rsCount != 1 {
 			t.Error(fmt.Errorf("ResultSet is invalid : %d", rsCount))
 		}
@@ -93,24 +93,24 @@ func testStore(t *testing.T, store *Store) {
 		if err != nil {
 			t.Error(err)
 		}
-		rsCount := rs.GetDataPointCount()
+		rsCount := rs.GetMetricsCount()
 		if rsCount != 1 {
 			t.Error(fmt.Errorf("ResultSet is invalid : %d", rsCount))
 		}
 
-		dps := rs.GetFirstMetrics()
-		if dps == nil {
+		ms := rs.GetFirstMetrics()
+		if ms == nil {
 			t.Error(fmt.Errorf("DataPoint is not found"))
 			return
 		}
 
-		if dps.Name != m[j].Name {
-			t.Error(fmt.Errorf("Invalid DataPoint Name %s != %s", dps.Name, m[j].Name))
+		if ms.Name != m[j].Name {
+			t.Error(fmt.Errorf("Invalid DataPoint Name %s != %s", ms.Name, m[j].Name))
 		}
 
-		dpsCount := len(dps.Values)
+		dpsCount := len(ms.Values)
 		for i := 0; i < dpsCount; i++ {
-			dp := dps.Values[i]
+			dp := ms.Values[i]
 			value := dp.Value
 			if int(value) != int(i*j) {
 				t.Error(fmt.Errorf("ResultSet value is invalid : %d != %d", int(value), int(i*j)))

@@ -12,14 +12,14 @@ import (
 // NewDataPointsWithGraphiteMetric returns a new data points from the specified graphite.Metric.
 func NewDataPointsWithGraphiteMetric(gm *graphite.Metric) (*metric.Metrics, error) {
 	dpSize := len(gm.DataPoints)
-	dps := metric.NewMetricsWithSize(dpSize)
-	dps.Name = gm.Name
+	ms := metric.NewMetricsWithSize(dpSize)
+	ms.Name = gm.Name
 	for n, gdp := range gm.DataPoints {
 		var err error
-		dps.Values[n], err = NewDataPointWithGraphiteDataPoint(gdp)
+		ms.Values[n], err = NewDataPointWithGraphiteDataPoint(gdp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	return dps, nil
+	return ms, nil
 }
