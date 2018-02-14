@@ -60,6 +60,11 @@ func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter)
 
 	w.Header().Set(httpResponseContentType, httpResponseContentTypeJSON)
 	w.WriteHeader(http.StatusOK)
+
+	if queryResult == nil {
+		return
+	}
+
 	encorder := json.NewEncorder()
 	content, ok := encorder.Encode(queryResult)
 	if ok != nil {
