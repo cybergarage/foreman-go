@@ -5,6 +5,7 @@
 package fql
 
 const (
+	QueryDefaultFromOffset    = 3600
 	QueryInsertString         = "INSERT"
 	QuerySelectString         = "SELECT"
 	QueryDeleteString         = "DELETE"
