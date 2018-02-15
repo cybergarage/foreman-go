@@ -7,11 +7,14 @@ package json
 import (
 	"errors"
 	"fmt"
+	"regexp"
+	"strconv"
 	"strings"
 )
 
 const (
-	PathSep = "/"
+	PathSep              = "/"
+	PathArrayIndexRegexp = `\[[0-9]+\]`
 )
 
 // Path represents a p object like XPath of XML
@@ -57,7 +60,7 @@ func (p *Path) GetPathString(path string) (string, error) {
 	}
 	value, ok := obj.(string)
 	if !ok {
-
+		return "", fmt.Errorf(errorDecorderInvalidKeyObjectType, p)
 	}
 	return value, nil
 }
@@ -77,6 +80,10 @@ func (p *Path) GetPathInteger(path string) (int, error) {
 		value = int(obj.(int32))
 	case int64:
 		value = int(obj.(int64))
+	case float64:
+		value = int(obj.(float64))
+	case float32:
+		value = int(obj.(float32))
 	default:
 		return 0, fmt.Errorf(errorDecorderInvalidKeyObjectType, p)
 	}
@@ -93,6 +100,12 @@ func (p *Path) GetPathFloat(path string) (float64, error) {
 
 	var value float64
 	switch obj.(type) {
+	case int:
+		value = float64(obj.(int))
+	case int32:
+		value = float64(obj.(int32))
+	case int64:
+		value = float64(obj.(int64))
 	case float64:
 		value = obj.(float64)
 	case float32:
@@ -137,6 +150,20 @@ func (p *Path) getChildObject(obj interface{}, key string) (interface{}, error) 
 		default:
 			return nil, fmt.Errorf(errorDecorderInvalidKeyObjectType, key)
 		}
+	case []interface{}:
+		arrayIndexRegexp := regexp.MustCompile(PathArrayIndexRegexp)
+		if !arrayIndexRegexp.MatchString(key) {
+			return nil, fmt.Errorf(errorPathInvalidArrayIndexKey, key)
+		}
+		arrayIndex, err := strconv.ParseInt(strings.Trim(key, "[]"), 10, 64)
+		if err != nil {
+			return nil, fmt.Errorf(errorPathInvalidArrayIndexKey, key)
+		}
+		jsonArray, _ := obj.([]interface{})
+		if len(jsonArray) <= int(arrayIndex) {
+			return nil, fmt.Errorf(errorPathInvalidArrayIndexRange, arrayIndex, len(jsonArray))
+		}
+		return jsonArray[arrayIndex], nil
 	}
 	return "", nil
 }
