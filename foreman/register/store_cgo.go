@@ -85,6 +85,18 @@ func (store *cgoStore) GetObject(key string) (Object, bool) {
 	return newObjectWithCObject(cObj), true
 }
 
+// RemoveObject removes the specified key object.
+func (store *cgoStore) RemoveObject(key string) bool {
+	cErr := C.foreman_error_new()
+	defer C.foreman_error_delete(cErr)
+
+	if !C.foreman_register_store_removeobject(store.cStore, C.CString(key), cErr) {
+		return false
+	}
+
+	return true
+}
+
 // Size returns the object count.
 func (store *cgoStore) Size() int64 {
 	return int64(C.foreman_register_store_size(store.cStore))
