@@ -12,6 +12,7 @@ type Store interface {
 
 	SetObject(obj Object) error
 	GetObject(key string) (Object, bool)
+	RemoveObject(key string) bool
 
 	Size() int64
 
