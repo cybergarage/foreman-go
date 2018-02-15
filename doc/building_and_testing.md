@@ -78,7 +78,7 @@ scenario_file = (scenario_event)+
 scenario_event = query; http_status_code(; verify_json_path; verify_json_value)?
 ```
 
-For example,
+The sample scenario file is bellow.
 
 ```
 SET (m0, 1.0, 1514764800) INTO METRICS;200
