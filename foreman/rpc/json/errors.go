@@ -8,6 +8,8 @@ const (
 	errorEncorderUnknownObjectType    = "Unknown object type : %s"
 	errorDecorderEmptyKey             = "Empty path"
 	errorPathEmptyRootObject          = "Empty root object"
+	errorPathInvalidArrayIndexKey     = "Invalid array index key : %s"
+	errorPathInvalidArrayIndexRange   = "Invalid array index range : %d > %d"
 	errorDecorderNotFoundKey          = "Key (%s) is not found"
 	errorDecorderInvalidKeyObjectType = "Key (%s) object type is invalid"
 )
