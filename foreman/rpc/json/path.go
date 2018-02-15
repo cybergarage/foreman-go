@@ -144,12 +144,7 @@ func (p *Path) getChildObject(obj interface{}, key string) (interface{}, error) 
 		if !hasKey {
 			return nil, fmt.Errorf(errorDecorderNotFoundKey, key)
 		}
-		switch keyObj.(type) {
-		case string, float64, map[string]interface{}:
-			return keyObj, nil
-		default:
-			return nil, fmt.Errorf(errorDecorderInvalidKeyObjectType, key)
-		}
+		return keyObj, nil
 	case []interface{}:
 		arrayIndexRegexp := regexp.MustCompile(PathArrayIndexRegexp)
 		if !arrayIndexRegexp.MatchString(key) {
@@ -165,5 +160,5 @@ func (p *Path) getChildObject(obj interface{}, key string) (interface{}, error) 
 		}
 		return jsonArray[arrayIndex], nil
 	}
-	return "", nil
+	return nil, nil
 }
