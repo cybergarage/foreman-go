@@ -16,3 +16,8 @@ func NewEvent(data string) *Event {
 	}
 	return e
 }
+
+// GetData returns the scenario data.
+func (e *Event) GetData() string {
+	return e.Data
+}
