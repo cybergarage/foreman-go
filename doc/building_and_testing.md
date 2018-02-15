@@ -40,3 +40,49 @@ git clone https://github.com/cybergarage/foreman-go.git
 source setup
 make test
 ```
+
+## Testing
+
+### Unit Testing
+
+For the unit test, Foreman conforms the following standard testing of Go language.
+
+- [The Go Programming Language - Package testing](https://golang.org/pkg/testing/)
+
+### Integration Testing
+
+Foreman has an original testing tool, `foremantest`, to create the integration test case more easily than [Apache JMeter](http://jmeter.apache.org). 
+
+```
+foremantest a testing utility for Forman.
+
+	NAME
+	foremantest
+
+	SYNOPSIS
+	foremantest <scenario_file>
+
+	DESCRIPTION
+	foremantest is a a testing utility for Forman.
+
+	RETURN VALUE
+	  Return EXIT_SUCCESS or EXIT_FAILURE
+```
+
+#### Senario File Format
+
+`foremantest` can execute a scenario file at once, and the following is the file format specification.
+
+```
+scenario_file = (scenario_event)+
+scenario_event = query; http_status_code(; verify_json_path; verify_json_value)?
+```
+
+For example,
+
+```
+SET (m0, 1.0, 1514764800) INTO METRICS;200
+SELECT (id) FROM METRICS;200;/[0];m0
+SELECT (id) FROM METRICS WHERE id == m0;200;/[0];m0
+SELECT * FROM METRICS WHERE id == m0 AND ts >= 1514764800 AND ts <= 1514765100;200;/[0]/datapoints/[0]/[0];1
+```
