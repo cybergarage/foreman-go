@@ -134,8 +134,8 @@ func (s *QueryScenario) verifyResponse(resObj interface{}, expectRes *QueryRespo
 	return nil
 }
 
-// Finalize closes the scenario.
-func (s *QueryScenario) Finalize() error {
+// Cleanup closes the scenario.
+func (s *QueryScenario) Cleanup() error {
 	err := s.server.Stop()
 	if err != nil {
 		return err
