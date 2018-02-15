@@ -60,7 +60,7 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 }
 
 // PostQuery posts a query string over Graphite interface
-func (client *Client) PostQuery(queryString string) (interface{}, error) {
+func (client *Client) PostQuery(queryString string) (interface{}, int, error) {
 	url := fmt.Sprintf("http://%s:%d%s?%s=%s",
 		client.Host,
 		client.HTTPPort,
@@ -70,20 +70,24 @@ func (client *Client) PostQuery(queryString string) (interface{}, error) {
 
 	res, err := http.Get(url)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	jsonResBytes, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
+
+	resCode := res.StatusCode
+
+	var resObj interface{}
 
 	dec := json.NewDecorder()
-	rootObj, err := dec.Decode(string(jsonResBytes))
+	resObj, err = dec.Decode(string(jsonResBytes))
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return rootObj, nil
+	return resObj, resCode, nil
 }
