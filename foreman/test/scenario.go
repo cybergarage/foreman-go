@@ -16,8 +16,8 @@ type ScenarioExecutor interface {
 	Setup() error
 	// Execute runs the specified event.
 	Execute(e *Event) error
-	// Finalize closes the scenario.
-	Finalize() error
+	// Cleanup closes the scenario.
+	Cleanup() error
 }
 
 // Scenario represents a parameter.
@@ -59,7 +59,7 @@ func (s *Scenario) ExecuteAll() error {
 		}
 	}
 
-	err = s.executor.Finalize()
+	err = s.executor.Cleanup()
 	if err != nil {
 		return err
 	}
