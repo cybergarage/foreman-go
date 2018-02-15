@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	rpc "github.com/cybergarage/foreman-go/foreman/rpc/graphite"
@@ -17,6 +18,7 @@ import (
 
 // Client represents a client for the server.
 type Client struct {
+	Scheme   string
 	Host     string
 	HTTPPort int
 	graphite *graphite.Client
@@ -25,6 +27,7 @@ type Client struct {
 // NewClient returns a new client.
 func NewClient() *Client {
 	client := &Client{
+		Scheme:   "http",
 		Host:     DefaultServerHost,
 		HTTPPort: DefaultHttpPort,
 		graphite: graphite.NewClient(),
@@ -60,30 +63,43 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 }
 
 // PostQuery posts a query string over Graphite interface
-func (client *Client) PostQuery(queryString string) (interface{}, error) {
-	url := fmt.Sprintf("http://%s:%d%s?%s=%s",
-		client.Host,
-		client.HTTPPort,
-		HttpServerFqlPath,
-		HttpServerFqlQuery,
-		queryString)
-
-	res, err := http.Get(url)
-	if err != nil {
-		return nil, err
+func (client *Client) PostQuery(queryString string) (interface{}, int, error) {
+	url := url.URL{
+		Scheme: client.Scheme,
+		Host: fmt.Sprintf(
+			"%s:%d",
+			client.Host,
+			client.HTTPPort),
+		Path: HttpServerFqlPath,
+		RawQuery: fmt.Sprintf("%s=%s",
+			HttpServerFqlQuery,
+			url.QueryEscape(queryString)),
 	}
+
+	res, err := http.Get(url.String())
+	if err != nil {
+		return nil, 0, err
+	}
+
+	resCode := res.StatusCode
 
 	jsonResBytes, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
+
+	if len(jsonResBytes) <= 0 {
+		return nil, resCode, nil
+	}
+
+	var resObj interface{}
 
 	dec := json.NewDecorder()
-	rootObj, err := dec.Decode(string(jsonResBytes))
+	resObj, err = dec.Decode(string(jsonResBytes))
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return rootObj, nil
+	return resObj, resCode, nil
 }
