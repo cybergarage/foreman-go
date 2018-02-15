@@ -14,7 +14,8 @@ GOPATH=$(shell pwd)
 GITHUB_ROOT=github.com/cybergarage
 
 PACKAGE_NAME=foreman
-BINARY_NAME=foremand
+DEAMON_NAME=foremand
+TESTING_NAME=foremantest
 
 GITHUB=${GITHUB_ROOT}/foreman-go
 
@@ -42,8 +43,9 @@ PACKAGES=\
 	${PACKAGE_ID}
 
 SOURCE_DIR=src/${GITHUB}/foreman
-BINARY_ID=${GITHUB}/${BINARY_NAME}
-BINARYIES=${BINARY_ID}
+BINARY_DEAMON=${GITHUB}/${DEAMON_NAME}
+BINARY_TESTING=${GITHUB}/${TESTING_NAME}
+BINARYIES=${BINARY_DEAMON} ${BINARY_TESTING}
 
 .PHONY: version
 
@@ -57,7 +59,7 @@ ${VERSION_GO}: ./foreman/version.gen
 version: ${VERSION_GO}
 
 format:
-	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${BINARY_NAME}
+	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${DEAMON_NAME} ${TESTING_NAME}
 
 const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go  && popd
