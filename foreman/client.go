@@ -81,13 +81,17 @@ func (client *Client) PostQuery(queryString string) (interface{}, int, error) {
 		return nil, 0, err
 	}
 
+	resCode := res.StatusCode
+
 	jsonResBytes, err := ioutil.ReadAll(res.Body)
 	res.Body.Close()
 	if err != nil {
 		return nil, 0, err
 	}
 
-	resCode := res.StatusCode
+	if len(jsonResBytes) <= 0 {
+		return nil, resCode, nil
+	}
 
 	var resObj interface{}
 
