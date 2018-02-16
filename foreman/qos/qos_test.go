@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/cybergarage/foreman-go/foreman/kb"
-	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
 const (
@@ -53,32 +52,38 @@ func testQoSOperators(t *testing.T, qos *QoS) {
 		"x <= 10.0",
 	}
 
-	xm := metric.NewMetricWithName("x")
-
 	formulas := make([]kb.Formula, len(formulaStrings))
 	for n, formulaString := range formulaStrings {
 		formula, err := qos.parseFormulaString(formulaString)
 		if err != nil {
 			t.Error(err)
 		}
-
-		vm := formula.GetVariable()
-		qm, _ := vm.(*Metric)
-		qm.SetEntity(xm)
-
 		formulas[n] = formula
 	}
 
+	// Get a singleton instance
+
+	xm, _ := qos.GetVariable("x")
+
 	// All formulas are good when x == 10.0
 
-	xm.Value = 10.0
+	err := xm.SetValue(10.0)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	for _, formula := range formulas {
 		testQoSGoodFormula(t, qos, formula)
 	}
 
 	// x == 1
 
-	xm.Value = 1.0
+	xm.SetValue(1.0)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	goodFormulas := []kb.Formula{
 		formulas[4],
 		formulas[5],
@@ -98,7 +103,11 @@ func testQoSOperators(t *testing.T, qos *QoS) {
 
 	// x == 100.0
 
-	xm.Value = 100.0
+	err = xm.SetValue(100.0)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	goodFormulas = []kb.Formula{
 		formulas[1],
 		formulas[2],

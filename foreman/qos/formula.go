@@ -5,10 +5,7 @@
 package qos
 
 import (
-	"fmt"
-
 	"github.com/cybergarage/foreman-go/foreman/kb"
-	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
 // Formula represents a formula.
@@ -22,14 +19,4 @@ func NewFormula() *Formula {
 		BaseFormula: kb.NewFormula(),
 	}
 	return formula
-}
-
-// SetMetricEntity sets a entity for the QoS metric.
-func (formula *Formula) SetMetricEntity(entity *metric.Metric) error {
-	m, ok := formula.GetVariable().(*Metric)
-	if !ok {
-		return fmt.Errorf(errorNullFormulaVariable, formula.String())
-	}
-	m.SetEntity(entity)
-	return nil
 }
