@@ -108,6 +108,20 @@ func testStore(t *testing.T, store Store) {
 		t.Errorf(testObjectInvalidDataSize, store.Size(), testStoreLoopCount)
 	}
 
+	// Delete objects
+
+	for n := 0; n < testStoreLoopCount; n++ {
+		key := fmt.Sprintf(testStoreKeyFormat, n)
+		ok := store.RemoveObject(key)
+		if !ok {
+			t.Error(fmt.Errorf(testObjectNotFound, key))
+		}
+	}
+
+	if store.Size() != 0 {
+		t.Errorf(testObjectInvalidDataSize, store.Size(), 0)
+	}
+
 	// Clear
 
 	err = store.Clear()
