@@ -49,7 +49,7 @@ For the unit test, Foreman conforms the following standard testing of Go languag
 
 - [The Go Programming Language - Package testing](https://golang.org/pkg/testing/)
 
-### Integration Testing
+### Integration Testing
 
 Foreman has an original testing tool, `foremantest`, to create the integration test case more easily than [Apache JMeter](http://jmeter.apache.org). 
 
@@ -78,7 +78,7 @@ scenario_file = (scenario_event)+
 scenario_event = query; http_status_code(; verify_json_path; verify_json_value)?
 ```
 
-For example,
+The sample scenario file is bellow.
 
 ```
 SET (m0, 1.0, 1514764800) INTO METRICS;200
