@@ -5,9 +5,10 @@
 package test
 
 import (
-	"fmt"
 	"io/ioutil"
 	"strings"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
 // ScenarioExecutor represents a scenario test.
@@ -15,29 +16,65 @@ type ScenarioExecutor interface {
 	// Setup initializes the scenario.
 	Setup() error
 	// Execute runs the specified event.
-	Execute(e *Event) error
+	Execute(e *Event) (*Response, *errors.Error)
 	// Cleanup closes the scenario.
 	Cleanup() error
 }
 
 // Scenario represents a parameter.
 type Scenario struct {
-	executor ScenarioExecutor
-	Events   []*Event
+	executor     ScenarioExecutor
+	Events       []*Event
+	LastEvent    *Event
+	LastResponse *Response
+	LastError    *errors.Error
 }
 
 // NewScenario create a new scenario.
 func NewScenario() *Scenario {
 	s := &Scenario{
-		Events:   make([]*Event, 0),
-		executor: nil,
+		Events:       make([]*Event, 0),
+		executor:     nil,
+		LastEvent:    nil,
+		LastResponse: nil,
+		LastError:    nil,
 	}
 	return s
 }
 
-// SetExecutor set the event executor.
+// SetExecutor sets the event executor.
 func (s *Scenario) SetExecutor(e ScenarioExecutor) {
 	s.executor = e
+}
+
+// SetLastEvent sets a last executed event.
+func (s *Scenario) SetLastEvent(e *Event) {
+	s.LastEvent = e
+}
+
+// SetLastResponse sets a last executed response.
+func (s *Scenario) SetLastResponse(r *Response) {
+	s.LastResponse = r
+}
+
+// SetLastError sets a last error.
+func (s *Scenario) SetLastError(e *errors.Error) {
+	s.LastError = e
+}
+
+// GetLastEvent gets the last executed event.
+func (s *Scenario) GetLastEvent() *Event {
+	return s.LastEvent
+}
+
+// GetLastResponse gets the last executed response.
+func (s *Scenario) GetLastResponse() *Response {
+	return s.LastResponse
+}
+
+// GetLastError gets the last error.
+func (s *Scenario) GetLastError() *errors.Error {
+	return s.LastError
 }
 
 // GetEvents returns all scenario events.
@@ -46,32 +83,37 @@ func (s *Scenario) GetEvents() []*Event {
 }
 
 // ExecuteAll runs all scenario events.
-func (s *Scenario) ExecuteAll() error {
+func (s *Scenario) ExecuteAll() *errors.Error {
 	err := s.executor.Setup()
 	if err != nil {
-		return err
+		return errors.NewErrorWithError(err)
 	}
 
-	for n, e := range s.Events {
-		err := s.executor.Execute(e)
+	for _, e := range s.Events {
+		s.SetLastEvent(e)
+
+		res, err := s.executor.Execute(e)
+		s.SetLastResponse(res)
+		s.SetLastError(err)
+
 		if err != nil {
-			return fmt.Errorf("LINE [%d] %s : %s", n, e.Data, err.Error())
+			return err
 		}
 	}
 
 	err = s.executor.Cleanup()
 	if err != nil {
-		return err
+		return errors.NewErrorWithError(err)
 	}
 
 	return nil
 }
 
 // LoadFile loads a specified scenario file.
-func (s *Scenario) LoadFile(filename string) error {
+func (s *Scenario) LoadFile(filename string) *errors.Error {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return err
+		return errors.NewErrorWithError(err)
 	}
 
 	for _, line := range strings.Split(string(content), "\n") {
@@ -92,7 +134,7 @@ func (s *Scenario) LoadFile(filename string) error {
 }
 
 // ExecuteFile loads a specified scenario file and runs it
-func (s *Scenario) ExecuteFile(filename string) error {
+func (s *Scenario) ExecuteFile(filename string) *errors.Error {
 	err := s.LoadFile(filename)
 	if err != nil {
 		return err

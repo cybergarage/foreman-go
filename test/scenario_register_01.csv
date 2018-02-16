@@ -1,0 +1,2 @@
+SET (test, "hello") INTO REGISTER;200
+SELECT * FROM REGISTER WHERE name == test;200;/register/test/value;hello
