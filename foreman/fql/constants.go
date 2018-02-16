@@ -25,4 +25,5 @@ const (
 	QueryColumnId             = "id"
 	QueryColumnTimestamp      = "ts"
 	QueryColumnValue          = "value"
+	QueryColumnVersion        = "ver"
 )
