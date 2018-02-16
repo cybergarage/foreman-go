@@ -74,8 +74,19 @@ foremantest a testing utility for Forman.
 `foremantest` can execute a scenario file at once, and the following is the file format specification.
 
 ```
-scenario_file = (scenario_event)+
-scenario_event = query; http_status_code(; verify_json_path; verify_json_value)?
+scenario_file = (scenario_lines)+
+
+scenario_lines = (scenario_event_line | comment_line | blank_line)
+
+scenario_event_line = query; http_status_code(; verify_json_path; verify_json_value)
+query = FQL STRING
+http_status_code = INTEGER
+verify_json_path =  '/' json_path_id ('/' json_path_id)*
+json_path_id =  (\[[0-9+]\] | [a-zA-Z0-9+]
+verify_json_value = STRING | INTEGER | FLOAT
+
+comment_line = ^#*
+blank_line = (nothing)
 ```
 
 The sample scenario file is bellow.

@@ -9,12 +9,13 @@ import (
 	"strconv"
 
 	"github.com/cybergarage/foreman-go/foreman"
+	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
 const (
 	errorQueryInvalidStatusCode         = "Expected status code %d != %d (%s)"
-	errorQueryEmptyResponseObject       = "Empty '%s'"
+	errorQueryEmptyResponseObject       = "Empty path object : %s"
 	errorQueryInvalidResponseString     = "Expected '%s' %s != %s"
 	errorQueryInvalidResponseInteger    = "Expected '%s' %d != %s"
 	errorQueryInvalidResponseReal       = "Expected '%s' %f != %s"
@@ -54,78 +55,93 @@ func (s *QueryScenario) Setup() error {
 }
 
 // Execute runs the specified event.
-func (s *QueryScenario) Execute(e *Event) error {
+func (s *QueryScenario) Execute(e *Event) (*Response, *errors.Error) {
 	q := NewQueryEvent()
 	err := q.ParseEvent(e)
 	if err != nil {
-		return err
+		return nil, errors.NewErrorWithError(err)
 	}
 
 	resObj, resCode, err := s.client.PostQuery(q.Query)
 	if err != nil {
-		return err
+		return nil, errors.NewErrorWithError(err)
 	}
 
-	if resCode != q.Response.StatusCode {
-		return fmt.Errorf(errorQueryInvalidStatusCode, resCode, q.Response.StatusCode, q.Query)
-	}
+	res := NewQueryResponse()
+	res.Query = q.Query
+	res.StatusCode = resCode
+	res.Content = resObj
 
-	if !q.HasVerifyData() {
-		return nil
-	}
-
-	err = s.verifyResponse(resObj, q.Response)
+	err = s.verifyResponse(res, q.Expectation)
 	if err != nil {
-		return err
+		return nil, errors.NewErrorWithError(err)
 	}
 
-	return nil
+	return res.Response, nil
 }
 
 // verifyResponse verifies the JSON response with the verify data.
-func (s *QueryScenario) verifyResponse(resObj interface{}, expectRes *QueryResponse) error {
+func (s *QueryScenario) verifyResponse(res *QueryResponse, expectRes *QueryExpectation) error {
+	resCode := res.GetStatusCode()
+	if resCode != expectRes.StatusCode {
+		return fmt.Errorf(errorQueryInvalidStatusCode, resCode, expectRes.StatusCode, res.Query)
+	}
+
+	// Check JSON path object
+
+	if len(expectRes.JSONPath) <= 0 {
+		return nil
+	}
+
+	resObj := res.GetContent()
 	jsonPath := json.NewPathWithObject(resObj)
 	pathObj, err := jsonPath.GetPathObject(expectRes.JSONPath)
-	if err != nil {
+	if err != nil || pathObj == nil {
 		return fmt.Errorf(errorQueryEmptyResponseObject, expectRes.JSONPath)
+	}
+
+	// Check JSON path value
+
+	if len(expectRes.JSONPathValue) <= 0 {
+		return nil
 	}
 
 	switch pathObj.(type) {
 	case string:
 		resValue, _ := pathObj.(string)
-		expectValue := expectRes.JSONValue
+		expectValue := expectRes.JSONPathValue
 		if resValue != expectValue {
-			return fmt.Errorf(errorQueryInvalidResponseString, expectRes.JSONPath, resValue, expectValue)
+			return fmt.Errorf(errorQueryInvalidResponseString, expectRes.JSONPath, expectValue, resValue)
 		}
 	case int:
 		resValue, _ := pathObj.(int)
-		expectValue, err := strconv.ParseInt(expectRes.JSONValue, 10, 64)
+		expectValue, err := strconv.ParseInt(expectRes.JSONPathValue, 10, 64)
 		if (err != nil) || (resValue != int(expectValue)) {
-			return fmt.Errorf(errorQueryInvalidResponseInteger, expectRes.JSONPath, resValue, expectRes.JSONValue)
+			return fmt.Errorf(errorQueryInvalidResponseInteger, expectRes.JSONPath, expectRes.JSONPathValue, resValue)
 		}
 	case int32:
 		resValue, _ := pathObj.(int32)
-		expectValue, err := strconv.ParseInt(expectRes.JSONValue, 10, 64)
+		expectValue, err := strconv.ParseInt(expectRes.JSONPathValue, 10, 64)
 		if (err != nil) || (resValue != int32(expectValue)) {
-			return fmt.Errorf(errorQueryInvalidResponseInteger, expectRes.JSONPath, resValue, expectRes.JSONValue)
+			return fmt.Errorf(errorQueryInvalidResponseInteger, expectRes.JSONPath, expectRes.JSONPathValue, resValue)
 		}
 	case int64:
 		resValue, _ := pathObj.(int64)
-		expectValue, err := strconv.ParseInt(expectRes.JSONValue, 10, 64)
+		expectValue, err := strconv.ParseInt(expectRes.JSONPathValue, 10, 64)
 		if (err != nil) || (resValue != int64(expectValue)) {
-			return fmt.Errorf(errorQueryInvalidResponseInteger, expectRes.JSONPath, resValue, expectRes.JSONValue)
+			return fmt.Errorf(errorQueryInvalidResponseInteger, expectRes.JSONPath, expectRes.JSONPathValue, resValue)
 		}
 	case float32:
 		resValue, _ := pathObj.(float32)
-		expectValue, err := strconv.ParseFloat(expectRes.JSONValue, 64)
+		expectValue, err := strconv.ParseFloat(expectRes.JSONPathValue, 64)
 		if (err != nil) || (resValue != float32(expectValue)) {
-			return fmt.Errorf(errorQueryInvalidResponseReal, expectRes.JSONPath, resValue, expectRes.JSONValue)
+			return fmt.Errorf(errorQueryInvalidResponseReal, expectRes.JSONPath, expectRes.JSONPathValue, resValue)
 		}
 	case float64:
 		resValue, _ := pathObj.(float64)
-		expectValue, err := strconv.ParseFloat(expectRes.JSONValue, 64)
+		expectValue, err := strconv.ParseFloat(expectRes.JSONPathValue, 64)
 		if (err != nil) || (resValue != float64(expectValue)) {
-			return fmt.Errorf(errorQueryInvalidResponseReal, expectRes.JSONPath, resValue, expectRes.JSONValue)
+			return fmt.Errorf(errorQueryInvalidResponseReal, expectRes.JSONPath, expectRes.JSONPathValue, resValue)
 		}
 	default:
 		return fmt.Errorf(errorQueryUnknownResponseObjectType, expectRes.JSONPath)
