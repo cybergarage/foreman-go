@@ -65,12 +65,12 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 		return nil, errors.NewErrorWithError(err)
 	}
 
-	var regData map[string]interface{}
+	regData := map[string]interface{}{}
 	regData[fql.QueryColumnValue] = data
 	regData[fql.QueryColumnVersion] = ver
 	regData[fql.QueryColumnTimestamp] = ts.Unix()
 
-	var regMap map[string]interface{}
+	regMap := map[string]interface{}{}
 	regMap[name] = regData
 
 	regContainer := map[string]interface{}{}
