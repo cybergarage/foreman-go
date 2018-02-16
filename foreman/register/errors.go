@@ -8,6 +8,6 @@ const (
 	errorInvalidObject     = "Invalid object (%s)"
 	errorInvalidObjectData = "Invalid object (%s) data (%s)"
 	errorInvalidStore      = "Invalid store (%s)"
-	errorEmptyName         = "Empty name"
-	errorNotFoundKey       = "Not found key (%s)"
+	errorQueryEmptyID      = "Empty ID"
+	errorQueryNotFoundID   = "Not found ID (%s)"
 )

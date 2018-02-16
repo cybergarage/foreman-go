@@ -1,0 +1,3 @@
+SET (test, "hello") INTO REGISTER;200
+SELECT * FROM REGISTER WHERE id == test;200;/register/test/value;hello
+EXPORT REGISTER WHERE id == test;200;/register/test/value;hello

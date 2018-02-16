@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/test"
 )
 
@@ -34,8 +35,8 @@ func usage() {
 	fmt.Printf("Usage : %s <scenario_file>\n", ProgramName)
 }
 
-func errorMessage(e error) {
-	fmt.Printf("%s\n", e.Error())
+func errorMessage(e *errors.Error) {
+	fmt.Printf("%s\n", e.String())
 }
 
 func main() {
@@ -54,24 +55,28 @@ func main() {
 		os.Exit(1)
 	}
 
-	err = s.Setup()
+	e := s.Setup()
 	if err != nil {
-		errorMessage(err)
+		errorMessage(errors.NewErrorWithError(e))
 		os.Exit(1)
 	}
 
 	for n, e := range s.GetEvents() {
-		err := s.Execute(e)
+		res, err := s.Execute(e)
 		if err != nil {
 			fmt.Printf("[%d] ERROR : %s\n", n, err.Error())
+			if res != nil {
+				fmt.Printf("%d : %s\n", res.GetStatusCode(), res.GetQuery())
+				fmt.Printf("%s", res.GetContent())
+			}
 			os.Exit(1)
 		}
-		fmt.Printf("[%d] %s : OK\n", n, e.GetData())
+		fmt.Printf("[%d] OK : %s\n", n, res.GetQuery())
 	}
 
-	err = s.Cleanup()
+	e = s.Cleanup()
 	if err != nil {
-		errorMessage(err)
+		errorMessage(errors.NewErrorWithError(e))
 		os.Exit(1)
 	}
 
