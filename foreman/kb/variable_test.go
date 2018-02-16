@@ -17,6 +17,15 @@ func (v *TestVariable) GetName() string {
 	return v.Name
 }
 
+func (v *TestVariable) SetValue(value interface{}) error {
+	floatValue, ok := value.(float64)
+	if !ok {
+		return nil
+	}
+	v.Value = floatValue
+	return nil
+}
+
 func (v *TestVariable) GetValue() (interface{}, error) {
 	return v.Value, nil
 }

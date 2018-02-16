@@ -39,7 +39,7 @@ func (kb *KnowledgeBase) SetRule(rule Rule) error {
 			variable := formula.GetVariable()
 			variableName := variable.GetName()
 
-			mapVariable, ok := kb.Variables[variableName]
+			mapVariable, ok := kb.GetVariable(variableName)
 			if !ok {
 				kb.Variables[variableName] = variable
 				continue
@@ -55,6 +55,12 @@ func (kb *KnowledgeBase) SetRule(rule Rule) error {
 	kb.Rules[rule.GetName()] = rule
 
 	return nil
+}
+
+// GetVariable returns a variable of the specified name.
+func (kb *KnowledgeBase) GetVariable(name string) (Variable, bool) {
+	v, ok := kb.Variables[name]
+	return v, ok
 }
 
 // SetRules adds a new rules.
