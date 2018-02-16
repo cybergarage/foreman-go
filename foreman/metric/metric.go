@@ -33,6 +33,21 @@ func NewMetricWithName(name string) *Metric {
 	return m
 }
 
+// GetName returns the stored name
+func (m *Metric) GetName() string {
+	return m.Name
+}
+
+// GetValue returns the stored value.
+func (m *Metric) GetValue() float64 {
+	return m.Value
+}
+
+// GetTimestamp returns the stored timestamp
+func (m *Metric) GetTimestamp() time.Time {
+	return m.Timestamp
+}
+
 // String returns a string description of the instance
 func (m *Metric) String() string {
 	return fmt.Sprintf("%s : %f (%d)", m.Name, m.Value, m.Timestamp.Unix())

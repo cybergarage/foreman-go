@@ -5,8 +5,6 @@
 package metric
 
 import (
-	"fmt"
-
 	"github.com/cybergarage/foreman-go/foreman/register"
 )
 
@@ -46,48 +44,46 @@ func (rs *Register) GetMetric(key string) (*RegisterMetric, bool) {
 		return nil, false
 	}
 
-	rm, ok := obj.(*RegisterMetric)
-	if !ok {
-		return nil, false
-	}
+	rm := NewRegisterMetricWithObject(obj)
 
 	return rm, ok
 }
 
 // UpdateMetric updates the specified metric.
 func (rs *Register) UpdateMetric(m *Metric) error {
-	key := m.Name
-	isNewMetricAdded := false
+	key := m.GetName()
 
 	obj, _ := rs.GetObject(key)
+
+	// Add new metric
+
 	if obj == nil {
-		obj = NewRegisterMetric()
-		obj.SetName(key)
-		err := rs.SetObject(obj)
+		rm := NewRegisterMetricWithMetric(m)
+		err := rs.SetObject(rm)
 		if err != nil {
 			return err
 		}
-		isNewMetricAdded = true
+
+		if rs.Listener != nil {
+			rs.Listener.RegisterMetricAdded(rm)
+		}
+
+		return nil
 	}
 
-	rm, ok := obj.(*RegisterMetric)
-	if !ok {
-		return fmt.Errorf(errorInvalidMetric, rm)
+	// Update metric
+
+	rm := NewRegisterMetricWithObject(obj)
+	if rs.Listener != nil {
+		rs.Listener.RegisterMetricUpdated(rm)
 	}
-
-	rm.Value = m.Value
-
-	err := obj.UpdateVersion()
+	err := rm.SetValue(m.GetValue())
 	if err != nil {
 		return err
 	}
-
-	if rs.Listener != nil {
-		if isNewMetricAdded {
-			rs.Listener.RegisterMetricAdded(rm)
-		} else {
-			rs.Listener.RegisterMetricUpdated(rm)
-		}
+	err = rs.SetObject(rm.Object)
+	if err != nil {
+		return err
 	}
 
 	return nil
