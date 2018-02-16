@@ -17,31 +17,18 @@ const (
 	errorInvalidEventCode           = "Invalid event code : %s"
 )
 
-// QueryResponse represents a scenario query response.
-type QueryResponse struct {
-	StatusCode     int
-	OnlyStatusCode bool
-	JSONPath       string
-	JSONValue      string
-}
-
 // QueryEvent represents a scenario query event.
 type QueryEvent struct {
-	Query    string
-	Response *QueryResponse
+	Query       string
+	Expectation *QueryExpectation
 }
 
 // NewQueryEvent create an scenario query event
 func NewQueryEvent() *QueryEvent {
 	q := &QueryEvent{
-		Response: &QueryResponse{},
+		Expectation: NewQueryExpectation(),
 	}
 	return q
-}
-
-// HasVerifyData returns whether verify data is specified.
-func (q *QueryEvent) HasVerifyData() bool {
-	return !q.Response.OnlyStatusCode
 }
 
 // ParseEvent parses the specified event.
@@ -62,20 +49,17 @@ func (q *QueryEvent) ParseEvent(e *Event) error {
 	if err != nil {
 		return fmt.Errorf(errorInvalidEventCode, e.Data)
 	}
-	q.Response.StatusCode = int(code)
+	q.Expectation.StatusCode = int(code)
 
-	if len(params) < 4 {
-		q.Response.OnlyStatusCode = true
+	if len(params) < 3 {
 		return nil
 	}
+	q.Expectation.JSONPath = params[2]
 
-	q.Response.OnlyStatusCode = false
-	q.Response.JSONPath = params[2]
-	q.Response.JSONValue = params[3]
-
-	if len(q.Response.JSONPath) <= 0 {
-		q.Response.OnlyStatusCode = true
+	if len(params) < 4 {
+		return nil
 	}
+	q.Expectation.JSONPathValue = params[3]
 
 	return nil
 }
