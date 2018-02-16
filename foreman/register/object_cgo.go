@@ -58,12 +58,8 @@ func (obj *cgoObject) GetName() (string, error) {
 }
 
 // SetData sets a specified data
-func (obj *cgoObject) SetData(data interface{}) error {
-	stringData, ok := data.(string)
-	if !ok {
-		return fmt.Errorf(errorInvalidObjectData, obj, data)
-	}
-	if !C.foreman_register_object_setdata(obj.cObject, C.CString(stringData)) {
+func (obj *cgoObject) SetData(data string) error {
+	if !C.foreman_register_object_setdata(obj.cObject, C.CString(data)) {
 		return fmt.Errorf(errorInvalidObject, obj.String())
 	}
 
@@ -76,7 +72,7 @@ func (obj *cgoObject) SetData(data interface{}) error {
 }
 
 // GetData returns the object data
-func (obj *cgoObject) GetData() (interface{}, error) {
+func (obj *cgoObject) GetData() (string, error) {
 	var data *C.char
 	if !C.foreman_register_object_getdata(obj.cObject, &data) {
 		return "", fmt.Errorf(errorInvalidObject, obj.String())

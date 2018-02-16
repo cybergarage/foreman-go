@@ -14,9 +14,9 @@ const (
 
 func TestQueryScenario(t *testing.T) {
 	scenarioFiles := []string{
-		"scenario_config_01.csv",
-		//"scenario_metrics_01.csv",
-		"scenario_register_01.csv",
+		//"scenario_config_01.csv",
+		"scenario_metrics_01.csv",
+		//"scenario_register_01.csv",
 	}
 
 	s := NewQueryScenario()

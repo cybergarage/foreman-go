@@ -72,12 +72,7 @@ func testStore(t *testing.T, store Store) {
 			t.Error(fmt.Errorf(testObjectNotFound, key))
 		}
 
-		objRawData, err := obj.GetData()
-		if err != nil {
-			t.Error(err)
-		}
-
-		objData, _ := objRawData.(string)
+		objData, err := obj.GetData()
 		if objData != data {
 			t.Error(fmt.Errorf(testObjectInvalidData, key, objData, data))
 		}
