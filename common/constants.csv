@@ -76,6 +76,7 @@ query_column_name,"name"
 query_column_id,"id"
 query_column_timestamp,"ts"
 query_column_value,"value"
+query_column_version,"ver"
 
 ########################################
 # Graphite Compatibility
