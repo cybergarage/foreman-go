@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package log
+package logging
 
 import (
 	"errors"
@@ -15,8 +15,6 @@ const (
 )
 
 func TestNullLogger(t *testing.T) {
-	SetSharedLogger(nil)
-
 	nOutput := Trace(testLogMessage)
 	if 0 < nOutput {
 		t.Error(errors.New(nullOutputErrorMessage))
@@ -44,8 +42,8 @@ func TestNullLogger(t *testing.T) {
 }
 
 func TestStdoutLogger(t *testing.T) {
-	SetSharedLogger(NewStdoutLogger(LoggerLevelTrace))
-	defer SetSharedLogger(nil)
+	SetLogLevel(LevelTrace)
+	SetLogtToStdout()
 
 	nOutput := Trace(testLogMessage)
 	if nOutput <= 0 {

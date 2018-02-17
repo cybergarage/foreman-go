@@ -14,7 +14,7 @@ foremand is a deamon command of Forman.
 	DESCRIPTION
 	foremand is a deamon process to Foreman.
 
-	Logs are located at /var/log/foremand.log
+	Logs are located at /var/logging/foremand.logging
 
 	OPTIONS
 	-c : * /path/to/foremand.conf * Path to an configuration files.
@@ -34,7 +34,7 @@ import (
 	"syscall"
 
 	"github.com/cybergarage/foreman-go/foreman"
-	"github.com/cybergarage/foreman-go/foreman/log"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
 const (
@@ -49,18 +49,19 @@ func main() {
 	// Command Line Option
 
 	//	foreground := flag.Bool("f", false, "Foreground mode.")
-	verbose := flag.Int("v", 0, "Output log level.")
-	configFile := flag.String("c", ConfigFile, "Path to an configuration file")
+	verbose := flag.Int("v", 0, "Output logging level.")
+	configFile := flag.String("config", ConfigFile, "Path to an configuration file")
 	flag.Parse()
 
 	server := foreman.NewServer()
 
-	// Log Level
+	// logging Level
 
-	logLevel := log.LoggerLevelInfo
+	logLevel := logging.LevelInfo
 	if 0 < *verbose {
-		logLevel = log.LoggerLevelTrace
+		logLevel = logging.LevelTrace
 	}
+	logging.SetLogLevel(logLevel)
 
 	// Set default logger
 
@@ -81,36 +82,32 @@ func main() {
 
 		logFile, err := config.GetKeyStringByPath(ConfigRoot + "/" + ConfigLogFile)
 		if err != nil {
-			log.Error(err.Error())
+			logging.Error(err.Error())
 			os.Exit(1)
 		}
 
 		if *foreground {
-			log.SetSharedLogger(log.NewStdoutLogger(logLevel))
+			logging.SetSharedLogger(logging.NewStdoutLogger(logLevel))
 		} else {
-			log.SetSharedLogger(log.NewFileLogger(logFile, logLevel))
+			logging.SetSharedLogger(logging.NewFileLogger(logFile, logLevel))
 		}
-		defer log.SetSharedLogger(nil)
+		defer logging.SetSharedLogger(nil)
 
-		// Output log message
+		// Output logging message
 
-		sharedLogger := log.GetSharedLogger()
-
-		log.Info(fmt.Sprintf("%s is start ...", ProgramName))
-		log.Info(fmt.Sprintf("%s = %s", ConfigLogFile, sharedLogger.File))
-		log.Info(fmt.Sprintf("log_level = %s", sharedLogger.GetLevelString()))
-
+		sharedLogger := logging.GetSharedLogger()
 	*/
 
 	// Start Server
+	logging.Info("%s is starting ...", ProgramName)
 
 	err := server.Start()
 	if err != nil {
-		log.Error(fmt.Sprintf("%s couldn't be started (%s)", ProgramName, err.Error()))
+		logging.Error("%s couldn't be started (%s)", ProgramName, err.Error())
 		os.Exit(1)
 	}
 
-	log.Info(fmt.Sprintf("%s is started", ProgramName))
+	logging.Info("%s is started", ProgramName)
 
 	sigCh := make(chan os.Signal, 1)
 
@@ -129,13 +126,13 @@ func main() {
 			case syscall.SIGHUP:
 				err = server.Restart()
 				if err != nil {
-					log.Error(fmt.Sprintf("%s couldn't be restarted (%s)", ProgramName, err.Error()))
+					logging.Error("%s couldn't be restarted (%s)", ProgramName, err.Error())
 					os.Exit(1)
 				}
 			case syscall.SIGINT, syscall.SIGTERM:
 				err = server.Stop()
 				if err != nil {
-					log.Error(fmt.Sprintf("%s couldn't be stopped (%s)", ProgramName, err.Error()))
+					logging.Error("%s couldn't be stopped (%s)", ProgramName, err.Error())
 					os.Exit(1)
 				}
 				exitCh <- 0
@@ -145,7 +142,7 @@ func main() {
 
 	code := <-exitCh
 
-	log.Info(fmt.Sprintf("%s is stop", ProgramName))
+	logging.Info("%s is stop", ProgramName)
 
 	os.Exit(code)
 }
