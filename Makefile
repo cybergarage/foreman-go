@@ -47,9 +47,9 @@ PACKAGES=\
 	${PACKAGE_ID}
 
 SOURCE_DIR=src/${GITHUB}/foreman
-BINARY_DEAMON=${GITHUB}/${DEAMON_NAME}
+BINARY_DAEMON=${GITHUB}/${DAEMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
-BINARYIES=${BINARY_DEAMON} ${BINARY_TESTING}
+BINARYIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
 CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -luuid -lalglib
 export CGO_LDFLAGS
@@ -66,7 +66,7 @@ ${VERSION_GO}: ./foreman/version.gen
 version: ${VERSION_GO}
 
 format:
-	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${DEAMON_NAME} ${TESTING_NAME}
+	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${DAEMON_NAME} ${TESTING_NAME}
 
 const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go  && popd
