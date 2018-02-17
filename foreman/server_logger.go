@@ -5,25 +5,25 @@
 package foreman
 
 import (
-	"github.com/cybergarage/foreman-go/foreman/log"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
 func (server *Server) Trace(format string, a ...interface{}) int {
-	return log.Trace(format, a)
+	return logging.Trace(format, a)
 }
 
 func (server *Server) Info(format string, a ...interface{}) int {
-	return log.Info(format, a)
+	return logging.Info(format, a)
 }
 
 func (server *Server) Warn(format string, a ...interface{}) int {
-	return log.Warn(format, a)
+	return logging.Warn(format, a)
 }
 
 func (server *Server) Error(format string, a ...interface{}) int {
-	return log.Error(format, a)
+	return logging.Error(format, a)
 }
 
 func (server *Server) Fatal(format string, a ...interface{}) int {
-	return log.Fatal(format, a)
+	return logging.Fatal(format, a)
 }
