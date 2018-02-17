@@ -35,6 +35,7 @@ cp debian/foremand.conf %{buildroot}/etc/foreman/foremand.conf
 %files
 %defattr(755,root,root,755)
 /usr/sbin/foremand
+/usr/sbin/foremantest
 %defattr(644,root,root,755)
 /etc/foreman
 
