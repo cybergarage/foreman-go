@@ -59,6 +59,11 @@ func (rule *BaseRule) SetListener(l RuleListener) {
 	rule.Listener = l
 }
 
+// GetListener returns the listener.
+func (rule *BaseRule) GetListener() RuleListener {
+	return rule.Listener
+}
+
 // IsSatisfied returns whether a clause in the rule is satisfied.
 func (rule *BaseRule) IsSatisfied() (bool, error) {
 	for _, clause := range rule.Clauses {

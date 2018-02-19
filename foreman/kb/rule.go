@@ -7,7 +7,7 @@ package kb
 // RuleListener represents a listener interface.
 type RuleListener interface {
 	RuleSatisfied(Rule)
-	Unsatisfied(Rule)
+	RuleUnsatisfied(Rule)
 }
 
 // Rule represents a interface.
@@ -19,5 +19,6 @@ type Rule interface {
 	IsSatisfied() (bool, error)
 	ParseString(Factory, string) error
 	SetListener(RuleListener)
+	GetListener() RuleListener
 	String() string
 }
