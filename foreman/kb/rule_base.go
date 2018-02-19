@@ -12,9 +12,8 @@ import (
 // BaseRule represents a rule.
 type BaseRule struct {
 	Rule
-	Name     string
-	Clauses  []Clause
-	Listener RuleListener
+	Name    string
+	Clauses []Clause
 }
 
 // NewRule returns a new null rule.
@@ -25,9 +24,8 @@ func NewRule() *BaseRule {
 // NewRuleWithName returns a new null rule.
 func NewRuleWithName(name string) *BaseRule {
 	p := &BaseRule{
-		Name:     name,
-		Clauses:  make([]Clause, 0),
-		Listener: nil,
+		Name:    name,
+		Clauses: make([]Clause, 0),
 	}
 	return p
 }
@@ -52,16 +50,6 @@ func (rule *BaseRule) AddClause(clause Clause) error {
 // GetClauses return all clauses in the rule.
 func (rule *BaseRule) GetClauses() []Clause {
 	return rule.Clauses
-}
-
-// SetListener set a listener.
-func (rule *BaseRule) SetListener(l RuleListener) {
-	rule.Listener = l
-}
-
-// GetListener returns the listener.
-func (rule *BaseRule) GetListener() RuleListener {
-	return rule.Listener
 }
 
 // IsSatisfied returns whether a clause in the rule is satisfied.
