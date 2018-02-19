@@ -22,7 +22,7 @@ import (
 // Server represents a Foreman Server.
 type Server struct {
 	metric.RegisterListener
-	kb.RuleListener
+	kb.KnowledgeBaseListener
 
 	graphite    *graphite.Server
 	registerMgr *register.Manager
@@ -58,6 +58,8 @@ func NewServer() *Server {
 
 	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
 	server.metricMgr.SetRegisterListener(server)
+
+	server.qosMgr.AddListener(server)
 
 	return server
 }
