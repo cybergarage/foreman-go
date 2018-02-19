@@ -18,7 +18,5 @@ type Rule interface {
 	GetClauses() []Clause
 	IsSatisfied() (bool, error)
 	ParseString(Factory, string) error
-	SetListener(RuleListener)
-	GetListener() RuleListener
 	String() string
 }
