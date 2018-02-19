@@ -4,13 +4,30 @@
 
 package foreman
 
-import "github.com/cybergarage/foreman-go/foreman/kb"
+import (
+	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/kb"
+)
+
+type qosRuleSource struct {
+	//action.RouteSource Disabled to conflict Rule::GetName()
+	kb.Rule
+}
 
 // RuleSatisfied is a listener for kb.Rule
-func (server *Server) RuleSatisfied(kb.Rule) {
-	// TODO : Post the event to the action manager
+func newQosRuleSourceWithRule(rule kb.Rule) action.RouteSource {
+	src := &qosRuleSource{
+		Rule: rule,
+	}
+	return src
+}
+
+// RuleSatisfied is a listener for kb.Rule
+func (server *Server) RuleSatisfied(rule kb.Rule) {
+	e := action.NewEventWithSource(newQosRuleSourceWithRule(rule))
+	server.actionMgr.PostEvent(e)
 }
 
 // RuleUnsatisfied is a listener for kb.Rule
-func (server *Server) RuleUnsatisfied(kb.Rule) {
+func (server *Server) RuleUnsatisfied(rule kb.Rule) {
 }
