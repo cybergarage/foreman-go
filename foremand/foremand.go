@@ -62,6 +62,10 @@ func main() {
 		logLevel = log.LoggerLevelTrace
 	}
 
+	// Set default logger
+
+	log.SetSharedLogger(log.NewStdoutLogger(logLevel))
+
 	// Load configuration
 
 	if 0 < len(*configFile) {
@@ -70,8 +74,6 @@ func main() {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
 			os.Exit(1)
 		}
-	} else {
-		log.SetSharedLogger(log.NewStdoutLogger(logLevel))
 	}
 
 	/*

@@ -52,7 +52,6 @@ func NewServer() *Server {
 	server.config = NewConfigWithRegistry(server.registryMgr)
 
 	server.graphite.CarbonListener = server
-
 	server.graphite.RenderListener = server
 	server.graphite.SetHTTPRequestListener(HttpServerFqlPath, server)
 
