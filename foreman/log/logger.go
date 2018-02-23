@@ -82,12 +82,12 @@ func NewStdoutLogger(level int) *Logger {
 	logger := &Logger{
 		File:     LoggerLStdout,
 		Level:    level,
-		outputer: outputStrount}
+		outputer: outputToStdout}
 	return logger
 }
 
-func outputStrount(file string, level int, msg string) (int, error) {
-	fmt.Println(msg)
+func outputToStdout(file string, level int, msg string) (int, error) {
+	fmt.Fprintln(os.Stdout, msg)
 	return len(msg), nil
 }
 
@@ -131,7 +131,7 @@ func output(outputLevel int, userFormat string, a ...interface{}) int {
 		t.Hour(), t.Minute(), t.Second())
 
 	// TODO : Support parameters
-	//userMsg := fmt.Sprintf(userFormat, a)
+	//　userMsg := fmt.Sprintf(userFormat, a...)
 	userMsg := userFormat
 
 	headerString := fmt.Sprintf("[%s]", sharedLogger.GetLevelString())

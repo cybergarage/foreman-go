@@ -6,6 +6,8 @@
 package foreman
 
 import (
+	"fmt"
+
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	"github.com/cybergarage/go-graphite/net/graphite"
 )
@@ -14,6 +16,7 @@ import (
 func (server *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 	// Ignore error requests
 	if err != nil {
+		server.Error(fmt.Sprintf("[GRAPHITE:BAD] : %s", err.Error()))
 		return
 	}
 
@@ -26,8 +29,11 @@ func (server *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 
 		err = server.metricMgr.AddMetric(fm)
 		if err != nil {
-			// TODO : Handle the error
+			server.Error(fmt.Sprintf("[GRAPHITE:BAD] : %s %s %f", fm.Name, fm.Timestamp.String(), fm.Value))
+			continue
 		}
+
+		server.Error(fmt.Sprintf("[GRAPHITE:OK] : %s %s %f", fm.Name, fm.Timestamp.String(), fm.Value))
 	}
 }
 
