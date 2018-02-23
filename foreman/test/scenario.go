@@ -6,23 +6,15 @@ package test
 
 import (
 	"io/ioutil"
+	"path/filepath"
 	"strings"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-// ScenarioExecutor represents a scenario test.
-type ScenarioExecutor interface {
-	// Setup initializes the scenario.
-	Setup() error
-	// Execute runs the specified event.
-	Execute(e *Event) (*Response, *errors.Error)
-	// Cleanup closes the scenario.
-	Cleanup() error
-}
-
 // Scenario represents a parameter.
 type Scenario struct {
+	Name         string
 	executor     ScenarioExecutor
 	Events       []*Event
 	LastEvent    *Event
@@ -33,6 +25,7 @@ type Scenario struct {
 // NewScenario create a new scenario.
 func NewScenario() *Scenario {
 	s := &Scenario{
+		Name:         "",
 		Events:       make([]*Event, 0),
 		executor:     nil,
 		LastEvent:    nil,
@@ -40,6 +33,11 @@ func NewScenario() *Scenario {
 		LastError:    nil,
 	}
 	return s
+}
+
+// SetName sets the name.
+func (s *Scenario) SetName(name string) {
+	s.Name = name
 }
 
 // SetExecutor sets the event executor.
@@ -60,6 +58,11 @@ func (s *Scenario) SetLastResponse(r *Response) {
 // SetLastError sets a last error.
 func (s *Scenario) SetLastError(e *errors.Error) {
 	s.LastError = e
+}
+
+// GetName returns the name.
+func (s *Scenario) GetName() string {
+	return s.Name
 }
 
 // GetLastEvent gets the last executed event.
@@ -115,6 +118,8 @@ func (s *Scenario) LoadFile(filename string) *errors.Error {
 	if err != nil {
 		return errors.NewErrorWithError(err)
 	}
+
+	s.SetName(filepath.Base(filename))
 
 	for _, line := range strings.Split(string(content), "\n") {
 		if len(line) <= 0 {
