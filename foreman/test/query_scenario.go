@@ -17,8 +17,8 @@ const (
 	errorQueryInvalidStatusCode         = "Expected status code %d != %d (%s)"
 	errorQueryEmptyResponseObject       = "Empty path object : %s"
 	errorQueryInvalidResponseString     = "Expected '%s' %s != %s"
-	errorQueryInvalidResponseInteger    = "Expected '%s' %d != %s"
-	errorQueryInvalidResponseReal       = "Expected '%s' %f != %s"
+	errorQueryInvalidResponseInteger    = "Expected '%s' %d != %d"
+	errorQueryInvalidResponseReal       = "Expected '%s' %f != %f"
 	errorQueryUnknownResponseObjectType = "Unknown path object type %s"
 )
 
@@ -111,6 +111,15 @@ func (s *QueryScenario) verifyResponse(res *QueryResponse, expectRes *QueryExpec
 	switch pathObj.(type) {
 	case string:
 		resValue, _ := pathObj.(string)
+		// Parse as a float at first such as '1E+00'
+		resFloatValue, err := strconv.ParseFloat(expectRes.JSONPathValue, 64)
+		if err == nil {
+			expectValue, err := strconv.ParseFloat(expectRes.JSONPathValue, 64)
+			if (err == nil) && (resFloatValue == float64(expectValue)) {
+				return nil
+			}
+		}
+		// Check as a string
 		expectValue := expectRes.JSONPathValue
 		if resValue != expectValue {
 			return fmt.Errorf(errorQueryInvalidResponseString, expectRes.JSONPath, expectValue, resValue)
