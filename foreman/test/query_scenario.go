@@ -33,7 +33,7 @@ type QueryScenario struct {
 func NewQueryScenario() *QueryScenario {
 	s := &QueryScenario{
 		Scenario: NewScenario(),
-		server:   foreman.NewServer(),
+		server:   nil,
 		client:   foreman.NewClient(),
 	}
 
@@ -44,6 +44,8 @@ func NewQueryScenario() *QueryScenario {
 
 // Setup initializes the scenario.
 func (s *QueryScenario) Setup() error {
+	s.server = foreman.NewServer()
+
 	err := s.server.Start()
 	if err != nil {
 		return err
@@ -156,5 +158,8 @@ func (s *QueryScenario) Cleanup() error {
 	if err != nil {
 		return err
 	}
+
+	s.server = nil
+
 	return nil
 }
