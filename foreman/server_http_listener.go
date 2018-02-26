@@ -6,11 +6,11 @@
 package foreman
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
@@ -98,5 +98,5 @@ func (server *Server) httpResponseJSONError(r *http.Request, w http.ResponseWrit
 
 // httpLogMessage outputs a log message for the specified HTTP request.
 func (server *Server) httpLogMessage(r *http.Request, statusCode int, msg string) {
-	server.Info(fmt.Sprintf("[%d] : %s", statusCode, msg))
+	logging.Info("[%d] : %s", statusCode, msg)
 }

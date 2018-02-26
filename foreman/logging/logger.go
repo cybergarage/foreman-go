@@ -70,7 +70,7 @@ func LogLevelFromString(ls string) LogLevel {
 	return LevelTrace
 }
 
-func SetLogLevelFromString(ls string) {
+func setLogLevelFromString(ls string) {
 	os.Setenv("RLOG_LOG_LEVEL", ls)
 	rlog.UpdateEnv()
 }
@@ -83,7 +83,7 @@ func SetLogLevel(l LogLevel) {
 	case LevelFatal:
 		ls = "CRITICAL"
 	}
-	SetLogLevelFromString(ls)
+	setLogLevelFromString(ls)
 }
 
 func SetLogFile(file string) {
@@ -100,27 +100,8 @@ func SetLogtToStdout() {
 	rlog.UpdateEnv()
 }
 
-func Trace(format string, a ...interface{}) int {
-	rlog.Debugf(format, a...)
-	return 0
-}
-
-func Info(format string, a ...interface{}) int {
-	rlog.Infof(format, a...)
-	return 0
-}
-
-func Warn(format string, a ...interface{}) int {
-	rlog.Warnf(format, a...)
-	return 0
-}
-
-func Error(format string, a ...interface{}) int {
-	rlog.Errorf(format, a...)
-	return 0
-}
-
-func Fatal(format string, a ...interface{}) int {
-	rlog.Criticalf(format, a...)
-	return 0
-}
+var Trace = rlog.Debugf
+var Info = rlog.Infof
+var Warn = rlog.Warnf
+var Error = rlog.Errorf
+var Fatal = rlog.Criticalf
