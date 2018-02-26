@@ -32,10 +32,13 @@ type Server struct {
 	actionMgr   *action.Manager
 
 	config *Config
+
+	configFile string
 }
 
 // NewServer returns a new Server.
-func NewServer() *Server {
+func NewServerWithConfigFile(configFile string) *Server {
+
 	server := &Server{
 		graphite:    graphite.NewServer(),
 		registryMgr: registry.NewManager(),
@@ -44,16 +47,30 @@ func NewServer() *Server {
 		metricMgr:   metric.NewManager(),
 		actionMgr:   action.NewManager(),
 		config:      nil,
+		configFile:  configFile,
 	}
 
 	server.initialize()
 	runtime.SetFinalizer(server, serverFinalizer)
 
-	server.config = NewConfigWithRegistry(server.registryMgr)
+	var err error
+	server.config, err = NewConfigWithRegistry(server.registryMgr)
+	if err != nil {
+		return nil
+	}
+
+	err = server.LoadConfig(server.configFile)
+	if err != nil {
+		return nil
+	}
 
 	server.graphite.CarbonListener = server
 	server.graphite.RenderListener = server
-	server.graphite.SetHTTPRequestListener(HttpServerFqlPath, server)
+	FqlPath, err := server.config.GetString(ConfigFqlPathKey)
+	if err != nil {
+		FqlPath = HttpServerFqlPath
+	}
+	server.graphite.SetHTTPRequestListener(FqlPath, server)
 
 	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
 	server.metricMgr.SetRegisterListener(server)
@@ -61,6 +78,10 @@ func NewServer() *Server {
 	server.qosMgr.AddListener(server)
 
 	return server
+}
+
+func NewServer() *Server {
+	return NewServerWithConfigFile("")
 }
 
 // GetHostname returns the hostname.
@@ -74,7 +95,7 @@ func (server *Server) LoadConfig(filename string) error {
 	if err != nil {
 		return err
 	}
-	return nil
+	return server.updateConfig()
 }
 
 // initialize initialize the server.
@@ -190,6 +211,8 @@ func (server *Server) Restart() error {
 	if err != nil {
 		return err
 	}
+
+	server.LoadConfig(server.configFile)
 
 	err = server.Start()
 	if err != nil {

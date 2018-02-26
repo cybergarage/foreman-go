@@ -4,14 +4,58 @@
 
 package foreman
 
+// #include <foreman/foreman-c.h>
+import "C"
 import (
+	"bufio"
+	"os"
 	"strconv"
 	"strings"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/registry"
+
+	"github.com/BurntSushi/toml"
 )
+
+type LogConfig struct {
+	File  string
+	Level string
+}
+
+type ServerConfig struct {
+	Host       string
+	CarbonPort int
+	HTTPPort   int
+}
+
+type FQLConfig struct {
+	Path  string
+	Query string
+}
+
+func DefaultTOMLConfig() TOMLConfig {
+	t := TOMLConfig{}
+	t.Log.File = DefaultLogFile
+	t.Log.Level = DefaultLogLevel
+
+	t.Server.Host = DefaultServerHost
+	t.Server.HTTPPort = DefaultHttpPort
+	t.Server.CarbonPort = DefaultCarbonPort
+
+	t.FQL.Path = HttpServerFqlPath
+	t.FQL.Query = HttpServerFqlQuery
+	return t
+}
+
+// type TOMLConfig represents a configuration read from or to be written to a TOML file
+type TOMLConfig struct {
+	Log    LogConfig
+	Server ServerConfig
+	FQL    FQLConfig
+}
 
 // Config represents a Config for Foreman.
 type Config struct {
@@ -20,17 +64,18 @@ type Config struct {
 }
 
 // NewConfigWithRegistry returns a new Config with the specified registry.
-func NewConfigWithRegistry(mgr *registry.Manager) *Config {
+func NewConfigWithRegistry(mgr *registry.Manager) (*Config, error) {
 	config := &Config{
 		Manager: mgr,
 	}
-	config.initialize()
-	return config
+	err := config.initialize()
+	return config, err
 }
 
 func (config *Config) initialize() error {
 	err := config.CreateCategoryObject(ConfigCategoryKey)
 	if err != nil {
+		logging.Trace("Error: %s\n", err)
 		return err
 	}
 
@@ -45,6 +90,7 @@ func (config *Config) initialize() error {
 	for key, value := range initialKeys {
 		err = config.SetKey(key, value)
 		if err != nil {
+			logging.Trace("Error: %s\n", err)
 			return err
 		}
 	}
@@ -52,16 +98,126 @@ func (config *Config) initialize() error {
 	return nil
 }
 
+func (config *Config) loadTOMLConfig(t TOMLConfig) (err error) {
+	err = config.SetKey(ConfigLogFileKey, t.Log.File)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	err = config.SetKey(ConfigLogLevelKey, t.Log.Level)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+
+	err = config.SetKey(ConfigHostKey, t.Server.Host)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	err = config.SetKey(ConfigCarbonPortKey, strconv.Itoa(t.Server.CarbonPort))
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	err = config.SetKey(ConfigHttpPortKey, strconv.Itoa(t.Server.HTTPPort))
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+
+	err = config.SetKey(ConfigFqlPathKey, t.FQL.Path)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	err = config.SetKey(ConfigFqlQueryKey, t.FQL.Query)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	return
+}
+
+func (config Config) toTOMLConfig() (t TOMLConfig, err error) {
+	t = TOMLConfig{}
+	t.Log.File, err = config.GetString(ConfigLogFileKey)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	t.Log.Level, err = config.GetString(ConfigLogLevelKey)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+
+	t.Server.Host, err = config.GetString(ConfigHostKey)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	t.Server.CarbonPort, err = config.GetInt(ConfigCarbonPortKey)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	t.Server.HTTPPort, err = config.GetInt(ConfigHttpPortKey)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+
+	t.FQL.Path, err = config.GetString(ConfigFqlPathKey)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	t.FQL.Query, err = config.GetString(ConfigFqlQueryKey)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	return
+}
+
 // LoadFile loads a specified Config file.
 func (config *Config) LoadFile(filename string) error {
-	// TODO: Not implemented yet
+	t := DefaultTOMLConfig()
+	if filename != "" {
+		_, err := toml.DecodeFile(filename, &t)
+		if err != nil {
+			return err
+		}
+		logging.Trace("Read TOML file %s, got config: %s", filename, t)
+	}
+	logging.SetLogLevel(logging.LogLevelFromString(t.Log.Level))
+	logging.SetLogFile(t.Log.File)
+	config.loadTOMLConfig(t)
 	return nil
+}
+
+func (config Config) ToFile(filename string) error {
+	outfile, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		outfile.Close()
+	}()
+	out := toml.NewEncoder(bufio.NewWriter(outfile))
+	t, err := config.toTOMLConfig()
+	if err != nil {
+		return err
+	}
+	return out.Encode(t)
 }
 
 // SetKey sets a key value.
 func (config *Config) SetKey(key string, value string) error {
 	parentObj, err := config.GetCategoryObject(ConfigCategoryKey)
 	if err != nil {
+		logging.Trace("Error: %s\n", err)
 		return err
 	}
 

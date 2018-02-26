@@ -28,7 +28,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -53,7 +52,13 @@ func main() {
 	configFile := flag.String("config", ConfigFile, "Path to an configuration file")
 	flag.Parse()
 
-	server := foreman.NewServer()
+	// Load configuration
+	server := foreman.NewServerWithConfigFile(*configFile)
+
+	if server == nil {
+		logging.Fatal("Could not start server. Terminating...")
+		os.Exit(1)
+	}
 
 	// logging Level
 
@@ -63,47 +68,12 @@ func main() {
 	}
 	logging.SetLogLevel(logLevel)
 
-	// Set default logger
-
-	log.SetSharedLogger(log.NewStdoutLogger(logLevel))
-
-	// Load configuration
-
-	if 0 < len(*configFile) {
-		err := server.LoadConfig(*configFile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s\n", err)
-			os.Exit(1)
-		}
-	}
-
-	/*
-		// Setup logger
-
-		logFile, err := config.GetKeyStringByPath(ConfigRoot + "/" + ConfigLogFile)
-		if err != nil {
-			logging.Error(err.Error())
-			os.Exit(1)
-		}
-
-		if *foreground {
-			logging.SetSharedLogger(logging.NewStdoutLogger(logLevel))
-		} else {
-			logging.SetSharedLogger(logging.NewFileLogger(logFile, logLevel))
-		}
-		defer logging.SetSharedLogger(nil)
-
-		// Output logging message
-
-		sharedLogger := logging.GetSharedLogger()
-	*/
-
 	// Start Server
 	logging.Info("%s is starting ...", ProgramName)
 
 	err := server.Start()
 	if err != nil {
-		logging.Error("%s couldn't be started (%s)", ProgramName, err.Error())
+		logging.Fatal("%s couldn't be started (%s)", ProgramName, err.Error())
 		os.Exit(1)
 	}
 
@@ -126,7 +96,7 @@ func main() {
 			case syscall.SIGHUP:
 				err = server.Restart()
 				if err != nil {
-					logging.Error("%s couldn't be restarted (%s)", ProgramName, err.Error())
+					logging.Fatal("%s couldn't be restarted (%s)", ProgramName, err.Error())
 					os.Exit(1)
 				}
 			case syscall.SIGINT, syscall.SIGTERM:
@@ -142,7 +112,7 @@ func main() {
 
 	code := <-exitCh
 
-	logging.Info("%s is stop", ProgramName)
+	logging.Info("Stopping %s...", ProgramName)
 
 	os.Exit(code)
 }
