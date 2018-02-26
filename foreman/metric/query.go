@@ -62,7 +62,7 @@ func NewQueryWithQuery(fq fql.Query) (*Query, error) {
 	}
 
 	var q *Query = nil
-	if fq.HasOnlyColumn(fql.QueryColumnId) {
+	if fq.HasOnlyColumn(fql.QueryColumnName) {
 		q = NewMetricQuery()
 	} else {
 		q = NewDataQuery()
@@ -74,7 +74,7 @@ func NewQueryWithQuery(fq fql.Query) (*Query, error) {
 	if ok {
 		for _, where := range wheres {
 			switch where.GetColumn() {
-			case fql.QueryColumnId:
+			case fql.QueryColumnName:
 				switch where.GetOperator().GetType() {
 				case fql.OperatorTypeEQ:
 					q.Target = where.GetOperand()
@@ -125,7 +125,7 @@ func (q *Query) String() string {
 	return fmt.Sprintf("%s FROM %s WHERE %s == %s AND %s >= %d AND %s <= %d",
 		fql.QuerySelectString,
 		fql.QueryTargetMetrics,
-		fql.QueryColumnId,
+		fql.QueryColumnName,
 		target,
 		fql.QueryColumnTimestamp,
 		from,
