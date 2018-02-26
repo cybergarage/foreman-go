@@ -18,11 +18,11 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
 	}
 
-	id := values[0].String()
+	name := values[0].String()
 	value := values[1].String()
 
 	obj := NewObject()
-	obj.SetName(id)
+	obj.SetName(name)
 	obj.SetData(value)
 
 	err := mgr.SetObject(obj)
@@ -34,20 +34,20 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error) {
-	ope, id, hasID := q.GetConditionByColumn(fql.QueryColumnId)
-	if hasID {
+	ope, name, hasName := q.GetConditionByColumn(fql.QueryColumnName)
+	if hasName {
 		if ope.GetType() != fql.OperatorTypeEQ {
-			hasID = false
+			hasName = false
 		}
 	}
 
-	if !hasID {
+	if !hasName {
 		return nil, errors.NewErrorWithError(fmt.Errorf(errorQueryEmptyID))
 	}
 
-	obj, ok := mgr.GetObject(id)
+	obj, ok := mgr.GetObject(name)
 	if !ok {
-		return nil, errors.NewErrorWithError(fmt.Errorf(errorQueryNotFoundID, id))
+		return nil, errors.NewErrorWithError(fmt.Errorf(errorQueryNotFoundID, name))
 	}
 
 	data, err := obj.GetData()
@@ -71,7 +71,7 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 	regData[fql.QueryColumnTimestamp] = ts.Unix()
 
 	regMap := map[string]interface{}{}
-	regMap[id] = regData
+	regMap[name] = regData
 
 	regContainer := map[string]interface{}{}
 	regContainer[strings.ToLower(fql.QueryTargetRegister)] = regMap
@@ -80,18 +80,18 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeDeleteQuery(q fql.Query) (interface{}, *errors.Error) {
-	ope, id, hasID := q.GetConditionByColumn(fql.QueryColumnId)
-	if hasID {
+	ope, name, hasName := q.GetConditionByColumn(fql.QueryColumnName)
+	if hasName {
 		if ope.GetType() != fql.OperatorTypeEQ {
-			hasID = false
+			hasName = false
 		}
 	}
 
 	// Delete only a specified rule
 
-	if hasID {
-		if !mgr.RemoveObject(id) {
-			return nil, errors.NewErrorWithError(fmt.Errorf(errorQueryNotFoundID, id))
+	if hasName {
+		if !mgr.RemoveObject(name) {
+			return nil, errors.NewErrorWithError(fmt.Errorf(errorQueryNotFoundID, name))
 		}
 		return nil, nil
 	}

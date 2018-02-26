@@ -22,7 +22,6 @@ const (
 	QueryConditionOperatorEq  = "=="
 	QueryConditionOperatorNeq = "!="
 	QueryColumnName           = "name"
-	QueryColumnId             = "id"
 	QueryColumnTimestamp      = "ts"
 	QueryColumnValue          = "value"
 	QueryColumnVersion        = "ver"
