@@ -21,3 +21,6 @@ debug
 
 # MacOSX
 .DS_Store
+
+# vim
+.*.sw?
