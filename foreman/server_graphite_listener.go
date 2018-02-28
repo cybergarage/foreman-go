@@ -8,12 +8,21 @@ package foreman
 import (
 	"fmt"
 
+	"github.com/cybergarage/foreman-go/foreman/log"
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	"github.com/cybergarage/go-graphite/net/graphite"
 )
 
-// MetricRequestReceived is a listener for Graphite Carbon
-func (server *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
+const (
+	graphiteGoodRequestPrefix = "[GRAPHITE:OK]"
+	graphiteBadRequestPrefix  = "[GRAPHITE:BAD]"
+	graphiteInsertQuery       = "INSERT"
+	graphiteFindQuery         = "FIND"
+	graphiteRenderQuery       = "RENDER"
+)
+
+// InsertMetricRequestReceived is a listener for Graphite Carbon
+func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err error) {
 	// Ignore error requests
 	if err != nil {
 		server.Error(fmt.Sprintf("[GRAPHITE:BAD] : %s", err.Error()))
@@ -29,38 +38,76 @@ func (server *Server) MetricRequestReceived(gm *graphite.Metric, err error) {
 
 		err = server.metricMgr.AddMetric(fm)
 		if err != nil {
-			server.Error(fmt.Sprintf("[GRAPHITE:BAD] : %s %s %f", fm.Name, fm.Timestamp.String(), fm.Value))
+			log.Error(fmt.Sprintf("%s : %s %s %s %f", graphiteBadRequestPrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value))
 			continue
 		}
 
-		server.Error(fmt.Sprintf("[GRAPHITE:OK] : %s %s %f", fm.Name, fm.Timestamp.String(), fm.Value))
+		log.Info(fmt.Sprintf("%s : %s %s %s %f", graphiteGoodRequestPrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value))
 	}
 }
 
-// QueryRequestReceived is a listener for Graphite Render
-func (server *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metric, error) {
+// FindMetricsRequestReceived is a listener for Graphite Render
+func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metrics, error) {
 	// Ignore error requests
 	if err != nil {
+		log.Error(fmt.Sprintf("%s : %s %s", graphiteBadRequestPrefix, graphiteFindQuery, gq.Target))
 		return nil, nil
 	}
 
 	// graphite.Query to foreman.Query
 	fq := metric.NewMetricQuery()
 	fq.Target = gq.Target
+
+	rs, err := server.metricMgr.Query(fq)
+	if err != nil {
+		log.Error(fmt.Sprintf("%s : %s %s", graphiteBadRequestPrefix, graphiteFindQuery, gq.Target))
+		return nil, err
+	}
+
+	mCount := rs.GetMetricsCount()
+	m := make([]*graphite.Metrics, mCount)
+
+	ms := rs.GetFirstMetrics()
+	for n := 0; n < mCount; n++ {
+		m[n] = graphite.NewMetrics()
+		if ms == nil {
+			break
+		}
+		m[n].Name = ms.Name
+		ms = rs.GetNextMetrics()
+	}
+
+	log.Info(fmt.Sprintf("%s : %s %s", graphiteGoodRequestPrefix, graphiteFindQuery, gq.Target))
+
+	return m, nil
+}
+
+// QueryMetricsRequestReceived is a listener for Graphite Render
+func (server *Server) QueryMetricsRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metrics, error) {
+	// Ignore error requests
+	if err != nil {
+		log.Error(fmt.Sprintf("%s : %s %s", graphiteBadRequestPrefix, graphiteRenderQuery, gq.Target))
+		return nil, nil
+	}
+
+	// graphite.Query to foreman.Query
+	fq := metric.NewDataQuery()
+	fq.Target = gq.Target
 	fq.From = gq.From
 	fq.Until = gq.Until
 
 	rs, err := server.metricMgr.Query(fq)
 	if err != nil {
+		log.Error(fmt.Sprintf("%s : %s %s", graphiteBadRequestPrefix, graphiteRenderQuery, gq.Target))
 		return nil, err
 	}
 
 	mCount := rs.GetMetricsCount()
-	m := make([]*graphite.Metric, mCount)
+	m := make([]*graphite.Metrics, mCount)
 
 	ms := rs.GetFirstMetrics()
 	for n := 0; n < mCount; n++ {
-		m[n] = graphite.NewMetric()
+		m[n] = graphite.NewMetrics()
 		if ms == nil {
 			break
 		}
@@ -76,6 +123,8 @@ func (server *Server) QueryRequestReceived(gq *graphite.Query, err error) ([]*gr
 
 		ms = rs.GetNextMetrics()
 	}
+
+	log.Info(fmt.Sprintf("%s : %s %s", graphiteGoodRequestPrefix, graphiteRenderQuery, gq.Target))
 
 	return m, nil
 }

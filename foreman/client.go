@@ -54,7 +54,7 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 		return err
 	}
 
-	err = client.graphite.PostMetric(gm)
+	err = client.graphite.PostMetrics(gm)
 	if err != nil {
 		return err
 	}
