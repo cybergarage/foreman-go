@@ -10,7 +10,7 @@ import (
 )
 
 // NewDataPointsWithGraphiteMetric returns a new data points from the specified graphite.Metric.
-func NewDataPointsWithGraphiteMetric(gm *graphite.Metric) (*metric.Metrics, error) {
+func NewDataPointsWithGraphiteMetric(gm *graphite.Metrics) (*metric.Metrics, error) {
 	dpSize := len(gm.DataPoints)
 	ms := metric.NewMetricsWithSize(dpSize)
 	ms.Name = gm.Name
