@@ -10,7 +10,7 @@ import (
 )
 
 // NewMetricsWithGraphiteMetric returns new metrics from Graphite metric.
-func NewMetricsWithGraphiteMetric(gm *graphite.Metric) []*metric.Metric {
+func NewMetricsWithGraphiteMetric(gm *graphite.Metrics) []*metric.Metric {
 	m := make([]*metric.Metric, len(gm.DataPoints))
 
 	for n, dp := range gm.DataPoints {
@@ -24,8 +24,8 @@ func NewMetricsWithGraphiteMetric(gm *graphite.Metric) []*metric.Metric {
 }
 
 // NewGraphiteMetricsWithMetric returns a new metric from Graphite metric.
-func NewGraphiteMetricsWithMetric(m *metric.Metric) (*graphite.Metric, error) {
-	gm := graphite.NewMetric()
+func NewGraphiteMetricsWithMetric(m *metric.Metric) (*graphite.Metrics, error) {
+	gm := graphite.NewMetrics()
 	gm.Name = m.Name
 
 	dp := graphite.NewDataPoint()

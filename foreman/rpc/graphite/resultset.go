@@ -10,7 +10,7 @@ import (
 )
 
 // NewResultSetWithGraphiteMetrics returns a new resultset from graphite.Metric.
-func NewResultSetWithGraphiteMetrics(gms []*graphite.Metric) (metric.ResultSet, error) {
+func NewResultSetWithGraphiteMetrics(gms []*graphite.Metrics) (metric.ResultSet, error) {
 	rs := metric.NewResultSet()
 	for _, gm := range gms {
 		ms, err := NewDataPointsWithGraphiteMetric(gm)
