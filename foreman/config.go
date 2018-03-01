@@ -185,11 +185,12 @@ func (config Config) toTOMLConfig() (t TOMLConfig, err error) {
 func (config *Config) LoadFile(filename string) error {
 	t := DefaultTOMLConfig()
 	if filename != "" {
+		logging.Trace("TOML Config file path: %s", filename)
 		_, err := toml.DecodeFile(filename, &t)
 		if err != nil {
 			return err
 		}
-		logging.Trace("Read TOML file %s, got config: %s", filename, t)
+		logging.Trace("Got config: %s", filename, t)
 	}
 	logging.SetLogLevel(logging.LogLevelFromString(t.Log.Level))
 	logging.SetLogFile(t.Log.File)
