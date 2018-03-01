@@ -43,12 +43,19 @@ const (
 	ConfigLogFile = "log_file"
 )
 
+func becomeVerbose(verbose bool) {
+	if verbose {
+		logging.SetLogLevel(logging.LevelTrace)
+		logging.Trace("Enabled verbose output.")
+	}
+}
+
 func main() {
 
 	// Command Line Option
 
 	//	foreground := flag.Bool("f", false, "Foreground mode.")
-	verbose := flag.Int("v", 0, "Output logging level.")
+	verbose := flag.Bool("v", false, "Verbose logging")
 	configFile := flag.String("config", ConfigFile, "Path to an configuration file")
 	flag.Parse()
 
@@ -61,12 +68,7 @@ func main() {
 	}
 
 	// logging Level
-
-	logLevel := logging.LevelInfo
-	if 0 < *verbose {
-		logLevel = logging.LevelTrace
-	}
-	logging.SetLogLevel(logLevel)
+	becomeVerbose(*verbose)
 
 	// Start Server
 	logging.Info("%s is starting ...", ProgramName)
@@ -77,7 +79,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	logging.Info("%s is started", ProgramName)
+	logging.Info("%s started", ProgramName)
 
 	sigCh := make(chan os.Signal, 1)
 
@@ -94,12 +96,15 @@ func main() {
 			s := <-sigCh
 			switch s {
 			case syscall.SIGHUP:
+				logging.Info("Caught SIGHUP, restarting...")
 				err = server.Restart()
 				if err != nil {
 					logging.Fatal("%s couldn't be restarted (%s)", ProgramName, err.Error())
 					os.Exit(1)
 				}
+				becomeVerbose(*verbose)
 			case syscall.SIGINT, syscall.SIGTERM:
+				logging.Info("Caught %s, stopping...", s.String())
 				err = server.Stop()
 				if err != nil {
 					logging.Error("%s couldn't be stopped (%s)", ProgramName, err.Error())
@@ -112,7 +117,7 @@ func main() {
 
 	code := <-exitCh
 
-	logging.Info("Stopping %s...", ProgramName)
+	logging.Info("%s stopped.", ProgramName)
 
 	os.Exit(code)
 }

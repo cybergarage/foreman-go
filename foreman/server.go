@@ -13,6 +13,7 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/kb"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	"github.com/cybergarage/foreman-go/foreman/qos"
 	"github.com/cybergarage/foreman-go/foreman/register"
@@ -56,6 +57,8 @@ func NewServerWithConfigFile(configFile string) *Server {
 	var err error
 	server.config, err = NewConfigWithRegistry(server.registryMgr)
 	if err != nil {
+		logging.Fatal("Could not create config registry!")
+		logging.Fatal("%s", err)
 		return nil
 	}
 
@@ -91,8 +94,10 @@ func (server *Server) GetHostname() (string, error) {
 
 // LoadConfig loads a specified configuration file.
 func (server *Server) LoadConfig(filename string) error {
+	logging.Trace("Server loading config file from %s.", filename)
 	err := server.config.LoadFile(filename)
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 	return server.updateConfig()
@@ -102,6 +107,7 @@ func (server *Server) LoadConfig(filename string) error {
 func (server *Server) initialize() error {
 	err := server.registryMgr.Start()
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 
@@ -119,12 +125,14 @@ func (server *Server) updateConfig() error {
 
 	port, err := server.config.GetInt(ConfigCarbonPortKey)
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 	server.graphite.Carbon.Port = port
 
 	port, err = server.config.GetInt(ConfigHttpPortKey)
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 	server.graphite.Render.Port = port
@@ -146,6 +154,7 @@ func (server *Server) GetHTTPPort() int {
 func (server *Server) Start() error {
 	err := server.updateConfig()
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 
@@ -154,24 +163,28 @@ func (server *Server) Start() error {
 	err = server.graphite.Start()
 	if err != nil {
 		server.Stop()
+		logging.Error("%s\n", err)
 		return err
 	}
 
 	err = server.registerMgr.Start()
 	if err != nil {
 		server.Stop()
+		logging.Error("%s\n", err)
 		return err
 	}
 
 	err = server.metricMgr.Start()
 	if err != nil {
 		server.Stop()
+		logging.Error("%s\n", err)
 		return err
 	}
 
 	err = server.qosMgr.Start()
 	if err != nil {
 		server.Stop()
+		logging.Error("%s\n", err)
 		return err
 	}
 
@@ -184,21 +197,25 @@ func (server *Server) Stop() error {
 
 	err := server.graphite.Stop()
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 
 	err = server.registerMgr.Stop()
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 
 	err = server.metricMgr.Stop()
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 
 	err = server.qosMgr.Stop()
 	if err != nil {
+		logging.Error("%s\n", err)
 		return err
 	}
 
@@ -207,17 +224,23 @@ func (server *Server) Stop() error {
 
 // Restart restats the server.
 func (server *Server) Restart() error {
+	logging.Info("Stopping server for restart...\n")
 	err := server.Stop()
 	if err != nil {
+		logging.Error("Could not stop server: %s\n", err)
 		return err
 	}
 
+	logging.Info("Reloading config...")
 	server.LoadConfig(server.configFile)
 
+	logging.Info("Restarting server...")
 	err = server.Start()
 	if err != nil {
+		logging.Error("Could not start server: %s\n", err)
 		return err
 	}
+	logging.Info("Restarted.")
 
 	return nil
 }

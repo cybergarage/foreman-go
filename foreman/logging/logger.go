@@ -83,6 +83,7 @@ func SetLogLevel(l LogLevel) {
 	case LevelFatal:
 		ls = "CRITICAL"
 	}
+	Warn("Setting log level to %s", ls)
 	setLogLevelFromString(ls)
 }
 
