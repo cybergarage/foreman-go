@@ -11,6 +11,7 @@ const (
 	QueryTypeInsert
 	QueryTypeSelect
 	QueryTypeDelete
+	QueryTypeAnalyze
 )
 
 // Query represents a query interface.

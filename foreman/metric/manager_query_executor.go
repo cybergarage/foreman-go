@@ -14,6 +14,20 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
+// ExecuteQuery must return the result as a standard array or map.
+func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
+	switch q.GetType() {
+	case fql.QueryTypeInsert:
+		return mgr.executeInsertQuery(q)
+	case fql.QueryTypeSelect:
+		return mgr.executeSelectQuery(q)
+	case fql.QueryTypeAnalyze:
+		return mgr.executeAnalyzeQuery(q)
+	}
+
+	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
+}
+
 func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
 	if !ok || len(values) < 3 {
@@ -39,7 +53,7 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	return nil, nil
 }
 
-func (mgr *Manager) executeSelectMetricsQuery(q *Query) (interface{}, *errors.Error) {
+func (mgr *Manager) executeSearchMetricsQuery(q *Query) (interface{}, *errors.Error) {
 	rs, err := mgr.Query(q)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
@@ -102,24 +116,55 @@ func (mgr *Manager) executeSelectQuery(fq fql.Query) (interface{}, *errors.Error
 		return nil, errors.NewErrorWithError(err)
 	}
 
-	switch q.Source {
-	case QuerySourceMetricType:
-		return mgr.executeSelectMetricsQuery(q)
-	case QuerySourceDataType:
+	switch q.Type {
+	case QueryTypeSearchMetrics:
+		return mgr.executeSearchMetricsQuery(q)
+	case QueryTypeSelectMetrics:
 		return mgr.executeSelectMetricsDataQuery(q)
 	}
 
 	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 }
 
-// ExecuteQuery must return the result as a standard array or map.
-func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
-	switch q.GetType() {
-	case fql.QueryTypeInsert:
-		return mgr.executeInsertQuery(q)
-	case fql.QueryTypeSelect:
-		return mgr.executeSelectQuery(q)
+func (mgr *Manager) executeAnalyzeQuery(fq fql.Query) (interface{}, *errors.Error) {
+	q, err := NewQueryWithQuery(fq)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
 	}
 
-	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
+	rs, err := mgr.Query(q)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	// See : Graphite Render URL API (http://graphite.readthedocs.io/en/latest/render_api.html)
+
+	rootContainer := []interface{}{}
+
+	ms := rs.GetFirstMetrics()
+	for ms != nil {
+		msMap := map[string]interface{}{}
+		msMap[json.GraphiteResponseTarget] = ms.Name
+
+		dps := []interface{}{}
+		for _, v := range ms.Values {
+			if v == nil {
+				continue
+			}
+			if math.IsNaN(v.Value) {
+				continue
+			}
+			dp := []interface{}{}
+			dp = append(dp, v.Value)
+			dp = append(dp, v.Timestamp.Unix())
+			dps = append(dps, dp)
+		}
+		msMap[json.GraphiteResponseDatapoints] = dps
+
+		rootContainer = append(rootContainer, msMap)
+
+		ms = rs.GetNextMetrics()
+	}
+
+	return rootContainer, nil
 }

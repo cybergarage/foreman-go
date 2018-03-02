@@ -12,17 +12,18 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
-type QuerySourceType int
+type QueryType int
 
 const (
-	QuerySourceUnknownType QuerySourceType = iota
-	QuerySourceMetricType
-	QuerySourceDataType
+	QueryTypeUnknown QueryType = iota
+	QueryTypeSearchMetrics
+	QueryTypeSelectMetrics
+	QueryTypeAnalyzeMetrics
 )
 
 // Query represents a query for the metric store.
 type Query struct {
-	Source   QuerySourceType
+	Type     QueryType
 	Target   string
 	From     *time.Time
 	Until    *time.Time
@@ -32,7 +33,7 @@ type Query struct {
 // NewMetricQuery returns a new metric query.
 func NewMetricQuery() *Query {
 	q := &Query{
-		Source:   QuerySourceMetricType,
+		Type:     QueryTypeSearchMetrics,
 		Target:   "",
 		From:     nil,
 		Until:    nil,
@@ -46,7 +47,7 @@ func NewDataQuery() *Query {
 	now := time.Now()
 	from := now.Add(QueryDefaultFromOffset)
 	q := &Query{
-		Source:   QuerySourceDataType,
+		Type:     QueryTypeSelectMetrics,
 		Target:   "",
 		From:     &from,
 		Until:    &now,
@@ -55,17 +56,35 @@ func NewDataQuery() *Query {
 	return q
 }
 
+// NewAnalyzeQuery returns a new analyze query.
+func NewAnalyzeQuery() *Query {
+	q := &Query{
+		Type:     QueryTypeAnalyzeMetrics,
+		Target:   "",
+		From:     nil,
+		Until:    nil,
+		Interval: 0,
+	}
+	return q
+}
+
 // NewQueryWithQuery returns a new query of the specified query.
 func NewQueryWithQuery(fq fql.Query) (*Query, error) {
-	if fq.GetType() != fql.QueryTypeSelect {
+	if (fq.GetType() != fql.QueryTypeSelect) && (fq.GetType() != fql.QueryTypeAnalyze) {
 		return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())
 	}
 
 	var q *Query = nil
-	if fq.HasOnlyColumn(fql.QueryColumnName) {
-		q = NewMetricQuery()
-	} else {
-		q = NewDataQuery()
+
+	switch fq.GetType() {
+	case fql.QueryTypeSelect:
+		if fq.HasOnlyColumn(fql.QueryColumnName) {
+			q = NewMetricQuery()
+		} else {
+			q = NewDataQuery()
+		}
+	case fql.QueryTypeAnalyze:
+		q = NewAnalyzeQuery()
 	}
 
 	// Where
