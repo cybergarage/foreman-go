@@ -5,7 +5,7 @@
 
 export GOPATH="$PWD"
 
-export CGO_LDFLAGS="-lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -luuid -lalglib"
+export CGO_LDFLAGS="-lforeman++ -lm -lstdc++ -lsqlite3 -luuid -lalglib"
 if [ `which python-config` ]; then
 	export CGO_CFLAGS="`python-config --includes`"
 	export CGO_LDFLAGS="$CGO_LDFLAGS `python-config --libs`"
