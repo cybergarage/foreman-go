@@ -26,10 +26,10 @@ func (m *routeDestinationMethod) String() string {
 	return m.Name
 }
 
-func (m *routeDestinationMethod) ProcessEvent(e *Event) (ResultSet, error) {
+func (m *routeDestinationMethod) ProcessEvent(e *Event) (*ResultSet, error) {
 	rs, err := m.ScriptManager.ExecMethod(m.Name, e.GetParameters())
 	if err != nil {
 		return nil, err
 	}
-	return rs, nil
+	return NewResultSetWithParameters(rs), nil
 }
