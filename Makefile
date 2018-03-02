@@ -59,9 +59,9 @@ export CGO_LDFLAGS
 
 all: test
 
-VERSION_GO="./foreman/version.go"
+VERSION_GO=${SOURCE_DIR}/version.go
 
-${VERSION_GO}: ./foreman/version.gen
+${VERSION_GO}: ${SOURCE_DIR}/version.gen
 	$< > $@
 
 version: ${VERSION_GO}
