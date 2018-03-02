@@ -57,8 +57,8 @@ CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -luuid -lalglib
 HAVE_PYTHON_CONFIG := $(shell command -v python-config 2> /dev/null)
 all:
 ifdef HAVE_PYTHON_CONFIG
-    CGO_LDFLAGS += $(shell python-config --libs)
     CGO_CFLAGS += $(shell python-config --includes)
+    CGO_LDFLAGS += $(shell python-config --libs)
 endif
 
 export CGO_CFLAGS
