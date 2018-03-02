@@ -11,6 +11,8 @@ product_name,"foreman"
 default_server_host,"localhost"
 default_carbon_port,2003
 default_http_port,8080
+default_log_file,"-"
+default_log_level,"INFO"
 
 ########################################
 # HTTP Server
@@ -29,6 +31,10 @@ config_version_key,"version"
 config_host_key,"host"
 config_carbon_port_key,"carbon_port"
 config_http_port_key,"http_port"
+config_fql_path_key,"fql_path"
+config_fql_query_key,"fql_query"
+config_log_file_key,"log_file"
+config_log_level_key,"log_level"
 
 ########################################
 # Action 
