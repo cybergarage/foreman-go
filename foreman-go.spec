@@ -1,6 +1,6 @@
 Name: foreman-go
 Version: %{expand:%%(git describe --abbrev=0 --tags)}
-Release:	1%{?dist}
+Release:	%{_sd_build_id}%{?dist}
 Summary: Foreman Go daemon
 
 License: BSD-3-clause

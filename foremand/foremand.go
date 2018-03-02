@@ -9,17 +9,16 @@ foremand is a deamon command of Forman.
 	foremand
 
 	SYNOPSIS
-	foremand [-s service] [-c cert file]  [OPTIONS]
+	foremand [-v] [-c config file]  [OPTIONS]
 
 	DESCRIPTION
 	foremand is a deamon process to Foreman.
 
-	Logs are located at /var/logging/foremand.logging
+	Logs to stdout by default, can be changed in the config file.
 
 	OPTIONS
-	-c : * /path/to/foremand.conf * Path to an configuration files.
-	-v : *level* Enable verbose output.
-	-f : *true* Run as forground process.
+	-config : /path/to/foremand.conf Path to a configuration files.
+	-v : Enable verbose output.
 
 	RETURN VALUE
 	  Return EXIT_SUCCESS or EXIT_FAILURE
