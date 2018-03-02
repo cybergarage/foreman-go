@@ -52,7 +52,11 @@ BINARY_DAEMON=${GITHUB}/${DAEMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
 BINARYIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
+CGO_CFLAGS += $(shell python-config --includes)
+export CGO_CFLAGS
+
 CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -luuid -lalglib
+CGO_LDFLAGS += $(shell python-config --libs)
 export CGO_LDFLAGS
 
 .PHONY: version
