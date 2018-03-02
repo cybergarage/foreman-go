@@ -9,6 +9,8 @@ const (
 	DefaultServerHost   = "localhost"
 	DefaultCarbonPort   = 2003
 	DefaultHttpPort     = 8080
+	DefaultLogFile      = "-"
+	DefaultLogLevel     = "INFO"
 	HttpServerFqlPath   = "/fql"
 	HttpServerFqlQuery  = "q"
 	ConfigCategoryKey   = "config"
@@ -17,4 +19,8 @@ const (
 	ConfigHostKey       = "host"
 	ConfigCarbonPortKey = "carbon_port"
 	ConfigHttpPortKey   = "http_port"
+	ConfigFqlPathKey    = "fql_path"
+	ConfigFqlQueryKey   = "fql_query"
+	ConfigLogFileKey    = "log_file"
+	ConfigLogLevelKey   = "log_level"
 )

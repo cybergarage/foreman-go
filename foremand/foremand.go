@@ -9,17 +9,16 @@ foremand is a deamon command of Forman.
 	foremand
 
 	SYNOPSIS
-	foremand [-s service] [-c cert file]  [OPTIONS]
+	foremand [-v] [-c config file]  [OPTIONS]
 
 	DESCRIPTION
 	foremand is a deamon process to Foreman.
 
-	Logs are located at /var/log/foremand.log
+	Logs to stdout by default, can be changed in the config file.
 
 	OPTIONS
-	-c : * /path/to/foremand.conf * Path to an configuration files.
-	-v : *level* Enable verbose output.
-	-f : *true* Run as forground process.
+	-config : /path/to/foremand.conf Path to a configuration files.
+	-v : Enable verbose output.
 
 	RETURN VALUE
 	  Return EXIT_SUCCESS or EXIT_FAILURE
@@ -28,13 +27,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/cybergarage/foreman-go/foreman"
-	"github.com/cybergarage/foreman-go/foreman/log"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
 const (
@@ -44,73 +42,43 @@ const (
 	ConfigLogFile = "log_file"
 )
 
+func becomeVerbose(verbose bool) {
+	if verbose {
+		logging.SetLogLevel(logging.LevelTrace)
+		logging.Trace("Enabled verbose output.")
+	}
+}
+
 func main() {
 
 	// Command Line Option
 
 	//	foreground := flag.Bool("f", false, "Foreground mode.")
-	verbose := flag.Int("v", 0, "Output log level.")
-	configFile := flag.String("c", ConfigFile, "Path to an configuration file")
+	verbose := flag.Bool("v", false, "Verbose logging")
+	configFile := flag.String("config", ConfigFile, "Path to an configuration file")
 	flag.Parse()
 
-	server := foreman.NewServer()
-
-	// Log Level
-
-	logLevel := log.LoggerLevelInfo
-	if 0 < *verbose {
-		logLevel = log.LoggerLevelTrace
-	}
-
-	// Set default logger
-
-	log.SetSharedLogger(log.NewStdoutLogger(logLevel))
-
 	// Load configuration
+	server := foreman.NewServerWithConfigFile(*configFile)
 
-	if 0 < len(*configFile) {
-		err := server.LoadConfig(*configFile)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s\n", err)
-			os.Exit(1)
-		}
-	}
-
-	/*
-		// Setup logger
-
-		logFile, err := config.GetKeyStringByPath(ConfigRoot + "/" + ConfigLogFile)
-		if err != nil {
-			log.Error(err.Error())
-			os.Exit(1)
-		}
-
-		if *foreground {
-			log.SetSharedLogger(log.NewStdoutLogger(logLevel))
-		} else {
-			log.SetSharedLogger(log.NewFileLogger(logFile, logLevel))
-		}
-		defer log.SetSharedLogger(nil)
-
-		// Output log message
-
-		sharedLogger := log.GetSharedLogger()
-
-		log.Info(fmt.Sprintf("%s is start ...", ProgramName))
-		log.Info(fmt.Sprintf("%s = %s", ConfigLogFile, sharedLogger.File))
-		log.Info(fmt.Sprintf("log_level = %s", sharedLogger.GetLevelString()))
-
-	*/
-
-	// Start Server
-
-	err := server.Start()
-	if err != nil {
-		log.Error(fmt.Sprintf("%s couldn't be started (%s)", ProgramName, err.Error()))
+	if server == nil {
+		logging.Fatal("Could not start server. Terminating...")
 		os.Exit(1)
 	}
 
-	log.Info(fmt.Sprintf("%s is started", ProgramName))
+	// logging Level
+	becomeVerbose(*verbose)
+
+	// Start Server
+	logging.Info("%s is starting ...", ProgramName)
+
+	err := server.Start()
+	if err != nil {
+		logging.Fatal("%s couldn't be started (%s)", ProgramName, err.Error())
+		os.Exit(1)
+	}
+
+	logging.Info("%s started", ProgramName)
 
 	sigCh := make(chan os.Signal, 1)
 
@@ -127,15 +95,18 @@ func main() {
 			s := <-sigCh
 			switch s {
 			case syscall.SIGHUP:
+				logging.Info("Caught SIGHUP, restarting...")
 				err = server.Restart()
 				if err != nil {
-					log.Error(fmt.Sprintf("%s couldn't be restarted (%s)", ProgramName, err.Error()))
+					logging.Fatal("%s couldn't be restarted (%s)", ProgramName, err.Error())
 					os.Exit(1)
 				}
+				becomeVerbose(*verbose)
 			case syscall.SIGINT, syscall.SIGTERM:
+				logging.Info("Caught %s, stopping...", s.String())
 				err = server.Stop()
 				if err != nil {
-					log.Error(fmt.Sprintf("%s couldn't be stopped (%s)", ProgramName, err.Error()))
+					logging.Error("%s couldn't be stopped (%s)", ProgramName, err.Error())
 					os.Exit(1)
 				}
 				exitCh <- 0
@@ -145,7 +116,7 @@ func main() {
 
 	code := <-exitCh
 
-	log.Info(fmt.Sprintf("%s is stop", ProgramName))
+	logging.Info("%s stopped.", ProgramName)
 
 	os.Exit(code)
 }

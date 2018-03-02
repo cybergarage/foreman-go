@@ -20,7 +20,11 @@ func TestConfigInitialKeys(t *testing.T) {
 		return
 	}
 
-	config := NewConfigWithRegistry(reg)
+	config, err := NewConfigWithRegistry(reg)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	err = config.initialize()
 	if err != nil {
@@ -58,7 +62,11 @@ func TestConfigIntKeys(t *testing.T) {
 		return
 	}
 
-	config := NewConfigWithRegistry(reg)
+	config, err := NewConfigWithRegistry(reg)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	intKeys := map[string]int{
 		"test_key01": 1,

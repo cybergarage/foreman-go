@@ -6,9 +6,7 @@
 package foreman
 
 import (
-	"fmt"
-
-	"github.com/cybergarage/foreman-go/foreman/log"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	"github.com/cybergarage/go-graphite/net/graphite"
 )
@@ -25,7 +23,7 @@ const (
 func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err error) {
 	// Ignore error requests
 	if err != nil {
-		server.Error(fmt.Sprintf("[GRAPHITE:BAD] : %s", err.Error()))
+		logging.Error("[GRAPHITE:BAD] : %s", err.Error())
 		return
 	}
 
@@ -38,11 +36,11 @@ func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err err
 
 		err = server.metricMgr.AddMetric(fm)
 		if err != nil {
-			log.Error(fmt.Sprintf("%s : %s %s %s %f", graphiteBadRequestPrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value))
+			logging.Error("%s : %s %s %s %f", graphiteBadRequestPrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value)
 			continue
 		}
 
-		log.Info(fmt.Sprintf("%s : %s %s %s %f", graphiteGoodRequestPrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value))
+		logging.Info("%s : %s %s %s %f", graphiteGoodRequestPrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value)
 	}
 }
 
@@ -50,7 +48,7 @@ func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err err
 func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metrics, error) {
 	// Ignore error requests
 	if err != nil {
-		log.Error(fmt.Sprintf("%s : %s %s", graphiteBadRequestPrefix, graphiteFindQuery, gq.Target))
+		logging.Error("%s : %s %s", graphiteBadRequestPrefix, graphiteFindQuery, gq.Target)
 		return nil, nil
 	}
 
@@ -60,7 +58,7 @@ func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) 
 
 	rs, err := server.metricMgr.Query(fq)
 	if err != nil {
-		log.Error(fmt.Sprintf("%s : %s %s", graphiteBadRequestPrefix, graphiteFindQuery, gq.Target))
+		logging.Error("%s : %s %s", graphiteBadRequestPrefix, graphiteFindQuery, gq.Target)
 		return nil, err
 	}
 
@@ -77,7 +75,7 @@ func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) 
 		ms = rs.GetNextMetrics()
 	}
 
-	log.Info(fmt.Sprintf("%s : %s %s", graphiteGoodRequestPrefix, graphiteFindQuery, gq.Target))
+	logging.Info("%s : %s %s", graphiteGoodRequestPrefix, graphiteFindQuery, gq.Target)
 
 	return m, nil
 }
@@ -86,7 +84,7 @@ func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) 
 func (server *Server) QueryMetricsRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metrics, error) {
 	// Ignore error requests
 	if err != nil {
-		log.Error(fmt.Sprintf("%s : %s %s", graphiteBadRequestPrefix, graphiteRenderQuery, gq.Target))
+		logging.Error("%s : %s %s", graphiteBadRequestPrefix, graphiteRenderQuery, gq.Target)
 		return nil, nil
 	}
 
@@ -98,7 +96,7 @@ func (server *Server) QueryMetricsRequestReceived(gq *graphite.Query, err error)
 
 	rs, err := server.metricMgr.Query(fq)
 	if err != nil {
-		log.Error(fmt.Sprintf("%s : %s %s", graphiteBadRequestPrefix, graphiteRenderQuery, gq.Target))
+		logging.Error("%s : %s %s", graphiteBadRequestPrefix, graphiteRenderQuery, gq.Target)
 		return nil, err
 	}
 
@@ -124,7 +122,7 @@ func (server *Server) QueryMetricsRequestReceived(gq *graphite.Query, err error)
 		ms = rs.GetNextMetrics()
 	}
 
-	log.Info(fmt.Sprintf("%s : %s %s", graphiteGoodRequestPrefix, graphiteRenderQuery, gq.Target))
+	logging.Info("%s : %s %s", graphiteGoodRequestPrefix, graphiteRenderQuery, gq.Target)
 
 	return m, nil
 }
