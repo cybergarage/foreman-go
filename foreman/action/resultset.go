@@ -5,7 +5,7 @@
 package action
 
 // ResultSet is an alias of Parameters
-type ResultSet = Parameters
+type ResultSet Parameters
 
 // NewResultSet returns a new result set.
 func NewResultSet() ResultSet {
