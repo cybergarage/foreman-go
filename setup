@@ -3,13 +3,19 @@
 # Set environment variables
 ########################################
 
-export GOPATH=`pwd`
+export GOPATH="$PWD"
 
 ########################################
 # Get dependency projects
 ########################################
 
-go get github.com/antlr/antlr4/runtime/Go/antlr
+dependencies=(
+"github.com/antlr/antlr4/runtime/Go/antlr"
+"github.com/BurntSushi/toml"
+"github.com/romana/rlog"
+)
+
+go get "${dependencies[@]}"
 
 ########################################
 # Get latest source codes.

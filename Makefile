@@ -12,7 +12,8 @@
 SHELL := bash
 
 PREFIX?=$(shell pwd)
-GOPATH=$(shell pwd)
+GOPATH:=$(shell pwd)
+export GOPATH
 
 GITHUB_ROOT=github.com/cybergarage
 
