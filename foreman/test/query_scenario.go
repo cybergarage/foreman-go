@@ -17,8 +17,8 @@ const (
 	errorQueryInvalidStatusCode         = "Expected status code %d != %d (%s)"
 	errorQueryEmptyResponseObject       = "Empty path object : %s"
 	errorQueryInvalidResponseString     = "Expected '%s' %s != %s"
-	errorQueryInvalidResponseInteger    = "Expected '%s' %d != %d"
-	errorQueryInvalidResponseReal       = "Expected '%s' %f != %f"
+	errorQueryInvalidResponseInteger    = "Expected '%s' %s != %d"
+	errorQueryInvalidResponseReal       = "Expected '%s' %s != %f"
 	errorQueryUnknownResponseObjectType = "Unknown path object type %s"
 )
 
