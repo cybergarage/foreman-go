@@ -52,7 +52,11 @@ BINARY_DAEMON=${GITHUB}/${DAEMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
 BINARYIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
+CGO_CFLAGS += $(shell python-config --includes)
+export CGO_CFLAGS
+
 CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -luuid -lalglib
+CGO_LDFLAGS += $(shell python-config --libs)
 export CGO_LDFLAGS
 
 .PHONY: version
@@ -77,7 +81,7 @@ const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 	pushd ${SOURCE_DIR}/errors && ./errors.go.gen > errors.go  && popd
 	
 antlr:
-	pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
+	- pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
 
 build: version const antlr format $(shell find ${SOURCE_DIR} -type f -name '*.go')
 	go build -v ${PACKAGES}
