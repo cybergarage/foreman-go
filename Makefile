@@ -12,12 +12,13 @@
 SHELL := bash
 
 PREFIX?=$(shell pwd)
-GOPATH=$(shell pwd)
+GOPATH:=$(shell pwd)
+export GOPATH
 
 GITHUB_ROOT=github.com/cybergarage
 
 PACKAGE_NAME=foreman
-DEAMON_NAME=foremand
+DAEMON_NAME=foremand
 TESTING_NAME=foremantest
 
 GITHUB=${GITHUB_ROOT}/foreman-go
@@ -31,7 +32,8 @@ GO_GRAPHITE_PACKAGES=${GO_GRAPHITE_PACKAGE_ID}
 GITHUB_ID=${GITHUB}.git/${PACKAGE_NAME}
 PACKAGE_ID=${GITHUB}/${PACKAGE_NAME}
 PACKAGES=\
-	${PACKAGE_ID}/log \
+	${PACKAGE_ID} \
+	${PACKAGE_ID}/logging \
 	${PACKAGE_ID}/errors \
 	${PACKAGE_ID}/registry \
 	${PACKAGE_ID}/metric \
@@ -46,9 +48,9 @@ PACKAGES=\
 	${PACKAGE_ID}
 
 SOURCE_DIR=src/${GITHUB}/foreman
-BINARY_DEAMON=${GITHUB}/${DEAMON_NAME}
+BINARY_DAEMON=${GITHUB}/${DAEMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
-BINARYIES=${BINARY_DEAMON} ${BINARY_TESTING}
+BINARYIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
 CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -luuid -lalglib
 export CGO_LDFLAGS
@@ -65,7 +67,7 @@ ${VERSION_GO}: ./foreman/version.gen
 version: ${VERSION_GO}
 
 format:
-	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${DEAMON_NAME} ${TESTING_NAME}
+	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${DAEMON_NAME} ${TESTING_NAME}
 
 const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go  && popd
