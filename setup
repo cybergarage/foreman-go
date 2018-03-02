@@ -5,6 +5,9 @@
 
 export GOPATH="$PWD"
 
+export CGO_CFLAGS="`python-config --includes`"
+export CGO_LDFLAGS="-lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -luuid -lalglib `python-config --libs`"
+
 ########################################
 # Get dependency projects
 ########################################
