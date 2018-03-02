@@ -8,6 +8,9 @@
 #
 ###################################################################
 
+# Need bash for pushd, popd
+SHELL := bash
+
 PREFIX?=$(shell pwd)
 GOPATH=$(shell pwd)
 
@@ -46,6 +49,9 @@ SOURCE_DIR=src/${GITHUB}/foreman
 BINARY_DEAMON=${GITHUB}/${DEAMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
 BINARYIES=${BINARY_DEAMON} ${BINARY_TESTING}
+
+CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -luuid -lalglib
+export CGO_LDFLAGS
 
 .PHONY: version
 
