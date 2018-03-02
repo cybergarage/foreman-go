@@ -5,7 +5,6 @@
 package action
 
 // #include <foreman/foreman-c.h>
-// #cgo LDFLAGS: -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -llua -lpython
 import "C"
 import (
 	"fmt"
