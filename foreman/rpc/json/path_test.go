@@ -56,7 +56,7 @@ func testJSONArray(t *testing.T) {
 		return
 	}
 	if realVal != 3 {
-		t.Errorf("%f != %f", realVal, 3)
+		t.Errorf("%f != %d", realVal, 3)
 	}
 }
 
