@@ -77,7 +77,7 @@ const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 	pushd ${SOURCE_DIR}/errors && ./errors.go.gen > errors.go  && popd
 	
 antlr:
-	pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
+	- pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
 
 build: version const antlr format $(shell find ${SOURCE_DIR} -type f -name '*.go')
 	go build -v ${PACKAGES}
