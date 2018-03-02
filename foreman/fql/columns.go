@@ -5,7 +5,7 @@
 package fql
 
 // Columns is a column array of of FQL.
-type Columns = []*Column
+type Columns []*Column
 
 // NewColumns returns a new Column array.
 func NewColumns() Columns {
