@@ -110,12 +110,13 @@ func (mgr *Manager) executeDeleteAction(q fql.Query) (interface{}, *errors.Error
 }
 
 func (mgr *Manager) executeExecuteAction(q fql.Query) (interface{}, *errors.Error) {
-	ope, methodName, hasName := q.GetConditionByColumn(fql.QueryColumnName)
-	if hasName {
-		if ope.GetType() != fql.OperatorTypeEQ {
-			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
-		}
+	targetObj, ok := q.GetTarget()
+	if !ok {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalid)
+
 	}
+
+	methodName := targetObj.String()
 
 	columns, ok := q.GetColumns()
 	if !ok {
@@ -143,7 +144,7 @@ func (mgr *Manager) executeExecuteAction(q fql.Query) (interface{}, *errors.Erro
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 	}
 
-	var resultMap map[string]interface{}
+	resultMap := map[string]interface{}{}
 	for name, result := range results {
 		resultMap[name] = result.GetValue()
 	}

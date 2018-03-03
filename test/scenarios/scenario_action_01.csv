@@ -1,4 +1,4 @@
 SET ("test_echo","python","ZGVmIHRlc3RfZWNobyhwYXJhbXMscmVzdWx0cyk6Cglmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CgkJcmVzdWx0c1trZXldID0gdmFsdWUKCXJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
 # SELECT * FROM ACTION WHERE name == "test_echo";200;
-EXECUTE INTO ACTION ("message") VALUES ("hello") WHERE name == "test_echo";200;
+EXECUTE test_echo (message) VALUES ("hello");200;/message;hello
 # DELETE FROM ACTION WHERE name == "test_echo";200;
