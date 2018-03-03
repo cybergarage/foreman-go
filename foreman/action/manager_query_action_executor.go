@@ -118,16 +118,8 @@ func (mgr *Manager) executeExecuteAction(q fql.Query) (interface{}, *errors.Erro
 
 	methodName := targetObj.String()
 
-	columns, ok := q.GetColumns()
-	if !ok {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidColumns)
-	}
-
-	values, ok := q.GetValues()
-	if !ok {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
-	}
-
+	columns, _ := q.GetColumns()
+	values, _ := q.GetValues()
 	if len(columns) != len(values) {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
 	}
