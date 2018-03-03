@@ -1,4 +1,5 @@
-# query;
-EXECUTE echo (message) VALUES ("hello");echo
+# query;method
+EXECUTE echo;echo
+EXECUTE echo (a) VALUES ("a");echo
 EXECUTE echo (a,b) VALUES ("a","b");echo
 EXECUTE echo (a,b,c) VALUES ("a","b","c");echo
