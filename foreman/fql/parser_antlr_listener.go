@@ -98,6 +98,25 @@ func (l *antlrParserListener) ExitExportQuery(ctx *ExportQueryContext) {
 }
 
 ////////////////////////////////////////
+// Execute
+////////////////////////////////////////
+
+// EnterExecuteQuery is called when production ExecuteQuery is entered.
+func (l *antlrParserListener) EnterExecuteQuery(ctx *ExecuteQueryContext) {
+	q := NewExecuteQuery()
+	l.PushObject(q)
+}
+
+// ExitExecuteQuery is called when production ExecuteQuery is exited.
+func (l *antlrParserListener) ExitExecuteQuery(ctx *ExecuteQueryContext) {
+	q, ok := l.PopObject().(*ExecuteQuery)
+	if !ok {
+		return
+	}
+	l.Queries = append(l.Queries, q)
+}
+
+////////////////////////////////////////
 // Delete
 ////////////////////////////////////////
 

@@ -15,82 +15,91 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 30, 144,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 31, 162,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
 	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 4, 13,
 	9, 13, 4, 14, 9, 14, 4, 15, 9, 15, 4, 16, 9, 16, 4, 17, 9, 17, 4, 18, 9,
-	18, 4, 19, 9, 19, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 7, 3, 44, 10, 3, 12, 3,
-	14, 3, 47, 11, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 5, 4, 54, 10, 4, 3, 5,
-	3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 5, 5, 63, 10, 5, 3, 5, 3, 5, 3, 5,
-	3, 5, 3, 5, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 7, 3, 7, 3, 7,
-	3, 7, 3, 7, 3, 7, 5, 7, 83, 10, 7, 3, 7, 3, 7, 3, 7, 3, 7, 5, 7, 89, 10,
-	7, 3, 8, 3, 8, 3, 8, 3, 8, 5, 8, 95, 10, 8, 3, 9, 3, 9, 3, 9, 3, 9, 3,
-	9, 5, 9, 102, 10, 9, 3, 10, 3, 10, 3, 11, 3, 11, 3, 12, 3, 12, 3, 12, 7,
-	12, 111, 10, 12, 12, 12, 14, 12, 114, 11, 12, 3, 13, 3, 13, 3, 14, 3, 14,
-	3, 14, 7, 14, 121, 10, 14, 12, 14, 14, 14, 124, 11, 14, 3, 15, 3, 15, 3,
-	15, 7, 15, 129, 10, 15, 12, 15, 14, 15, 132, 11, 15, 3, 16, 3, 16, 3, 16,
-	3, 16, 3, 17, 3, 17, 3, 18, 3, 18, 3, 19, 3, 19, 3, 19, 2, 2, 20, 2, 4,
-	6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 2, 4, 3,
-	2, 27, 30, 3, 2, 16, 21, 2, 138, 2, 38, 3, 2, 2, 2, 4, 40, 3, 2, 2, 2,
-	6, 53, 3, 2, 2, 2, 8, 55, 3, 2, 2, 2, 10, 69, 3, 2, 2, 2, 12, 76, 3, 2,
-	2, 2, 14, 90, 3, 2, 2, 2, 16, 96, 3, 2, 2, 2, 18, 103, 3, 2, 2, 2, 20,
-	105, 3, 2, 2, 2, 22, 107, 3, 2, 2, 2, 24, 115, 3, 2, 2, 2, 26, 117, 3,
-	2, 2, 2, 28, 125, 3, 2, 2, 2, 30, 133, 3, 2, 2, 2, 32, 137, 3, 2, 2, 2,
-	34, 139, 3, 2, 2, 2, 36, 141, 3, 2, 2, 2, 38, 39, 5, 4, 3, 2, 39, 3, 3,
-	2, 2, 2, 40, 45, 5, 6, 4, 2, 41, 42, 7, 25, 2, 2, 42, 44, 5, 6, 4, 2, 43,
-	41, 3, 2, 2, 2, 44, 47, 3, 2, 2, 2, 45, 43, 3, 2, 2, 2, 45, 46, 3, 2, 2,
-	2, 46, 5, 3, 2, 2, 2, 47, 45, 3, 2, 2, 2, 48, 54, 5, 8, 5, 2, 49, 54, 5,
-	10, 6, 2, 50, 54, 5, 12, 7, 2, 51, 54, 5, 14, 8, 2, 52, 54, 5, 16, 9, 2,
-	53, 48, 3, 2, 2, 2, 53, 49, 3, 2, 2, 2, 53, 50, 3, 2, 2, 2, 53, 51, 3,
-	2, 2, 2, 53, 52, 3, 2, 2, 2, 54, 7, 3, 2, 2, 2, 55, 56, 7, 6, 2, 2, 56,
-	57, 7, 10, 2, 2, 57, 62, 5, 18, 10, 2, 58, 59, 7, 3, 2, 2, 59, 60, 5, 26,
-	14, 2, 60, 61, 7, 4, 2, 2, 61, 63, 3, 2, 2, 2, 62, 58, 3, 2, 2, 2, 62,
-	63, 3, 2, 2, 2, 63, 64, 3, 2, 2, 2, 64, 65, 7, 12, 2, 2, 65, 66, 7, 3,
-	2, 2, 66, 67, 5, 22, 12, 2, 67, 68, 7, 4, 2, 2, 68, 9, 3, 2, 2, 2, 69,
-	70, 7, 8, 2, 2, 70, 71, 7, 3, 2, 2, 71, 72, 5, 22, 12, 2, 72, 73, 7, 4,
-	2, 2, 73, 74, 7, 10, 2, 2, 74, 75, 5, 18, 10, 2, 75, 11, 3, 2, 2, 2, 76,
-	82, 7, 5, 2, 2, 77, 83, 7, 14, 2, 2, 78, 79, 7, 3, 2, 2, 79, 80, 5, 26,
-	14, 2, 80, 81, 7, 4, 2, 2, 81, 83, 3, 2, 2, 2, 82, 77, 3, 2, 2, 2, 82,
-	78, 3, 2, 2, 2, 83, 84, 3, 2, 2, 2, 84, 85, 7, 11, 2, 2, 85, 88, 5, 18,
-	10, 2, 86, 87, 7, 13, 2, 2, 87, 89, 5, 28, 15, 2, 88, 86, 3, 2, 2, 2, 88,
-	89, 3, 2, 2, 2, 89, 13, 3, 2, 2, 2, 90, 91, 7, 9, 2, 2, 91, 94, 5, 18,
-	10, 2, 92, 93, 7, 13, 2, 2, 93, 95, 5, 28, 15, 2, 94, 92, 3, 2, 2, 2, 94,
-	95, 3, 2, 2, 2, 95, 15, 3, 2, 2, 2, 96, 97, 7, 7, 2, 2, 97, 98, 7, 11,
-	2, 2, 98, 101, 5, 18, 10, 2, 99, 100, 7, 13, 2, 2, 100, 102, 5, 28, 15,
-	2, 101, 99, 3, 2, 2, 2, 101, 102, 3, 2, 2, 2, 102, 17, 3, 2, 2, 2, 103,
-	104, 7, 27, 2, 2, 104, 19, 3, 2, 2, 2, 105, 106, 9, 2, 2, 2, 106, 21, 3,
-	2, 2, 2, 107, 112, 5, 20, 11, 2, 108, 109, 7, 24, 2, 2, 109, 111, 5, 20,
-	11, 2, 110, 108, 3, 2, 2, 2, 111, 114, 3, 2, 2, 2, 112, 110, 3, 2, 2, 2,
-	112, 113, 3, 2, 2, 2, 113, 23, 3, 2, 2, 2, 114, 112, 3, 2, 2, 2, 115, 116,
-	7, 27, 2, 2, 116, 25, 3, 2, 2, 2, 117, 122, 5, 24, 13, 2, 118, 119, 7,
-	24, 2, 2, 119, 121, 5, 24, 13, 2, 120, 118, 3, 2, 2, 2, 121, 124, 3, 2,
-	2, 2, 122, 120, 3, 2, 2, 2, 122, 123, 3, 2, 2, 2, 123, 27, 3, 2, 2, 2,
-	124, 122, 3, 2, 2, 2, 125, 130, 5, 30, 16, 2, 126, 127, 7, 22, 2, 2, 127,
-	129, 5, 30, 16, 2, 128, 126, 3, 2, 2, 2, 129, 132, 3, 2, 2, 2, 130, 128,
-	3, 2, 2, 2, 130, 131, 3, 2, 2, 2, 131, 29, 3, 2, 2, 2, 132, 130, 3, 2,
-	2, 2, 133, 134, 5, 34, 18, 2, 134, 135, 5, 32, 17, 2, 135, 136, 5, 36,
-	19, 2, 136, 31, 3, 2, 2, 2, 137, 138, 9, 3, 2, 2, 138, 33, 3, 2, 2, 2,
-	139, 140, 7, 27, 2, 2, 140, 35, 3, 2, 2, 2, 141, 142, 9, 2, 2, 2, 142,
-	37, 3, 2, 2, 2, 12, 45, 53, 62, 82, 88, 94, 101, 112, 122, 130,
+	18, 4, 19, 9, 19, 4, 20, 9, 20, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 7, 3, 46,
+	10, 3, 12, 3, 14, 3, 49, 11, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 5,
+	4, 57, 10, 4, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 5, 5, 66, 10, 5,
+	3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6,
+	3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 5, 7, 86, 10, 7, 3, 7, 3, 7, 3, 7,
+	3, 7, 5, 7, 92, 10, 7, 3, 8, 3, 8, 3, 8, 3, 8, 5, 8, 98, 10, 8, 3, 9, 3,
+	9, 3, 9, 3, 9, 3, 9, 5, 9, 105, 10, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10,
+	3, 10, 5, 10, 113, 10, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 5, 10, 120,
+	10, 10, 3, 11, 3, 11, 3, 12, 3, 12, 3, 13, 3, 13, 3, 13, 7, 13, 129, 10,
+	13, 12, 13, 14, 13, 132, 11, 13, 3, 14, 3, 14, 3, 15, 3, 15, 3, 15, 7,
+	15, 139, 10, 15, 12, 15, 14, 15, 142, 11, 15, 3, 16, 3, 16, 3, 16, 7, 16,
+	147, 10, 16, 12, 16, 14, 16, 150, 11, 16, 3, 17, 3, 17, 3, 17, 3, 17, 3,
+	18, 3, 18, 3, 19, 3, 19, 3, 20, 3, 20, 3, 20, 2, 2, 21, 2, 4, 6, 8, 10,
+	12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 2, 4, 3, 2, 28,
+	31, 3, 2, 17, 22, 2, 158, 2, 40, 3, 2, 2, 2, 4, 42, 3, 2, 2, 2, 6, 56,
+	3, 2, 2, 2, 8, 58, 3, 2, 2, 2, 10, 72, 3, 2, 2, 2, 12, 79, 3, 2, 2, 2,
+	14, 93, 3, 2, 2, 2, 16, 99, 3, 2, 2, 2, 18, 106, 3, 2, 2, 2, 20, 121, 3,
+	2, 2, 2, 22, 123, 3, 2, 2, 2, 24, 125, 3, 2, 2, 2, 26, 133, 3, 2, 2, 2,
+	28, 135, 3, 2, 2, 2, 30, 143, 3, 2, 2, 2, 32, 151, 3, 2, 2, 2, 34, 155,
+	3, 2, 2, 2, 36, 157, 3, 2, 2, 2, 38, 159, 3, 2, 2, 2, 40, 41, 5, 4, 3,
+	2, 41, 3, 3, 2, 2, 2, 42, 47, 5, 6, 4, 2, 43, 44, 7, 26, 2, 2, 44, 46,
+	5, 6, 4, 2, 45, 43, 3, 2, 2, 2, 46, 49, 3, 2, 2, 2, 47, 45, 3, 2, 2, 2,
+	47, 48, 3, 2, 2, 2, 48, 5, 3, 2, 2, 2, 49, 47, 3, 2, 2, 2, 50, 57, 5, 8,
+	5, 2, 51, 57, 5, 10, 6, 2, 52, 57, 5, 12, 7, 2, 53, 57, 5, 14, 8, 2, 54,
+	57, 5, 16, 9, 2, 55, 57, 5, 18, 10, 2, 56, 50, 3, 2, 2, 2, 56, 51, 3, 2,
+	2, 2, 56, 52, 3, 2, 2, 2, 56, 53, 3, 2, 2, 2, 56, 54, 3, 2, 2, 2, 56, 55,
+	3, 2, 2, 2, 57, 7, 3, 2, 2, 2, 58, 59, 7, 6, 2, 2, 59, 60, 7, 11, 2, 2,
+	60, 65, 5, 20, 11, 2, 61, 62, 7, 3, 2, 2, 62, 63, 5, 28, 15, 2, 63, 64,
+	7, 4, 2, 2, 64, 66, 3, 2, 2, 2, 65, 61, 3, 2, 2, 2, 65, 66, 3, 2, 2, 2,
+	66, 67, 3, 2, 2, 2, 67, 68, 7, 13, 2, 2, 68, 69, 7, 3, 2, 2, 69, 70, 5,
+	24, 13, 2, 70, 71, 7, 4, 2, 2, 71, 9, 3, 2, 2, 2, 72, 73, 7, 8, 2, 2, 73,
+	74, 7, 3, 2, 2, 74, 75, 5, 24, 13, 2, 75, 76, 7, 4, 2, 2, 76, 77, 7, 11,
+	2, 2, 77, 78, 5, 20, 11, 2, 78, 11, 3, 2, 2, 2, 79, 85, 7, 5, 2, 2, 80,
+	86, 7, 15, 2, 2, 81, 82, 7, 3, 2, 2, 82, 83, 5, 28, 15, 2, 83, 84, 7, 4,
+	2, 2, 84, 86, 3, 2, 2, 2, 85, 80, 3, 2, 2, 2, 85, 81, 3, 2, 2, 2, 86, 87,
+	3, 2, 2, 2, 87, 88, 7, 12, 2, 2, 88, 91, 5, 20, 11, 2, 89, 90, 7, 14, 2,
+	2, 90, 92, 5, 30, 16, 2, 91, 89, 3, 2, 2, 2, 91, 92, 3, 2, 2, 2, 92, 13,
+	3, 2, 2, 2, 93, 94, 7, 9, 2, 2, 94, 97, 5, 20, 11, 2, 95, 96, 7, 14, 2,
+	2, 96, 98, 5, 30, 16, 2, 97, 95, 3, 2, 2, 2, 97, 98, 3, 2, 2, 2, 98, 15,
+	3, 2, 2, 2, 99, 100, 7, 7, 2, 2, 100, 101, 7, 12, 2, 2, 101, 104, 5, 20,
+	11, 2, 102, 103, 7, 14, 2, 2, 103, 105, 5, 30, 16, 2, 104, 102, 3, 2, 2,
+	2, 104, 105, 3, 2, 2, 2, 105, 17, 3, 2, 2, 2, 106, 107, 7, 10, 2, 2, 107,
+	112, 5, 20, 11, 2, 108, 109, 7, 3, 2, 2, 109, 110, 5, 28, 15, 2, 110, 111,
+	7, 4, 2, 2, 111, 113, 3, 2, 2, 2, 112, 108, 3, 2, 2, 2, 112, 113, 3, 2,
+	2, 2, 113, 119, 3, 2, 2, 2, 114, 115, 7, 13, 2, 2, 115, 116, 7, 3, 2, 2,
+	116, 117, 5, 24, 13, 2, 117, 118, 7, 4, 2, 2, 118, 120, 3, 2, 2, 2, 119,
+	114, 3, 2, 2, 2, 119, 120, 3, 2, 2, 2, 120, 19, 3, 2, 2, 2, 121, 122, 7,
+	28, 2, 2, 122, 21, 3, 2, 2, 2, 123, 124, 9, 2, 2, 2, 124, 23, 3, 2, 2,
+	2, 125, 130, 5, 22, 12, 2, 126, 127, 7, 25, 2, 2, 127, 129, 5, 22, 12,
+	2, 128, 126, 3, 2, 2, 2, 129, 132, 3, 2, 2, 2, 130, 128, 3, 2, 2, 2, 130,
+	131, 3, 2, 2, 2, 131, 25, 3, 2, 2, 2, 132, 130, 3, 2, 2, 2, 133, 134, 7,
+	28, 2, 2, 134, 27, 3, 2, 2, 2, 135, 140, 5, 26, 14, 2, 136, 137, 7, 25,
+	2, 2, 137, 139, 5, 26, 14, 2, 138, 136, 3, 2, 2, 2, 139, 142, 3, 2, 2,
+	2, 140, 138, 3, 2, 2, 2, 140, 141, 3, 2, 2, 2, 141, 29, 3, 2, 2, 2, 142,
+	140, 3, 2, 2, 2, 143, 148, 5, 32, 17, 2, 144, 145, 7, 23, 2, 2, 145, 147,
+	5, 32, 17, 2, 146, 144, 3, 2, 2, 2, 147, 150, 3, 2, 2, 2, 148, 146, 3,
+	2, 2, 2, 148, 149, 3, 2, 2, 2, 149, 31, 3, 2, 2, 2, 150, 148, 3, 2, 2,
+	2, 151, 152, 5, 36, 19, 2, 152, 153, 5, 34, 18, 2, 153, 154, 5, 38, 20,
+	2, 154, 33, 3, 2, 2, 2, 155, 156, 9, 3, 2, 2, 156, 35, 3, 2, 2, 2, 157,
+	158, 7, 28, 2, 2, 158, 37, 3, 2, 2, 2, 159, 160, 9, 2, 2, 2, 160, 39, 3,
+	2, 2, 2, 14, 47, 56, 65, 85, 91, 97, 104, 112, 119, 130, 140, 148,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
 
 var literalNames = []string{
-	"", "'('", "')'", "", "", "", "", "", "", "", "", "", "'*'", "'='", "'=='",
-	"'<'", "'<='", "'>'", "'>='", "'!='", "", "", "','", "';'",
+	"", "'('", "')'", "", "", "", "", "", "", "", "", "", "", "'*'", "'='",
+	"'=='", "'<'", "'<='", "'>'", "'>='", "'!='", "", "", "','", "';'",
 }
 var symbolicNames = []string{
-	"", "", "", "SELECT", "INSERT", "DELETE", "SET", "EXPORT", "INTO", "FROM",
-	"VALUES", "WHERE", "ASTERISK", "SINGLE_EQ", "DOUBLE_EQ", "OP_LT", "LE",
-	"GT", "GE", "NOTEQ", "AND", "OR", "COMMA", "SEMICOLON", "WS", "IDENTIFIER",
+	"", "", "", "SELECT", "INSERT", "DELETE", "SET", "EXPORT", "EXECUTE", "INTO",
+	"FROM", "VALUES", "WHERE", "ASTERISK", "SINGLE_EQ", "DOUBLE_EQ", "OP_LT",
+	"LE", "GT", "GE", "NOTEQ", "AND", "OR", "COMMA", "SEMICOLON", "WS", "IDENTIFIER",
 	"STRING", "NUMBER", "REAL",
 }
 
 var ruleNames = []string{
 	"fql", "queryList", "query", "insertQuery", "setQuery", "selectQuery",
-	"exportQuery", "deleteQuery", "target", "value", "values", "column", "columns",
-	"conditions", "condition", "operator", "leftOperand", "rightOperand",
+	"exportQuery", "deleteQuery", "executeQuery", "target", "value", "values",
+	"column", "columns", "conditions", "condition", "operator", "leftOperand",
+	"rightOperand",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
 
@@ -128,27 +137,28 @@ const (
 	FQLParserDELETE     = 5
 	FQLParserSET        = 6
 	FQLParserEXPORT     = 7
-	FQLParserINTO       = 8
-	FQLParserFROM       = 9
-	FQLParserVALUES     = 10
-	FQLParserWHERE      = 11
-	FQLParserASTERISK   = 12
-	FQLParserSINGLE_EQ  = 13
-	FQLParserDOUBLE_EQ  = 14
-	FQLParserOP_LT      = 15
-	FQLParserLE         = 16
-	FQLParserGT         = 17
-	FQLParserGE         = 18
-	FQLParserNOTEQ      = 19
-	FQLParserAND        = 20
-	FQLParserOR         = 21
-	FQLParserCOMMA      = 22
-	FQLParserSEMICOLON  = 23
-	FQLParserWS         = 24
-	FQLParserIDENTIFIER = 25
-	FQLParserSTRING     = 26
-	FQLParserNUMBER     = 27
-	FQLParserREAL       = 28
+	FQLParserEXECUTE    = 8
+	FQLParserINTO       = 9
+	FQLParserFROM       = 10
+	FQLParserVALUES     = 11
+	FQLParserWHERE      = 12
+	FQLParserASTERISK   = 13
+	FQLParserSINGLE_EQ  = 14
+	FQLParserDOUBLE_EQ  = 15
+	FQLParserOP_LT      = 16
+	FQLParserLE         = 17
+	FQLParserGT         = 18
+	FQLParserGE         = 19
+	FQLParserNOTEQ      = 20
+	FQLParserAND        = 21
+	FQLParserOR         = 22
+	FQLParserCOMMA      = 23
+	FQLParserSEMICOLON  = 24
+	FQLParserWS         = 25
+	FQLParserIDENTIFIER = 26
+	FQLParserSTRING     = 27
+	FQLParserNUMBER     = 28
+	FQLParserREAL       = 29
 )
 
 // FQLParser rules.
@@ -161,16 +171,17 @@ const (
 	FQLParserRULE_selectQuery  = 5
 	FQLParserRULE_exportQuery  = 6
 	FQLParserRULE_deleteQuery  = 7
-	FQLParserRULE_target       = 8
-	FQLParserRULE_value        = 9
-	FQLParserRULE_values       = 10
-	FQLParserRULE_column       = 11
-	FQLParserRULE_columns      = 12
-	FQLParserRULE_conditions   = 13
-	FQLParserRULE_condition    = 14
-	FQLParserRULE_operator     = 15
-	FQLParserRULE_leftOperand  = 16
-	FQLParserRULE_rightOperand = 17
+	FQLParserRULE_executeQuery = 8
+	FQLParserRULE_target       = 9
+	FQLParserRULE_value        = 10
+	FQLParserRULE_values       = 11
+	FQLParserRULE_column       = 12
+	FQLParserRULE_columns      = 13
+	FQLParserRULE_conditions   = 14
+	FQLParserRULE_condition    = 15
+	FQLParserRULE_operator     = 16
+	FQLParserRULE_leftOperand  = 17
+	FQLParserRULE_rightOperand = 18
 )
 
 // IFqlContext is an interface to support dynamic dispatch.
@@ -263,7 +274,7 @@ func (p *FQLParser) Fql() (localctx IFqlContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(36)
+		p.SetState(38)
 		p.QueryList()
 	}
 
@@ -382,24 +393,24 @@ func (p *FQLParser) QueryList() (localctx IQueryListContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(38)
+		p.SetState(40)
 		p.Query()
 	}
-	p.SetState(43)
+	p.SetState(45)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == FQLParserSEMICOLON {
 		{
-			p.SetState(39)
+			p.SetState(41)
 			p.Match(FQLParserSEMICOLON)
 		}
 		{
-			p.SetState(40)
+			p.SetState(42)
 			p.Query()
 		}
 
-		p.SetState(45)
+		p.SetState(47)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -495,6 +506,16 @@ func (s *QueryContext) DeleteQuery() IDeleteQueryContext {
 	return t.(IDeleteQueryContext)
 }
 
+func (s *QueryContext) ExecuteQuery() IExecuteQueryContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IExecuteQueryContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExecuteQueryContext)
+}
+
 func (s *QueryContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -535,43 +556,50 @@ func (p *FQLParser) Query() (localctx IQueryContext) {
 		}
 	}()
 
-	p.SetState(51)
+	p.SetState(54)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case FQLParserINSERT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(46)
+			p.SetState(48)
 			p.InsertQuery()
 		}
 
 	case FQLParserSET:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(47)
+			p.SetState(49)
 			p.SetQuery()
 		}
 
 	case FQLParserSELECT:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(48)
+			p.SetState(50)
 			p.SelectQuery()
 		}
 
 	case FQLParserEXPORT:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(49)
+			p.SetState(51)
 			p.ExportQuery()
 		}
 
 	case FQLParserDELETE:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(50)
+			p.SetState(52)
 			p.DeleteQuery()
+		}
+
+	case FQLParserEXECUTE:
+		p.EnterOuterAlt(localctx, 6)
+		{
+			p.SetState(53)
+			p.ExecuteQuery()
 		}
 
 	default:
@@ -704,50 +732,50 @@ func (p *FQLParser) InsertQuery() (localctx IInsertQueryContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(53)
+		p.SetState(56)
 		p.Match(FQLParserINSERT)
 	}
 	{
-		p.SetState(54)
+		p.SetState(57)
 		p.Match(FQLParserINTO)
 	}
 	{
-		p.SetState(55)
+		p.SetState(58)
 		p.Target()
 	}
-	p.SetState(60)
+	p.SetState(63)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == FQLParserT__0 {
 		{
-			p.SetState(56)
+			p.SetState(59)
 			p.Match(FQLParserT__0)
 		}
 		{
-			p.SetState(57)
+			p.SetState(60)
 			p.Columns()
 		}
 		{
-			p.SetState(58)
+			p.SetState(61)
 			p.Match(FQLParserT__1)
 		}
 
 	}
 	{
-		p.SetState(62)
+		p.SetState(65)
 		p.Match(FQLParserVALUES)
 	}
 	{
-		p.SetState(63)
+		p.SetState(66)
 		p.Match(FQLParserT__0)
 	}
 	{
-		p.SetState(64)
+		p.SetState(67)
 		p.Values()
 	}
 	{
-		p.SetState(65)
+		p.SetState(68)
 		p.Match(FQLParserT__1)
 	}
 
@@ -862,27 +890,27 @@ func (p *FQLParser) SetQuery() (localctx ISetQueryContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(67)
+		p.SetState(70)
 		p.Match(FQLParserSET)
 	}
 	{
-		p.SetState(68)
+		p.SetState(71)
 		p.Match(FQLParserT__0)
 	}
 	{
-		p.SetState(69)
+		p.SetState(72)
 		p.Values()
 	}
 	{
-		p.SetState(70)
+		p.SetState(73)
 		p.Match(FQLParserT__1)
 	}
 	{
-		p.SetState(71)
+		p.SetState(74)
 		p.Match(FQLParserINTO)
 	}
 	{
-		p.SetState(72)
+		p.SetState(75)
 		p.Target()
 	}
 
@@ -1016,30 +1044,30 @@ func (p *FQLParser) SelectQuery() (localctx ISelectQueryContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(74)
+		p.SetState(77)
 		p.Match(FQLParserSELECT)
 	}
-	p.SetState(80)
+	p.SetState(83)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case FQLParserASTERISK:
 		{
-			p.SetState(75)
+			p.SetState(78)
 			p.Match(FQLParserASTERISK)
 		}
 
 	case FQLParserT__0:
 		{
-			p.SetState(76)
+			p.SetState(79)
 			p.Match(FQLParserT__0)
 		}
 		{
-			p.SetState(77)
+			p.SetState(80)
 			p.Columns()
 		}
 		{
-			p.SetState(78)
+			p.SetState(81)
 			p.Match(FQLParserT__1)
 		}
 
@@ -1047,24 +1075,24 @@ func (p *FQLParser) SelectQuery() (localctx ISelectQueryContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	{
-		p.SetState(82)
+		p.SetState(85)
 		p.Match(FQLParserFROM)
 	}
 	{
-		p.SetState(83)
+		p.SetState(86)
 		p.Target()
 	}
-	p.SetState(86)
+	p.SetState(89)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == FQLParserWHERE {
 		{
-			p.SetState(84)
+			p.SetState(87)
 			p.Match(FQLParserWHERE)
 		}
 		{
-			p.SetState(85)
+			p.SetState(88)
 			p.Conditions()
 		}
 
@@ -1182,24 +1210,24 @@ func (p *FQLParser) ExportQuery() (localctx IExportQueryContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(88)
+		p.SetState(91)
 		p.Match(FQLParserEXPORT)
 	}
 	{
-		p.SetState(89)
+		p.SetState(92)
 		p.Target()
 	}
-	p.SetState(92)
+	p.SetState(95)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == FQLParserWHERE {
 		{
-			p.SetState(90)
+			p.SetState(93)
 			p.Match(FQLParserWHERE)
 		}
 		{
-			p.SetState(91)
+			p.SetState(94)
 			p.Conditions()
 		}
 
@@ -1321,29 +1349,201 @@ func (p *FQLParser) DeleteQuery() (localctx IDeleteQueryContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(94)
+		p.SetState(97)
 		p.Match(FQLParserDELETE)
 	}
 	{
-		p.SetState(95)
+		p.SetState(98)
 		p.Match(FQLParserFROM)
 	}
 	{
-		p.SetState(96)
+		p.SetState(99)
 		p.Target()
 	}
-	p.SetState(99)
+	p.SetState(102)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == FQLParserWHERE {
 		{
-			p.SetState(97)
+			p.SetState(100)
 			p.Match(FQLParserWHERE)
 		}
 		{
-			p.SetState(98)
+			p.SetState(101)
 			p.Conditions()
+		}
+
+	}
+
+	return localctx
+}
+
+// IExecuteQueryContext is an interface to support dynamic dispatch.
+type IExecuteQueryContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsExecuteQueryContext differentiates from other interfaces.
+	IsExecuteQueryContext()
+}
+
+type ExecuteQueryContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyExecuteQueryContext() *ExecuteQueryContext {
+	var p = new(ExecuteQueryContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = FQLParserRULE_executeQuery
+	return p
+}
+
+func (*ExecuteQueryContext) IsExecuteQueryContext() {}
+
+func NewExecuteQueryContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ExecuteQueryContext {
+	var p = new(ExecuteQueryContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = FQLParserRULE_executeQuery
+
+	return p
+}
+
+func (s *ExecuteQueryContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ExecuteQueryContext) EXECUTE() antlr.TerminalNode {
+	return s.GetToken(FQLParserEXECUTE, 0)
+}
+
+func (s *ExecuteQueryContext) Target() ITargetContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*ITargetContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ITargetContext)
+}
+
+func (s *ExecuteQueryContext) Columns() IColumnsContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IColumnsContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IColumnsContext)
+}
+
+func (s *ExecuteQueryContext) VALUES() antlr.TerminalNode {
+	return s.GetToken(FQLParserVALUES, 0)
+}
+
+func (s *ExecuteQueryContext) Values() IValuesContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IValuesContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IValuesContext)
+}
+
+func (s *ExecuteQueryContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ExecuteQueryContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *ExecuteQueryContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.EnterExecuteQuery(s)
+	}
+}
+
+func (s *ExecuteQueryContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(FQLListener); ok {
+		listenerT.ExitExecuteQuery(s)
+	}
+}
+
+func (p *FQLParser) ExecuteQuery() (localctx IExecuteQueryContext) {
+	localctx = NewExecuteQueryContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 16, FQLParserRULE_executeQuery)
+	var _la int
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(104)
+		p.Match(FQLParserEXECUTE)
+	}
+	{
+		p.SetState(105)
+		p.Target()
+	}
+	p.SetState(110)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == FQLParserT__0 {
+		{
+			p.SetState(106)
+			p.Match(FQLParserT__0)
+		}
+		{
+			p.SetState(107)
+			p.Columns()
+		}
+		{
+			p.SetState(108)
+			p.Match(FQLParserT__1)
+		}
+
+	}
+	p.SetState(117)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	if _la == FQLParserVALUES {
+		{
+			p.SetState(112)
+			p.Match(FQLParserVALUES)
+		}
+		{
+			p.SetState(113)
+			p.Match(FQLParserT__0)
+		}
+		{
+			p.SetState(114)
+			p.Values()
+		}
+		{
+			p.SetState(115)
+			p.Match(FQLParserT__1)
 		}
 
 	}
@@ -1415,7 +1615,7 @@ func (s *TargetContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Target() (localctx ITargetContext) {
 	localctx = NewTargetContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, FQLParserRULE_target)
+	p.EnterRule(localctx, 18, FQLParserRULE_target)
 
 	defer func() {
 		p.ExitRule()
@@ -1435,7 +1635,7 @@ func (p *FQLParser) Target() (localctx ITargetContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(101)
+		p.SetState(119)
 		p.Match(FQLParserIDENTIFIER)
 	}
 
@@ -1518,7 +1718,7 @@ func (s *ValueContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Value() (localctx IValueContext) {
 	localctx = NewValueContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 18, FQLParserRULE_value)
+	p.EnterRule(localctx, 20, FQLParserRULE_value)
 	var _la int
 
 	defer func() {
@@ -1539,7 +1739,7 @@ func (p *FQLParser) Value() (localctx IValueContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(103)
+		p.SetState(121)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<FQLParserIDENTIFIER)|(1<<FQLParserSTRING)|(1<<FQLParserNUMBER)|(1<<FQLParserREAL))) != 0) {
@@ -1636,7 +1836,7 @@ func (s *ValuesContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Values() (localctx IValuesContext) {
 	localctx = NewValuesContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 20, FQLParserRULE_values)
+	p.EnterRule(localctx, 22, FQLParserRULE_values)
 	var _la int
 
 	defer func() {
@@ -1657,24 +1857,24 @@ func (p *FQLParser) Values() (localctx IValuesContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(105)
+		p.SetState(123)
 		p.Value()
 	}
-	p.SetState(110)
+	p.SetState(128)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == FQLParserCOMMA {
 		{
-			p.SetState(106)
+			p.SetState(124)
 			p.Match(FQLParserCOMMA)
 		}
 		{
-			p.SetState(107)
+			p.SetState(125)
 			p.Value()
 		}
 
-		p.SetState(112)
+		p.SetState(130)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1746,7 +1946,7 @@ func (s *ColumnContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Column() (localctx IColumnContext) {
 	localctx = NewColumnContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 22, FQLParserRULE_column)
+	p.EnterRule(localctx, 24, FQLParserRULE_column)
 
 	defer func() {
 		p.ExitRule()
@@ -1766,7 +1966,7 @@ func (p *FQLParser) Column() (localctx IColumnContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(113)
+		p.SetState(131)
 		p.Match(FQLParserIDENTIFIER)
 	}
 
@@ -1856,7 +2056,7 @@ func (s *ColumnsContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Columns() (localctx IColumnsContext) {
 	localctx = NewColumnsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 24, FQLParserRULE_columns)
+	p.EnterRule(localctx, 26, FQLParserRULE_columns)
 	var _la int
 
 	defer func() {
@@ -1877,24 +2077,24 @@ func (p *FQLParser) Columns() (localctx IColumnsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(115)
+		p.SetState(133)
 		p.Column()
 	}
-	p.SetState(120)
+	p.SetState(138)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == FQLParserCOMMA {
 		{
-			p.SetState(116)
+			p.SetState(134)
 			p.Match(FQLParserCOMMA)
 		}
 		{
-			p.SetState(117)
+			p.SetState(135)
 			p.Column()
 		}
 
-		p.SetState(122)
+		p.SetState(140)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1993,7 +2193,7 @@ func (s *ConditionsContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Conditions() (localctx IConditionsContext) {
 	localctx = NewConditionsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 26, FQLParserRULE_conditions)
+	p.EnterRule(localctx, 28, FQLParserRULE_conditions)
 	var _la int
 
 	defer func() {
@@ -2014,24 +2214,24 @@ func (p *FQLParser) Conditions() (localctx IConditionsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(123)
+		p.SetState(141)
 		p.Condition()
 	}
-	p.SetState(128)
+	p.SetState(146)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == FQLParserAND {
 		{
-			p.SetState(124)
+			p.SetState(142)
 			p.Match(FQLParserAND)
 		}
 		{
-			p.SetState(125)
+			p.SetState(143)
 			p.Condition()
 		}
 
-		p.SetState(130)
+		p.SetState(148)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2129,7 +2329,7 @@ func (s *ConditionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Condition() (localctx IConditionContext) {
 	localctx = NewConditionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 28, FQLParserRULE_condition)
+	p.EnterRule(localctx, 30, FQLParserRULE_condition)
 
 	defer func() {
 		p.ExitRule()
@@ -2149,15 +2349,15 @@ func (p *FQLParser) Condition() (localctx IConditionContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(131)
+		p.SetState(149)
 		p.LeftOperand()
 	}
 	{
-		p.SetState(132)
+		p.SetState(150)
 		p.Operator()
 	}
 	{
-		p.SetState(133)
+		p.SetState(151)
 		p.RightOperand()
 	}
 
@@ -2248,7 +2448,7 @@ func (s *OperatorContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) Operator() (localctx IOperatorContext) {
 	localctx = NewOperatorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 30, FQLParserRULE_operator)
+	p.EnterRule(localctx, 32, FQLParserRULE_operator)
 	var _la int
 
 	defer func() {
@@ -2269,7 +2469,7 @@ func (p *FQLParser) Operator() (localctx IOperatorContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(135)
+		p.SetState(153)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<FQLParserDOUBLE_EQ)|(1<<FQLParserOP_LT)|(1<<FQLParserLE)|(1<<FQLParserGT)|(1<<FQLParserGE)|(1<<FQLParserNOTEQ))) != 0) {
@@ -2347,7 +2547,7 @@ func (s *LeftOperandContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) LeftOperand() (localctx ILeftOperandContext) {
 	localctx = NewLeftOperandContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 32, FQLParserRULE_leftOperand)
+	p.EnterRule(localctx, 34, FQLParserRULE_leftOperand)
 
 	defer func() {
 		p.ExitRule()
@@ -2367,7 +2567,7 @@ func (p *FQLParser) LeftOperand() (localctx ILeftOperandContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(137)
+		p.SetState(155)
 		p.Match(FQLParserIDENTIFIER)
 	}
 
@@ -2450,7 +2650,7 @@ func (s *RightOperandContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *FQLParser) RightOperand() (localctx IRightOperandContext) {
 	localctx = NewRightOperandContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 34, FQLParserRULE_rightOperand)
+	p.EnterRule(localctx, 36, FQLParserRULE_rightOperand)
 	var _la int
 
 	defer func() {
@@ -2471,7 +2671,7 @@ func (p *FQLParser) RightOperand() (localctx IRightOperandContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(139)
+		p.SetState(157)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<FQLParserIDENTIFIER)|(1<<FQLParserSTRING)|(1<<FQLParserNUMBER)|(1<<FQLParserREAL))) != 0) {
