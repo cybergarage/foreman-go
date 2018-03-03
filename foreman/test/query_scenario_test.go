@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	scenarioDirectory = "../../test/"
+	testScenarioDirectory = "../../test/scenarios/"
 )
 
 func TestQueryScenario(t *testing.T) {
@@ -22,7 +22,7 @@ func TestQueryScenario(t *testing.T) {
 	s := NewQueryScenario()
 
 	for _, file := range scenarioFiles {
-		err := s.ExecuteFile(scenarioDirectory + file)
+		err := s.ExecuteFile(testScenarioDirectory + file)
 		if err != nil {
 			t.Error(err)
 			res := s.GetLastResponse()
