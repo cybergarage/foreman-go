@@ -145,7 +145,7 @@ func (l *antlrParserListener) ExitTarget(ctx *TargetContext) {
 	if !ok {
 		return
 	}
-	q.SetTarget(NewTargetWithString(strings.ToUpper(ctx.GetText())))
+	q.SetTarget(NewTargetWithString(ctx.GetText()))
 }
 
 ////////////////////////////////////////
