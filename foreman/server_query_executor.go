@@ -6,6 +6,8 @@
 package foreman
 
 import (
+	"strings"
+
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
@@ -32,7 +34,7 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryEmptyTarget)
 	}
 
-	target := targetObj.String()
+	target := strings.ToUpper(targetObj.String())
 	executor, ok := executors[target]
 	if !ok {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)

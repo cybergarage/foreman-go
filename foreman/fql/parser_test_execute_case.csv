@@ -1,4 +1,4 @@
 # query;
-EXECUTE TEST_ECHO (message) VALUES ("hello");TEST_ECHO
-EXECUTE TEST_ECHO (a,b) VALUES ("a","b");TEST_ECHO
-EXECUTE TEST_ECHO (a,b,c) VALUES ("a","b","c");TEST_ECHO
+EXECUTE echo (message) VALUES ("hello");echo
+EXECUTE echo (a,b) VALUES ("a","b");echo
+EXECUTE echo (a,b,c) VALUES ("a","b","c");echo
