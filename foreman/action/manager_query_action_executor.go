@@ -56,19 +56,21 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 
 	method := mgr.GetFirstMethod()
 	for method != nil {
-		method = mgr.GetNextMethod(method)
 		if hasWhere {
 			if method.Name != whereName {
+				method = mgr.GetNextMethod(method)
 				continue
 			}
 		}
+
 		var methodMap map[string]interface{}
 		methodMap[ActionColumnName] = method.Name
 		methodMap[ActionColumnLanguage] = method.Language
 		methodMap[ActionColumnCode] = base64.StdEncoding.EncodeToString(method.Code)
 		methodMap[ActionColumnEncoding] = ActionEncodingBase64
-
 		methods = append(methods, methodMap)
+
+		method = mgr.GetNextMethod(method)
 	}
 
 	var actionMap map[string]interface{}
@@ -105,4 +107,46 @@ func (mgr *Manager) executeDeleteAction(q fql.Query) (interface{}, *errors.Error
 	}
 
 	return nil, nil
+}
+
+func (mgr *Manager) executeExecuteAction(q fql.Query) (interface{}, *errors.Error) {
+	ope, methodName, hasName := q.GetConditionByColumn(fql.QueryColumnName)
+	if hasName {
+		if ope.GetType() != fql.OperatorTypeEQ {
+			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
+		}
+	}
+
+	columns, ok := q.GetColumns()
+	if !ok {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidColumns)
+	}
+
+	values, ok := q.GetValues()
+	if !ok {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
+	}
+
+	if len(columns) != len(values) {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
+	}
+
+	params := NewParameters()
+	for n, column := range columns {
+		value := values[n]
+		param := NewParameterFromString(column.String(), value.String())
+		params.AddParameter(param)
+	}
+
+	results, err := mgr.ExecMethod(methodName, params)
+	if err != nil {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
+	}
+
+	var resultMap map[string]interface{}
+	for name, result := range results {
+		resultMap[name] = result.GetValue()
+	}
+
+	return resultMap, nil
 }

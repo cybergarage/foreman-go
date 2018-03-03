@@ -24,6 +24,8 @@ func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 			return mgr.executeSelectAction(q)
 		case fql.QueryTypeDelete:
 			return mgr.executeDeleteAction(q)
+		case fql.QueryTypeExecute:
+			return mgr.executeExecuteAction(q)
 		}
 	case fql.QueryTargetRoute:
 		switch q.GetType() {

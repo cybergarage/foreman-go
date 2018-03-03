@@ -31,6 +31,9 @@ type FQLListener interface {
 	// EnterDeleteQuery is called when entering the deleteQuery production.
 	EnterDeleteQuery(c *DeleteQueryContext)
 
+	// EnterExecuteQuery is called when entering the executeQuery production.
+	EnterExecuteQuery(c *ExecuteQueryContext)
+
 	// EnterTarget is called when entering the target production.
 	EnterTarget(c *TargetContext)
 
@@ -84,6 +87,9 @@ type FQLListener interface {
 
 	// ExitDeleteQuery is called when exiting the deleteQuery production.
 	ExitDeleteQuery(c *DeleteQueryContext)
+
+	// ExitExecuteQuery is called when exiting the executeQuery production.
+	ExitExecuteQuery(c *ExecuteQueryContext)
 
 	// ExitTarget is called when exiting the target production.
 	ExitTarget(c *TargetContext)

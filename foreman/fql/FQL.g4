@@ -32,6 +32,7 @@ query
 	| selectQuery
 	| exportQuery
 	| deleteQuery
+	| executeQuery
 	;
 
 /*------------------------------------------------------------------
@@ -72,6 +73,14 @@ exportQuery
 
 deleteQuery
 	: DELETE FROM target (WHERE conditions)?
+	;
+
+/*------------------------------------------------------------------
+ * EXECUTE
+ *------------------------------------------------------------------*/
+
+executeQuery
+	: EXECUTE target ('(' columns ')')? (VALUES '(' values ')')?
 	;
 
 /*------------------------------------------------------------------
@@ -151,6 +160,10 @@ SET
 
 EXPORT
 	: E X P O R T
+	;
+
+EXECUTE
+	: E X E C U T E
 	;
 
 INTO
