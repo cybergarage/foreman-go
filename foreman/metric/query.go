@@ -12,16 +12,26 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
+type QueryType int
+
+const (
+	QueryTypeUnknown QueryType = iota
+	QueryTypeInsert
+	QueryTypeSelect
+	QueryTypeAnalyze
+)
+
 type QuerySourceType int
 
 const (
-	QuerySourceUnknownType QuerySourceType = iota
-	QuerySourceMetricType
+	QuerySourceTypeUnknown QuerySourceType = iota
+	QuerySourceTypeMetric
 	QuerySourceDataType
 )
 
 // Query represents a query for the metric store.
 type Query struct {
+	Type     QueryType
 	Source   QuerySourceType
 	Target   string
 	From     *time.Time
@@ -32,7 +42,8 @@ type Query struct {
 // NewMetricQuery returns a new metric query.
 func NewMetricQuery() *Query {
 	q := &Query{
-		Source:   QuerySourceMetricType,
+		Type:     QueryTypeSelect,
+		Source:   QuerySourceTypeMetric,
 		Target:   "",
 		From:     nil,
 		Until:    nil,
@@ -46,6 +57,22 @@ func NewDataQuery() *Query {
 	now := time.Now()
 	from := now.Add(QueryDefaultFromOffset)
 	q := &Query{
+		Type:     QueryTypeSelect,
+		Source:   QuerySourceDataType,
+		Target:   "",
+		From:     &from,
+		Until:    &now,
+		Interval: 0,
+	}
+	return q
+}
+
+// NewAnalyzeQuery returns a new metric query.
+func NewAnalyzeQuery() *Query {
+	now := time.Now()
+	from := now.Add(QueryDefaultFromOffset)
+	q := &Query{
+		Type:     QueryTypeAnalyze,
 		Source:   QuerySourceDataType,
 		Target:   "",
 		From:     &from,
@@ -57,15 +84,37 @@ func NewDataQuery() *Query {
 
 // NewQueryWithQuery returns a new query of the specified query.
 func NewQueryWithQuery(fq fql.Query) (*Query, error) {
-	if fq.GetType() != fql.QueryTypeSelect {
+	var q *Query
+
+	switch fq.GetType() {
+	case fql.QueryTypeInsert:
+		// TODO : Not implemented yet
+	case fql.QueryTypeSelect:
+		if fq.HasOnlyColumn(fql.QueryColumnName) {
+			q = NewMetricQuery()
+		} else {
+			q = NewDataQuery()
+		}
+	case fql.QueryTypeAnalyze:
+		q = NewAnalyzeQuery()
+	}
+
+	// Unknow query
+
+	if q == nil {
 		return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())
 	}
 
-	var q *Query = nil
-	if fq.HasOnlyColumn(fql.QueryColumnName) {
-		q = NewMetricQuery()
-	} else {
-		q = NewDataQuery()
+	// Column (only for ANALYZE)
+
+	columns, ok := fq.GetColumns()
+	if ok {
+		for _, column := range columns {
+			switch fq.GetType() {
+			case fql.QueryTypeAnalyze:
+				q.Target = column.String()
+			}
+		}
 	}
 
 	// Where
