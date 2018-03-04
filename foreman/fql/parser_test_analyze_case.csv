@@ -1,0 +1,2 @@
+# query;target;metrics
+ANALYZE x FROM METRICS;METRICS;x

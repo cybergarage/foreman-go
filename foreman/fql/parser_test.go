@@ -21,12 +21,14 @@ const (
 	testFQLExportCaseFilename  = "parser_test_export_case.csv"
 	testFQLDeleteCaseFilename  = "parser_test_delete_case.csv"
 	testFQLExecuteCaseFilename = "parser_test_execute_case.csv"
+	testFQLAnalyzeCaseFilename = "parser_test_analyze_case.csv"
 )
 
 const (
 	errorInvalidTarget         = "Invalid target %s != %s"
 	errorInvalidValue          = "Invalid value %s != %s"
 	errorInvalidColumnCount    = "Invalid column count %d != %d"
+	errorInvalidColumn         = "Invalid column %s != %s"
 	errorInvalidValueCount     = "Invalid value count %d != %d"
 	errorInvalidConditionCount = "Invalid condition count %d != %d"
 	errorInvalidCorrectCount   = "Invalid correct count %d != %d"
@@ -91,6 +93,7 @@ func TestFQLCases(t *testing.T) {
 		testFQLExportCaseFilename:  &selectQueryTestListener{},
 		testFQLDeleteCaseFilename:  &deleteQueryTestListener{},
 		testFQLExecuteCaseFilename: &executeQueryTestListener{},
+		testFQLAnalyzeCaseFilename: &analyzeQueryTestListener{},
 	}
 
 	for filename, listener := range testCases {
@@ -231,6 +234,37 @@ func (l *executeQueryTestListener) testCase(t *testing.T, q Query, corrects []st
 
 	if len(columns) != len(values) {
 		return fmt.Errorf(errorInvalidValueCount, len(columns), len(values))
+	}
+
+	return nil
+}
+
+// Analyze
+
+type analyzeQueryTestListener struct{}
+
+func (l *analyzeQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	if len(corrects) < 2 {
+		return fmt.Errorf(errorInvalidCorrectCount, len(corrects), 2)
+	}
+
+	// Target (corrects[0])
+
+	target, _ := q.GetTarget()
+	if target.String() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.String(), corrects[0])
+	}
+
+	// Columns (corrects[1])
+
+	columns, _ := q.GetColumns()
+	if len(columns) != 1 {
+		return fmt.Errorf(errorInvalidColumnCount, len(columns), 1)
+	}
+
+	colums := columns[0]
+	if colums.String() != corrects[1] {
+		return fmt.Errorf(errorInvalidValue, colums.String(), columns[0])
 	}
 
 	return nil
