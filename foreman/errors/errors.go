@@ -13,10 +13,21 @@ const (
 	ErrorCodeQueryInvalidValues      = 1012
 	ErrorCodeQueryInvalidColumns     = 1013
 	ErrorCodeQueryInvalidConditions  = 1014
+	ErrorCodeQueryNotFoundData       = 1015
 )
 
 func ErrorCodeToString(code int) string {
-	errorMap := map[int]string{}
+	errorMap := map[int]string{
+		ErrorInternalServerError:         "Internal Server Error",
+		ErrorCodeQueryInvalid:            "Invalid Query",
+		ErrorCodeQueryMethodNotSupported: "Query method not supported",
+		ErrorCodeQueryEmptyTarget:        "Empty query target",
+		ErrorCodeQueryTargetNotSupported: "Query target not supported",
+		ErrorCodeQueryInvalidValues:      "Invalid query values",
+		ErrorCodeQueryInvalidColumns:     "Invalid query columns",
+		ErrorCodeQueryInvalidConditions:  "Invalid query conditions",
+		ErrorCodeQueryNotFoundData:       "Not found data",
+	}
 	errMsg, ok := errorMap[code]
 	if !ok {
 		return ""
