@@ -67,6 +67,9 @@ func NewServerWithConfigFile(configFile string) *Server {
 		return nil
 	}
 
+	server.actionMgr.SetRegistryStore(server.registryMgr.GetStore())
+	server.actionMgr.SetRegisterStore(server.registerMgr.GetStore())
+
 	server.graphite.CarbonListener = server
 	server.graphite.RenderListener = server
 	FqlPath, err := server.config.GetString(ConfigFqlPathKey)
