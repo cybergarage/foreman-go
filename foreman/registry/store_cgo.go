@@ -17,6 +17,7 @@ import (
 
 // CgoStore represents a registry store for Foreman.
 type CgoStore struct {
+	Store
 	cStore unsafe.Pointer
 }
 

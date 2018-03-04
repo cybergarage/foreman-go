@@ -5,8 +5,8 @@
 // Package registry provides registry interfaces
 package registry
 
-// Storing represents an abstract interface of registry.
-type Storing interface {
+// Store represents an abstract interface of registry.
+type Store interface {
 	Open() error
 	Close() error
 	Clear() error
@@ -28,9 +28,4 @@ type Storing interface {
 	Search(q *Query) ([]*Object, error)
 
 	String() string
-}
-
-// Store represents an registry store.
-type Store struct {
-	Storing
 }
