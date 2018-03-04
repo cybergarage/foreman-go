@@ -24,7 +24,7 @@ func NewManager() *Manager {
 }
 
 // GetStore returns an internal store
-func (mgr *Manager) GetStore() Store {
+func (mgr *Manager) GetStore() *Store {
 	return mgr.Registry.Store
 }
 
