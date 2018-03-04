@@ -30,29 +30,31 @@ func (mgr *Manager) executeInsertRoute(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeSelectRoute(q fql.Query) (interface{}, *errors.Error) {
-	ope, whereName, hasWhere := q.GetConditionByColumn(fql.QueryColumnName)
-	if hasWhere {
+	ope, routeName, hasRouteName := q.GetConditionByColumn(fql.QueryColumnName)
+	if hasRouteName {
 		if ope.GetType() != fql.OperatorTypeEQ {
 			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 		}
 	}
 
-	var routes []interface{}
+	routes := map[string]interface{}{}
 	for _, route := range mgr.GetAllRoutes() {
-		if hasWhere {
-			if route.Name != whereName {
+		if hasRouteName {
+			if route.Name != routeName {
 				continue
 			}
 		}
-		var routeMap map[string]string
-		routeMap[RouteColumnName] = route.GetName()
+
+		routeMap := map[string]string{}
 		routeMap[RouteColumnSource] = route.GetSource()
 		routeMap[RouteColumnDestination] = route.GetDestination()
-		routes = append(routes, routeMap)
+
+		routes[route.GetName()] = routeMap
 	}
 
-	var routeMap map[string]interface{}
+	routeMap := map[string]interface{}{}
 	routeMap[RouteColumnRoutes] = routes
+
 	actionContainer := map[string]interface{}{}
 	actionContainer[strings.ToLower(fql.QueryTargetAction)] = routeMap
 

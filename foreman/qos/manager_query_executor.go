@@ -39,17 +39,17 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error) {
-	ope, whereName, ok := q.GetConditionByColumn(fql.QueryColumnName)
-	if ok {
+	ope, whereName, hasName := q.GetConditionByColumn(fql.QueryColumnName)
+	if hasName {
 		if ope.GetType() != fql.OperatorTypeEQ {
-			ok = false
+			hasName = false
 		}
 	}
 
-	var ruleMap map[string]string
+	ruleMap := map[string]string{}
 	for _, rule := range mgr.GetRules() {
 		ruleName := rule.GetName()
-		if ok {
+		if hasName {
 			if ruleName != whereName {
 				continue
 			}
