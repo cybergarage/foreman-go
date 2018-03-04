@@ -15,13 +15,18 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-// Store represents a registry store for Foreman.
-type cgoStore struct {
+// CgoStore represents a registry store for Foreman.
+type CgoStore struct {
 	cStore unsafe.Pointer
 }
 
+// GetCObject returns the internal Clang object.
+func (store *CgoStore) GetCObject() unsafe.Pointer {
+	return store.cStore
+}
+
 // Open initializes the store.
-func (store *cgoStore) Open() error {
+func (store *CgoStore) Open() error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -34,7 +39,7 @@ func (store *cgoStore) Open() error {
 }
 
 // Close closes the store.
-func (store *cgoStore) Close() error {
+func (store *CgoStore) Close() error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -47,7 +52,7 @@ func (store *cgoStore) Close() error {
 }
 
 // Clear remove all registry data.
-func (store *cgoStore) Clear() error {
+func (store *CgoStore) Clear() error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -60,7 +65,7 @@ func (store *cgoStore) Clear() error {
 }
 
 // CreateObject insert a new object
-func (store *cgoStore) CreateObject(obj *Object) error {
+func (store *CgoStore) CreateObject(obj *Object) error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -87,7 +92,7 @@ func (store *cgoStore) CreateObject(obj *Object) error {
 }
 
 // CreateObject insert a new object
-func (store *cgoStore) UpdateObject(obj *Object) error {
+func (store *CgoStore) UpdateObject(obj *Object) error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -109,7 +114,7 @@ func (store *cgoStore) UpdateObject(obj *Object) error {
 }
 
 // GetObject gets a specified object.
-func (store *cgoStore) GetObject(objID string) (*Object, error) {
+func (store *CgoStore) GetObject(objID string) (*Object, error) {
 	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -128,7 +133,7 @@ func (store *cgoStore) GetObject(objID string) (*Object, error) {
 }
 
 // DeleteObject deletes a specified object.
-func (store *cgoStore) DeleteObject(objID string) error {
+func (store *CgoStore) DeleteObject(objID string) error {
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -144,7 +149,7 @@ func (store *cgoStore) DeleteObject(objID string) error {
 }
 
 // Browse returns a child objects
-func (store *cgoStore) Browse(q *Query) ([]*Object, error) {
+func (store *CgoStore) Browse(q *Query) ([]*Object, error) {
 	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -169,7 +174,7 @@ func (store *cgoStore) Browse(q *Query) ([]*Object, error) {
 }
 
 // Search finds a specified objects.
-func (store *cgoStore) Search(q *Query) ([]*Object, error) {
+func (store *CgoStore) Search(q *Query) ([]*Object, error) {
 	if store.cStore == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -194,7 +199,7 @@ func (store *cgoStore) Search(q *Query) ([]*Object, error) {
 }
 
 // String returns a string description of the instance
-func (store *cgoStore) String() string {
+func (store *CgoStore) String() string {
 	if store.cStore == nil {
 		return ""
 	}

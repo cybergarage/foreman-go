@@ -23,6 +23,11 @@ func NewManager() *Manager {
 	return mgr
 }
 
+// GetStore returns an internal store
+func (mgr *Manager) GetStore() Store {
+	return mgr.Registry.Store
+}
+
 // CreateCategoryObject create the specified category object under the root.
 func (mgr *Manager) CreateCategoryObject(category string) error {
 	categoryObj := NewObject()
