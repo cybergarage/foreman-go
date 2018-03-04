@@ -9,7 +9,7 @@ import "fmt"
 
 // Registry represents an registry.
 type Registry struct {
-	*Store
+	Store
 }
 
 // NewRegistry returns a new registry.
