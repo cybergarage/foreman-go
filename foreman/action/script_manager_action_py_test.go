@@ -71,7 +71,7 @@ func testPythonEngineRegister(t *testing.T, mgr *ScriptManager) {
 }
 
 func TestPythonEngine(t *testing.T) {
-	mgr := NewScriptManager()
+	mgr := newTestScriptEngine()
 
 	if !mgr.HasEngine(ActionLanguagePython) {
 		t.Skipf(errorEngineNotFound, ActionLanguagePython)
@@ -79,6 +79,5 @@ func TestPythonEngine(t *testing.T) {
 	}
 
 	testPythonEngineEcho(t, mgr)
-	// FIXME
-	//testPythonEngineRegister(t, mgr)
+	testPythonEngineRegister(t, mgr)
 }

@@ -7,6 +7,9 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
+
+	"github.com/cybergarage/foreman-go/foreman/register"
+	"github.com/cybergarage/foreman-go/foreman/registry"
 )
 
 const (
@@ -18,6 +21,13 @@ const (
 	errorEngineNotFound  = "Script Engine (%s) is not found"
 	errorObjectNotEquals = "Object does not equal (%v != %v)"
 )
+
+func newTestScriptEngine() *ScriptManager {
+	mgr := NewScriptManager()
+	mgr.SetRegisterStore(register.NewStore())
+	mgr.SetRegistryStore(registry.NewStore())
+	return mgr
+}
 
 const (
 	testEchoMethod = "test_echo"
@@ -57,30 +67,30 @@ func executeTestRegisterMethods(mgr *ScriptManager) (Parameters, error) {
 
 	// test_setregister
 
-	inParams := NewParameters()
-	inParam := NewParameterFromString(regName, regValue)
-	inParams.AddParameter(inParam)
+	setParams := NewParameters()
+	setParams.AddParameter(NewParameterFromString(regName, regValue))
 
-	_, err := mgr.ExecMethod(testSetRegisterMethod, inParams)
+	_, err := mgr.ExecMethod(testSetRegisterMethod, setParams)
 	if err != nil {
 		return nil, err
 	}
 
 	// test_getregister
 
-	outParams := NewParameters()
+	getParams := NewParameters()
+	getParams.AddParameter(NewParameterFromString(regName, ""))
 
-	results, err := mgr.ExecMethod(testGetRegisterMethod, outParams)
+	getResults, err := mgr.ExecMethod(testGetRegisterMethod, getParams)
 	if err != nil {
 		return nil, err
 	}
 
 	// Check result
 
-	if !inParams.Equals(results) {
-		err = fmt.Errorf(errorObjectNotEquals, inParams, results)
+	if !setParams.Equals(getResults) {
+		err = fmt.Errorf(errorObjectNotEquals, setParams, getResults)
 		return nil, err
 	}
 
-	return results, nil
+	return getResults, nil
 }

@@ -5,6 +5,7 @@
 package action
 
 const (
+	errorInvalidClangObject       = "Invalid Clang object"
 	errorUnknownParameterType     = "Unknown parameter type (%d)"
 	errorInvalidParameterType     = "Invalid parameter type (%d != %d)"
 	errorRouteDestinationNotFound = "Destination (%s) is not found"
