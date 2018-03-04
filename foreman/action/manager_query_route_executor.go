@@ -30,8 +30,8 @@ func (mgr *Manager) executeInsertRoute(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeSelectRoute(q fql.Query) (interface{}, *errors.Error) {
-	ope, routeName, hasRouteName := q.GetConditionByColumn(fql.QueryColumnName)
-	if hasRouteName {
+	ope, name, hasName := q.GetConditionByColumn(fql.QueryColumnName)
+	if hasName {
 		if ope.GetType() != fql.OperatorTypeEQ {
 			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 		}
@@ -39,8 +39,8 @@ func (mgr *Manager) executeSelectRoute(q fql.Query) (interface{}, *errors.Error)
 
 	routes := map[string]interface{}{}
 	for _, route := range mgr.GetAllRoutes() {
-		if hasRouteName {
-			if route.Name != routeName {
+		if hasName {
+			if route.Name != name {
 				continue
 			}
 		}
@@ -50,6 +50,10 @@ func (mgr *Manager) executeSelectRoute(q fql.Query) (interface{}, *errors.Error)
 		routeMap[RouteColumnDestination] = route.GetDestination()
 
 		routes[route.GetName()] = routeMap
+	}
+
+	if hasName && (len(routes) <= 0) {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryNotFoundData)
 	}
 
 	routeMap := map[string]interface{}{}
@@ -62,8 +66,8 @@ func (mgr *Manager) executeSelectRoute(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeDeleteRoute(q fql.Query) (interface{}, *errors.Error) {
-	ope, whereName, hasWhere := q.GetConditionByColumn(fql.QueryColumnName)
-	if hasWhere {
+	ope, name, hasName := q.GetConditionByColumn(fql.QueryColumnName)
+	if hasName {
 		if ope.GetType() != fql.OperatorTypeEQ {
 			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 		}
@@ -71,8 +75,8 @@ func (mgr *Manager) executeDeleteRoute(q fql.Query) (interface{}, *errors.Error)
 
 	// Remove only a specified route
 
-	if hasWhere {
-		ok := mgr.RemoveRoute(whereName)
+	if hasName {
+		ok := mgr.RemoveRoute(name)
 		if !ok {
 			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 		}
