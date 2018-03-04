@@ -1,1 +1,1 @@
-EXPORT CONFIG;200;/config/product;foreman
+EXPORT FROM CONFIG;200;/config/product;foreman

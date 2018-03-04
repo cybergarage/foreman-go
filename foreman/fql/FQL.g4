@@ -65,7 +65,7 @@ selectQuery
  *------------------------------------------------------------------*/
 
 exportQuery
-	: EXPORT target (WHERE conditions)?
+	: EXPORT FROM target (WHERE conditions)?
 	;
 
 /*------------------------------------------------------------------
