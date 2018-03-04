@@ -103,13 +103,41 @@ func (mgr *Manager) executeSelectQuery(fq fql.Query) (interface{}, *errors.Error
 	}
 
 	switch q.Source {
-	case QuerySourceMetricType:
+	case QuerySourceTypeMetric:
 		return mgr.executeSelectMetricsQuery(q)
 	case QuerySourceDataType:
 		return mgr.executeSelectMetricsDataQuery(q)
 	}
 
 	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
+}
+
+func (mgr *Manager) executeAnalyzeQuery(fq fql.Query) (interface{}, *errors.Error) {
+	q, err := NewQueryWithQuery(fq)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	rs, err := mgr.Query(q)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	rootContainer := map[string]interface{}{}
+
+	ms := rs.GetFirstMetrics()
+	for ms != nil {
+		results := []float64{}
+		for _, v := range ms.Values {
+			fv := v.Value
+			results = append(results, fv)
+		}
+		rootContainer[ms.Name] = results
+
+		ms = rs.GetNextMetrics()
+	}
+
+	return rootContainer, nil
 }
 
 // ExecuteQuery must return the result as a standard array or map.
@@ -119,6 +147,8 @@ func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		return mgr.executeInsertQuery(q)
 	case fql.QueryTypeSelect:
 		return mgr.executeSelectQuery(q)
+	case fql.QueryTypeAnalyze:
+		return mgr.executeAnalyzeQuery(q)
 	}
 
 	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)

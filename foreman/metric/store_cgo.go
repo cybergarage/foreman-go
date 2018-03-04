@@ -136,18 +136,26 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 		return nil, err
 	}
 
-	if q.Source == QuerySourceUnknownType {
+	if q.Source == QuerySourceTypeUnknown {
 		return nil, fmt.Errorf(errorStoreInvalidQuery, q.String())
 	}
 
 	crs := C.foreman_metric_resultset_new()
 
 	executed := false
-	switch q.Source {
-	case QuerySourceMetricType:
-		executed = bool(C.foreman_metric_store_querymetric(store.cStore, cq, crs))
-	case QuerySourceDataType:
-		executed = bool(C.foreman_metric_store_querydata(store.cStore, cq, crs))
+	switch q.Type {
+	case QueryTypeSelect:
+		switch q.Source {
+		case QuerySourceTypeMetric:
+			executed = bool(C.foreman_metric_store_querymetric(store.cStore, cq, crs))
+		case QuerySourceDataType:
+			executed = bool(C.foreman_metric_store_querydata(store.cStore, cq, crs))
+		}
+	case QueryTypeAnalyze:
+		switch q.Source {
+		case QuerySourceTypeMetric, QuerySourceDataType:
+			executed = bool(C.foreman_metric_store_analyzedata(store.cStore, cq, crs))
+		}
 	}
 
 	if !executed {
