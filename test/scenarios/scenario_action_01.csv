@@ -3,3 +3,9 @@ SET ("test_echo","python","ZGVmIHRlc3RfZWNobyhwYXJhbXMscmVzdWx0cyk6Cglmb3Iga2V5L
 EXECUTE test_echo;200;
 EXECUTE test_echo (message) VALUES ("hello");200;/message;hello
 DELETE FROM ACTION WHERE name == "test_echo";200;
+
+# register commands
+SET ("test_setregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3Rfc2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKGtleSwgc3RyKHZhbHVlKSkKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+SET ("test_getregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfZ2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIHJlZ19rZXksIHZhbHVlIGluIHBhcmFtcy5pdGVyaXRlbXMoKToKICAgICAgICByZWdfdmFsdWUgPSBmb3JlbWFuLmdldF9yZWdpc3RlcihyZWdfa2V5KQogICAgICAgIHJlc3VsdHNbcmVnX2tleV0gPSByZWdfdmFsdWUKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXECUTE test_setregister (test_reg) VALUES ("hello");200;
+EXECUTE test_getregister (test_reg) VALUES ("");200;/test_reg;hello

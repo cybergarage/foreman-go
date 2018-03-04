@@ -14,10 +14,14 @@ const (
 
 func TestQueryScenario(t *testing.T) {
 	scenarioFiles := []string{
-		"scenario_action_01.csv",
 		"scenario_config_01.csv",
-		"scenario_metrics_01.csv",
 		"scenario_register_01.csv",
+		"scenario_metrics_01.csv",
+		"scenario_action_01.csv",
+		// FIXME
+		// fatal error: unexpected signal during runtime execution
+		// [signal SIGSEGV: segmentation violation code=0x1 addr=0x5859c3000 pc=0x7fff4be8a2c7]
+		//"scenario_register_01.csv",
 	}
 
 	s := NewQueryScenario()
