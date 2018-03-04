@@ -74,16 +74,21 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 	// Update metric
 
 	rm := NewRegisterMetricWithObject(obj)
-	if rs.Listener != nil {
-		rs.Listener.RegisterMetricUpdated(rm)
-	}
+
 	err := rm.SetValue(m.GetValue())
 	if err != nil {
 		return err
 	}
+
 	err = rs.SetObject(rm.Object)
 	if err != nil {
 		return err
+	}
+
+	// Call listener
+
+	if rs.Listener != nil {
+		rs.Listener.RegisterMetricUpdated(rm)
 	}
 
 	return nil
