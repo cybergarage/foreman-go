@@ -52,7 +52,7 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 		}
 	}
 
-	var methods []interface{}
+	methods := map[string]interface{}{}
 
 	method := mgr.GetFirstMethod()
 	for method != nil {
@@ -63,17 +63,17 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 			}
 		}
 
-		var methodMap map[string]interface{}
-		methodMap[ActionColumnName] = method.Name
+		methodMap := map[string]interface{}{}
 		methodMap[ActionColumnLanguage] = method.Language
 		methodMap[ActionColumnCode] = base64.StdEncoding.EncodeToString(method.Code)
 		methodMap[ActionColumnEncoding] = ActionEncodingBase64
-		methods = append(methods, methodMap)
+
+		methods[method.Name] = methodMap
 
 		method = mgr.GetNextMethod(method)
 	}
 
-	var actionMap map[string]interface{}
+	actionMap := map[string]interface{}{}
 	actionMap[ActionColumnMethods] = methods
 	actionContainer := map[string]interface{}{}
 	actionContainer[strings.ToLower(fql.QueryTargetAction)] = actionMap
