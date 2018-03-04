@@ -81,7 +81,7 @@ deleteQuery
  *------------------------------------------------------------------*/
 
 analyzeQuery
-	: ANALYZE column FROM target
+	: ANALYZE column FROM target (WHERE conditions)?
 	;
 
 /*------------------------------------------------------------------
