@@ -4,7 +4,7 @@ EXPORT FROM ROUTE;200;/action/routes/qos
 EXPORT FROM ROUTE WHERE name == "qos";200;/action/routes/qos
 
 # Set a destination method
-SET ("qos_unsatisfied","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZChwYXJhbXMscmVzdWx0cyk6CiAgICBmb3JlbWFuLnNldF9yZWdpc3RlcigncW9zJywgJ2ZhbHNlJykpCiAgICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;200;
+SET ("qos_unsatisfied","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZChwYXJhbXMscmVzdWx0cyk6CiAgICBmb3JlbWFuLnNldF9yZWdpc3RlcigncW9zJywgJ2ZhbHNlJykKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
 EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied
 EXPORT FROM ACTION WHERE name == "qos_unsatisfied";200;/action/methods/qos_unsatisfied
 # EXECUTE qos_unsatisfied;200;
