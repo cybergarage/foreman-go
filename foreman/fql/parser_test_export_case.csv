@@ -1,4 +1,4 @@
 # query; target; column_count; condition_count
-EXPORT QoS;QoS;0;0
-EXPORT QoS WHERE x > 1;QoS;0;1
-EXPORT QoS WHERE x > 1 AND y < 1;QoS;0;2
+EXPORT FROM QoS;QoS;0;0
+EXPORT FROM QoS WHERE x > 1;QoS;0;1
+EXPORT FROM QoS WHERE x > 1 AND y < 1;QoS;0;2
