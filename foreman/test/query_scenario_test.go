@@ -14,10 +14,10 @@ const (
 
 func TestQueryScenario(t *testing.T) {
 	scenarioFiles := []string{
-		//"scenario_config_01.csv",
-		//"scenario_metrics_01.csv",
-		//"scenario_register_01.csv",
-		//"scenario_action_01.csv",
+		"scenario_config_01.csv",
+		"scenario_metrics_01.csv",
+		"scenario_register_01.csv",
+		"scenario_action_01.csv",
 
 		// FIXME : Could not execute scenario_register_01 after scenario_action_01
 		//[signal SIGSEGV: segmentation violation code=0x1 addr=0x585ac0000 pc=0x7fff55ccb2c7]
@@ -39,7 +39,7 @@ func TestQueryScenario(t *testing.T) {
 		//	/Users/skonno/Src/foreman-go/src/github.com/cybergarage/foreman-go/foreman/action/script_manager_cgo.go:141 +0x163 fp=0xc42005d958 sp=0xc42005d8f0 pc=0x43196c3
 		//"scenario_register_01.csv",
 
-		"scenario_qos_01.csv",
+		//"scenario_qos_01.csv",
 	}
 
 	s := NewQueryScenario()
