@@ -70,7 +70,7 @@ func (mgr *Manager) PostEvent(e *Event) error {
 
 	// TODO : Update to execute parallel.
 	for _, route := range routes {
-		dest := mgr.findRouteDestination(route.GetSource())
+		dest := mgr.findRouteDestination(route.GetDestination())
 		if dest == nil {
 			continue
 		}
