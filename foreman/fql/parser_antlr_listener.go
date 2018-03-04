@@ -6,6 +6,10 @@ package fql
 
 import "strings"
 
+const (
+	parserValueTrimStrings = "\""
+)
+
 type antlrParserListener struct {
 	*BaseFQLListener
 	Queries
@@ -190,7 +194,7 @@ func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
 	if !ok {
 		return
 	}
-	value := strings.Trim(ctx.GetText(), "\"")
+	value := strings.Trim(ctx.GetText(), parserValueTrimStrings)
 	q.AddValue(NewValueWithString(value))
 }
 
@@ -207,7 +211,7 @@ func (l *antlrParserListener) ExitCondition(ctx *ConditionContext) {
 	condString := []string{
 		ctx.LeftOperand().GetText(),
 		ctx.Operator().GetText(),
-		ctx.RightOperand().GetText(),
+		strings.Trim(ctx.RightOperand().GetText(), parserValueTrimStrings),
 	}
 	cond := NewConditionWithObjects(condString)
 	q.AddCondition(cond)
