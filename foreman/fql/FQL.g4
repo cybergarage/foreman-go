@@ -32,6 +32,7 @@ query
 	| selectQuery
 	| exportQuery
 	| deleteQuery
+	| analyzeQuery
 	| executeQuery
 	;
 
@@ -73,6 +74,14 @@ exportQuery
 
 deleteQuery
 	: DELETE FROM target (WHERE conditions)?
+	;
+
+/*------------------------------------------------------------------
+ * ANALYZE
+ *------------------------------------------------------------------*/
+
+analyzeQuery
+	: ANALYZE column FROM target
 	;
 
 /*------------------------------------------------------------------
@@ -156,6 +165,10 @@ DELETE
 
 SET
 	: S E T
+	;
+
+ANALYZE
+	: A N A L Y Z E
 	;
 
 EXPORT
