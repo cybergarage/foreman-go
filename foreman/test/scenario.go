@@ -14,23 +14,25 @@ import (
 
 // Scenario represents a parameter.
 type Scenario struct {
-	Name         string
-	executor     ScenarioExecutor
-	Events       []*Event
-	LastEvent    *Event
-	LastResponse *Response
-	LastError    *errors.Error
+	Name              string
+	executor          ScenarioExecutor
+	executionListener ScenarioExecutionListener
+	Events            []*Event
+	LastEvent         *Event
+	LastResponse      *Response
+	LastError         *errors.Error
 }
 
 // NewScenario create a new scenario.
 func NewScenario() *Scenario {
 	s := &Scenario{
-		Name:         "",
-		Events:       make([]*Event, 0),
-		executor:     nil,
-		LastEvent:    nil,
-		LastResponse: nil,
-		LastError:    nil,
+		Name:              "",
+		Events:            make([]*Event, 0),
+		executor:          nil,
+		executionListener: nil,
+		LastEvent:         nil,
+		LastResponse:      nil,
+		LastError:         nil,
 	}
 	return s
 }
@@ -43,6 +45,11 @@ func (s *Scenario) SetName(name string) {
 // SetExecutor sets the event executor.
 func (s *Scenario) SetExecutor(e ScenarioExecutor) {
 	s.executor = e
+}
+
+// SetExecutor sets the event executor.
+func (s *Scenario) SetExecutionListener(l ScenarioExecutionListener) {
+	s.executionListener = l
 }
 
 // SetLastEvent sets a last executed event.
@@ -98,6 +105,10 @@ func (s *Scenario) ExecuteAll() *errors.Error {
 		res, err := s.executor.Execute(e)
 		s.SetLastResponse(res)
 		s.SetLastError(err)
+
+		if s.executionListener != nil {
+			s.executionListener.EventExecuted(e, res, err)
+		}
 
 		if err != nil {
 			return err

@@ -49,11 +49,14 @@ func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter)
 		return
 	}
 
-	// FIXME: Exceute all queries
+	// FIXME: Execute all queries
 	query := queries[0]
 
 	queryResult, queryErr := server.ExecuteQuery(query)
-	if queryErr != nil {
+	if queryErr == nil {
+		server.httpLogMessage(r, http.StatusOK, queryString)
+	} else {
+		server.httpLogMessage(r, http.StatusBadRequest, queryErr.String())
 		server.httpResponseJSONError(r, w, queryErr)
 		return
 	}
@@ -71,8 +74,6 @@ func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter)
 		return
 	}
 	w.Write([]byte(content))
-
-	server.httpLogMessage(r, http.StatusOK, queryString)
 }
 
 // badRequestReceived returns http.StatusBadRequest
@@ -92,8 +93,6 @@ func (server *Server) httpResponseJSONError(r *http.Request, w http.ResponseWrit
 	}
 
 	w.Write([]byte(content))
-
-	server.httpLogMessage(r, http.StatusBadRequest, err.String())
 }
 
 // httpLogMessage outputs a log message for the specified HTTP request.

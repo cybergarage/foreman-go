@@ -14,6 +14,20 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
+// ExecuteQuery must return the result as a standard array or map.
+func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
+	switch q.GetType() {
+	case fql.QueryTypeInsert:
+		return mgr.executeInsertQuery(q)
+	case fql.QueryTypeSelect:
+		return mgr.executeSelectQuery(q)
+	case fql.QueryTypeAnalyze:
+		return mgr.executeAnalyzeQuery(q)
+	}
+
+	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
+}
+
 func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
 	if !ok || len(values) < 3 {
@@ -39,7 +53,7 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	return nil, nil
 }
 
-func (mgr *Manager) executeSelectMetricsQuery(q *Query) (interface{}, *errors.Error) {
+func (mgr *Manager) executeSearchMetricsQuery(q *Query) (interface{}, *errors.Error) {
 	rs, err := mgr.Query(q)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
@@ -104,7 +118,7 @@ func (mgr *Manager) executeSelectQuery(fq fql.Query) (interface{}, *errors.Error
 
 	switch q.Source {
 	case QuerySourceTypeMetric:
-		return mgr.executeSelectMetricsQuery(q)
+		return mgr.executeSearchMetricsQuery(q)
 	case QuerySourceDataType:
 		return mgr.executeSelectMetricsDataQuery(q)
 	}
@@ -138,18 +152,4 @@ func (mgr *Manager) executeAnalyzeQuery(fq fql.Query) (interface{}, *errors.Erro
 	}
 
 	return rootContainer, nil
-}
-
-// ExecuteQuery must return the result as a standard array or map.
-func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
-	switch q.GetType() {
-	case fql.QueryTypeInsert:
-		return mgr.executeInsertQuery(q)
-	case fql.QueryTypeSelect:
-		return mgr.executeSelectQuery(q)
-	case fql.QueryTypeAnalyze:
-		return mgr.executeAnalyzeQuery(q)
-	}
-
-	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 }
