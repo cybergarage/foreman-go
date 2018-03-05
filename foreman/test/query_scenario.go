@@ -38,6 +38,7 @@ func NewQueryScenario() *QueryScenario {
 	}
 
 	s.SetExecutor(s)
+	s.SetExecutionListener(s)
 
 	return s
 }
@@ -80,6 +81,11 @@ func (s *QueryScenario) Execute(e *Event) (*Response, *errors.Error) {
 	}
 
 	return res.Response, nil
+}
+
+// EventExecuted are received the execution result.
+func (s *QueryScenario) EventExecuted(*Event, *Response, *errors.Error) {
+
 }
 
 // verifyResponse verifies the JSON response with the verify data.
