@@ -4,8 +4,16 @@
 
 package action
 
+import (
+	"github.com/cybergarage/foreman-go/foreman/register"
+	"github.com/cybergarage/foreman-go/foreman/registry"
+)
+
 // Scripting represents an abstract interface of the script manager
 type Scripting interface {
+	SetRegistryStore(store registry.Store) error
+	SetRegisterStore(store register.Store) error
+
 	HasEngine(method string) bool
 
 	AddMethod(method *Method) error

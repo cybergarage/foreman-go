@@ -74,6 +74,12 @@ func (s *BaseFQLListener) EnterAnalyzeQuery(ctx *AnalyzeQueryContext) {}
 // ExitAnalyzeQuery is called when production analyzeQuery is exited.
 func (s *BaseFQLListener) ExitAnalyzeQuery(ctx *AnalyzeQueryContext) {}
 
+// EnterExecuteQuery is called when production executeQuery is entered.
+func (s *BaseFQLListener) EnterExecuteQuery(ctx *ExecuteQueryContext) {}
+
+// ExitExecuteQuery is called when production executeQuery is exited.
+func (s *BaseFQLListener) ExitExecuteQuery(ctx *ExecuteQueryContext) {}
+
 // EnterTarget is called when production target is entered.
 func (s *BaseFQLListener) EnterTarget(ctx *TargetContext) {}
 

@@ -28,7 +28,7 @@ func testClientExportQuery(t *testing.T, server *Server, client *Client) {
 }
 
 func testClientConfigQuery(t *testing.T, server *Server, client *Client) {
-	configObj, _, err := client.PostQuery("EXPORT CONFIG")
+	configObj, _, err := client.PostQuery("EXPORT FROM CONFIG")
 	if err != nil {
 		t.Error(err)
 	}

@@ -4,20 +4,20 @@
 
 package fql
 
-// AnalyzeQuery represents a Analyze query.
-type AnalyzeQuery struct {
+// ExecuteQuery represents a execute query.
+type ExecuteQuery struct {
 	*baseQuery
 }
 
-// NewAnalyzeQuery returns a new Analyze query.
-func NewAnalyzeQuery() Query {
-	q := &AnalyzeQuery{
+// NewExecuteQuery returns a new execute query.
+func NewExecuteQuery() Query {
+	q := &ExecuteQuery{
 		baseQuery: newBaseQuery(),
 	}
 	return q
 }
 
 // GetType returns a stored type.
-func (q *AnalyzeQuery) GetType() QueryType {
-	return QueryTypeAnalyze
+func (q *ExecuteQuery) GetType() QueryType {
+	return QueryTypeExecute
 }

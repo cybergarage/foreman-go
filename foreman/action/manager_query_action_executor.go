@@ -52,26 +52,28 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 		}
 	}
 
-	var methods []interface{}
+	methods := map[string]interface{}{}
 
 	method := mgr.GetFirstMethod()
 	for method != nil {
-		method = mgr.GetNextMethod(method)
 		if hasWhere {
 			if method.Name != whereName {
+				method = mgr.GetNextMethod(method)
 				continue
 			}
 		}
-		var methodMap map[string]interface{}
-		methodMap[ActionColumnName] = method.Name
+
+		methodMap := map[string]interface{}{}
 		methodMap[ActionColumnLanguage] = method.Language
 		methodMap[ActionColumnCode] = base64.StdEncoding.EncodeToString(method.Code)
 		methodMap[ActionColumnEncoding] = ActionEncodingBase64
 
-		methods = append(methods, methodMap)
+		methods[method.Name] = methodMap
+
+		method = mgr.GetNextMethod(method)
 	}
 
-	var actionMap map[string]interface{}
+	actionMap := map[string]interface{}{}
 	actionMap[ActionColumnMethods] = methods
 	actionContainer := map[string]interface{}{}
 	actionContainer[strings.ToLower(fql.QueryTargetAction)] = actionMap
@@ -105,4 +107,39 @@ func (mgr *Manager) executeDeleteAction(q fql.Query) (interface{}, *errors.Error
 	}
 
 	return nil, nil
+}
+
+func (mgr *Manager) executeExecuteAction(q fql.Query) (interface{}, *errors.Error) {
+	targetObj, ok := q.GetTarget()
+	if !ok {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalid)
+
+	}
+
+	methodName := targetObj.String()
+
+	columns, _ := q.GetColumns()
+	values, _ := q.GetValues()
+	if len(columns) != len(values) {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
+	}
+
+	params := NewParameters()
+	for n, column := range columns {
+		value := values[n]
+		param := NewParameterFromString(column.String(), value.String())
+		params.AddParameter(param)
+	}
+
+	results, err := mgr.ExecMethod(methodName, params)
+	if err != nil {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
+	}
+
+	resultMap := map[string]interface{}{}
+	for name, result := range results {
+		resultMap[name] = result.GetValue()
+	}
+
+	return resultMap, nil
 }

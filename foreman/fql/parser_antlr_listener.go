@@ -6,6 +6,10 @@ package fql
 
 import "strings"
 
+const (
+	parserValueTrimStrings = "\""
+)
+
 type antlrParserListener struct {
 	*BaseFQLListener
 	Queries
@@ -136,6 +140,25 @@ func (l *antlrParserListener) ExitAnalyzeQuery(ctx *AnalyzeQueryContext) {
 }
 
 ////////////////////////////////////////
+// Execute
+////////////////////////////////////////
+
+// EnterExecuteQuery is called when production ExecuteQuery is entered.
+func (l *antlrParserListener) EnterExecuteQuery(ctx *ExecuteQueryContext) {
+	q := NewExecuteQuery()
+	l.PushObject(q)
+}
+
+// ExitExecuteQuery is called when production ExecuteQuery is exited.
+func (l *antlrParserListener) ExitExecuteQuery(ctx *ExecuteQueryContext) {
+	q, ok := l.PopObject().(*ExecuteQuery)
+	if !ok {
+		return
+	}
+	l.Queries = append(l.Queries, q)
+}
+
+////////////////////////////////////////
 // Target
 ////////////////////////////////////////
 
@@ -145,7 +168,7 @@ func (l *antlrParserListener) ExitTarget(ctx *TargetContext) {
 	if !ok {
 		return
 	}
-	q.SetTarget(NewTargetWithString(strings.ToUpper(ctx.GetText())))
+	q.SetTarget(NewTargetWithString(ctx.GetText()))
 }
 
 ////////////////////////////////////////
@@ -171,7 +194,7 @@ func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
 	if !ok {
 		return
 	}
-	value := strings.Trim(ctx.GetText(), "\"")
+	value := strings.Trim(ctx.GetText(), parserValueTrimStrings)
 	q.AddValue(NewValueWithString(value))
 }
 
@@ -188,7 +211,7 @@ func (l *antlrParserListener) ExitCondition(ctx *ConditionContext) {
 	condString := []string{
 		ctx.LeftOperand().GetText(),
 		ctx.Operator().GetText(),
-		ctx.RightOperand().GetText(),
+		strings.Trim(ctx.RightOperand().GetText(), parserValueTrimStrings),
 	}
 	cond := NewConditionWithObjects(condString)
 	q.AddCondition(cond)

@@ -1,5 +1,5 @@
 # query; value; target
-SET ("abc") INTO table;TABLE;abc
+SET ("abc") INTO table;table;abc
 # QoS
-SET (rule1, "(x1 < 1)") INTO QoS;QOS;rule1;(x1 < 1)
-SET (rule2, "((x1 < 1) & (x2 == 1)) | ((x3 < 1) & (x4 == 1))") INTO QoS;QOS;rule2;((x1 < 1) & (x2 == 1)) | ((x3 < 1) & (x4 == 1))
+SET (rule1, "(x1 < 1)") INTO QoS;QoS;rule1;(x1 < 1)
+SET (rule2, "((x1 < 1) & (x2 == 1)) | ((x3 < 1) & (x4 == 1))") INTO QoS;QoS;rule2;((x1 < 1) & (x2 == 1)) | ((x3 < 1) & (x4 == 1))
