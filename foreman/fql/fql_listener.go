@@ -34,6 +34,9 @@ type FQLListener interface {
 	// EnterAnalyzeQuery is called when entering the analyzeQuery production.
 	EnterAnalyzeQuery(c *AnalyzeQueryContext)
 
+	// EnterExecuteQuery is called when entering the executeQuery production.
+	EnterExecuteQuery(c *ExecuteQueryContext)
+
 	// EnterTarget is called when entering the target production.
 	EnterTarget(c *TargetContext)
 
@@ -90,6 +93,9 @@ type FQLListener interface {
 
 	// ExitAnalyzeQuery is called when exiting the analyzeQuery production.
 	ExitAnalyzeQuery(c *AnalyzeQueryContext)
+
+	// ExitExecuteQuery is called when exiting the executeQuery production.
+	ExitExecuteQuery(c *ExecuteQueryContext)
 
 	// ExitTarget is called when exiting the target production.
 	ExitTarget(c *TargetContext)

@@ -24,10 +24,10 @@ func newQosRuleSourceWithRule(rule kb.Rule) action.RouteSource {
 
 // RuleSatisfied is a listener for kb.Rule
 func (server *Server) RuleSatisfied(rule kb.Rule) {
-	e := action.NewEventWithSource(newQosRuleSourceWithRule(rule))
-	server.actionMgr.PostEvent(e)
 }
 
 // RuleUnsatisfied is a listener for kb.Rule
 func (server *Server) RuleUnsatisfied(rule kb.Rule) {
+	e := action.NewEventWithSource(newQosRuleSourceWithRule(rule))
+	server.actionMgr.PostEvent(e)
 }

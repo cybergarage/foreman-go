@@ -12,11 +12,47 @@ import (
 	"unsafe"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
+	"github.com/cybergarage/foreman-go/foreman/register"
+	"github.com/cybergarage/foreman-go/foreman/registry"
 )
 
 // cgoScriptManager represents an action manager using foreman-cc.
 type cgoScriptManager struct {
 	cManager unsafe.Pointer
+}
+
+// SetRegistryStore sets the registry store to use in the scripts.
+func (mgr *cgoScriptManager) SetRegistryStore(store registry.Store) error {
+	cStore, ok := store.(*registry.CgoStore)
+	if !ok {
+		return fmt.Errorf(errorInvalidClangObject)
+	}
+	cStoreObj := cStore.GetCObject()
+	if cStoreObj == nil {
+		return fmt.Errorf(errorInvalidClangObject)
+	}
+
+	if !C.foreman_action_manager_setregistrystore(mgr.cManager, cStoreObj) {
+		return fmt.Errorf(errorInvalidClangObject)
+	}
+	return nil
+}
+
+// SetRegisterStore sets the register store to use in the scripts.
+func (mgr *cgoScriptManager) SetRegisterStore(store register.Store) error {
+	cStore, ok := store.(*register.CgoStore)
+	if !ok {
+		return fmt.Errorf(errorInvalidClangObject)
+	}
+	cStoreObj := cStore.GetCObject()
+	if cStoreObj == nil {
+		return fmt.Errorf(errorInvalidClangObject)
+	}
+
+	if !C.foreman_action_manager_setregisterstore(mgr.cManager, cStoreObj) {
+		return fmt.Errorf(errorInvalidClangObject)
+	}
+	return nil
 }
 
 // HasEngine checks whether a script engine of the specified programming language is added.

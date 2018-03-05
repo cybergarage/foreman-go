@@ -5,17 +5,22 @@
 package action
 
 import (
+	"strings"
+
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
 // ExecuteQuery must return the result as a standard array or map.
 func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
+	// Target type
+
 	targetObj, ok := q.GetTarget()
 	if !ok {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryEmptyTarget)
 	}
-	switch targetObj.String() {
+
+	switch strings.ToUpper(targetObj.String()) {
 	case fql.QueryTargetAction:
 		switch q.GetType() {
 		case fql.QueryTypeInsert:
@@ -24,6 +29,8 @@ func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 			return mgr.executeSelectAction(q)
 		case fql.QueryTypeDelete:
 			return mgr.executeDeleteAction(q)
+		case fql.QueryTypeExecute:
+			return mgr.executeExecuteAction(q)
 		}
 	case fql.QueryTargetRoute:
 		switch q.GetType() {
@@ -34,6 +41,13 @@ func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		case fql.QueryTypeDelete:
 			return mgr.executeDeleteRoute(q)
 		}
+	}
+
+	// Query type
+
+	switch q.GetType() {
+	case fql.QueryTypeExecute:
+		return mgr.executeExecuteAction(q)
 	}
 
 	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)

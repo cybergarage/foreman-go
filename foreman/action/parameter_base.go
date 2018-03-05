@@ -6,6 +6,7 @@ package action
 
 import (
 	"fmt"
+	"strconv"
 )
 
 const (
@@ -51,6 +52,16 @@ func NewParameterFromBool(name string, value bool) *BaseParameter {
 
 // NewParameterFromString returns a new string parameter.
 func NewParameterFromString(name string, value string) *BaseParameter {
+	ivalue, err := strconv.ParseInt(value, 10, 64)
+	if err == nil {
+		return NewParameterFromInteger(name, ivalue)
+	}
+
+	fvalue, err := strconv.ParseFloat(value, 64)
+	if err == nil {
+		return NewParameterFromReal(name, fvalue)
+	}
+
 	param := &BaseParameter{
 		Name:  name,
 		Type:  ParameterStringType,

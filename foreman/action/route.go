@@ -16,7 +16,7 @@ type RouteObject interface {
 
 // ActionObject represents an abstract interface for the action.
 type ActionObject interface {
-	ProcessEvent(e *Event) (ResultSet, error)
+	ProcessEvent(e *Event) (*ResultSet, error)
 }
 
 // RouteSource represents an abstract interface for the route source object.

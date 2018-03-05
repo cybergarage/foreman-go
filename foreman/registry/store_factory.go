@@ -13,21 +13,15 @@ import (
 	"unsafe"
 )
 
-func newStoreWithInterface(storeImpl Storing) Store {
-	store := Store{
-		Storing: storeImpl,
+func newStoreWithCObject(cObject unsafe.Pointer) Store {
+	store := &CgoStore{
+		cStore: cObject,
 	}
+	runtime.SetFinalizer(store, storeFinalizer)
 	return store
 }
 
-func newStoreWithCObject(cObject unsafe.Pointer) Store {
-	storeImp := &cgoStore{}
-	storeImp.cStore = cObject
-	runtime.SetFinalizer(storeImp, storeFinalizer)
-	return newStoreWithInterface(storeImp)
-}
-
-func storeFinalizer(self *cgoStore) {
+func storeFinalizer(self *CgoStore) {
 	if self.cStore != nil {
 		if C.foreman_registry_store_delete(self.cStore) {
 			self.cStore = nil

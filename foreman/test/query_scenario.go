@@ -16,9 +16,9 @@ import (
 const (
 	errorQueryInvalidStatusCode         = "Expected status code %d != %d (%s)"
 	errorQueryEmptyResponseObject       = "Empty path object : %s"
-	errorQueryInvalidResponseString     = "Expected '%s' %v != %v"
-	errorQueryInvalidResponseInteger    = "Expected '%s' %v != %v"
-	errorQueryInvalidResponseReal       = "Expected '%s' %v != %v"
+	errorQueryInvalidResponseString     = "Expected '%s' %s != %s"
+	errorQueryInvalidResponseInteger    = "Expected '%s' %s != %d"
+	errorQueryInvalidResponseReal       = "Expected '%s' %s != %f"
 	errorQueryUnknownResponseObjectType = "Unknown path object type %s"
 )
 

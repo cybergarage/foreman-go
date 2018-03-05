@@ -116,10 +116,10 @@ func (mgr *Manager) executeSelectQuery(fq fql.Query) (interface{}, *errors.Error
 		return nil, errors.NewErrorWithError(err)
 	}
 
-	switch q.Type {
-	case QueryTypeSearchMetrics:
+	switch q.Source {
+	case QuerySourceTypeMetric:
 		return mgr.executeSearchMetricsQuery(q)
-	case QueryTypeSelectMetrics:
+	case QuerySourceDataType:
 		return mgr.executeSelectMetricsDataQuery(q)
 	}
 
@@ -137,31 +137,16 @@ func (mgr *Manager) executeAnalyzeQuery(fq fql.Query) (interface{}, *errors.Erro
 		return nil, errors.NewErrorWithError(err)
 	}
 
-	// See : Graphite Render URL API (http://graphite.readthedocs.io/en/latest/render_api.html)
-
-	rootContainer := []interface{}{}
+	rootContainer := map[string]interface{}{}
 
 	ms := rs.GetFirstMetrics()
 	for ms != nil {
-		msMap := map[string]interface{}{}
-		msMap[json.GraphiteResponseTarget] = ms.Name
-
-		dps := []interface{}{}
+		results := []float64{}
 		for _, v := range ms.Values {
-			if v == nil {
-				continue
-			}
-			if math.IsNaN(v.Value) {
-				continue
-			}
-			dp := []interface{}{}
-			dp = append(dp, v.Value)
-			dp = append(dp, v.Timestamp.Unix())
-			dps = append(dps, dp)
+			fv := v.Value
+			results = append(results, fv)
 		}
-		msMap[json.GraphiteResponseDatapoints] = dps
-
-		rootContainer = append(rootContainer, msMap)
+		rootContainer[ms.Name] = results
 
 		ms = rs.GetNextMetrics()
 	}

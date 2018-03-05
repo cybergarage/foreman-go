@@ -33,6 +33,7 @@ query
 	| exportQuery
 	| deleteQuery
 	| analyzeQuery
+	| executeQuery
 	;
 
 /*------------------------------------------------------------------
@@ -64,7 +65,7 @@ selectQuery
  *------------------------------------------------------------------*/
 
 exportQuery
-	: EXPORT target (WHERE conditions)?
+	: EXPORT FROM target (WHERE conditions)?
 	;
 
 /*------------------------------------------------------------------
@@ -80,7 +81,15 @@ deleteQuery
  *------------------------------------------------------------------*/
 
 analyzeQuery
-	: ANALYZE target (WHERE conditions)?
+	: ANALYZE column FROM target (WHERE conditions)?
+	;
+
+/*------------------------------------------------------------------
+ * EXECUTE
+ *------------------------------------------------------------------*/
+
+executeQuery
+	: EXECUTE target ('(' columns ')')? (VALUES '(' values ')')?
 	;
 
 /*------------------------------------------------------------------
@@ -158,12 +167,16 @@ SET
 	: S E T
 	;
 
+ANALYZE
+	: A N A L Y Z E
+	;
+
 EXPORT
 	: E X P O R T
 	;
 
-ANALYZE
-	: A N A L Y Z E
+EXECUTE
+	: E X E C U T E
 	;
 
 INTO

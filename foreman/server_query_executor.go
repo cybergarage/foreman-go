@@ -6,6 +6,8 @@
 package foreman
 
 import (
+	"strings"
+
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
@@ -17,7 +19,20 @@ const (
 // ExecuteQuery executes the specified query
 func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 
-	executors := map[string]fql.QueryExecutor{
+	// Query type
+
+	queryExecutors := map[fql.QueryType]fql.QueryExecutor{
+		fql.QueryTypeExecute: server.actionMgr,
+	}
+
+	executor, ok := queryExecutors[q.GetType()]
+	if ok {
+		return executor.ExecuteQuery(q)
+	}
+
+	// Target type
+
+	targetExecutors := map[string]fql.QueryExecutor{
 		fql.QueryTargetQos:      server.qosMgr,
 		fql.QueryTargetConfig:   server.config,
 		fql.QueryTargetMetrics:  server.metricMgr,
@@ -32,8 +47,8 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryEmptyTarget)
 	}
 
-	target := targetObj.String()
-	executor, ok := executors[target]
+	target := strings.ToUpper(targetObj.String())
+	executor, ok = targetExecutors[target]
 	if !ok {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 	}

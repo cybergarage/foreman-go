@@ -51,7 +51,16 @@ BINARY_DAEMON=${GITHUB}/${DAEMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
 BINARIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
-CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -lfolly -lgflags -lglog -luuid -lalglib
+CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -luuid -lalglib
+
+HAVE_PYTHON_CONFIG := $(shell command -v python-config 2> /dev/null)
+all:
+ifdef HAVE_PYTHON_CONFIG
+    CGO_CFLAGS += $(shell python-config --includes)
+    CGO_LDFLAGS += $(shell python-config --libs)
+endif
+
+export CGO_CFLAGS
 export CGO_LDFLAGS
 
 CONST_CSVS = $(wildcard $(SOURCE_DIR)/common/*.csv)
@@ -65,9 +74,9 @@ ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/fql/fql_, base_listener
 
 all: test
 
-VERSION_GO="./foreman/version.go"
+VERSION_GO=${SOURCE_DIR}/version.go
 
-${VERSION_GO}: ./foreman/version.gen
+${VERSION_GO}: ${SOURCE_DIR}/version.gen
 	$< > $@
 
 version: ${VERSION_GO}
@@ -84,6 +93,16 @@ const: $(CONST_GOS) antlr
 
 format:
 	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${DAEMON_NAME} ${TESTING_NAME}
+
+const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
+	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go  && popd
+	pushd ${SOURCE_DIR}/fql && ./constants.go.gen > constants.go  && popd
+	pushd ${SOURCE_DIR}/action && ./constants.go.gen > constants.go  && popd
+	pushd ${SOURCE_DIR}/rpc/json && ./constants.go.gen > constants.go  && popd
+	pushd ${SOURCE_DIR}/errors && ./errors.go.gen > errors.go  && popd
+	
+antlr:
+	- pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
 
 vet: format
 	go vet ${PACKAGES}
