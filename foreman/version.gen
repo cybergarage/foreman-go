@@ -4,7 +4,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-version=$(git describe --tags | awk 'BEGIN { FS = "-" } ; { print $1 }')
+version=$(git describe --abbrev=0 --tags)
 
 cat <<EOF
 // Copyright (C) 2017 Satoshi Konno. All rights reserved.
