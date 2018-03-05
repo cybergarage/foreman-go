@@ -99,7 +99,7 @@ func NewQueryWithQuery(fq fql.Query) (*Query, error) {
 		q = NewAnalyzeQuery()
 	}
 
-	// Unknow query
+	// Unknown query
 
 	if q == nil {
 		return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())

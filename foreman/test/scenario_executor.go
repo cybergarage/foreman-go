@@ -8,7 +8,7 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-// ScenarioExecutor represents a scenario test.
+// ScenarioExecutor represents a scenario executor.
 type ScenarioExecutor interface {
 	// Setup initializes the scenario.
 	Setup() error
@@ -16,4 +16,9 @@ type ScenarioExecutor interface {
 	Execute(e *Event) (*Response, *errors.Error)
 	// Cleanup closes the scenario.
 	Cleanup() error
+}
+
+// ScenarioExecutionListener represents a scenario listener
+type ScenarioExecutionListener interface {
+	EventExecuted(*Event, *Response, *errors.Error)
 }

@@ -44,13 +44,12 @@ PACKAGES=\
 	${PACKAGE_ID}/fql \
 	${PACKAGE_ID}/rpc/graphite \
 	${PACKAGE_ID}/rpc/json \
-	${PACKAGE_ID}/test \
-	${PACKAGE_ID}
+	${PACKAGE_ID}/test
 
 SOURCE_DIR=src/${GITHUB}/foreman
 BINARY_DAEMON=${GITHUB}/${DAEMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
-BINARYIES=${BINARY_DAEMON} ${BINARY_TESTING}
+BINARIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
 CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -luuid -lalglib
 
@@ -64,7 +63,14 @@ endif
 export CGO_CFLAGS
 export CGO_LDFLAGS
 
-.PHONY: version
+CONST_CSVS = $(wildcard $(SOURCE_DIR)/common/*.csv)
+CONST_GENS = $(shell find $(SOURCE_DIR) -type f -name '*.go.gen')
+CONST_GOS = $(basename $(CONST_GENS))
+
+GO_FILES = $(shell find $(SOURCE_DIR) -type f -name '*.go')
+ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/fql/fql_, base_listener lexer listener parser))
+
+.PHONY: version clean
 
 all: test
 
@@ -74,6 +80,16 @@ ${VERSION_GO}: ${SOURCE_DIR}/version.gen
 	$< > $@
 
 version: ${VERSION_GO}
+
+$(CONST_GOS):  $(CONST_GENS) $(CONST_CSVS)
+	cd $(dir $@) && ./$(notdir $@).gen > $(notdir $@)
+
+$(ANTLR_FILES): $(SOURCE_DIR)/fql/FQL.g4
+	cd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4
+
+antlr: $(ANTLR_FILES)
+
+const: $(CONST_GOS) antlr
 
 format:
 	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${DAEMON_NAME} ${TESTING_NAME}
@@ -88,16 +104,19 @@ const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 antlr:
 	- pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
 
-build: version const antlr format $(shell find ${SOURCE_DIR} -type f -name '*.go')
+vet: format
+	go vet ${PACKAGES}
+
+build: antlr vet
 	go build -v ${PACKAGES}
 
-test: build 
+test: antlr vet
 	go test -v -cover ${PACKAGES}
 
-install: build
-	go install ${BINARYIES}
+install: antlr vet
+	go install ${BINARIES}
 
 clean:
-	rm ${PREFIX}/bin/*
+	-rm ${PREFIX}/bin/*
 	rm -rf _obj
 	go clean -i ${PACKAGES}
