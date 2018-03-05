@@ -19,6 +19,9 @@ const (
 	errorQueryInvalidResponseString     = "Expected '%s' %s != %s"
 	errorQueryInvalidResponseInteger    = "Expected '%s' %s != %d"
 	errorQueryInvalidResponseReal       = "Expected '%s' %s != %f"
+	errorQueryInvalidResponseString     = "Expected '%s' %v != %v"
+	errorQueryInvalidResponseInteger    = "Expected '%s' %v != %v"
+	errorQueryInvalidResponseReal       = "Expected '%s' %v != %v"
 	errorQueryUnknownResponseObjectType = "Unknown path object type %s"
 )
 
