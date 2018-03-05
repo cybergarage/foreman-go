@@ -18,6 +18,7 @@ package logging
 
 import (
 	"os"
+	"strings"
 
 	"github.com/romana/rlog"
 )
@@ -32,6 +33,8 @@ const (
 	LevelError
 	LevelFatal
 )
+
+var isVerbose = false
 
 func (l LogLevel) String() string {
 	switch l {
@@ -52,7 +55,7 @@ func (l LogLevel) String() string {
 }
 
 func LogLevelFromString(ls string) LogLevel {
-	switch ls {
+	switch strings.ToUpper(ls) {
 	case "NONE":
 		return LevelNone
 	case "TRACE":
@@ -76,6 +79,10 @@ func setLogLevelFromString(ls string) {
 }
 
 func SetLogLevel(l LogLevel) {
+	if isVerbose {
+		Warn("Verbose logging enabled, not changing log level.")
+		return
+	}
 	ls := l.String()
 	switch l { // for rlog
 	case LevelTrace:
@@ -106,3 +113,11 @@ var Info = rlog.Infof
 var Warn = rlog.Warnf
 var Error = rlog.Errorf
 var Fatal = rlog.Criticalf
+
+func SetVerbose(verbose bool) {
+	if verbose {
+		SetLogLevel(LevelTrace)
+		Warn("Verbose logging enabled.")
+	}
+	isVerbose = verbose
+}
