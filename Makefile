@@ -60,6 +60,13 @@ ifdef HAVE_PYTHON_CONFIG
     CGO_LDFLAGS += $(shell python-config --libs)
 endif
 
+HAVE_PKG_CONFIG := $(shell command -v pkg-config 2> /dev/null)
+all:
+ifdef HAVE_PYTHON_CONFIG
+    CGO_CFLAGS += $(shell pkg-config lua --silence-errors --cflags)
+    CGO_LDFLAGS += $(shell pkg-config lua --silence-errors --libs)
+endif
+
 export CGO_CFLAGS
 export CGO_LDFLAGS
 
