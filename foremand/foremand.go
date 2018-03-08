@@ -50,13 +50,15 @@ func becomeVerbose(verbose bool) {
 }
 
 func main() {
-
-	// Command Line Option
+	// Command Line Options
 
 	//	foreground := flag.Bool("f", false, "Foreground mode.")
 	verbose := flag.Bool("v", false, "Verbose logging")
 	configFile := flag.String("config", ConfigFile, "Path to an configuration file")
 	flag.Parse()
+
+	// logging Level
+	logging.SetVerbose(*verbose)
 
 	// Load configuration
 	server := foreman.NewServerWithConfigFile(*configFile)
@@ -65,9 +67,6 @@ func main() {
 		logging.Fatal("Could not start server. Terminating...")
 		os.Exit(1)
 	}
-
-	// logging Level
-	becomeVerbose(*verbose)
 
 	// Start Server
 	logging.Info("%s is starting ...", ProgramName)
@@ -101,7 +100,6 @@ func main() {
 					logging.Fatal("%s couldn't be restarted (%s)", ProgramName, err.Error())
 					os.Exit(1)
 				}
-				becomeVerbose(*verbose)
 			case syscall.SIGINT, syscall.SIGTERM:
 				logging.Info("Caught %s, stopping...", s.String())
 				err = server.Stop()

@@ -6,6 +6,8 @@ Summary: Foreman Go daemon
 License: BSD-3-clause
 URL: http://github.com/cybergarage/foreman-cc
 
+%{?systemd_requires}
+BuildRequires: systemd
 BuildRequires: foreman-cc
 
 Source: %{expand:%%(pwd)}
@@ -31,6 +33,9 @@ export GOPATH="$PWD"
 GOBIN=%{buildroot}/usr/sbin make install
 mkdir -p %{buildroot}/etc/foreman
 cp debian/foremand.conf %{buildroot}/etc/foreman/foremand.conf
+mkdir -p %{buildroot}/%{_unitdir}
+cp debian/foremand.service %{buildroot}/%{_unitdir}/foremand.service
+mkdir -p %{buildroot}/var/log/foreman
 
 %files
 %defattr(755,root,root,755)
@@ -38,6 +43,17 @@ cp debian/foremand.conf %{buildroot}/etc/foreman/foremand.conf
 /usr/sbin/foremantest
 %defattr(644,root,root,755)
 /etc/foreman
+%{_unitdir}/foremand.service
+%dir /var/log/foreman
+
+%post
+%systemd_post foremand.service
+
+%preun
+%systemd_preun foremand.service
+
+%postun
+%systemd_postun_with_restart foremand.service
 
 %changelog
 * Thu Jan 25 2018 Satoshi Konno <skonno@cybergarage.org>
