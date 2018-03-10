@@ -18,9 +18,9 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	}
 
 	name := values[0].String()
-	qos := values[1].String()
+	formula := values[1].String()
 
-	rule, err := mgr.ParseQoSString(qos)
+	rule, err := mgr.ParseQoSString(formula)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}
@@ -39,7 +39,7 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error) {
-	ope, whereName, hasName := q.GetConditionByColumn(fql.QueryColumnName)
+	ope, name, hasName := q.GetConditionByColumn(fql.QueryColumnName)
 	if hasName {
 		if ope.GetType() != fql.OperatorTypeEQ {
 			hasName = false
@@ -50,11 +50,15 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 	for _, rule := range mgr.GetRules() {
 		ruleName := rule.GetName()
 		if hasName {
-			if ruleName != whereName {
+			if ruleName != name {
 				continue
 			}
 		}
 		ruleMap[ruleName] = rule.String()
+	}
+
+	if hasName && (len(ruleMap) <= 0) {
+		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryNotFoundData)
 	}
 
 	qosContainer := map[string]interface{}{}
@@ -64,17 +68,17 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 }
 
 func (mgr *Manager) executeDeleteQuery(q fql.Query) (interface{}, *errors.Error) {
-	ope, whereName, ok := q.GetConditionByColumn(fql.QueryColumnName)
-	if ok {
+	ope, name, hasName := q.GetConditionByColumn(fql.QueryColumnName)
+	if hasName {
 		if ope.GetType() != fql.OperatorTypeEQ {
-			ok = false
+			hasName = false
 		}
 	}
 
 	// Delete only a specified rule
 
-	if ok {
-		if !mgr.RemoveRule(whereName) {
+	if hasName {
+		if !mgr.RemoveRule(name) {
 			return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 		}
 		return nil, nil

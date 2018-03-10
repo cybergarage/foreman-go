@@ -15,4 +15,4 @@ error_code_query_target_not_supported,1011,"Query target not supported"
 error_code_query_invalid_values,1012,"Invalid query values"
 error_code_query_invalid_columns,1013,"Invalid query columns"
 error_code_query_invalid_conditions,1014,"Invalid query conditions"
-
+error_code_query_not_found_data,1015,"Not found data"
