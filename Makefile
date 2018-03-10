@@ -92,7 +92,7 @@ $(CONST_GOS):  $(CONST_GENS) $(CONST_CSVS)
 	cd $(dir $@) && ./$(notdir $@).gen > $(notdir $@)
 
 $(ANTLR_FILES): $(SOURCE_DIR)/fql/FQL.g4
-	cd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4
+	- cd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4
 
 antlr: $(ANTLR_FILES)
 
