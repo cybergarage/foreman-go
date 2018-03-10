@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	graphitePrefix      = "GRAPHITE "
+	graphitePrefix      = "GRAPHITE"
 	graphiteInsertQuery = "INSERT"
 	graphiteFindQuery   = "FIND"
 	graphiteRenderQuery = "RENDER"
