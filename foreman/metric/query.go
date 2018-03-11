@@ -6,7 +6,6 @@ package metric
 
 import (
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/fql"
@@ -131,17 +130,15 @@ func NewQueryWithQuery(fq fql.Query) (*Query, error) {
 					return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())
 				}
 			case fql.QueryColumnTimestamp:
-				ts, err := strconv.ParseInt(where.GetOperand(), 10, 64)
+				ts, err := fql.TimeStringToTime(where.GetOperand())
 				if err != nil {
 					return nil, err
 				}
 				switch where.GetOperator().GetType() {
 				case fql.OperatorTypeGT, fql.OperatorTypeGE:
-					t := time.Unix(ts, 0)
-					q.From = &t
+					q.From = ts
 				case fql.OperatorTypeLT, fql.OperatorTypeLE:
-					t := time.Unix(ts, 0)
-					q.Until = &t
+					q.Until = ts
 				default:
 					return nil, fmt.Errorf(errorStoreInvalidQuery, fq.String())
 				}
