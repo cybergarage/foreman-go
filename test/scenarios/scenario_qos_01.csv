@@ -22,7 +22,7 @@ EXPORT FROM REGISTER WHERE name == m0;200;/register/m0/value;1.0
 
 # Set a source QoS
 
-SET (m0_10, "m0 < 10", 1514764800) INTO QOS;200
+SET (m0_10, "m0 < 10") INTO QOS;200
 EXPORT FROM QOS;200;/qos/m0_10
 EXPORT FROM QOS WHERE name == m0_10;200;/qos/m0_10
 
