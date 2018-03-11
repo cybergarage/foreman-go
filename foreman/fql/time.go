@@ -82,13 +82,13 @@ func AbsouleteTimeStringToTime(timeStr string) (*time.Time, error) {
 			now := time.Now()
 			return &now, nil
 		case 1: // queryAbsoluteTimeRegexRFC
-			time, err := time.Parse(queryAbsoluteTimeFormatRFC, timeStr)
+			time, err := time.ParseInLocation(queryAbsoluteTimeFormatRFC, timeStr, time.Local)
 			if err != nil {
 				return nil, err
 			}
 			return &time, nil
 		case 2: // queryAbsoluteTimeRegexSQL
-			time, err := time.Parse(queryAbsoluteTimeFormatSQL, timeStr)
+			time, err := time.ParseInLocation(queryAbsoluteTimeFormatSQL, timeStr, time.Local)
 			if err != nil {
 				return nil, err
 			}
