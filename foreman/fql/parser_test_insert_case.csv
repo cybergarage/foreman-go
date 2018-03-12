@@ -1,2 +1,3 @@
 # query; target; value_1; ...; value_n
 INSERT INTO abc VALUES ("a","b","c");abc;a;b;c
+INSERT INTO a.b.c VALUES ("a","b","c");a.b.c;a;b;c

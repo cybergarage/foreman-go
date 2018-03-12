@@ -1,2 +1,2 @@
 #!/bin/bash
-../../common/errors.go.gen errors ../../common/errors.csv
+pushd ../../common > /dev/null && ./errors.go.gen errors errors.csv && popd > /dev/null
