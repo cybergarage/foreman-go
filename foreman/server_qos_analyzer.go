@@ -41,7 +41,7 @@ func (server *Server) analyzeRootCaluse(name string) error {
 		}
 		if 3 <= len(results) {
 			if (0.6 < results[0]) && (firstResults[2] < results[2]) {
-				logging.Info("%s")
+				logging.Info("%s : %f, %f", ms.Name, results[0], results[1])
 			}
 		}
 		ms = rs.GetNextMetrics()
