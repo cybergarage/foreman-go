@@ -125,9 +125,11 @@ func (q *baseQuery) String() string {
 	var queryString string
 
 	queryTypeStrings := map[QueryType]string{
-		QueryTypeInsert: QueryInsertString,
-		QueryTypeSelect: QuerySelectString,
-		QueryTypeDelete: QueryDeleteString,
+		QueryTypeInsert:  QueryInsertString,
+		QueryTypeSelect:  QuerySelectString,
+		QueryTypeDelete:  QueryDeleteString,
+		QueryTypeAnalyze: QueryAnalyzeString,
+		QueryTypeExecute: QueryExecuteString,
 	}
 	queryTypeString, ok := queryTypeStrings[q.GetType()]
 	if ok {
