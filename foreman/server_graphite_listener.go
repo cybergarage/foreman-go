@@ -12,18 +12,17 @@ import (
 )
 
 const (
-	graphiteGoodRequestPrefix = "[GRAPHITE:OK]"
-	graphiteBadRequestPrefix  = "[GRAPHITE:BAD]"
-	graphiteInsertQuery       = "INSERT"
-	graphiteFindQuery         = "FIND"
-	graphiteRenderQuery       = "RENDER"
+	graphitePrefix      = "GRAPHITE"
+	graphiteInsertQuery = "INSERT"
+	graphiteFindQuery   = "FIND"
+	graphiteRenderQuery = "RENDER"
 )
 
 // InsertMetricRequestReceived is a listener for Graphite Carbon
 func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err error) {
 	// Ignore error requests
 	if err != nil {
-		logging.Error("[GRAPHITE:BAD] : %s", err.Error())
+		logging.Error("[GRAPHITE:BAD] %s", err.Error())
 		return
 	}
 
@@ -36,11 +35,11 @@ func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err err
 
 		err = server.metricMgr.AddMetric(fm)
 		if err != nil {
-			logging.Error("%s : %s %s %s %f", graphiteBadRequestPrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value)
+			logging.Error("%s %s %s %s %f", graphitePrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value)
 			continue
 		}
 
-		logging.Info("%s : %s %s %s %f", graphiteGoodRequestPrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value)
+		logging.Trace("%s %s %s %s %f", graphitePrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value)
 	}
 }
 
@@ -48,7 +47,7 @@ func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err err
 func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metrics, error) {
 	// Ignore error requests
 	if err != nil {
-		logging.Error("%s : %s %s", graphiteBadRequestPrefix, graphiteFindQuery, gq.Target)
+		logging.Error("%s %s %s", graphitePrefix, graphiteFindQuery, gq.Target)
 		return nil, nil
 	}
 
@@ -58,7 +57,7 @@ func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) 
 
 	rs, err := server.metricMgr.Query(fq)
 	if err != nil {
-		logging.Error("%s : %s %s", graphiteBadRequestPrefix, graphiteFindQuery, gq.Target)
+		logging.Error("%s %s %s", graphitePrefix, graphiteFindQuery, gq.Target)
 		return nil, err
 	}
 
@@ -75,7 +74,7 @@ func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) 
 		ms = rs.GetNextMetrics()
 	}
 
-	logging.Info("%s : %s %s", graphiteGoodRequestPrefix, graphiteFindQuery, gq.Target)
+	logging.Info("%s %s %s", graphitePrefix, graphiteFindQuery, gq.Target)
 
 	return m, nil
 }
@@ -84,7 +83,7 @@ func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) 
 func (server *Server) QueryMetricsRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metrics, error) {
 	// Ignore error requests
 	if err != nil {
-		logging.Error("%s : %s %s", graphiteBadRequestPrefix, graphiteRenderQuery, gq.Target)
+		logging.Error("%s %s %s", graphitePrefix, graphiteRenderQuery, gq.Target)
 		return nil, nil
 	}
 
@@ -96,7 +95,7 @@ func (server *Server) QueryMetricsRequestReceived(gq *graphite.Query, err error)
 
 	rs, err := server.metricMgr.Query(fq)
 	if err != nil {
-		logging.Error("%s : %s %s", graphiteBadRequestPrefix, graphiteRenderQuery, gq.Target)
+		logging.Error("%s %s %s", graphitePrefix, graphiteRenderQuery, gq.Target)
 		return nil, err
 	}
 
@@ -122,7 +121,7 @@ func (server *Server) QueryMetricsRequestReceived(gq *graphite.Query, err error)
 		ms = rs.GetNextMetrics()
 	}
 
-	logging.Info("%s : %s %s", graphiteGoodRequestPrefix, graphiteRenderQuery, gq.Target)
+	logging.Info("%s %s %s %s %s", graphitePrefix, graphiteRenderQuery, gq.Target, gq.From.String(), gq.Until.String())
 
 	return m, nil
 }

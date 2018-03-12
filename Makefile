@@ -60,6 +60,13 @@ ifdef HAVE_PYTHON_CONFIG
     CGO_LDFLAGS += $(shell python-config --libs)
 endif
 
+HAVE_PKG_CONFIG := $(shell command -v pkg-config 2> /dev/null)
+all:
+ifdef HAVE_PYTHON_CONFIG
+    CGO_CFLAGS += $(shell pkg-config lua --silence-errors --cflags)
+    CGO_LDFLAGS += $(shell pkg-config lua --silence-errors --libs)
+endif
+
 export CGO_CFLAGS
 export CGO_LDFLAGS
 
@@ -85,7 +92,7 @@ $(CONST_GOS):  $(CONST_GENS) $(CONST_CSVS)
 	cd $(dir $@) && ./$(notdir $@).gen > $(notdir $@)
 
 $(ANTLR_FILES): $(SOURCE_DIR)/fql/FQL.g4
-	cd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4
+	- cd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4
 
 antlr: $(ANTLR_FILES)
 

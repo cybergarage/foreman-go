@@ -5,5 +5,6 @@
 package fql
 
 const (
-	errorParserEmptyQuery = "Query is empty"
+	errorParserEmptyQuery  = "Query is empty"
+	errorInvalidTimeFormat = "Invalid time format : %s"
 )

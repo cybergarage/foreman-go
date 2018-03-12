@@ -1,4 +1,12 @@
 # query; target; condition_count
 DELETE FROM QoS;QoS;0
+
 DELETE FROM QoS WHERE x > 1;QoS;1
-DELETE FROM QoS WHERE x > 1 AND y < 1;QoS;2
+DELETE FROM QoS WHERE x > 1 AND y < 2;QoS;2
+DELETE FROM QoS WHERE x > 1 AND y < 2 AND z == 3;QoS;3
+
+DELETE FROM QoS WHERE x.y > 1;QoS;1
+DELETE FROM QoS WHERE x.y.z > 1;QoS;1
+DELETE FROM QoS WHERE *.y.z > 1;QoS;1
+DELETE FROM QoS WHERE x.*.z > 1;QoS;1
+DELETE FROM QoS WHERE x.y.* > 1;QoS;1
