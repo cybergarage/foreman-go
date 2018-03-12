@@ -140,6 +140,9 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 		return nil, fmt.Errorf(errorStoreInvalidQuery, q.String())
 	}
 
+	cerr := C.foreman_error_new()
+	defer C.foreman_error_delete(cerr)
+
 	crs := C.foreman_metric_resultset_new()
 
 	executed := false
@@ -154,13 +157,20 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 	case QueryTypeAnalyze:
 		switch q.Source {
 		case QuerySourceTypeMetric, QuerySourceDataType:
-			executed = bool(C.foreman_metric_store_analyzedata(store.cStore, cq, crs))
+			executed = bool(C.foreman_metric_store_analyzedata(store.cStore, cq, crs, cerr))
 		}
 	}
 
 	if !executed {
 		C.foreman_metric_resultset_delete(crs)
-		return nil, fmt.Errorf(errorStoreInvalidQuery, q.String())
+
+		errMsg := fmt.Sprintf(errorStoreInvalidQuery, q.String())
+		queryErr := errors.NewWithCObject(cerr)
+		if 0 < len(queryErr.Message) {
+			errMsg = fmt.Sprintf("%s (%s)", errMsg, queryErr.Message)
+		}
+
+		return nil, fmt.Errorf(errMsg)
 	}
 
 	return NewResultSetWithCObject(crs), nil
