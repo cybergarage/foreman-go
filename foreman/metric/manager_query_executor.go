@@ -35,8 +35,18 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	}
 
 	name := values[0].String()
-	value, valueErr := strconv.ParseFloat(values[1].String(), 64)
+
+	strValue := values[1].String()
+	value, valueErr := strconv.ParseFloat(strValue, 64)
+	if valueErr != nil {
+		if (strValue == "None") || (strValue == "NULL") || (strValue == "nil") {
+			value = math.NaN()
+			valueErr = nil
+		}
+	}
+
 	ts, tsErr := strconv.ParseInt(values[2].String(), 10, 64)
+
 	if len(name) < 0 || valueErr != nil || tsErr != nil {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
 	}
