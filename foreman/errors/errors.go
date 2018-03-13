@@ -14,6 +14,7 @@ const (
 	ErrorCodeQueryInvalidColumns     = 1013
 	ErrorCodeQueryInvalidConditions  = 1014
 	ErrorCodeQueryNotFoundData       = 1015
+	ErrorCodeQueryInvalidTimeFormat  = 1100
 )
 
 func ErrorCodeToString(code int) string {
@@ -27,6 +28,7 @@ func ErrorCodeToString(code int) string {
 		ErrorCodeQueryInvalidColumns:     "Invalid query columns",
 		ErrorCodeQueryInvalidConditions:  "Invalid query conditions",
 		ErrorCodeQueryNotFoundData:       "Not found data",
+		ErrorCodeQueryInvalidTimeFormat:  "Invalid time format",
 	}
 	errMsg, ok := errorMap[code]
 	if !ok {

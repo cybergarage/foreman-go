@@ -8,6 +8,8 @@ const (
 	QueryInsertString         = "INSERT"
 	QuerySelectString         = "SELECT"
 	QueryDeleteString         = "DELETE"
+	QueryAnalyzeString        = "ANALYZE"
+	QueryExecuteString        = "EXECUTE"
 	QueryTargetQos            = "QOS"
 	QueryTargetConfig         = "CONFIG"
 	QueryTargetMetrics        = "METRICS"

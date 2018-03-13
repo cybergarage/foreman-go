@@ -62,6 +62,8 @@ route_column_destination,"dest"
 query_insert_string,"INSERT"
 query_select_string,"SELECT"
 query_delete_string,"DELETE"
+query_analyze_string,"ANALYZE"
+query_execute_string,"EXECUTE"
 
 query_target_qos,"QOS"
 query_target_config,"CONFIG"
