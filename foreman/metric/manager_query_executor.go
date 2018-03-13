@@ -152,9 +152,17 @@ func (mgr *Manager) executeAnalyzeQuery(fq fql.Query) (interface{}, *errors.Erro
 	ms := rs.GetFirstMetrics()
 	for ms != nil {
 		results := []float64{}
-		for _, v := range ms.Values {
-			fv := v.Value
-			results = append(results, fv)
+		for n, v := range ms.Values {
+			switch n {
+			case 0: // Correlation
+				results = append(results, v.Value)
+			case 1: // Max Value and Timestamp
+				results = append(results, v.Value)
+				results = append(results, float64(v.Timestamp.Unix()))
+			case 2: // Min Value and Timestamp
+				results = append(results, v.Value)
+				results = append(results, float64(v.Timestamp.Unix()))
+			}
 		}
 		rootContainer[ms.Name] = results
 
