@@ -51,7 +51,7 @@ BINARY_DAEMON=${GITHUB}/${DAEMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
 BINARIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
-CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -luuid -lalglib
+CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -luuid -lalglib -lgflags -lfolly -lglog
 
 HAVE_PYTHON_CONFIG := $(shell command -v python-config 2> /dev/null)
 all:
