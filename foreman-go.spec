@@ -8,8 +8,8 @@ URL: http://github.com/cybergarage/foreman-cc
 
 %{?systemd_requires}
 BuildRequires: systemd
-BuildRequires: foreman-cc, libsqlite3x-devel, libstdc++-devel, boost-devel, curl-devel, libuuid-devel
-Requires: alglib, libsqlite3x, libstdc++, libuuid
+BuildRequires: foreman-cc, libsqlite3x-devel, boost-devel, curl-devel, libuuid-devel
+Requires: libsqlite3x, libuuid
 
 Source: %{expand:%%(pwd)}
 
@@ -31,6 +31,9 @@ go get ./... || true
 
 %install
 export GOPATH="$PWD"
+export CGO_CXXFLAGS="-static-libstdc++ -static-libgcc"
+export CGO_CFLAGS="-static-libgcc"
+export go_linker_flags='-linkmode=external "-extldflags=-static-libstdc++ -static-libgcc"'
 GOBIN=%{buildroot}/usr/sbin make install
 mkdir -p %{buildroot}/etc/foreman
 cp debian/foremand.conf %{buildroot}/etc/foreman/foremand.conf

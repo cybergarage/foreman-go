@@ -51,7 +51,7 @@ BINARY_DAEMON=${GITHUB}/${DAEMON_NAME}
 BINARY_TESTING=${GITHUB}/${TESTING_NAME}
 BINARIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
-CGO_LDFLAGS += -lforeman++ -lm -lstdc++ -lsqlite3 -luuid -lalglib -lgflags -lfolly -lglog
+CGO_LDFLAGS += -lforeman++ -lfolly -lgflags -lglog -lalglib -lsqlite3 -luuid -lm
 
 HAVE_PYTHON_CONFIG := $(shell command -v python-config 2> /dev/null)
 all:
@@ -67,7 +67,6 @@ ifdef HAVE_PYTHON_CONFIG
     CGO_LDFLAGS += $(shell pkg-config lua --silence-errors --libs)
 endif
 
-export CGO_CFLAGS
 export CGO_LDFLAGS
 
 CONST_CSVS = $(wildcard $(SOURCE_DIR)/common/*.csv)
@@ -121,7 +120,7 @@ test: antlr vet
 	go test -v -cover ${PACKAGES}
 
 install: antlr vet
-	go install ${BINARIES}
+	go install -ldflags '${go_linker_flags}' -v ${BINARIES}
 
 clean:
 	-rm ${PREFIX}/bin/*
