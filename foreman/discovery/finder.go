@@ -4,15 +4,26 @@
 
 package discovery
 
+import (
+	"regexp"
+)
+
 // FinderSearchListener a listener for Finder.
 type FinderSearchListener interface {
 	FinderSearchResponseReceived(*Node)
 }
 
+// FinderNotifyListener a listener for Finder.
+type FinderNotifyListener interface {
+	FinderNotifyReceived(*Node)
+}
+
 // Finder represents an abstract interface
 type Finder interface {
-	Search() error
+	Search(regexp.Regexp) error
+	SearchAll() error
 	SetSearchListener(FinderSearchListener) error
-	FindNodes(string) ([]*Node, error)
-	GetNodes() ([]*Node, error)
+	SetNotifyListener(FinderNotifyListener) error
+	GetNodes(regexp.Regexp) ([]*Node, error)
+	GetAllNodes() ([]*Node, error)
 }
