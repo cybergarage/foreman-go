@@ -4,23 +4,24 @@
 
 package foreman
 
-const (
-	ProductName         = "foreman"
-	DefaultServerHost   = "localhost"
-	DefaultCarbonPort   = 2003
-	DefaultHttpPort     = 8080
-	DefaultLogFile      = "-"
-	DefaultLogLevel     = "INFO"
-	HttpServerFqlPath   = "/fql"
-	HttpServerFqlQuery  = "q"
-	ConfigCategoryKey   = "config"
-	ConfigProductKey    = "product"
-	ConfigVersionKey    = "version"
-	ConfigHostKey       = "host"
-	ConfigCarbonPortKey = "carbon_port"
-	ConfigHttpPortKey   = "http_port"
-	ConfigFqlPathKey    = "fql_path"
-	ConfigFqlQueryKey   = "fql_query"
-	ConfigLogFileKey    = "log_file"
-	ConfigLogLevelKey   = "log_level"
+const ( 
+ProductName = "foreman"
+DefaultServerHost = "localhost"
+DefaultCarbonPort = 2003
+DefaultHttpPort = 8080
+DefaultLogFile = "-"
+DefaultLogLevel = "INFO"
+DefaultRpcProtocol = "http"
+HttpServerFqlPath = "/fql"
+HttpServerFqlQuery = "q"
+ConfigCategoryKey = "config"
+ConfigProductKey = "product"
+ConfigVersionKey = "version"
+ConfigHostKey = "host"
+ConfigCarbonPortKey = "carbon_port"
+ConfigHttpPortKey = "http_port"
+ConfigFqlPathKey = "fql_path"
+ConfigFqlQueryKey = "fql_query"
+ConfigLogFileKey = "log_file"
+ConfigLogLevelKey = "log_level"
 )
