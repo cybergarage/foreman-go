@@ -13,6 +13,7 @@ default_carbon_port,2003
 default_http_port,8080
 default_log_file,"-"
 default_log_level,"INFO"
+default_rpc_protocol,"http"
 
 ########################################
 # HTTP Server
