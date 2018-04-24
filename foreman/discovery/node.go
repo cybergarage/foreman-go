@@ -8,14 +8,12 @@ import (
 	"net"
 )
 
-// Node represents a node.
-type Node struct {
-	Cluster string
-	Address net.Addr
-}
-
-// NewNode returns a new node.
-func NewNode() *Node {
-	node := &Node{}
-	return node
+// Node represents an abstract node interface
+type Node interface {
+	// GetCuster returns the cluster name
+	GetCuster() string
+	// GetAddress returns the interface address
+	GetAddress() net.Addr
+	// GetRPCPort returns the RPC port
+	GetRPCPort() int
 }

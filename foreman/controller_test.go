@@ -2,16 +2,12 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package discovery
+package foreman
 
 import (
 	"testing"
 )
 
-func finderTest(t *testing.T, finder Finder) {
-}
-
-func TestNewSharedFinder(t *testing.T) {
-	finder := NewSharedFinder()
-	finderTest(t, finder)
+func TestNewController(t *testing.T) {
+	NewController()
 }
