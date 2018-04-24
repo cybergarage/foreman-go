@@ -4,11 +4,9 @@
 
 package discovery
 
-import "regexp"
-
 // baseFinder represents a base finder.
 type baseFinder struct {
-	nodes          []*Node
+	nodes          []Node
 	searchListener FinderSearchListener
 	notifyListener FinderNotifyListener
 }
@@ -16,7 +14,7 @@ type baseFinder struct {
 // newBaseFinder returns a new base finder.
 func newBaseFinder() *baseFinder {
 	finder := &baseFinder{
-		nodes:          make([]*Node, 0),
+		nodes:          make([]Node, 0),
 		searchListener: nil,
 		notifyListener: nil,
 	}
@@ -36,17 +34,12 @@ func (finder *baseFinder) SetNotifyListener(l FinderNotifyListener) error {
 }
 
 // addNodes adds a specified node.
-func (finder *baseFinder) addNode(node *Node) error {
+func (finder *baseFinder) addNode(node Node) error {
 	finder.nodes = append(finder.nodes, node)
 	return nil
 }
 
-// GetNodes returns only specified regex nodes.
-func (finder *baseFinder) GetNodes(regexp.Regexp) ([]*Node, error) {
-	return nil, nil
-}
-
 // GetAllNodes returns all found nodes.
-func (finder *baseFinder) GetAllNodes() ([]*Node, error) {
+func (finder *baseFinder) GetAllNodes() ([]Node, error) {
 	return finder.nodes, nil
 }

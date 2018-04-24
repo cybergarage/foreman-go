@@ -8,10 +8,6 @@ import (
 	"testing"
 )
 
-func finderTest(t *testing.T, finder Finder) {
-}
-
-func TestNewSharedFinder(t *testing.T) {
-	finder := NewSharedFinder()
-	finderTest(t, finder)
+func TestNewBaseNode(t *testing.T) {
+	newBaseNode()
 }

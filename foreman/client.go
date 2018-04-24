@@ -27,7 +27,7 @@ type Client struct {
 // NewClient returns a new client.
 func NewClient() *Client {
 	client := &Client{
-		Scheme:   "http",
+		Scheme:   DefaultRpcProtocol,
 		Host:     DefaultServerHost,
 		HTTPPort: DefaultHttpPort,
 		graphite: graphite.NewClient(),
