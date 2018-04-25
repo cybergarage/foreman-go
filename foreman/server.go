@@ -22,6 +22,8 @@ import (
 
 // Server represents a Foreman Server.
 type Server struct {
+	Node
+
 	metric.RegisterListener
 	kb.KnowledgeBaseListener
 
@@ -37,7 +39,7 @@ type Server struct {
 	configFile string
 }
 
-// NewServer returns a new Server.
+// NewServerWithConfigFile returns a new server with a specified configuration file.
 func NewServerWithConfigFile(configFile string) *Server {
 
 	server := &Server{
@@ -151,6 +153,22 @@ func (server *Server) GetGraphitePort() int {
 // GetHTTPPort returns the graphite HTTP port.
 func (server *Server) GetHTTPPort() int {
 	return server.graphite.Render.Port
+}
+
+// GetCuster returns the cluster name
+func (server *Server) GetCuster() string {
+	// TODO : Support cluster
+	return ""
+}
+
+// GetAddress returns the interface address
+func (server *Server) GetAddress() string {
+	return server.graphite.GetAddress()
+}
+
+// GetRPCPort returns the RPC port
+func (server *Server) GetRPCPort() int {
+	return server.GetHTTPPort()
 }
 
 // Start starts the server.

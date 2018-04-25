@@ -5,14 +5,8 @@
 package foreman
 
 import (
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"net/url"
-
 	"github.com/cybergarage/foreman-go/foreman/metric"
 	rpc "github.com/cybergarage/foreman-go/foreman/rpc/graphite"
-	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 	"github.com/cybergarage/go-graphite/net/graphite"
 )
 
@@ -62,44 +56,10 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 	return nil
 }
 
-// PostQuery posts a query string over Graphite interface
-func (client *Client) PostQuery(queryString string) (interface{}, int, error) {
-	url := url.URL{
-		Scheme: client.Scheme,
-		Host: fmt.Sprintf(
-			"%s:%d",
-			client.Host,
-			client.HTTPPort),
-		Path: HttpServerFqlPath,
-		RawQuery: fmt.Sprintf("%s=%s",
-			HttpServerFqlQuery,
-			url.QueryEscape(queryString)),
-	}
-
-	res, err := http.Get(url.String())
-	if err != nil {
-		return nil, 0, err
-	}
-
-	resCode := res.StatusCode
-
-	jsonResBytes, err := ioutil.ReadAll(res.Body)
-	res.Body.Close()
-	if err != nil {
-		return nil, 0, err
-	}
-
-	if len(jsonResBytes) <= 0 {
-		return nil, resCode, nil
-	}
-
-	var resObj interface{}
-
-	dec := json.NewDecorder()
-	resObj, err = dec.Decode(string(jsonResBytes))
-	if err != nil {
-		return nil, 0, err
-	}
-
-	return resObj, resCode, nil
+// PostQuery posts a query string
+func (client *Client) PostQuery(query string) (interface{}, int, error) {
+	node := NewRemoteNode()
+	node.Address = client.Host
+	node.RPCPort = client.HTTPPort
+	return node.PostQuery(query)
 }

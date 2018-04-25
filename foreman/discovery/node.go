@@ -4,16 +4,12 @@
 
 package discovery
 
-import (
-	"net"
-)
-
 // Node represents an abstract node interface
 type Node interface {
 	// GetCuster returns the cluster name
 	GetCuster() string
 	// GetAddress returns the interface address
-	GetAddress() net.Addr
+	GetAddress() string
 	// GetRPCPort returns the RPC port
 	GetRPCPort() int
 }
