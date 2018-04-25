@@ -15,3 +15,8 @@ func TestNewSharedFinder(t *testing.T) {
 	finder := NewSharedFinder()
 	finderTest(t, finder)
 }
+
+func TestNewStaticFinder(t *testing.T) {
+	finder := NewStaticFinderWithNodes(make([]Node, 0))
+	finderTest(t, finder)
+}
