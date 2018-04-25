@@ -4,15 +4,11 @@
 
 package discovery
 
-import (
-	"net"
-)
-
 // Node represents a node.
 type baseNode struct {
 	Node
 	Cluster string
-	Address net.Addr
+	Address string
 	RPCPort int
 }
 
@@ -28,7 +24,7 @@ func (node *baseNode) GetCuster() string {
 }
 
 // GetAddress returns the interface address
-func (node *baseNode) GetAddress() net.Addr {
+func (node *baseNode) GetAddress() string {
 	return node.Address
 }
 

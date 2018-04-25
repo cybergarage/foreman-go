@@ -7,7 +7,6 @@ package foreman
 import (
 	"fmt"
 	"io/ioutil"
-	"net"
 	"net/http"
 	"net/url"
 
@@ -18,12 +17,12 @@ import (
 type RemoteNode struct {
 	Node
 	Cluster string
-	Address net.Addr
+	Address string
 	RPCPort int
 }
 
 // NewNode returns a new node.
-func NewRemoteNode() Node {
+func NewRemoteNode() *RemoteNode {
 	node := &RemoteNode{}
 	return node
 }
@@ -34,7 +33,7 @@ func (node *RemoteNode) GetCuster() string {
 }
 
 // GetAddress returns the interface address
-func (node *RemoteNode) GetAddress() net.Addr {
+func (node *RemoteNode) GetAddress() string {
 	return node.Address
 }
 
@@ -49,7 +48,7 @@ func (node *RemoteNode) PostQuery(queryString string) (interface{}, int, error) 
 		Scheme: DefaultRpcProtocol,
 		Host: fmt.Sprintf(
 			"%s:%d",
-			node.GetAddress().String(),
+			node.GetAddress(),
 			node.GetRPCPort()),
 		Path: HttpServerFqlPath,
 		RawQuery: fmt.Sprintf("%s=%s",
