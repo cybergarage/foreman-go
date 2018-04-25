@@ -21,8 +21,8 @@ func NewController() *Controller {
 	return ctrl
 }
 
-// addFinder adds a specified finder.
-func (ctrl *Controller) addFinder(finder discovery.Finder) error {
+// AddFinder adds a specified finder.
+func (ctrl *Controller) AddFinder(finder discovery.Finder) error {
 	ctrl.Finders = append(ctrl.Finders, finder)
 	return nil
 }
