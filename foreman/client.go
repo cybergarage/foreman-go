@@ -16,15 +16,17 @@ type Client struct {
 	Host     string
 	HTTPPort int
 	graphite *graphite.Client
+	*Controller
 }
 
 // NewClient returns a new client.
 func NewClient() *Client {
 	client := &Client{
-		Scheme:   DefaultRpcProtocol,
-		Host:     DefaultServerHost,
-		HTTPPort: DefaultHttpPort,
-		graphite: graphite.NewClient(),
+		Scheme:     DefaultRpcProtocol,
+		Host:       DefaultServerHost,
+		HTTPPort:   DefaultHttpPort,
+		graphite:   graphite.NewClient(),
+		Controller: NewController(),
 	}
 	return client
 }
