@@ -44,6 +44,7 @@ PACKAGES=\
 	${PACKAGE_ID}/fql \
 	${PACKAGE_ID}/rpc/graphite \
 	${PACKAGE_ID}/rpc/json \
+	${PACKAGE_ID}/discovery \
 	${PACKAGE_ID}/test
 
 SOURCE_DIR=src/${GITHUB}/foreman
