@@ -8,5 +8,15 @@ import (
 	"testing"
 )
 
-func TestNewFinder(t *testing.T) {
+func finderTest(t *testing.T, finder Finder) {
+}
+
+func TestNewSharedFinder(t *testing.T) {
+	finder := NewSharedFinder()
+	finderTest(t, finder)
+}
+
+func TestNewStaticFinder(t *testing.T) {
+	finder := NewStaticFinderWithNodes(make([]Node, 0))
+	finderTest(t, finder)
 }
