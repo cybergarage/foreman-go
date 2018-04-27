@@ -86,7 +86,7 @@ func (ctrl *Controller) GetResponsibleNodesForMetric(m *metric.Metric) ([]Node, 
 			return nil, err
 		}
 		for _, node := range nodes {
-			respNodes = append(allNodes, (Node)(node))
+			respNodes = append(respNodes, (Node)(node))
 		}
 	}
 	return respNodes, nil

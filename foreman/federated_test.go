@@ -10,11 +10,20 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/discovery"
 )
 
-func TestFederatedMetrics(t *testing.T) {
+func federatedMetricsTest(t *testing.T, client *Client, nodes []Node) {
+}
+
+func setupFederatedNodes(t *testing.T) []discovery.Node {
 	nodes := make([]discovery.Node, 0)
+	return nodes
+}
+
+func TestFederatedMetricsWithStaticFinder(t *testing.T) {
+	nodes := setupFederatedNodes(t)
 	finder := discovery.NewStaticFinderWithNodes(nodes)
-	finder.SearchAll()
 
 	client := NewClient()
 	client.AddFinder(finder)
+
+	//federatedMetricsTest(t, client, nodes)
 }
