@@ -4,6 +4,12 @@
 
 package discovery
 
+import (
+	"fmt"
+	"regexp"
+	"strings"
+)
+
 // baseFinder represents a base finder.
 type baseFinder struct {
 	nodes          []Node
@@ -42,4 +48,74 @@ func (finder *baseFinder) addNode(node Node) error {
 // GetAllNodes returns all found nodes.
 func (finder *baseFinder) GetAllNodes() ([]Node, error) {
 	return finder.nodes, nil
+}
+
+// GetPrefixNodes returns only nodes matching with a specified start string
+func (finder *baseFinder) GetPrefixNodes(targetString string) ([]Node, error) {
+	nodes, err := finder.GetAllNodes()
+	if err != nil {
+		return nil, err
+	}
+
+	matchedNodes := make([]Node, 0)
+
+	for _, node := range nodes {
+		port := node.GetRPCPort()
+		addr := node.GetAddress()
+		name := node.GetName()
+
+		hosts := []string{
+			addr,
+			fmt.Sprintf("%s:%d", addr, port),
+			name,
+			fmt.Sprintf("%s:%d", name, port),
+		}
+
+		for _, host := range hosts {
+			if len(host) <= 0 {
+				continue
+			}
+			if strings.HasPrefix(targetString, host) {
+				matchedNodes = append(matchedNodes, node)
+				break
+			}
+		}
+	}
+
+	return matchedNodes, nil
+}
+
+// GetRegexpNodes returns only nodes matching with a specified regular expression
+func (finder *baseFinder) GetRegexpNodes(re *regexp.Regexp) ([]Node, error) {
+	nodes, err := finder.GetAllNodes()
+	if err != nil {
+		return nil, err
+	}
+
+	matchedNodes := make([]Node, 0)
+
+	for _, node := range nodes {
+		port := node.GetRPCPort()
+		addr := node.GetAddress()
+		name := node.GetName()
+
+		hosts := []string{
+			addr,
+			fmt.Sprintf("%s:%d", addr, port),
+			name,
+			fmt.Sprintf("%s:%d", name, port),
+		}
+
+		for _, host := range hosts {
+			if len(host) <= 0 {
+				continue
+			}
+			if re.MatchString(host) {
+				matchedNodes = append(matchedNodes, node)
+				break
+			}
+		}
+	}
+
+	return matchedNodes, nil
 }

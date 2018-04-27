@@ -6,6 +6,7 @@ package foreman
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/discovery"
+	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
 // Controller represents a controller.
@@ -73,4 +74,20 @@ func (ctrl *Controller) GetAllNodes() ([]Node, error) {
 		}
 	}
 	return allNodes, nil
+}
+
+// GetResponsibleNodesForMetric returns a responsible node for a specified metric.
+func (ctrl *Controller) GetResponsibleNodesForMetric(m *metric.Metric) ([]Node, error) {
+	name := m.GetName()
+	respNodes := make([]Node, 0)
+	for _, finder := range ctrl.Finders {
+		nodes, err := finder.GetPrefixNodes(name)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			respNodes = append(allNodes, (Node)(node))
+		}
+	}
+	return respNodes, nil
 }

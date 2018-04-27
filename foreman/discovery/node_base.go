@@ -4,10 +4,13 @@
 
 package discovery
 
+import "net"
+
 // Node represents a node.
 type baseNode struct {
 	Node
 	Cluster string
+	Name    string
 	Address string
 	RPCPort int
 }
@@ -23,8 +26,39 @@ func (node *baseNode) GetCuster() string {
 	return node.Cluster
 }
 
+// GetName returns the host name
+func (node *baseNode) GetName() string {
+	if 0 < len(node.Name) {
+		return node.Name
+	}
+
+	if len(node.Address) <= 0 {
+		return ""
+	}
+	names, err := net.LookupAddr(node.Address)
+	if err != nil {
+		return ""
+	}
+	node.Name = names[0]
+
+	return node.Name
+}
+
 // GetAddress returns the interface address
 func (node *baseNode) GetAddress() string {
+	if 0 < len(node.Address) {
+		return node.Address
+	}
+
+	if len(node.Name) <= 0 {
+		return ""
+	}
+	addrs, err := net.LookupIP(node.Name)
+	if err != nil {
+		return ""
+	}
+	node.Address = addrs[0].String()
+
 	return node.Address
 }
 
