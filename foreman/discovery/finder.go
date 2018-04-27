@@ -28,6 +28,8 @@ type Finder interface {
 	SetNotifyListener(FinderNotifyListener) error
 	// GetAllNodes returns all found nodes.
 	GetAllNodes() ([]Node, error)
+	// GetPrefixNodes returns only nodes matching with a specified start string
+	GetPrefixNodes(string) ([]Node, error)
 	// GetRegexpNodes returns only nodes matching with a specified regular expression
 	GetRegexpNodes(*regexp.Regexp) ([]Node, error)
 }

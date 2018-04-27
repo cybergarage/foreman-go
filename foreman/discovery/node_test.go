@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	testNodeName      = "foreman001.cybergarage.org"
-	testMatchingError = "Matching Error (%s) : %s"
+	testNodeName          = "foreman001.cybergarage.org"
+	testNodeMatchingError = "Matching Error (%s) : %s"
 )
 
 var testNodeRegExpStrings = []string{
@@ -24,7 +24,7 @@ func nodeMachingTest(t *testing.T, node Node) {
 	for _, reString := range testNodeRegExpStrings {
 		re := regexp.MustCompile(reString)
 		if !re.MatchString(name) {
-			t.Errorf(testMatchingError, reString, name)
+			t.Errorf(testNodeMatchingError, reString, name)
 		}
 	}
 }
