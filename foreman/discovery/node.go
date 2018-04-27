@@ -8,6 +8,8 @@ package discovery
 type Node interface {
 	// GetCuster returns the cluster name
 	GetCuster() string
+	// GetName returns the host name
+	GetName() string
 	// GetAddress returns the interface address
 	GetAddress() string
 	// GetRPCPort returns the RPC port
