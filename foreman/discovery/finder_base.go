@@ -4,6 +4,11 @@
 
 package discovery
 
+import (
+	"fmt"
+	"regexp"
+)
+
 // baseFinder represents a base finder.
 type baseFinder struct {
 	nodes          []Node
@@ -42,4 +47,40 @@ func (finder *baseFinder) addNode(node Node) error {
 // GetAllNodes returns all found nodes.
 func (finder *baseFinder) GetAllNodes() ([]Node, error) {
 	return finder.nodes, nil
+}
+
+// GetRegexpNodes returns only nodes matching with a specified regular expression
+func (finder *baseFinder) GetRegexpNodes(re *regexp.Regexp) ([]Node, error) {
+	nodes, err := finder.GetAllNodes()
+	if err != nil {
+		return nil, err
+	}
+
+	matchedNodes := make([]Node, 0)
+
+	for _, node := range nodes {
+		port := node.GetRPCPort()
+
+		addr := node.GetAddress()
+		if re.MatchString(addr) {
+			matchedNodes = append(matchedNodes, node)
+			break
+		}
+		if re.MatchString(fmt.Sprintf("%s:%d", addr, port)) {
+			matchedNodes = append(matchedNodes, node)
+			break
+		}
+
+		name := node.GetName()
+		if re.MatchString(name) {
+			matchedNodes = append(matchedNodes, node)
+			break
+		}
+		if re.MatchString(fmt.Sprintf("%s:%d", name, port)) {
+			matchedNodes = append(matchedNodes, node)
+			break
+		}
+	}
+
+	return matchedNodes, nil
 }

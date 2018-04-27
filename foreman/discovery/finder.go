@@ -4,6 +4,10 @@
 
 package discovery
 
+import (
+	"regexp"
+)
+
 // FinderSearchListener a listener for Finder.
 type FinderSearchListener interface {
 	FinderSearchResponseReceived(*Node)
@@ -24,4 +28,6 @@ type Finder interface {
 	SetNotifyListener(FinderNotifyListener) error
 	// GetAllNodes returns all found nodes.
 	GetAllNodes() ([]Node, error)
+	// GetRegexpNodes returns only nodes matching with a specified regular expression
+	GetRegexpNodes(*regexp.Regexp) ([]Node, error)
 }
