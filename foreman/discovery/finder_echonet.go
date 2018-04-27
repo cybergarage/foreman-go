@@ -4,8 +4,6 @@
 
 package discovery
 
-import "regexp"
-
 // EchonetFinder represents a base finder.
 type EchonetFinder struct {
 	*baseFinder
@@ -19,12 +17,7 @@ func NewEchonetFinder() Finder {
 	return finder
 }
 
-// Search searches only the specified nodes.
-func (finder *baseFinder) Search(regexp.Regexp) error {
-	return nil
-}
-
 // SearchAll searches all nodes.
-func (finder *baseFinder) SearchAll() error {
+func (finder *EchonetFinder) SearchAll() error {
 	return nil
 }
