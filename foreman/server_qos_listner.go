@@ -34,5 +34,5 @@ func (server *Server) RuleUnsatisfied(rule kb.Rule) {
 	e := action.NewEventWithSource(newQosRuleSourceWithRule(rule))
 	server.actionMgr.PostEvent(e)
 
-	server.analyzeQos(rule)
+	//server.analyzeQos(rule)
 }
