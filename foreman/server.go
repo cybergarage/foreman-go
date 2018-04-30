@@ -20,6 +20,10 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/registry"
 )
 
+const (
+	serverBindRetryCount = 100
+)
+
 // Server represents a Foreman Server.
 type Server struct {
 	Node
@@ -72,8 +76,8 @@ func NewServerWithConfigFile(configFile string) *Server {
 	server.actionMgr.SetRegistryStore(server.registryMgr.GetStore())
 	server.actionMgr.SetRegisterStore(server.registerMgr.GetStore())
 
-	server.graphite.CarbonListener = server
-	server.graphite.RenderListener = server
+	server.graphite.SetCarbonListener(server)
+	server.graphite.SetRenderListener(server)
 	FqlPath, err := server.config.GetString(ConfigFqlPathKey)
 	if err != nil {
 		FqlPath = HttpServerFqlPath
@@ -173,6 +177,10 @@ func (server *Server) GetRPCPort() int {
 
 // Start starts the server.
 func (server *Server) Start() error {
+	if server == nil {
+		return nil
+	}
+
 	err := server.updateConfig()
 	if err != nil {
 		logging.Error("%s\n", err)
@@ -181,7 +189,14 @@ func (server *Server) Start() error {
 
 	// Start all managers without the register manager
 
+	graphiteRetryCount := 0
 	err = server.graphite.Start()
+	for (err != nil) || (graphiteRetryCount < serverBindRetryCount) {
+		server.graphite.SetCarbonPort(server.graphite.GetCarbonPort() + 1)
+		server.graphite.SetRenderPort(server.graphite.GetRenderPort() + 1)
+		graphiteRetryCount++
+		err = server.graphite.Start()
+	}
 	if err != nil {
 		server.Stop()
 		logging.Error("%s\n", err)
@@ -214,6 +229,10 @@ func (server *Server) Start() error {
 
 // Stop stops the server.
 func (server *Server) Stop() error {
+	if server == nil {
+		return nil
+	}
+
 	// Stop all managers without the register manager
 
 	err := server.graphite.Stop()
