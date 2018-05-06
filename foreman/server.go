@@ -96,22 +96,6 @@ func NewServer() *Server {
 	return NewServerWithConfigFile("")
 }
 
-// GetHostname returns the hostname.
-func (server *Server) GetHostname() (string, error) {
-	return os.Hostname()
-}
-
-// LoadConfig loads a specified configuration file.
-func (server *Server) LoadConfig(filename string) error {
-	logging.Trace("Server loading config file from %s.", filename)
-	err := server.config.LoadFile(filename)
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-	return server.updateConfig()
-}
-
 // initialize initialize the server.
 func (server *Server) initialize() error {
 	err := server.registryMgr.Start()
@@ -149,6 +133,22 @@ func (server *Server) updateConfig() error {
 	return err
 }
 
+func (server *Server) LoadConfig(filename string) error {
+	logging.Trace("Server loading config file from %s.", filename)
+	err := server.config.LoadFile(filename)
+	if err != nil {
+		logging.Error("%s\n", err)
+		return err
+	}
+	return server.updateConfig()
+}
+
+// GetHostname returns the hostname.
+func (server *Server) GetHostname() (string, error) {
+	return os.Hostname()
+}
+
+// LoadConfig loads a specified configuration file.
 // GetGraphitePort returns the graphite carbon port.
 func (server *Server) GetGraphitePort() int {
 	return server.graphite.Carbon.Port
@@ -163,6 +163,15 @@ func (server *Server) GetHTTPPort() int {
 func (server *Server) GetCuster() string {
 	// TODO : Support cluster
 	return ""
+}
+
+// GetName returns the host name
+func (server *Server) GetName() string {
+	name, err := server.GetHostname()
+	if err != nil {
+		return ""
+	}
+	return name
 }
 
 // GetAddress returns the interface address
