@@ -17,6 +17,7 @@ import (
 type RemoteNode struct {
 	Node
 	Cluster string
+	Name    string
 	Address string
 	RPCPort int
 }
@@ -30,6 +31,11 @@ func NewRemoteNode() *RemoteNode {
 // GetCuster returns the cluster name
 func (node *RemoteNode) GetCuster() string {
 	return node.Cluster
+}
+
+// GetName returns the host name
+func (node *RemoteNode) GetName() string {
+	return node.Name
 }
 
 // GetAddress returns the interface address
