@@ -11,7 +11,11 @@ import (
 )
 
 const (
-	testFederatedNodeCont = 10
+	testFederatedNodePrefix     = "node%02d"
+	testFederatedNodeCont       = 10
+	testFederatedStartTimestamp = 1514732400 // 2018-01-01 00:00:00
+	testFederatedEndTimestamp   = 1514775600 // 2018-01-01 12:00:00
+	testFederatedInterval       = 300
 )
 
 func federatedMetricsTest(t *testing.T, client *Client, nodes []Node) {
