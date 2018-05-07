@@ -17,7 +17,7 @@ import (
 
 // Remote represents a remote node.
 type RemoteNode struct {
-	Node
+	*baseNode
 	Cluster string
 	Name    string
 	Address string
@@ -26,17 +26,20 @@ type RemoteNode struct {
 
 // NewRemoteNode returns a remote new node.
 func NewRemoteNode() *RemoteNode {
-	node := &RemoteNode{}
+	node := &RemoteNode{
+		baseNode: newBaseNode(),
+	}
 	return node
 }
 
 // NewRemoteNodeWithDiscoveryNode returns a remote new node.
 func NewRemoteNodeWithDiscoveryNode(discoveryNode discovery.Node) *RemoteNode {
 	node := &RemoteNode{
-		Cluster: discoveryNode.GetCuster(),
-		Name:    discoveryNode.GetName(),
-		Address: discoveryNode.GetAddress(),
-		RPCPort: discoveryNode.GetRPCPort(),
+		baseNode: newBaseNode(),
+		Cluster:  discoveryNode.GetCuster(),
+		Name:     discoveryNode.GetName(),
+		Address:  discoveryNode.GetAddress(),
+		RPCPort:  discoveryNode.GetRPCPort(),
 	}
 	return node
 }

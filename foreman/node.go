@@ -4,6 +4,8 @@
 
 package foreman
 
+import "github.com/cybergarage/foreman-go/foreman/metric"
+
 // Node represents an abstract node interface
 type Node interface {
 	// GetCuster returns the cluster name
@@ -16,4 +18,7 @@ type Node interface {
 	GetRPCPort() int
 	// PostQuery posts a query string
 	PostQuery(query string) (interface{}, error)
+
+	// PostMetric posts a metric
+	PostMetric(m *metric.Metric) error
 }

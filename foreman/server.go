@@ -27,7 +27,7 @@ const (
 
 // Server represents a Foreman Server.
 type Server struct {
-	Node
+	*baseNode
 
 	metric.RegisterListener
 	kb.KnowledgeBaseListener
@@ -48,6 +48,7 @@ type Server struct {
 func NewServerWithConfigFile(configFile string) *Server {
 
 	server := &Server{
+		baseNode:    newBaseNode(),
 		graphite:    graphite.NewServer(),
 		registryMgr: registry.NewManager(),
 		registerMgr: register.NewManager(),
