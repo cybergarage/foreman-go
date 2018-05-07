@@ -70,7 +70,7 @@ func (ctrl *Controller) GetAllNodes() ([]Node, error) {
 			return nil, err
 		}
 		for _, node := range nodes {
-			allNodes = append(allNodes, (Node)(node))
+			allNodes = append(allNodes, NewRemoteNodeWithDiscoveryNode(node))
 		}
 	}
 	return allNodes, nil
@@ -86,7 +86,7 @@ func (ctrl *Controller) GetResponsibleNodesForMetric(m *metric.Metric) ([]Node, 
 			return nil, err
 		}
 		for _, node := range nodes {
-			respNodes = append(respNodes, (Node)(node))
+			respNodes = append(respNodes, NewRemoteNodeWithDiscoveryNode(node))
 		}
 	}
 	return respNodes, nil
