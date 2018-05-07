@@ -6,6 +6,7 @@
 package foreman
 
 import (
+	"fmt"
 	"os"
 	"runtime"
 
@@ -27,7 +28,7 @@ const (
 
 // Server represents a Foreman Server.
 type Server struct {
-	*baseNode
+	Node
 
 	metric.RegisterListener
 	kb.KnowledgeBaseListener
@@ -48,7 +49,6 @@ type Server struct {
 func NewServerWithConfigFile(configFile string) *Server {
 
 	server := &Server{
-		baseNode:    newBaseNode(),
 		graphite:    graphite.NewServer(),
 		registryMgr: registry.NewManager(),
 		registerMgr: register.NewManager(),
@@ -216,6 +216,13 @@ func (server *Server) PostQuery(query string) (interface{}, error) {
 	}
 
 	return resObjects, nil
+}
+
+// PostMetric posts a metric
+func (server *Server) PostMetric(m *metric.Metric) error {
+	query := fmt.Sprintf(insertMetricQueryFormat, m.GetName(), m.GetValue(), m.GetTimestamp().Unix())
+	_, err := server.PostQuery(query)
+	return err
 }
 
 // Start starts the server.
