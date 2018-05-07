@@ -5,36 +5,53 @@
 package foreman
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/discovery"
+	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
 const (
-	testFederatedNodePrefix     = "node%02d"
-	testFederatedNodeCont       = 10
-	testFederatedStartTimestamp = 1514732400 // 2018-01-01 00:00:00
-	testFederatedEndTimestamp   = 1514775600 // 2018-01-01 12:00:00
-	testFederatedInterval       = 300
+	testFederatedNodePrefix            = "node%03d"
+	testFederatedNodeCont              = 10
+	testFederatedMetricsPrefix         = "node%03d.metric%03d"
+	testFederatedMetricsStartTimestamp = 1514732400 // 2018-01-01 00:00:00
+	testFederatedMetricsEndTimestamp   = 1514775600 // 2018-01-01 12:00:00
+	testFederatedMetricsInterval       = 300
+	testFederatedMetricsCount          = (testFederatedMetricsEndTimestamp - testFederatedMetricsStartTimestamp) / testFederatedMetricsInterval
 )
 
-func federatedMetricsTest(t *testing.T, client *Client, nodes []Node) {
-}
-
-func setupFederatedNode(t *testing.T) *Server {
+func setupFederatedNode(t *testing.T, nodeNo int) *Server {
 	server := NewServer()
+
+	ts := testFederatedMetricsStartTimestamp
+	for n := 0; n < testFederatedMetricsCount; n++ {
+		m := metric.NewMetric()
+		m.Name = fmt.Sprintf(testFederatedMetricsPrefix, nodeNo, n)
+		m.Timestamp = time.Unix(int64(ts), 0)
+		m.Value = float64(n)
+		ts += testFederatedMetricsInterval
+		err := server.PostMetric(m)
+		if err != nil {
+			t.Error(err)
+			break
+		}
+	}
 
 	err := server.Start()
 	if err != nil {
 		t.Error(err)
 	}
+
 	return server
 }
 
 func setupFederatedNodes(t *testing.T) []*Server {
 	servers := make([]*Server, testFederatedNodeCont)
 	for n := 0; n < testFederatedNodeCont; n++ {
-		servers[n] = setupFederatedNode(t)
+		servers[n] = setupFederatedNode(t, n)
 	}
 	return servers
 }
@@ -61,6 +78,9 @@ func stopFederatedNodes(t *testing.T, servers []*Server) {
 	}
 }
 
+func federatedMetricsTest(t *testing.T, client *Client, nodes []*Server) {
+}
+
 func TestFederatedMetricsWithStaticFinder(t *testing.T) {
 	nodes := setupFederatedNodes(t)
 	finder := setupStaticFinderWithServers(t, nodes)
@@ -68,7 +88,7 @@ func TestFederatedMetricsWithStaticFinder(t *testing.T) {
 	client := NewClient()
 	client.AddFinder(finder)
 
-	//federatedMetricsTest(t, client, nodes)
+	federatedMetricsTest(t, client, nodes)
 
 	stopFederatedNodes(t, nodes)
 }
