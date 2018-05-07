@@ -48,8 +48,8 @@ func (node *RemoteNode) GetRPCPort() int {
 	return node.RPCPort
 }
 
-// PostQuery posts a query string
-func (node *RemoteNode) PostQuery(queryString string) (interface{}, int, error) {
+// PostQueryOverHTTP posts a query string over HTTP
+func (node *RemoteNode) PostQueryOverHTTP(query string) (interface{}, int, error) {
 	url := url.URL{
 		Scheme: DefaultRpcProtocol,
 		Host: fmt.Sprintf(
@@ -59,7 +59,7 @@ func (node *RemoteNode) PostQuery(queryString string) (interface{}, int, error) 
 		Path: HttpServerFqlPath,
 		RawQuery: fmt.Sprintf("%s=%s",
 			HttpServerFqlQuery,
-			url.QueryEscape(queryString)),
+			url.QueryEscape(query)),
 	}
 
 	res, err := http.Get(url.String())
@@ -88,4 +88,10 @@ func (node *RemoteNode) PostQuery(queryString string) (interface{}, int, error) 
 	}
 
 	return resObj, resCode, nil
+}
+
+// PostQuery posts a query string
+func (node *RemoteNode) PostQuery(query string) (interface{}, error) {
+	resObj, _, err := node.PostQueryOverHTTP(query)
+	return resObj, err
 }

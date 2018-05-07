@@ -59,9 +59,17 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 }
 
 // PostQuery posts a query string
-func (client *Client) PostQuery(query string) (interface{}, int, error) {
+func (client *Client) PostQuery(query string) (interface{}, error) {
 	node := NewRemoteNode()
 	node.Address = client.Host
 	node.RPCPort = client.HTTPPort
 	return node.PostQuery(query)
+}
+
+// PostQueryOverHTTP posts a query string over HTTP
+func (client *Client) PostQueryOverHTTP(query string) (interface{}, int, error) {
+	node := NewRemoteNode()
+	node.Address = client.Host
+	node.RPCPort = client.HTTPPort
+	return node.PostQueryOverHTTP(query)
 }
