@@ -11,7 +11,6 @@ import (
 	"net/url"
 
 	"github.com/cybergarage/foreman-go/foreman/discovery"
-	"github.com/cybergarage/foreman-go/foreman/metric"
 
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
@@ -109,9 +108,4 @@ func (node *RemoteNode) PostQueryOverHTTP(query string) (interface{}, int, error
 func (node *RemoteNode) PostQuery(query string) (interface{}, error) {
 	resObj, _, err := node.PostQueryOverHTTP(query)
 	return resObj, err
-}
-
-// PostMetric posts a metric
-func (node *RemoteNode) PostMetric(m *metric.Metric) error {
-	return nodePostMetric(node, m)
 }
