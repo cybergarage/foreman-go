@@ -12,6 +12,7 @@ import (
 	"github.com/cybergarage/go-graphite/net/graphite"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/kb"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/metric"
@@ -182,6 +183,38 @@ func (server *Server) GetAddress() string {
 // GetRPCPort returns the RPC port
 func (server *Server) GetRPCPort() int {
 	return server.GetHTTPPort()
+}
+
+// PostQuery posts a query string
+func (server *Server) PostQuery(query string) (interface{}, error) {
+	parser := fql.NewParser()
+	queries, err := parser.ParseString(query)
+	if err != nil {
+		return nil, err
+	}
+
+	queryCnt := len(queries)
+	if queryCnt <= 0 {
+		return nil, nil
+	}
+
+	var resObjects []interface{}
+	if 1 < queryCnt {
+		resObjects = make([]interface{}, queryCnt)
+	}
+
+	for n, query := range queries {
+		resObject, queryErr := server.ExecuteQuery(query)
+		if queryErr == nil {
+			return nil, queryErr.Error()
+		}
+		if queryCnt == 1 {
+			return resObject, nil
+		}
+		resObjects[n] = resObject
+	}
+
+	return resObjects, nil
 }
 
 // Start starts the server.
