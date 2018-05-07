@@ -44,32 +44,44 @@ func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter)
 		return
 	}
 
-	if len(queries) <= 0 {
+	queryCnt := len(queries)
+	if queryCnt <= 0 {
 		server.badRequestReceived(r, w)
 		return
 	}
 
-	// FIXME: Execute all queries
-	query := queries[0]
+	var queryAllResponse interface{}
+	var queryResponses []interface{}
+	if 1 < queryCnt {
+		queryResponses = make([]interface{}, queryCnt)
+		queryAllResponse = queryResponses
+	}
 
-	queryResult, queryErr := server.ExecuteQuery(query)
-	if queryErr == nil {
-		server.httpLogMessage(r, http.StatusOK, queryString)
-	} else {
-		server.httpLogMessage(r, http.StatusBadRequest, queryErr.String())
-		server.httpResponseJSONError(r, w, queryErr)
-		return
+	for n, query := range queries {
+		queryResponse, queryErr := server.ExecuteQuery(query)
+		if queryErr == nil {
+			server.httpLogMessage(r, http.StatusOK, query.String())
+		} else {
+			server.httpLogMessage(r, http.StatusBadRequest, queryErr.String())
+			server.httpResponseJSONError(r, w, queryErr)
+			return
+		}
+		if queryCnt == 1 {
+			queryAllResponse = queryResponse
+		} else {
+			queryResponses[n] = queryResponse
+		}
 	}
 
 	w.Header().Set(httpResponseContentType, httpResponseContentTypeJSON)
 	w.WriteHeader(http.StatusOK)
 
-	if queryResult == nil {
+	if queryAllResponse == nil {
 		return
 	}
 
 	encorder := json.NewEncorder()
-	content, ok := encorder.Encode(queryResult)
+	content, ok := encorder.Encode(queryAllResponse)
 	if ok != nil {
 		return
 	}
