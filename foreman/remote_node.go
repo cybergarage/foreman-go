@@ -11,13 +11,15 @@ import (
 	"net/url"
 
 	"github.com/cybergarage/foreman-go/foreman/discovery"
+	"github.com/cybergarage/foreman-go/foreman/metric"
 
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
 // Remote represents a remote node.
 type RemoteNode struct {
-	*baseNode
+	Node
+
 	Cluster string
 	Name    string
 	Address string
@@ -26,20 +28,17 @@ type RemoteNode struct {
 
 // NewRemoteNode returns a remote new node.
 func NewRemoteNode() *RemoteNode {
-	node := &RemoteNode{
-		baseNode: newBaseNode(),
-	}
+	node := &RemoteNode{}
 	return node
 }
 
 // NewRemoteNodeWithDiscoveryNode returns a remote new node.
 func NewRemoteNodeWithDiscoveryNode(discoveryNode discovery.Node) *RemoteNode {
 	node := &RemoteNode{
-		baseNode: newBaseNode(),
-		Cluster:  discoveryNode.GetCuster(),
-		Name:     discoveryNode.GetName(),
-		Address:  discoveryNode.GetAddress(),
-		RPCPort:  discoveryNode.GetRPCPort(),
+		Cluster: discoveryNode.GetCuster(),
+		Name:    discoveryNode.GetName(),
+		Address: discoveryNode.GetAddress(),
+		RPCPort: discoveryNode.GetRPCPort(),
 	}
 	return node
 }
@@ -110,4 +109,11 @@ func (node *RemoteNode) PostQueryOverHTTP(query string) (interface{}, int, error
 func (node *RemoteNode) PostQuery(query string) (interface{}, error) {
 	resObj, _, err := node.PostQueryOverHTTP(query)
 	return resObj, err
+}
+
+// PostMetric posts a metric
+func (node *RemoteNode) PostMetric(m *metric.Metric) error {
+	query := fmt.Sprintf(insertMetricQueryFormat, m.GetName(), m.GetValue(), m.GetTimestamp().Unix())
+	_, err := node.PostQuery(query)
+	return err
 }

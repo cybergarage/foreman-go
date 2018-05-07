@@ -4,7 +4,13 @@
 
 package foreman
 
-import "github.com/cybergarage/foreman-go/foreman/metric"
+import (
+	"github.com/cybergarage/foreman-go/foreman/metric"
+)
+
+const (
+	insertMetricQueryFormat = "SET (%s, %f, %d) INTO METRICS"
+)
 
 // Node represents an abstract node interface
 type Node interface {
