@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/cybergarage/foreman-go/foreman/discovery"
+
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
@@ -22,9 +24,20 @@ type RemoteNode struct {
 	RPCPort int
 }
 
-// NewNode returns a new node.
+// NewRemoteNode returns a remote new node.
 func NewRemoteNode() *RemoteNode {
 	node := &RemoteNode{}
+	return node
+}
+
+// NewRemoteNodeWithDiscoveryNode returns a remote new node.
+func NewRemoteNodeWithDiscoveryNode(discoveryNode discovery.Node) *RemoteNode {
+	node := &RemoteNode{
+		Cluster: discoveryNode.GetCuster(),
+		Name:    discoveryNode.GetName(),
+		Address: discoveryNode.GetAddress(),
+		RPCPort: discoveryNode.GetRPCPort(),
+	}
 	return node
 }
 
