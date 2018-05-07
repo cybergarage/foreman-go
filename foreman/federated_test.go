@@ -21,16 +21,20 @@ const (
 func federatedMetricsTest(t *testing.T, client *Client, nodes []Node) {
 }
 
+func setupFederatedNode(t *testing.T) *Server {
+	server := NewServer()
+
+	err := server.Start()
+	if err != nil {
+		t.Error(err)
+	}
+	return server
+}
+
 func setupFederatedNodes(t *testing.T) []*Server {
 	servers := make([]*Server, testFederatedNodeCont)
-
 	for n := 0; n < testFederatedNodeCont; n++ {
-		server := NewServer()
-		err := server.Start()
-		if err != nil {
-			t.Error(err)
-		}
-		servers[n] = server
+		servers[n] = setupFederatedNode(t)
 	}
 	return servers
 }
