@@ -5,6 +5,8 @@
 package foreman
 
 import (
+	"fmt"
+
 	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
@@ -27,4 +29,11 @@ type Node interface {
 
 	// PostMetric posts a metric
 	PostMetric(m *metric.Metric) error
+}
+
+// nodePostMetric posts a metric
+func nodePostMetric(node Node, m *metric.Metric) error {
+	query := fmt.Sprintf(insertMetricQueryFormat, m.GetName(), m.GetValue(), m.GetTimestamp().Unix())
+	_, err := node.PostQuery(query)
+	return err
 }

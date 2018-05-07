@@ -6,7 +6,6 @@
 package foreman
 
 import (
-	"fmt"
 	"os"
 	"runtime"
 
@@ -220,9 +219,7 @@ func (server *Server) PostQuery(query string) (interface{}, error) {
 
 // PostMetric posts a metric
 func (server *Server) PostMetric(m *metric.Metric) error {
-	query := fmt.Sprintf(insertMetricQueryFormat, m.GetName(), m.GetValue(), m.GetTimestamp().Unix())
-	_, err := server.PostQuery(query)
-	return err
+	return nodePostMetric(server, m)
 }
 
 // Start starts the server.

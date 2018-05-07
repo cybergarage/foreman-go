@@ -113,7 +113,5 @@ func (node *RemoteNode) PostQuery(query string) (interface{}, error) {
 
 // PostMetric posts a metric
 func (node *RemoteNode) PostMetric(m *metric.Metric) error {
-	query := fmt.Sprintf(insertMetricQueryFormat, m.GetName(), m.GetValue(), m.GetTimestamp().Unix())
-	_, err := node.PostQuery(query)
-	return err
+	return nodePostMetric(node, m)
 }
