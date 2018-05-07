@@ -217,11 +217,6 @@ func (server *Server) PostQuery(query string) (interface{}, error) {
 	return resObjects, nil
 }
 
-// PostMetric posts a metric
-func (server *Server) PostMetric(m *metric.Metric) error {
-	return nodePostMetric(server, m)
-}
-
 // Start starts the server.
 func (server *Server) Start() error {
 	if server == nil {

@@ -33,7 +33,7 @@ func setupFederatedNode(t *testing.T, nodeNo int) *Server {
 		m.Timestamp = time.Unix(int64(ts), 0)
 		m.Value = float64(n)
 		ts += testFederatedMetricsInterval
-		err := server.PostMetric(m)
+		err := server.metricMgr.AddMetric(m)
 		if err != nil {
 			t.Error(err)
 			break

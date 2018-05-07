@@ -4,12 +4,6 @@
 
 package foreman
 
-import (
-	"fmt"
-
-	"github.com/cybergarage/foreman-go/foreman/metric"
-)
-
 const (
 	insertMetricQueryFormat = "SET (%s, %f, %d) INTO METRICS"
 )
@@ -26,14 +20,4 @@ type Node interface {
 	GetRPCPort() int
 	// PostQuery posts a query string
 	PostQuery(query string) (interface{}, error)
-
-	// PostMetric posts a metric
-	PostMetric(m *metric.Metric) error
-}
-
-// nodePostMetric posts a metric
-func nodePostMetric(node Node, m *metric.Metric) error {
-	query := fmt.Sprintf(insertMetricQueryFormat, m.GetName(), m.GetValue(), m.GetTimestamp().Unix())
-	_, err := node.PostQuery(query)
-	return err
 }
