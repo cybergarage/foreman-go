@@ -26,6 +26,11 @@ const (
 func setupFederatedNode(t *testing.T, nodeNo int) *Server {
 	server := NewServer()
 
+	err := server.Start()
+	if err != nil {
+		t.Error(err)
+	}
+
 	ts := testFederatedMetricsStartTimestamp
 	for n := 0; n < testFederatedMetricsCount; n++ {
 		m := metric.NewMetric()
@@ -33,16 +38,11 @@ func setupFederatedNode(t *testing.T, nodeNo int) *Server {
 		m.Timestamp = time.Unix(int64(ts), 0)
 		m.Value = float64(n)
 		ts += testFederatedMetricsInterval
-		err := server.PostMetric(m)
+		err := server.metricMgr.AddMetric(m)
 		if err != nil {
 			t.Error(err)
 			break
 		}
-	}
-
-	err := server.Start()
-	if err != nil {
-		t.Error(err)
 	}
 
 	return server
