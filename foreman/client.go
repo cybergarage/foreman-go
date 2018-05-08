@@ -12,10 +12,11 @@ import (
 
 // Client represents a client for the server.
 type Client struct {
-	Scheme   string
-	Host     string
-	HTTPPort int
-	graphite *graphite.Client
+	Scheme     string
+	Host       string
+	HTTPPort   int
+	CarbonPort int
+	RenderPort int
 	*Controller
 }
 
@@ -25,7 +26,8 @@ func NewClient() *Client {
 		Scheme:     DefaultRpcProtocol,
 		Host:       DefaultServerHost,
 		HTTPPort:   DefaultHttpPort,
-		graphite:   graphite.NewClient(),
+		CarbonPort: graphite.DefaultCarbonPort,
+		RenderPort: graphite.DefaultRenderPort,
 		Controller: NewController(),
 	}
 	return client
@@ -50,12 +52,36 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 		return err
 	}
 
-	err = client.graphite.PostMetrics(gm)
+	graphite := graphite.NewClient()
+	graphite.CarbonPort = client.CarbonPort
+	err = graphite.PostMetrics(gm)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+// GetMetrics gets the specified metrics over Graphite interface
+func (client *Client) GetMetrics(q *metric.Query) (metric.ResultSet, error) {
+	gq, err := rpc.NewGraphiteQueryWithMetricQuery(q)
+	if err != nil {
+		return nil, err
+	}
+
+	graphite := graphite.NewClient()
+	graphite.RenderPort = client.RenderPort
+	gms, err := graphite.PostQuery(gq)
+	if err != nil {
+		return nil, err
+	}
+
+	rs, err := rpc.NewResultSetWithGraphiteMetrics(gms)
+	if err != nil {
+		return nil, err
+	}
+
+	return rs, nil
 }
 
 // PostQuery posts a query string
