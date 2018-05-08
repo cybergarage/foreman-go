@@ -21,15 +21,6 @@ func NewMetricsWithGraphiteMetric(gm *graphite.Metrics) []*metric.Metric {
 	return ms
 }
 
-// NewMetricsWithGraphiteMetrics returns new metrics from Graphite metric.
-func NewMetricsWithGraphiteMetrics(gms []*graphite.Metrics) []*metric.Metric {
-	ms := make([]*metric.Metric, 0)
-	for _, gm := range gms {
-		ms = append(ms, NewMetricsWithGraphiteMetric(gm)...)
-	}
-	return ms
-}
-
 // NewGraphiteMetricsWithMetric returns a new metric from Graphite metric.
 func NewGraphiteMetricsWithMetric(m *metric.Metric) (*graphite.Metrics, error) {
 	gm := graphite.NewMetrics()
