@@ -32,6 +32,8 @@ type Server struct {
 	metric.RegisterListener
 	kb.KnowledgeBaseListener
 
+	*Controller
+
 	graphite    *graphite.Server
 	registerMgr *register.Manager
 	registryMgr *registry.Manager
@@ -48,6 +50,7 @@ type Server struct {
 func NewServerWithConfigFile(configFile string) *Server {
 
 	server := &Server{
+		Controller:  NewController(),
 		graphite:    graphite.NewServer(),
 		registryMgr: registry.NewManager(),
 		registerMgr: register.NewManager(),
