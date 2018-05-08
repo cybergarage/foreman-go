@@ -152,14 +152,18 @@ func (server *Server) GetHostname() (string, error) {
 	return os.Hostname()
 }
 
-// LoadConfig loads a specified configuration file.
-// GetGraphitePort returns the graphite carbon port.
-func (server *Server) GetGraphitePort() int {
+// GetHTTPPort returns the graphite HTTP port.
+func (server *Server) GetHTTPPort() int {
+	return server.graphite.Render.Port
+}
+
+// GetCarbonPort returns the graphite carbon port.
+func (server *Server) GetCarbonPort() int {
 	return server.graphite.Carbon.Port
 }
 
-// GetHTTPPort returns the graphite HTTP port.
-func (server *Server) GetHTTPPort() int {
+// GetRenderPort returns the graphite render port.
+func (server *Server) GetRenderPort() int {
 	return server.graphite.Render.Port
 }
 
