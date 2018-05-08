@@ -39,9 +39,21 @@ func (client *Client) SetHost(host string) error {
 	return nil
 }
 
-// SetHTTPPort sets the specified point into the client.
+// SetHTTPPort sets the specified port.
 func (client *Client) SetHTTPPort(port int) error {
 	client.HTTPPort = port
+	return nil
+}
+
+// SetCarbonPort sets the specified port.
+func (client *Client) SetCarbonPort(port int) error {
+	client.CarbonPort = port
+	return nil
+}
+
+// SetRenderPort sets the specified port.
+func (client *Client) SetRenderPort(port int) error {
+	client.RenderPort = port
 	return nil
 }
 
