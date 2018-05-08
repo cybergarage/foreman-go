@@ -11,16 +11,23 @@ import (
 
 // NewMetricsWithGraphiteMetric returns new metrics from Graphite metric.
 func NewMetricsWithGraphiteMetric(gm *graphite.Metrics) []*metric.Metric {
-	m := make([]*metric.Metric, len(gm.DataPoints))
-
+	ms := make([]*metric.Metric, len(gm.DataPoints))
 	for n, dp := range gm.DataPoints {
-		m[n] = metric.NewMetric()
-		m[n].Name = gm.Name
-		m[n].Value = dp.Value
-		m[n].Timestamp = dp.Timestamp
+		ms[n] = metric.NewMetric()
+		ms[n].Name = gm.Name
+		ms[n].Value = dp.Value
+		ms[n].Timestamp = dp.Timestamp
 	}
+	return ms
+}
 
-	return m
+// NewMetricsWithGraphiteMetrics returns new metrics from Graphite metric.
+func NewMetricsWithGraphiteMetrics(gms []*graphite.Metrics) []*metric.Metric {
+	ms := make([]*metric.Metric, 0)
+	for _, gm := range gms {
+		ms = append(ms, NewMetricsWithGraphiteMetric(gm)...)
+	}
+	return ms
 }
 
 // NewGraphiteMetricsWithMetric returns a new metric from Graphite metric.
