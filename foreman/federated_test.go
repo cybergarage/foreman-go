@@ -17,6 +17,7 @@ const (
 	testFederatedNodePrefix            = "node%03d"
 	testFederatedNodeCont              = 10
 	testFederatedMetricsPrefix         = "node%03d.metric%03d"
+	testFederatedQueryPrefix           = "*.metric%03d"
 	testFederatedMetricsStartTimestamp = 1514732400 // 2018-01-01 00:00:00
 	testFederatedMetricsEndTimestamp   = 1514775600 // 2018-01-01 12:00:00
 	testFederatedMetricsInterval       = 300
@@ -79,11 +80,34 @@ func stopFederatedNodes(t *testing.T, servers []*Server) {
 }
 
 func federatedMetricsTest(t *testing.T, client *Client, nodes []*Server) {
+	q := metric.NewMetricQuery()
+	q.SetFromUnix(testFederatedMetricsStartTimestamp)
+	q.SetUntilUnix(testFederatedMetricsEndTimestamp)
+	q.SetIntervalSecond(testFederatedMetricsInterval)
+
+	for _, node := range nodes {
+		for n := 0; n < testFederatedMetricsCount; n++ {
+			q.Target = fmt.Sprintf(testFederatedQueryPrefix, n)
+		}
+
+		client.SetHTTPPort(node.GetHTTPPort())
+		client.SetCarbonPort(node.GetCarbonPort())
+		client.SetRenderPort(node.GetRenderPort())
+		_, err := client.GetMetrics(q)
+		if err != nil {
+			t.Error(err)
+			return
+		}
+	}
 }
 
 func TestFederatedMetricsWithStaticFinder(t *testing.T) {
 	nodes := setupFederatedNodes(t)
 	finder := setupStaticFinderWithServers(t, nodes)
+
+	for _, node := range nodes {
+		node.AddFinder(finder)
+	}
 
 	client := NewClient()
 	client.AddFinder(finder)
