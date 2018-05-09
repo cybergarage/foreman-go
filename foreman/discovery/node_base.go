@@ -66,3 +66,28 @@ func (node *baseNode) GetAddress() string {
 func (node *baseNode) GetRPCPort() int {
 	return node.RPCPort
 }
+
+// NodeEqual returns true if the other node is same with this node
+func NodeEqual(this, other Node) bool {
+	if this.GetCluster() != other.GetCluster() {
+		return false
+	}
+
+	if 0 < len(this.GetName()) && 0 < len(other.GetName()) {
+		if this.GetName() != other.GetName() {
+			return false
+		}
+	}
+
+	if 0 < len(this.GetAddress()) && 0 < len(other.GetAddress()) {
+		if this.GetAddress() != other.GetAddress() {
+			return false
+		}
+	}
+
+	if this.GetRPCPort() != other.GetRPCPort() {
+		return false
+	}
+
+	return true
+}
