@@ -22,3 +22,15 @@ func NewMetricsWithSize(size int) *Metrics {
 func NewMetrics() *Metrics {
 	return NewMetricsWithSize(0)
 }
+
+// AddDataPoint adds a data point.
+func (ms *Metrics) AddDataPoint(dp *DataPoint) error {
+	ms.Values = append(ms.Values, dp)
+	return nil
+}
+
+// AddDataPoints adds data points.
+func (ms *Metrics) AddDataPoints(dp []*DataPoint) error {
+	ms.Values = append(ms.Values, dp...)
+	return nil
+}
