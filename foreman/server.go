@@ -192,6 +192,24 @@ func (server *Server) GetRPCPort() int {
 	return server.GetHTTPPort()
 }
 
+// GetAllClusterNodes returns all nodes in the same cluster
+func (server *Server) GetAllClusterNodes() []Node {
+	allNodes, err := server.GetAllNodes()
+	if err != nil {
+		return make([]Node, 0)
+	}
+
+	clusterName := server.GetCluster()
+	clusterNodes := make([]Node, 0)
+	for _, node := range allNodes {
+		if node.GetCluster() != clusterName {
+			continue
+		}
+		clusterNodes = append(clusterNodes, node)
+	}
+	return clusterNodes
+}
+
 // PostQuery posts a query string
 func (server *Server) PostQuery(query string) (interface{}, error) {
 	parser := fql.NewParser()
