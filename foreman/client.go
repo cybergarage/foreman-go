@@ -33,6 +33,19 @@ func NewClient() *Client {
 	return client
 }
 
+// NewClientWithNode returns a new client for a specified node.
+func NewClientWithNode(node Node) *Client {
+	client := &Client{
+		Scheme:     DefaultRpcProtocol,
+		Host:       node.GetName(),
+		HTTPPort:   node.GetRPCPort(),
+		CarbonPort: node.GetCarbonPort(),
+		RenderPort: node.GetRenderPort(),
+		Controller: NewController(),
+	}
+	return client
+}
+
 // SetHost sets the specified host into the client.
 func (client *Client) SetHost(host string) error {
 	client.Host = host
@@ -76,11 +89,7 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 
 // GetMetrics gets the specified metrics over Graphite interface
 func (client *Client) GetMetrics(q *metric.Query) (metric.ResultSet, error) {
-	gq, err := graphite.NewGraphiteQueryWithMetricQuery(q)
-	if err != nil {
-		return nil, err
-	}
-
+	gq := graphite.NewGraphiteQueryWithMetricQuery(q)
 	gc := go_graphite.NewClient()
 	gc.RenderPort = client.RenderPort
 	gms, err := gc.PostQuery(gq)
