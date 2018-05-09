@@ -6,8 +6,8 @@ package foreman
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/metric"
-	rpc "github.com/cybergarage/foreman-go/foreman/rpc/graphite"
-	"github.com/cybergarage/go-graphite/net/graphite"
+	"github.com/cybergarage/foreman-go/foreman/rpc/graphite"
+	go_graphite "github.com/cybergarage/go-graphite/net/graphite"
 )
 
 // Client represents a client for the server.
@@ -26,8 +26,8 @@ func NewClient() *Client {
 		Scheme:     DefaultRpcProtocol,
 		Host:       DefaultServerHost,
 		HTTPPort:   DefaultHttpPort,
-		CarbonPort: graphite.DefaultCarbonPort,
-		RenderPort: graphite.DefaultRenderPort,
+		CarbonPort: go_graphite.DefaultCarbonPort,
+		RenderPort: go_graphite.DefaultRenderPort,
 		Controller: NewController(),
 	}
 	return client
@@ -59,12 +59,12 @@ func (client *Client) SetRenderPort(port int) error {
 
 // PostMetric posts a metric over Graphite interface
 func (client *Client) PostMetric(m *metric.Metric) error {
-	gm, err := rpc.NewGraphiteMetricsWithMetric(m)
+	gm, err := graphite.NewGraphiteMetricsWithMetric(m)
 	if err != nil {
 		return err
 	}
 
-	graphite := graphite.NewClient()
+	graphite := go_graphite.NewClient()
 	graphite.CarbonPort = client.CarbonPort
 	err = graphite.PostMetrics(gm)
 	if err != nil {
@@ -76,19 +76,19 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 
 // GetMetrics gets the specified metrics over Graphite interface
 func (client *Client) GetMetrics(q *metric.Query) (metric.ResultSet, error) {
-	gq, err := rpc.NewGraphiteQueryWithMetricQuery(q)
+	gq, err := graphite.NewGraphiteQueryWithMetricQuery(q)
 	if err != nil {
 		return nil, err
 	}
 
-	graphite := graphite.NewClient()
-	graphite.RenderPort = client.RenderPort
-	gms, err := graphite.PostQuery(gq)
+	gc := go_graphite.NewClient()
+	gc.RenderPort = client.RenderPort
+	gms, err := gc.PostQuery(gq)
 	if err != nil {
 		return nil, err
 	}
 
-	rs, err := rpc.NewResultSetWithGraphiteMetrics(gms)
+	rs, err := graphite.NewResultSetWithGraphiteMetrics(gms)
 	if err != nil {
 		return nil, err
 	}
