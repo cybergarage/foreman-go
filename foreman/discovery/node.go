@@ -14,4 +14,41 @@ type Node interface {
 	GetAddress() string
 	// GetRPCPort returns the RPC port
 	GetRPCPort() int
+	// GetRenderPort returns the Graphite render port
+	GetRenderPort() int
+	// GetCarbonPort returns the Graphite carbon port
+	GetCarbonPort() int
+}
+
+// NodeEqual returns true if the other node is same with this node
+func NodeEqual(this, other Node) bool {
+	if this.GetCluster() != other.GetCluster() {
+		return false
+	}
+
+	if 0 < len(this.GetName()) && 0 < len(other.GetName()) {
+		if this.GetName() != other.GetName() {
+			return false
+		}
+	}
+
+	if 0 < len(this.GetAddress()) && 0 < len(other.GetAddress()) {
+		if this.GetAddress() != other.GetAddress() {
+			return false
+		}
+	}
+
+	if this.GetRPCPort() != other.GetRPCPort() {
+		return false
+	}
+
+	if this.GetRenderPort() != other.GetRenderPort() {
+		return false
+	}
+
+	if this.GetCarbonPort() != other.GetCarbonPort() {
+		return false
+	}
+
+	return true
 }
