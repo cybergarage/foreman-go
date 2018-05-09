@@ -4,6 +4,10 @@
 
 package foreman
 
+import (
+	"github.com/cybergarage/foreman-go/foreman/discovery"
+)
+
 const (
 	insertMetricQueryFormat = "SET (%s, %f, %d) INTO METRICS"
 )
@@ -18,6 +22,15 @@ type Node interface {
 	GetAddress() string
 	// GetRPCPort returns the RPC port
 	GetRPCPort() int
+	// GetRenderPort returns the Graphite render port
+	GetRenderPort() int
+	// GetCarbonPort returns the Graphite carbon port
+	GetCarbonPort() int
 	// PostQuery posts a query string
 	PostQuery(query string) (interface{}, error)
+}
+
+// NodeEqual returns true if the other node is same with this node
+func NodeEqual(this, other Node) bool {
+	return discovery.NodeEqual(this, other)
 }

@@ -11,18 +11,19 @@ import (
 	"net/url"
 
 	"github.com/cybergarage/foreman-go/foreman/discovery"
-
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
-// Remote represents a remote node.
+// RemoteNode represents a remote node.
 type RemoteNode struct {
 	Node
 
-	Cluster string
-	Name    string
-	Address string
-	RPCPort int
+	Cluster    string
+	Name       string
+	Address    string
+	RPCPort    int
+	RenderPort int
+	CarbonPort int
 }
 
 // NewRemoteNode returns a remote new node.
@@ -34,10 +35,12 @@ func NewRemoteNode() *RemoteNode {
 // NewRemoteNodeWithDiscoveryNode returns a remote new node.
 func NewRemoteNodeWithDiscoveryNode(discoveryNode discovery.Node) *RemoteNode {
 	node := &RemoteNode{
-		Cluster: discoveryNode.GetCluster(),
-		Name:    discoveryNode.GetName(),
-		Address: discoveryNode.GetAddress(),
-		RPCPort: discoveryNode.GetRPCPort(),
+		Cluster:    discoveryNode.GetCluster(),
+		Name:       discoveryNode.GetName(),
+		Address:    discoveryNode.GetAddress(),
+		RPCPort:    discoveryNode.GetRPCPort(),
+		RenderPort: discoveryNode.GetRenderPort(),
+		CarbonPort: discoveryNode.GetCarbonPort(),
 	}
 	return node
 }
@@ -60,6 +63,16 @@ func (node *RemoteNode) GetAddress() string {
 // GetRPCPort returns the RPC port
 func (node *RemoteNode) GetRPCPort() int {
 	return node.RPCPort
+}
+
+// GetRenderPort returns the Graphite render port
+func (node *RemoteNode) GetRenderPort() int {
+	return node.RenderPort
+}
+
+// GetCarbonPort returns the Graphite carbon port
+func (node *RemoteNode) GetCarbonPort() int {
+	return node.CarbonPort
 }
 
 // PostQueryOverHTTP posts a query string over HTTP

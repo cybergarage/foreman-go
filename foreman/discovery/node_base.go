@@ -9,10 +9,12 @@ import "net"
 // Node represents a node.
 type baseNode struct {
 	Node
-	Cluster string
-	Name    string
-	Address string
-	RPCPort int
+	Cluster    string
+	Name       string
+	Address    string
+	RPCPort    int
+	RenderPort int
+	CarbonPort int
 }
 
 // NewNode returns a new node.
@@ -67,27 +69,12 @@ func (node *baseNode) GetRPCPort() int {
 	return node.RPCPort
 }
 
-// NodeEqual returns true if the other node is same with this node
-func NodeEqual(this, other Node) bool {
-	if this.GetCluster() != other.GetCluster() {
-		return false
-	}
+// GetRenderPort returns the Graphite render port
+func (node *baseNode) GetRenderPort() int {
+	return node.RenderPort
+}
 
-	if 0 < len(this.GetName()) && 0 < len(other.GetName()) {
-		if this.GetName() != other.GetName() {
-			return false
-		}
-	}
-
-	if 0 < len(this.GetAddress()) && 0 < len(other.GetAddress()) {
-		if this.GetAddress() != other.GetAddress() {
-			return false
-		}
-	}
-
-	if this.GetRPCPort() != other.GetRPCPort() {
-		return false
-	}
-
-	return true
+// GetCarbonPort returns the Graphite carbon port
+func (node *baseNode) GetCarbonPort() int {
+	return node.CarbonPort
 }

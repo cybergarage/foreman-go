@@ -27,3 +27,12 @@ func TestNewServer(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestNewServerEquals(t *testing.T) {
+	server := NewServer()
+	remoteNode := NewRemoteNodeWithDiscoveryNode(server)
+
+	if !NodeEqual(server, remoteNode) {
+		t.Errorf("%s != %s", server.GetName(), remoteNode.GetName())
+	}
+}
