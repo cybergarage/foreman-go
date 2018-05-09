@@ -48,7 +48,7 @@ func TestRegexpGraphite(t *testing.T) {
 			continue
 		}
 
-		ok, expandedName := re.ExpandNode(node)
+		expandedName, ok := re.ExpandNode(node)
 		if expand != expandedName {
 			t.Errorf("[%d] %s != %s", n, expand, expandedName)
 			continue

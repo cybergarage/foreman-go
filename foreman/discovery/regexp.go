@@ -84,30 +84,30 @@ func (re *Regexp) MatchNode(node Node) bool {
 }
 
 // expandNodeString replaces expression to node returns the result;
-func (re *Regexp) expandNodeString(nodeStr string) (bool, string) {
+func (re *Regexp) expandNodeString(nodeStr string) (string, bool) {
 	if len(nodeStr) <= 0 {
-		return false, ""
+		return "", false
 	}
 
 	// FIXME : Only replacing the prefix expression string
 	if strings.HasPrefix(re.expr, exprAsteriskGo) {
-		return true, strings.Replace(re.expr, exprAsteriskGo, nodeStr, 1)
+		return strings.Replace(re.expr, exprAsteriskGo, nodeStr, 1), true
 	}
 
-	return true, re.expr
+	return re.expr, true
 }
 
 // ExpandNode replaces expression to node returns the result;
-func (re *Regexp) ExpandNode(node Node) (bool, string) {
-	ok, result := re.expandNodeString(node.GetName())
+func (re *Regexp) ExpandNode(node Node) (string, bool) {
+	result, ok := re.expandNodeString(node.GetName())
 	if ok {
-		return true, result
+		return result, true
 	}
 
-	ok, result = re.expandNodeString(node.GetAddress())
+	result, ok = re.expandNodeString(node.GetAddress())
 	if ok {
-		return true, result
+		return result, true
 	}
 
-	return false, ""
+	return "", false
 }
