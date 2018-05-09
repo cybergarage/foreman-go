@@ -167,8 +167,8 @@ func (server *Server) GetRenderPort() int {
 	return server.graphite.Render.Port
 }
 
-// GetCuster returns the cluster name
-func (server *Server) GetCuster() string {
+// GetCluster returns the cluster name
+func (server *Server) GetCluster() string {
 	// TODO : Support cluster
 	return ""
 }
