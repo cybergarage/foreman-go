@@ -21,8 +21,8 @@ func newBaseNode() Node {
 	return node
 }
 
-// GetCuster returns the cluster name
-func (node *baseNode) GetCuster() string {
+// GetCluster returns the cluster name
+func (node *baseNode) GetCluster() string {
 	return node.Cluster
 }
 

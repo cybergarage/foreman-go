@@ -34,7 +34,7 @@ func NewRemoteNode() *RemoteNode {
 // NewRemoteNodeWithDiscoveryNode returns a remote new node.
 func NewRemoteNodeWithDiscoveryNode(discoveryNode discovery.Node) *RemoteNode {
 	node := &RemoteNode{
-		Cluster: discoveryNode.GetCuster(),
+		Cluster: discoveryNode.GetCluster(),
 		Name:    discoveryNode.GetName(),
 		Address: discoveryNode.GetAddress(),
 		RPCPort: discoveryNode.GetRPCPort(),
@@ -42,8 +42,8 @@ func NewRemoteNodeWithDiscoveryNode(discoveryNode discovery.Node) *RemoteNode {
 	return node
 }
 
-// GetCuster returns the cluster name
-func (node *RemoteNode) GetCuster() string {
+// GetCluster returns the cluster name
+func (node *RemoteNode) GetCluster() string {
 	return node.Cluster
 }
 

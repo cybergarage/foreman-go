@@ -6,8 +6,8 @@ package discovery
 
 // Node represents an abstract node interface
 type Node interface {
-	// GetCuster returns the cluster name
-	GetCuster() string
+	// GetCluster returns the cluster name
+	GetCluster() string
 	// GetName returns the host name
 	GetName() string
 	// GetAddress returns the interface address
