@@ -28,6 +28,14 @@ func (ctrl *Controller) AddFinder(finder discovery.Finder) error {
 	return nil
 }
 
+// HasFinders returns whether the controller has no finder.
+func (ctrl *Controller) HasFinders() bool {
+	if len(ctrl.Finders) <= 0 {
+		return false
+	}
+	return true
+}
+
 // SearchAll searches all nodes.
 func (ctrl *Controller) SearchAll() error {
 	for _, finder := range ctrl.Finders {
