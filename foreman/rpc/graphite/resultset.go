@@ -9,7 +9,7 @@ import (
 	"github.com/cybergarage/go-graphite/net/graphite"
 )
 
-// NewResultSetWithGraphiteMetrics returns a new resultset from graphite.Metric.
+// NewResultSetWithGraphiteMetrics returns a resultset from an arrray of graphite metrics.
 func NewResultSetWithGraphiteMetrics(gms []*graphite.Metrics) (metric.ResultSet, error) {
 	rs := metric.NewResultSet()
 	for _, gm := range gms {
@@ -23,4 +23,31 @@ func NewResultSetWithGraphiteMetrics(gms []*graphite.Metrics) (metric.ResultSet,
 		}
 	}
 	return rs, nil
+}
+
+// NewGraphiteMetricsWithResultSet returns an arrray of graphite metrics from a resultset.
+func NewGraphiteMetricsWithResultSet(rs metric.ResultSet) ([]*graphite.Metrics, error) {
+	mCount := rs.GetMetricsCount()
+	gms := make([]*graphite.Metrics, mCount)
+
+	ms := rs.GetFirstMetrics()
+	for n := 0; n < mCount; n++ {
+		gms[n] = graphite.NewMetrics()
+		if ms == nil {
+			break
+		}
+		gms[n].Name = ms.Name
+		dpCount := len(ms.Values)
+		gms[n].DataPoints = graphite.NewDataPoints(dpCount)
+		for i := 0; i < dpCount; i++ {
+			dp := graphite.NewDataPoint()
+			dp.Timestamp = ms.Values[i].Timestamp
+			dp.Value = ms.Values[i].Value
+			gms[n].DataPoints[i] = dp
+		}
+
+		ms = rs.GetNextMetrics()
+	}
+
+	return gms, nil
 }
