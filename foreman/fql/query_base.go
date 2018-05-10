@@ -14,15 +14,17 @@ type baseQuery struct {
 	Columns
 	Values
 	Conditions
+	forwardingFlag bool
 }
 
 // newQueryWithToken returns a new query with the specified string.
 func newBaseQuery() *baseQuery {
 	q := &baseQuery{
-		Target:     nil,
-		Columns:    NewColumns(),
-		Values:     NewValues(),
-		Conditions: NewConditions(),
+		Target:         nil,
+		Columns:        NewColumns(),
+		Values:         NewValues(),
+		Conditions:     NewConditions(),
+		forwardingFlag: false,
 	}
 	return q
 }
@@ -117,6 +119,14 @@ func (q *baseQuery) GetConditionByColumn(leftOpe string) (*Operator, string, boo
 		}
 	}
 	return nil, "", false
+}
+
+func (q *baseQuery) SetForwardingFlag(flag bool) {
+	q.forwardingFlag = flag
+}
+
+func (q *baseQuery) IsForwardingQuery() bool {
+	return q.forwardingFlag
 }
 
 // String returns a string description of the instance
