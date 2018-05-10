@@ -34,5 +34,8 @@ type Query interface {
 	GetConditions() (Conditions, bool)
 	GetConditionByColumn(leftOpe string) (*Operator, string, bool)
 
+	SetForwardingFlag(bool)
+	IsForwardingQuery() bool
+
 	String() string
 }
