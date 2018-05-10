@@ -11,12 +11,7 @@ import (
 func TestNewServer(t *testing.T) {
 	server := NewServer()
 
-	_, err := server.GetHostname()
-	if err != nil {
-		t.Error(err)
-	}
-
-	err = server.Start()
+	err := server.Start()
 	if err != nil {
 		t.Error(err)
 		return
