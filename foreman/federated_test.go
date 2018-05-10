@@ -15,18 +15,18 @@ import (
 
 const (
 	testFederatedNodePrefix            = "node%03d"
-	testFederatedNodeCont              = 10
+	testFederatedNodeCont              = 3
 	testFederatedMetricsPrefix         = "node%03d.metric%03d"
 	testFederatedQueryPrefix           = "*.metric%03d"
 	testFederatedMetricsStartTimestamp = 1514732400 // 2018-01-01 00:00:00
-	testFederatedMetricsEndTimestamp   = 1514775600 // 2018-01-01 12:00:00
+	testFederatedMetricsEndTimestamp   = 1514746800 // 2018-01-01 04:00:00
 	testFederatedMetricsInterval       = 300
 	testFederatedMetricsCount          = (testFederatedMetricsEndTimestamp - testFederatedMetricsStartTimestamp) / testFederatedMetricsInterval
 )
 
 func setupFederatedNode(t *testing.T, nodeNo int) *Server {
 	server := NewServer()
-
+	server.SetName(fmt.Sprintf(testFederatedNodePrefix, nodeNo))
 	err := server.Start()
 	if err != nil {
 		t.Error(err)
@@ -80,28 +80,59 @@ func stopFederatedNodes(t *testing.T, servers []*Server) {
 }
 
 func federatedMetricsTest(t *testing.T, client *Client, nodes []*Server) {
+	testNodeCount := len(nodes)
+
 	q := metric.NewMetricQuery()
 	q.SetFromUnix(testFederatedMetricsStartTimestamp)
 	q.SetUntilUnix(testFederatedMetricsEndTimestamp)
 	q.SetIntervalSecond(testFederatedMetricsInterval)
 
 	for _, node := range nodes {
-		for n := 0; n < testFederatedMetricsCount; n++ {
-			q.Target = fmt.Sprintf(testFederatedQueryPrefix, n)
-		}
-
 		client.SetHTTPPort(node.GetHTTPPort())
 		client.SetCarbonPort(node.GetCarbonPort())
 		client.SetRenderPort(node.GetRenderPort())
-		_, err := client.GetMetrics(q)
-		if err != nil {
-			t.Error(err)
-			return
+
+		for n := 0; n < testFederatedMetricsCount; n++ {
+			q.Target = fmt.Sprintf(testFederatedQueryPrefix, n)
+
+			rs, err := client.GetMetrics(q)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			if rs.GetMetricsCount() != testNodeCount {
+				t.Errorf("%s : %d != %d", node.GetName(), rs.GetMetricsCount(), testNodeCount)
+				break
+			}
+
+			ms := rs.GetFirstMetrics()
+			for ms != nil {
+				if len(ms.Values) != testFederatedMetricsCount {
+					t.Errorf("%s : %d != %d", node.GetName(), len(ms.Values), testFederatedMetricsCount)
+					break
+				}
+				ms = rs.GetNextMetrics()
+			}
 		}
 	}
 }
 
-func TestFederatedMetricsWithStaticFinder(t *testing.T) {
+func TestStandaloneNodeMetricsWithStaticFinder(t *testing.T) {
+	node := setupFederatedNode(t, 0)
+	nodes := []*Server{node}
+	finder := setupStaticFinderWithServers(t, nodes)
+	node.AddFinder(finder)
+
+	client := NewClient()
+	client.AddFinder(finder)
+
+	federatedMetricsTest(t, client, nodes)
+
+	stopFederatedNodes(t, nodes)
+}
+
+func TestFederatedMultiNodeMetricsWithStaticFinder(t *testing.T) {
 	nodes := setupFederatedNodes(t)
 	finder := setupStaticFinderWithServers(t, nodes)
 
