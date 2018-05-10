@@ -147,11 +147,6 @@ func (server *Server) LoadConfig(filename string) error {
 	return server.updateConfig()
 }
 
-// GetHostname returns the hostname.
-func (server *Server) GetHostname() (string, error) {
-	return os.Hostname()
-}
-
 // GetHTTPPort returns the graphite HTTP port.
 func (server *Server) GetHTTPPort() int {
 	return server.graphite.Render.Port
@@ -175,7 +170,7 @@ func (server *Server) GetCluster() string {
 
 // GetName returns the host name
 func (server *Server) GetName() string {
-	name, err := server.GetHostname()
+	name, err := os.Hostname()
 	if err != nil {
 		return ""
 	}
@@ -194,7 +189,15 @@ func (server *Server) GetRPCPort() int {
 
 // GetAllClusterNodes returns all nodes in the same cluster
 func (server *Server) GetAllClusterNodes() []Node {
-	allNodes, err := server.GetAllNodes()
+	// Return only the server if the server has no finder
+
+	if !server.Controller.HasFinders() {
+		return []Node{server}
+	}
+
+	// The server is included if the server has any finders
+
+	allNodes, err := server.Controller.GetAllNodes()
 	if err != nil {
 		return make([]Node, 0)
 	}
