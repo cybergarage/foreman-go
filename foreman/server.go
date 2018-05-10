@@ -29,6 +29,9 @@ const (
 type Server struct {
 	Node
 
+	cluster string
+	name    string
+
 	metric.RegisterListener
 	kb.KnowledgeBaseListener
 
@@ -50,6 +53,8 @@ type Server struct {
 func NewServerWithConfigFile(configFile string) *Server {
 
 	server := &Server{
+		cluster:     "",
+		name:        "",
 		Controller:  NewController(),
 		graphite:    graphite.NewServer(),
 		registryMgr: registry.NewManager(),
@@ -64,7 +69,11 @@ func NewServerWithConfigFile(configFile string) *Server {
 	server.initialize()
 	runtime.SetFinalizer(server, serverFinalizer)
 
-	var err error
+	hostname, err := os.Hostname()
+	if err == nil {
+		server.name = hostname
+	}
+
 	server.config, err = NewConfigWithRegistry(server.registryMgr)
 	if err != nil {
 		logging.Fatal("Could not create config registry!")
@@ -116,6 +125,51 @@ func serverFinalizer(server *Server) {
 	server.registryMgr.Stop()
 }
 
+// SetCluster sets a cluster name
+func (server *Server) SetCluster(name string) {
+	server.cluster = name
+}
+
+// GetCluster returns the cluster name
+func (server *Server) GetCluster() string {
+	return server.cluster
+}
+
+// SetName sets a host name
+func (server *Server) SetName(name string) {
+	server.name = name
+}
+
+// GetName returns the host name
+func (server *Server) GetName() string {
+	return server.name
+}
+
+// GetHTTPPort returns the graphite HTTP port.
+func (server *Server) GetHTTPPort() int {
+	return server.graphite.Render.Port
+}
+
+// GetCarbonPort returns the graphite carbon port.
+func (server *Server) GetCarbonPort() int {
+	return server.graphite.Carbon.Port
+}
+
+// GetRenderPort returns the graphite render port.
+func (server *Server) GetRenderPort() int {
+	return server.graphite.Render.Port
+}
+
+// GetAddress returns the interface address
+func (server *Server) GetAddress() string {
+	return server.graphite.GetAddress()
+}
+
+// GetRPCPort returns the RPC port
+func (server *Server) GetRPCPort() int {
+	return server.GetHTTPPort()
+}
+
 // updateConfig sets latest configurations.
 func (server *Server) updateConfig() error {
 	// Set latest network configurations
@@ -137,6 +191,7 @@ func (server *Server) updateConfig() error {
 	return err
 }
 
+// LoadConfig sets the configurations in the specified file.
 func (server *Server) LoadConfig(filename string) error {
 	logging.Trace("Server loading config file from %s.", filename)
 	err := server.config.LoadFile(filename)
@@ -145,46 +200,6 @@ func (server *Server) LoadConfig(filename string) error {
 		return err
 	}
 	return server.updateConfig()
-}
-
-// GetHTTPPort returns the graphite HTTP port.
-func (server *Server) GetHTTPPort() int {
-	return server.graphite.Render.Port
-}
-
-// GetCarbonPort returns the graphite carbon port.
-func (server *Server) GetCarbonPort() int {
-	return server.graphite.Carbon.Port
-}
-
-// GetRenderPort returns the graphite render port.
-func (server *Server) GetRenderPort() int {
-	return server.graphite.Render.Port
-}
-
-// GetCluster returns the cluster name
-func (server *Server) GetCluster() string {
-	// TODO : Support cluster
-	return ""
-}
-
-// GetName returns the host name
-func (server *Server) GetName() string {
-	name, err := os.Hostname()
-	if err != nil {
-		return ""
-	}
-	return name
-}
-
-// GetAddress returns the interface address
-func (server *Server) GetAddress() string {
-	return server.graphite.GetAddress()
-}
-
-// GetRPCPort returns the RPC port
-func (server *Server) GetRPCPort() int {
-	return server.GetHTTPPort()
 }
 
 // GetAllClusterNodes returns all nodes in the same cluster
