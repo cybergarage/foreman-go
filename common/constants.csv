@@ -1,0 +1,95 @@
+# Copyright (C) 2017 Satoshi Konno. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+product_name,"foreman"
+
+########################################
+# Default
+########################################
+
+default_server_host,"localhost"
+default_carbon_port,2003
+default_http_port,8080
+default_rpc_protocol,"http"
+default_log_file,"-"
+default_log_level,"INFO"
+
+########################################
+# HTTP Server
+########################################
+
+http_server_fql_path,"/fql"
+http_server_fql_query,"q"
+http_server_fql_retransmission,"r"
+
+########################################
+# Registry
+########################################
+
+config_category_key,"config"
+config_product_key,"product"
+config_version_key,"version"
+config_host_key,"host"
+config_carbon_port_key,"carbon_port"
+config_http_port_key,"http_port"
+config_fql_path_key,"fql_path"
+config_fql_query_key,"fql_query"
+config_log_file_key,"log_file"
+config_log_level_key,"log_level"
+
+########################################
+# Action 
+########################################
+
+action_encoding_base64,"base64"
+action_language_python,"python"
+action_language_lua,"lua"
+
+action_column_methods,"methods"
+action_column_name,"name"
+action_column_code,"code"
+action_column_encoding,"encoding"
+action_column_language,"language"
+
+route_column_routes,"routes"
+route_column_name,"name"
+route_column_source,"src"
+route_column_destination,"dest"
+
+########################################
+# Query
+########################################
+
+query_insert_string,"INSERT"
+query_select_string,"SELECT"
+query_delete_string,"DELETE"
+query_analyze_string,"ANALYZE"
+query_execute_string,"EXECUTE"
+
+query_target_qos,"QOS"
+query_target_config,"CONFIG"
+query_target_metrics,"METRICS"
+query_target_register,"REGISTER"
+query_target_registry,"REGISTRY"
+query_target_action,"ACTION"
+query_target_route,"ROUTE"
+
+query_condition_operator_lt,"<"
+query_condition_operator_le,"<="
+query_condition_operator_gt,">"
+query_condition_operator_ge,">="
+query_condition_operator_eq,"=="
+query_condition_operator_neq,"!="
+
+query_column_name,"name"
+query_column_timestamp,"ts"
+query_column_value,"value"
+query_column_version,"ver"
+
+########################################
+# Graphite Compatibility
+########################################
+
+graphite_response_target,"target"
+graphite_response_datapoints,"datapoints"
