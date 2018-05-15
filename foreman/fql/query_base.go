@@ -121,11 +121,11 @@ func (q *baseQuery) GetConditionByColumn(leftOpe string) (*Operator, string, boo
 	return nil, "", false
 }
 
-func (q *baseQuery) SetForwardingFlag(flag bool) {
+func (q *baseQuery) SetRetransmissionFlag(flag bool) {
 	q.forwardingFlag = flag
 }
 
-func (q *baseQuery) IsForwardingQuery() bool {
+func (q *baseQuery) IsRetransmissionQuery() bool {
 	return q.forwardingFlag
 }
 

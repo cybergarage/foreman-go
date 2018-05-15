@@ -15,7 +15,6 @@ import (
 )
 
 const (
-	httpRequestQueryParam       = "q"
 	httpResponseContentType     = "Content-Type"
 	httpResponseContentTypeJSON = "application/json"
 )
@@ -33,7 +32,7 @@ func (server *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter
 
 // fqlRequestReceived handles FQL requests
 func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter) {
-	queryString := r.FormValue(httpRequestQueryParam)
+	queryString := r.FormValue(HttpRequestFqlQueryParam)
 
 	parser := fql.NewParser()
 	queries, err := parser.ParseString(queryString)
@@ -48,6 +47,13 @@ func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter)
 	if queryCnt <= 0 {
 		server.badRequestReceived(r, w)
 		return
+	}
+
+	retransParam := r.FormValue(HttpRequestFqlRetransmissionParam)
+	if 0 <= len(retransParam) {
+		for _, query := range queries {
+			query.SetRetransmissionFlag(true)
+		}
 	}
 
 	var queryAllResponse interface{}
