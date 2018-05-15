@@ -75,6 +75,11 @@ query_target_registry,"REGISTRY"
 query_target_action,"ACTION"
 query_target_route,"ROUTE"
 
+query_target_type_none,0
+query_target_type_shared,1
+query_target_type_federated,2
+query_target_type_standalone,3
+
 query_condition_operator_lt,"<"
 query_condition_operator_le,"<="
 query_condition_operator_gt,">"
