@@ -23,7 +23,7 @@ const (
 // HTTPRequestReceived is a listener for FQL
 func (server *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter) {
 	switch r.URL.Path {
-	case HttpServerFqlPath:
+	case HttpRequestFqlPath:
 		server.fqlRequestReceived(r, w)
 		return
 	}

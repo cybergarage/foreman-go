@@ -93,7 +93,7 @@ func NewServerWithConfigFile(configFile string) *Server {
 	server.graphite.SetRenderListener(server)
 	FqlPath, err := server.config.GetString(ConfigFqlPathKey)
 	if err != nil {
-		FqlPath = HttpServerFqlPath
+		FqlPath = HttpRequestFqlPath
 	}
 	server.graphite.SetHTTPRequestListener(FqlPath, server)
 

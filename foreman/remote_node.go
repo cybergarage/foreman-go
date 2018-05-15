@@ -83,9 +83,9 @@ func (node *RemoteNode) PostQueryOverHTTP(query string) (interface{}, int, error
 			"%s:%d",
 			node.GetAddress(),
 			node.GetRPCPort()),
-		Path: HttpServerFqlPath,
+		Path: HttpRequestFqlPath,
 		RawQuery: fmt.Sprintf("%s=%s",
-			HttpServerFqlQuery,
+			HttpRequestFqlQueryParam,
 			url.QueryEscape(query)),
 	}
 
