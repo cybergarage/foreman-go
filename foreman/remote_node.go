@@ -77,16 +77,29 @@ func (node *RemoteNode) GetCarbonPort() int {
 
 // PostQueryOverHTTP posts a query string over HTTP
 func (node *RemoteNode) PostQueryOverHTTP(query string) (interface{}, int, error) {
+	return node.postQueryOverHTTPWithRetransmissionFlag(query, false)
+}
+
+// postQueryOverHTTPWithRetransmissionFlag posts a query string over HTTP
+func (node *RemoteNode) postQueryOverHTTPWithRetransmissionFlag(query string, retransmissionFlag bool) (interface{}, int, error) {
+	rawQuery := fmt.Sprintf("%s=%s",
+		HttpRequestFqlQueryParam,
+		url.QueryEscape(query))
+
+	if retransmissionFlag {
+		rawQuery += fmt.Sprintf("&%s=%t",
+			HttpRequestFqlRetransmissionParam,
+			retransmissionFlag)
+	}
+
 	url := url.URL{
 		Scheme: DefaultRpcProtocol,
 		Host: fmt.Sprintf(
 			"%s:%d",
 			node.GetAddress(),
 			node.GetRPCPort()),
-		Path: HttpRequestFqlPath,
-		RawQuery: fmt.Sprintf("%s=%s",
-			HttpRequestFqlQueryParam,
-			url.QueryEscape(query)),
+		Path:     HttpRequestFqlPath,
+		RawQuery: rawQuery,
 	}
 
 	res, err := http.Get(url.String())
@@ -119,6 +132,12 @@ func (node *RemoteNode) PostQueryOverHTTP(query string) (interface{}, int, error
 
 // PostQuery posts a query string
 func (node *RemoteNode) PostQuery(query string) (interface{}, error) {
-	resObj, _, err := node.PostQueryOverHTTP(query)
+	resObj, _, err := node.postQueryOverHTTPWithRetransmissionFlag(query, false)
+	return resObj, err
+}
+
+// PostRetransmissionQuery posts a query string
+func (node *RemoteNode) PostRetransmissionQuery(query string) (interface{}, error) {
+	resObj, _, err := node.postQueryOverHTTPWithRetransmissionFlag(query, true)
 	return resObj, err
 }
