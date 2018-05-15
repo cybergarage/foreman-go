@@ -16,6 +16,15 @@ const (
 	errorServerQueryTargetNotFound = "Not found the query target (%s) "
 )
 
+// executeRetransmissionQuery executes the specified query
+func (server *Server) executeRetransmissionQuery(node Node, q fql.Query) {
+	remoteNode, ok := node.(*RemoteNode)
+	if !ok {
+		return
+	}
+	remoteNode.PostRetransmissionQuery(q.String())
+}
+
 // ExecuteQuery executes the specified query
 func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 
@@ -53,5 +62,21 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 	}
 
-	return executor.ExecuteQuery(q)
+	// Execute query to local node
+
+	resObj, err := executor.ExecuteQuery(q)
+	if err != nil {
+		return nil, err
+	}
+
+	// Execute query to remote nodes
+
+	for _, node := range server.GetAllClusterNodes() {
+		if NodeEqual(node, server) {
+			continue
+		}
+		go server.executeRetransmissionQuery(node, q)
+	}
+
+	return resObj, err
 }
