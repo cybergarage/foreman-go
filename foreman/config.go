@@ -45,8 +45,8 @@ func DefaultTOMLConfig() TOMLConfig {
 	t.Server.HTTPPort = DefaultHttpPort
 	t.Server.CarbonPort = DefaultCarbonPort
 
-	t.FQL.Path = HttpServerFqlPath
-	t.FQL.Query = HttpServerFqlQuery
+	t.FQL.Path = HttpRequestFqlPath
+	t.FQL.Query = HttpRequestFqlQueryParam
 	return t
 }
 

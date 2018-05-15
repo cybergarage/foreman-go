@@ -19,9 +19,9 @@ default_log_level,"INFO"
 # HTTP Server
 ########################################
 
-http_server_fql_path,"/fql"
-http_server_fql_query,"q"
-http_server_fql_retransmission,"r"
+http_request_fql_path,"/fql"
+http_request_fql_query_param,"q"
+http_request_fql_retransmission_param,"r"
 
 ########################################
 # Registry
