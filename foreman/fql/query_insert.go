@@ -12,17 +12,7 @@ type InsertQuery struct {
 // NewInsertQuery returns a new insert query.
 func NewInsertQuery() Query {
 	q := &InsertQuery{
-		baseQuery: newBaseQuery(),
+		baseQuery: newBaseQueryWithType(QueryTypeInsert),
 	}
 	return q
-}
-
-// GetType returns a query type.
-func (q *InsertQuery) GetType() QueryType {
-	return QueryTypeInsert
-}
-
-// IsStateChangeQuery returns whether state change query
-func (q *InsertQuery) IsStateChangeQuery() bool {
-	return true
 }

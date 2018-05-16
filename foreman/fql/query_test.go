@@ -9,8 +9,6 @@ import (
 )
 
 func TestNewQuery(t *testing.T) {
-	newBaseQuery()
-
 	NewInsertQuery()
 	NewSetQuery()
 	NewSelectQuery()
