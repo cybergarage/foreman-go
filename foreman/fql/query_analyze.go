@@ -17,7 +17,12 @@ func NewAnalyzeQuery() Query {
 	return q
 }
 
-// GetType returns a stored type.
+// GetType returns a query type.
 func (q *AnalyzeQuery) GetType() QueryType {
 	return QueryTypeAnalyze
+}
+
+// IsStateChangeQuery returns whether state change query
+func (q *AnalyzeQuery) IsStateChangeQuery() bool {
+	return false
 }

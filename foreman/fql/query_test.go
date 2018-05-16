@@ -15,4 +15,28 @@ func TestNewQuery(t *testing.T) {
 	NewSetQuery()
 	NewSelectQuery()
 	NewExportQuery()
+	NewDeleteQuery()
+	NewAnalyzeQuery()
+}
+
+type testStatusChangeQuery struct {
+	query          Query
+	isStatusChange bool
+}
+
+func TestStateChangeQueries(t *testing.T) {
+	testQueries := []*testStatusChangeQuery{
+		&testStatusChangeQuery{NewInsertQuery(), true},
+		&testStatusChangeQuery{NewSetQuery(), true},
+		&testStatusChangeQuery{NewSelectQuery(), false},
+		&testStatusChangeQuery{NewExportQuery(), false},
+		&testStatusChangeQuery{NewDeleteQuery(), true},
+		&testStatusChangeQuery{NewAnalyzeQuery(), false},
+	}
+
+	for n, testQuery := range testQueries {
+		if testQuery.query.IsStateChangeQuery() != testQuery.isStatusChange {
+			t.Errorf("[%d] %t != %t", n, testQuery.query.IsStateChangeQuery(), testQuery.isStatusChange)
+		}
+	}
 }

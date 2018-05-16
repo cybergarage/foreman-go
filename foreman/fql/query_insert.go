@@ -17,7 +17,12 @@ func NewInsertQuery() Query {
 	return q
 }
 
-// GetType returns a stored type.
+// GetType returns a query type.
 func (q *InsertQuery) GetType() QueryType {
 	return QueryTypeInsert
+}
+
+// IsStateChangeQuery returns whether state change query
+func (q *InsertQuery) IsStateChangeQuery() bool {
+	return true
 }

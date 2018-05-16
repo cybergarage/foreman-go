@@ -17,7 +17,12 @@ func NewExecuteQuery() Query {
 	return q
 }
 
-// GetType returns a stored type.
+// GetType returns a query type.
 func (q *ExecuteQuery) GetType() QueryType {
 	return QueryTypeExecute
+}
+
+// IsStateChangeQuery returns whether state change query
+func (q *ExecuteQuery) IsStateChangeQuery() bool {
+	return false
 }
