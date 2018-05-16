@@ -8,6 +8,8 @@ package foreman
 import (
 	"strings"
 
+	"github.com/cybergarage/foreman-go/foreman/logging"
+
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
@@ -17,12 +19,11 @@ const (
 )
 
 // executeRetransmissionQuery executes the specified query
-func (server *Server) executeRetransmissionQuery(node Node, q fql.Query) {
-	remoteNode, ok := node.(*RemoteNode)
-	if !ok {
-		return
-	}
-	remoteNode.PostRetransmissionQuery(q.String())
+func (server *Server) executeRetransmissionQuery(node Node, query fql.Query) error {
+	remoteNode := node.(*RemoteNode)
+	queryString := query.String()
+	_, err := remoteNode.PostRetransmissionQuery(queryString)
+	return err
 }
 
 // ExecuteQuery executes the specified query
@@ -71,12 +72,15 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 
 	// Execute query to remote nodes
 
-	if q.IsStateChangeQuery() {
+	if q.IsStateChangeQuery() && !q.IsRetransmissionQuery() {
 		for _, node := range server.GetAllClusterNodes() {
 			if NodeEqual(node, server) {
 				continue
 			}
-			server.executeRetransmissionQuery(node, q)
+			err := server.executeRetransmissionQuery(node, q)
+			if err != nil {
+				logging.Error("%s", err)
+			}
 		}
 	}
 

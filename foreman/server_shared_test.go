@@ -5,25 +5,127 @@
 package foreman
 
 import (
+	"fmt"
+	"strings"
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
 const (
-	testSharedNodeCont = 3
+	testSharedNodeCont             = 3
+	testSharedTestQosName          = "qos%03d"
+	testSharedTestQosFormulaPrefix = "(m%03d <"
+	testSharedTestQosSetQuery      = "SET (qos%03d, \"m%03d < %03d\") INTO QOS"
+	testSharedTestQosGetQuery      = "EXPORT FROM QOS WHERE name == qos%03d"
 )
 
+func setupSharedTestNode(t *testing.T, nodeNo int) *Server {
+	server := NewServer()
+	server.SetName(fmt.Sprintf(testNodeNamePrefix, nodeNo))
+	err := server.Start()
+	if err != nil {
+		t.Error(err)
+	}
+
+	return server
+}
+
+func setupSharedTestNodes(t *testing.T) []*Server {
+	servers := make([]*Server, testSharedNodeCont)
+	for n := 0; n < testSharedNodeCont; n++ {
+		servers[n] = setupSharedTestNode(t, n)
+	}
+	return servers
+}
+
 func sharedRegistryTest(t *testing.T, client *Client, nodes []*Server) {
-	//testNodeCount := len(nodes)
+	testNodeCount := len(nodes)
 
 	for _, node := range nodes {
 		client.SetHTTPPort(node.GetHTTPPort())
 		client.SetCarbonPort(node.GetCarbonPort())
 		client.SetRenderPort(node.GetRenderPort())
+
+		for n := 0; n < testNodeCount; n++ {
+			q := fmt.Sprintf(testSharedTestQosGetQuery, n)
+			resObj, err := client.PostQuery(q)
+			if err != nil {
+				t.Error(err)
+				return
+			}
+
+			resMap, ok := resObj.(map[string]interface{})
+			if !ok {
+				t.Error("")
+				return
+			}
+			qosObj, ok := resMap["qos"]
+			if !ok {
+				t.Errorf("%s : %s", node.GetName(), q)
+				return
+			}
+			qosMap, ok := qosObj.(map[string]interface{})
+			if !ok {
+				t.Errorf("%s : %s", node.GetName(), q)
+				return
+			}
+
+			qosName := fmt.Sprintf(testSharedTestQosName, n)
+			resQosFormula, ok := qosMap[qosName]
+			if !ok {
+				t.Errorf("%s : %s", node.GetName(), q)
+				return
+			}
+			resQosFormulaStr, ok := resQosFormula.(string)
+			if !ok {
+				t.Errorf("%s : %s", node.GetName(), q)
+				return
+			}
+
+			//  (m000 < 0.000000) != (m000 < 000)
+
+			qosFormulaPrefix := fmt.Sprintf(testSharedTestQosFormulaPrefix, n)
+			if !strings.HasPrefix(resQosFormulaStr, qosFormulaPrefix) {
+				t.Errorf("%s : %s != %s", qosName, resQosFormulaStr, qosFormulaPrefix)
+				return
+			}
+		}
 	}
 }
 
 func TestStandaloneSharedRegistryWithStaticFinder(t *testing.T) {
+	node := setupSharedTestNode(t, 0)
+	nodes := []*Server{node}
+	finder := setupStaticFinderWithServers(t, nodes)
+	node.AddFinder(finder)
+	client := NewClient()
+	client.AddFinder(finder)
+
+	sharedRegistryTest(t, client, nodes)
+
+	stopTestNodes(t, nodes)
 }
 
 func TestMultiNodeSharedRegistryWithStaticFinder(t *testing.T) {
+	logging.SetLogLevel(logging.LevelTrace)
+
+	nodes := setupSharedTestNodes(t)
+	finder := setupStaticFinderWithServers(t, nodes)
+
+	for n, node := range nodes {
+		node.AddFinder(finder)
+		q := fmt.Sprintf(testSharedTestQosSetQuery, n, n, n)
+		_, err := node.PostQuery(q)
+		if err != nil {
+			t.Error(err)
+		}
+	}
+
+	client := NewClient()
+	client.AddFinder(finder)
+
+	sharedRegistryTest(t, client, nodes)
+
+	stopTestNodes(t, nodes)
 }
