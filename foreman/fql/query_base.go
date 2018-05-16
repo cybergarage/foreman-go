@@ -6,6 +6,7 @@ package fql
 
 import (
 	"fmt"
+	"strings"
 )
 
 // baseQuery represents a parameter.
@@ -150,7 +151,6 @@ func (q *baseQuery) String() string {
 	qt, ok := (interface{}(q)).(Query)
 	if ok {
 		queryType = qt.GetType()
-
 	}
 
 	// Query String
@@ -190,9 +190,9 @@ func (q *baseQuery) String() string {
 	if ok {
 		switch queryType {
 		case QueryTypeInsert:
-			queryString += fmt.Sprintf("INTO %s", target)
+			queryString += fmt.Sprintf(" INTO %s", target)
 		case QueryTypeSelect, QueryTypeDelete:
-			queryString += fmt.Sprintf("FROM %s", target)
+			queryString += fmt.Sprintf(" FROM %s", target)
 		}
 	}
 
@@ -217,12 +217,16 @@ func (q *baseQuery) String() string {
 	if queryType == QueryTypeInsert {
 		values, ok := q.GetValues()
 		if ok {
-			queryString += "VALUES ("
+			queryString += " VALUES ("
 			for n, value := range values {
 				if 0 < n {
 					queryString += ", "
 				}
-				queryString += value.String()
+				valueString := value.String()
+				if 0 <= strings.IndexAny(valueString, " ") {
+					valueString = fmt.Sprintf("\"%s\"", valueString)
+				}
+				queryString += valueString
 			}
 			queryString += ")"
 		}
@@ -232,7 +236,7 @@ func (q *baseQuery) String() string {
 
 	conditions, ok := q.GetConditions()
 	if ok {
-		queryString += "WHERE "
+		queryString += " WHERE "
 		for _, condition := range conditions {
 			queryString += fmt.Sprintf("%s ", condition.String())
 		}
