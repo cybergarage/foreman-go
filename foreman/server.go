@@ -248,7 +248,7 @@ func (server *Server) PostQuery(query string) (interface{}, error) {
 
 	for n, query := range queries {
 		resObject, queryErr := server.ExecuteQuery(query)
-		if queryErr == nil {
+		if queryErr != nil {
 			return nil, queryErr.Error()
 		}
 		if queryCnt == 1 {
