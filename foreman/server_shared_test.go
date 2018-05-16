@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/logging"
 )
@@ -120,6 +121,9 @@ func TestMultiNodeSharedRegistryWithStaticFinder(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
+
+		// Wait for asynchronous queries for other cluster nodes
+		time.Sleep(1 * time.Second)
 	}
 
 	client := NewClient()

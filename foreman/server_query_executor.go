@@ -8,10 +8,9 @@ package foreman
 import (
 	"strings"
 
-	"github.com/cybergarage/foreman-go/foreman/logging"
-
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
 const (
@@ -23,6 +22,9 @@ func (server *Server) executeRetransmissionQuery(node Node, query fql.Query) err
 	remoteNode := node.(*RemoteNode)
 	queryString := query.String()
 	_, err := remoteNode.PostRetransmissionQuery(queryString)
+	if err != nil {
+		logging.Error("%s", err)
+	}
 	return err
 }
 
@@ -77,10 +79,7 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 			if NodeEqual(node, server) {
 				continue
 			}
-			err := server.executeRetransmissionQuery(node, q)
-			if err != nil {
-				logging.Error("%s", err)
-			}
+			go server.executeRetransmissionQuery(node, q)
 		}
 	}
 
