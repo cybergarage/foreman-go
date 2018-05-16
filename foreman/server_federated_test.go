@@ -7,6 +7,7 @@ package foreman
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/metric"
 )
@@ -20,6 +21,39 @@ const (
 	testFederatedMetricsInterval       = 300
 	testFederatedMetricsCount          = (testFederatedMetricsEndTimestamp - testFederatedMetricsStartTimestamp) / testFederatedMetricsInterval
 )
+
+func setupFederatedTestNode(t *testing.T, nodeNo int) *Server {
+	server := NewServer()
+	server.SetName(fmt.Sprintf(testNodeNamePrefix, nodeNo))
+	err := server.Start()
+	if err != nil {
+		t.Error(err)
+	}
+
+	ts := testFederatedMetricsStartTimestamp
+	for n := 0; n < testFederatedMetricsCount; n++ {
+		m := metric.NewMetric()
+		m.Name = fmt.Sprintf(testFederatedMetricsPrefix, nodeNo, n)
+		m.Timestamp = time.Unix(int64(ts), 0)
+		m.Value = float64(n)
+		ts += testFederatedMetricsInterval
+		err := server.metricMgr.AddMetric(m)
+		if err != nil {
+			t.Error(err)
+			break
+		}
+	}
+
+	return server
+}
+
+func setupFederatedTestNodes(t *testing.T) []*Server {
+	servers := make([]*Server, testFederatedNodeCont)
+	for n := 0; n < testFederatedNodeCont; n++ {
+		servers[n] = setupFederatedTestNode(t, n)
+	}
+	return servers
+}
 
 func federatedMetricsTest(t *testing.T, client *Client, nodes []*Server) {
 	testNodeCount := len(nodes)
@@ -61,7 +95,7 @@ func federatedMetricsTest(t *testing.T, client *Client, nodes []*Server) {
 }
 
 func TestStandaloneNodeMetricsWithStaticFinder(t *testing.T) {
-	node := setupTestNode(t, 0)
+	node := setupFederatedTestNode(t, 0)
 	nodes := []*Server{node}
 	finder := setupStaticFinderWithServers(t, nodes)
 	node.AddFinder(finder)
@@ -75,7 +109,7 @@ func TestStandaloneNodeMetricsWithStaticFinder(t *testing.T) {
 }
 
 func TestFederatedMultiNodeMetricsWithStaticFinder(t *testing.T) {
-	nodes := setupTestNodes(t)
+	nodes := setupFederatedTestNodes(t)
 	finder := setupStaticFinderWithServers(t, nodes)
 
 	for _, node := range nodes {
