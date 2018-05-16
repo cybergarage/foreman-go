@@ -38,3 +38,24 @@ func TestStateChangeQueries(t *testing.T) {
 		}
 	}
 }
+
+func TestQueryToString(t *testing.T) {
+	testQueries := []string{
+		"INSERT INTO QOS VALUES (qos000)",
+		"INSERT INTO QOS VALUES (qos000, \"m000 < 000\")",
+	}
+
+	for n, testQuery := range testQueries {
+		parser := NewParser()
+		queries, err := parser.ParseString(testQuery)
+		if err != nil {
+			t.Error(err)
+			continue
+		}
+		query := queries[0]
+		queryString := query.String()
+		if queryString != testQuery {
+			t.Errorf("[%d] %s != %s", n, queryString, testQuery)
+		}
+	}
+}
