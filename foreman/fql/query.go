@@ -34,6 +34,8 @@ type Query interface {
 	GetConditions() (Conditions, bool)
 	GetConditionByColumn(leftOpe string) (*Operator, string, bool)
 
+	IsStateChangeQuery() bool
+
 	SetRetransmissionFlag(bool)
 	IsRetransmissionQuery() bool
 

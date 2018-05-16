@@ -29,11 +29,6 @@ func newBaseQuery() *baseQuery {
 	return q
 }
 
-// GetType returns a stored type in the query.
-func (q *baseQuery) GetType() QueryType {
-	return QueryTypeUnknown
-}
-
 // SetTarget sets a specified target into the query.
 func (q *baseQuery) SetTarget(target *Target) error {
 	q.Target = target
@@ -121,10 +116,12 @@ func (q *baseQuery) GetConditionByColumn(leftOpe string) (*Operator, string, boo
 	return nil, "", false
 }
 
+// SetRetransmissionFlag sets a retransmission flag.
 func (q *baseQuery) SetRetransmissionFlag(flag bool) {
 	q.forwardingFlag = flag
 }
 
+// IsRetransmissionQuery returns whether retransmission query
 func (q *baseQuery) IsRetransmissionQuery() bool {
 	return q.forwardingFlag
 }
@@ -132,6 +129,15 @@ func (q *baseQuery) IsRetransmissionQuery() bool {
 // String returns a string description of the instance
 func (q *baseQuery) String() string {
 
+	// Query Type
+
+	queryType := QueryTypeUnknown
+	qt, ok := (interface{}(q)).(Query)
+	if ok {
+		queryType = qt.GetType()
+
+	}
+	// Query String
 	var queryString string
 
 	queryTypeStrings := map[QueryType]string{
@@ -141,14 +147,14 @@ func (q *baseQuery) String() string {
 		QueryTypeAnalyze: QueryAnalyzeString,
 		QueryTypeExecute: QueryExecuteString,
 	}
-	queryTypeString, ok := queryTypeStrings[q.GetType()]
+	queryTypeString, ok := queryTypeStrings[queryType]
 	if ok {
 		queryString += fmt.Sprintf("%s", queryTypeString)
 	}
 
 	// Columns (Select)
 
-	if q.GetType() == QueryTypeSelect {
+	if queryType == QueryTypeSelect {
 		columns, ok := q.GetColumns()
 		if ok {
 			queryString += "("
@@ -166,7 +172,7 @@ func (q *baseQuery) String() string {
 
 	target, ok := q.GetTarget()
 	if ok {
-		switch q.GetType() {
+		switch queryType {
 		case QueryTypeInsert:
 			queryString += fmt.Sprintf("INTO %s", target)
 		case QueryTypeSelect, QueryTypeDelete:
@@ -176,7 +182,7 @@ func (q *baseQuery) String() string {
 
 	// Columns (Insert)
 
-	if q.GetType() == QueryTypeInsert {
+	if queryType == QueryTypeInsert {
 		columns, ok := q.GetColumns()
 		if ok {
 			queryString += "("
@@ -192,7 +198,7 @@ func (q *baseQuery) String() string {
 
 	// Values (Insert)
 
-	if q.GetType() == QueryTypeInsert {
+	if queryType == QueryTypeInsert {
 		values, ok := q.GetValues()
 		if ok {
 			queryString += "VALUES ("

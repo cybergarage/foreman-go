@@ -17,7 +17,12 @@ func NewDeleteQuery() Query {
 	return q
 }
 
-// GetType returns a stored type.
+// GetType returns a query type.
 func (q *DeleteQuery) GetType() QueryType {
 	return QueryTypeDelete
+}
+
+// IsStateChangeQuery returns whether state change query
+func (q *DeleteQuery) IsStateChangeQuery() bool {
+	return true
 }

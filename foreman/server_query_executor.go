@@ -71,11 +71,13 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 
 	// Execute query to remote nodes
 
-	for _, node := range server.GetAllClusterNodes() {
-		if NodeEqual(node, server) {
-			continue
+	if q.IsStateChangeQuery() {
+		for _, node := range server.GetAllClusterNodes() {
+			if NodeEqual(node, server) {
+				continue
+			}
+			server.executeRetransmissionQuery(node, q)
 		}
-		go server.executeRetransmissionQuery(node, q)
 	}
 
 	return resObj, err
