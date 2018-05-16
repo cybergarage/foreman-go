@@ -12,17 +12,7 @@ type SelectQuery struct {
 // NewSelectQuery returns a new select query.
 func NewSelectQuery() Query {
 	q := &SelectQuery{
-		baseQuery: newBaseQuery(),
+		baseQuery: newBaseQueryWithType(QueryTypeSelect),
 	}
 	return q
-}
-
-// GetType returns a query type.
-func (q *SelectQuery) GetType() QueryType {
-	return QueryTypeSelect
-}
-
-// IsStateChangeQuery returns whether state change query
-func (q *SelectQuery) IsStateChangeQuery() bool {
-	return false
 }

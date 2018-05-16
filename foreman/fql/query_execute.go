@@ -12,17 +12,7 @@ type ExecuteQuery struct {
 // NewExecuteQuery returns a new execute query.
 func NewExecuteQuery() Query {
 	q := &ExecuteQuery{
-		baseQuery: newBaseQuery(),
+		baseQuery: newBaseQueryWithType(QueryTypeExecute),
 	}
 	return q
-}
-
-// GetType returns a query type.
-func (q *ExecuteQuery) GetType() QueryType {
-	return QueryTypeExecute
-}
-
-// IsStateChangeQuery returns whether state change query
-func (q *ExecuteQuery) IsStateChangeQuery() bool {
-	return false
 }

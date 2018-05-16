@@ -10,6 +10,7 @@ import (
 
 // baseQuery represents a parameter.
 type baseQuery struct {
+	Type QueryType
 	*Target
 	Columns
 	Values
@@ -18,8 +19,9 @@ type baseQuery struct {
 }
 
 // newQueryWithToken returns a new query with the specified string.
-func newBaseQuery() *baseQuery {
+func newBaseQueryWithType(queryType QueryType) *baseQuery {
 	q := &baseQuery{
+		Type:           queryType,
 		Target:         nil,
 		Columns:        NewColumns(),
 		Values:         NewValues(),
@@ -27,6 +29,19 @@ func newBaseQuery() *baseQuery {
 		forwardingFlag: false,
 	}
 	return q
+}
+
+// GetType returns a query type.
+func (q *baseQuery) GetType() QueryType {
+	return q.Type
+}
+
+// IsStateChangeQuery returns whether state change query
+func (q *baseQuery) IsStateChangeQuery() bool {
+	if (q.Type == QueryTypeInsert) || (q.Type == QueryTypeDelete) {
+		return true
+	}
+	return false
 }
 
 // SetTarget sets a specified target into the query.
@@ -137,6 +152,7 @@ func (q *baseQuery) String() string {
 		queryType = qt.GetType()
 
 	}
+
 	// Query String
 	var queryString string
 
