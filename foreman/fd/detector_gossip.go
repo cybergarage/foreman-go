@@ -6,18 +6,18 @@ package fd
 
 // GossipDetector represents a gossip based detector.
 type GossipDetector struct {
-	*baseDetector
+	*HeartbeatDetector
 }
 
 // NewGossipDetector returns a new gossip detector.
 func NewGossipDetector() Detector {
 	detector := &GossipDetector{
-		baseDetector: newBaseDetector(),
+		HeartbeatDetector: NewHeartbeatDetector(),
 	}
 	return detector
 }
 
 // Execute runs the failure action
-func (detector *baseDetector) Execute() error {
+func (detector *GossipDetector) Execute() error {
 	return nil
 }
