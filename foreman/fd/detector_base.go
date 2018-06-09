@@ -33,13 +33,3 @@ func (detector *baseDetector) SetListener(l DetectorListener) error {
 	detector.listener = l
 	return nil
 }
-
-// Start starts the instance
-func (detector *baseDetector) Start() error {
-	return nil
-}
-
-// Stop starts the instance
-func (detector *baseDetector) Stop() error {
-	return nil
-}
