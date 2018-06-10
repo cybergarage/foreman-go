@@ -15,6 +15,7 @@ type baseNode struct {
 	RPCPort    int
 	RenderPort int
 	CarbonPort int
+	Status     *NodeStatus
 }
 
 // NewNode returns a new node.
@@ -77,4 +78,9 @@ func (node *baseNode) GetRenderPort() int {
 // GetCarbonPort returns the Graphite carbon port
 func (node *baseNode) GetCarbonPort() int {
 	return node.CarbonPort
+}
+
+// GetStatus returns the current condition status
+func (node *baseNode) GetStatus() NodeStatus {
+	return *node.Status
 }
