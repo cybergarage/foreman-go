@@ -4,6 +4,21 @@
 
 package discovery
 
+type NodeCondition int
+type NodeClock uint
+
+const (
+	NodeConditionUnknown = iota
+	NodeConditionReady
+	NodeConditionStop
+)
+
+// NodeStatus represents an abstract node interface
+type NodeStatus struct {
+	Condition NodeCondition
+	Clock     NodeClock
+}
+
 // Node represents an abstract node interface
 type Node interface {
 	// GetCluster returns the cluster name
@@ -18,6 +33,8 @@ type Node interface {
 	GetRenderPort() int
 	// GetCarbonPort returns the Graphite carbon port
 	GetCarbonPort() int
+	// GetStatus returns the current condition status
+	GetStatus() NodeStatus
 }
 
 // NodeEqual returns true if the other node is same with this node
