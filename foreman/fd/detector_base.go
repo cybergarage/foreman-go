@@ -5,19 +5,31 @@
 package fd
 
 import (
+	"fmt"
+	"math"
+
 	"github.com/cybergarage/foreman-go/foreman/discovery"
+)
+
+const (
+	errorDetectorNotFoundFinder   = "Finder Not Found"
+	errorDetectorNotFoundListener = "Listener Not Found"
+	errorDetectorNotFoundExecutor = "Executor Not Found"
 )
 
 // baseDetector represents a base detector.
 type baseDetector struct {
-	finder   discovery.Finder
-	listener DetectorListener
+	finder   Finder
+	listener FailureDetectionListener
+	executor FailureDetectionExecutor
 }
 
 // newBaseDetector returns a new base detector.
 func newBaseDetector() *baseDetector {
 	detector := &baseDetector{
+		finder:   nil,
 		listener: nil,
+		executor: nil,
 	}
 	return detector
 }
@@ -28,8 +40,65 @@ func (detector *baseDetector) SetFinder(f discovery.Finder) error {
 	return nil
 }
 
-// SetListener sets a listener to know failure nodes
-func (detector *baseDetector) SetListener(l DetectorListener) error {
+// GetFinder returns a current finder
+func (detector *baseDetector) GetFinder() (discovery.Finder, error) {
+	if detector.finder == nil {
+		return nil, fmt.Errorf(errorDetectorNotFoundFinder)
+	}
+	return detector.finder, nil
+}
+
+// SetListener sets a listener
+func (detector *baseDetector) SetListener(l FailureDetectionListener) error {
 	detector.listener = l
+	return nil
+}
+
+// GetListener returns a current listener
+func (detector *baseDetector) GetListener() (FailureDetectionListener, error) {
+	if detector.listener == nil {
+		return nil, fmt.Errorf(errorDetectorNotFoundListener)
+	}
+	return detector.listener, nil
+}
+
+// SetExecutor sets a executor
+func (detector *baseDetector) SetExecutor(e FailureDetectionExecutor) error {
+	detector.executor = e
+	return nil
+}
+
+// GetExecutor returns a current executor
+func (detector *baseDetector) GetExecutor() (FailureDetectionExecutor, error) {
+	if detector.listener == nil {
+		return nil, fmt.Errorf(errorDetectorNotFoundExecutor)
+	}
+	return detector.executor, nil
+}
+
+// ExecuteFailureDetection runs the failure action
+func (detector *baseDetector) ExecuteFailureDetection(node Node) error {
+	executor, err := detector.GetExecutor()
+	if err != nil {
+		return err
+	}
+
+	finder, err := detector.GetFinder()
+	if err != nil {
+		return err
+	}
+
+	targetNodes, err := finder.GetAllNodes()
+	if err != nil {
+		return err
+	}
+
+	targetAllNodeCount := len(targetNodes)
+	targetNodeCount := int(math.Ceil(GossipExecutorDefaultPercentage))
+	for n := 0; n < targetNodeCount; n++ {
+		//targetNode := targetNodes[rand.Intn(targetAllNodeCount)]
+		//executor.ExecuteFailureDetection(detector, targetNode)
+	}
+
 	return nil
 }
