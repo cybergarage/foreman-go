@@ -26,6 +26,10 @@ type Node interface {
 	GetRenderPort() int
 	// GetCarbonPort returns the Graphite carbon port
 	GetCarbonPort() int
+	// GetCondition returns the current status
+	GetCondition() NodeCondition
+	// GetClock returns the current logical clock
+	GetClock() NodeClock
 	// PostQuery posts a query string
 	PostQuery(query string) (interface{}, error)
 }
