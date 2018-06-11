@@ -44,9 +44,10 @@ type Server struct {
 	metricMgr   *metric.Manager
 	actionMgr   *action.Manager
 
-	config *Config
-
+	config     *Config
 	configFile string
+
+	status *Status
 }
 
 // NewServerWithConfigFile returns a new server with a specified configuration file.
@@ -64,6 +65,7 @@ func NewServerWithConfigFile(configFile string) *Server {
 		actionMgr:   action.NewManager(),
 		config:      nil,
 		configFile:  configFile,
+		status:      NewStatus(),
 	}
 
 	server.initialize()

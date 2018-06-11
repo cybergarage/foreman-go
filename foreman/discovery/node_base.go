@@ -15,12 +15,16 @@ type baseNode struct {
 	RPCPort    int
 	RenderPort int
 	CarbonPort int
-	Status     *NodeStatus
+	Clock      NodeClock
+	Condition  NodeCondition
 }
 
 // NewNode returns a new node.
 func newBaseNode() Node {
-	node := &baseNode{}
+	node := &baseNode{
+		Clock:     0,
+		Condition: NodeConditionInitial,
+	}
 	return node
 }
 
@@ -80,7 +84,12 @@ func (node *baseNode) GetCarbonPort() int {
 	return node.CarbonPort
 }
 
-// GetStatus returns the current condition status
-func (node *baseNode) GetStatus() NodeStatus {
-	return *node.Status
+// GetCondition returns the current status
+func (node *baseNode) GetCondition() NodeCondition {
+	return node.Condition
+}
+
+// GetClock returns the current logical clock
+func (node *baseNode) GetClock() NodeClock {
+	return node.Clock
 }
