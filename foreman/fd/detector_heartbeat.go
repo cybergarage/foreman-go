@@ -12,6 +12,11 @@ const (
 	HeartbeatDetectorDefaultInterval = time.Second * 1
 )
 
+// HeartbeatDetectorExecutor represents an abstract interface
+type HeartbeatDetectorExecutor interface {
+	ExecuteFailureDetection() error
+}
+
 // HeartbeatDetector represents a heartbeat based detector.
 type HeartbeatDetector struct {
 	*baseDetector
@@ -51,8 +56,15 @@ func (detector *HeartbeatDetector) Stop() error {
 }
 
 func heartbeatDetectorExecuter(detector *HeartbeatDetector) {
+	executor, ok := (interface{}(detector)).(HeartbeatDetectorExecutor)
+	if !ok {
+		detector.Stop()
+		return
+	}
+
 	go func() {
 		for {
+			executor.ExecuteFailureDetection()
 			select {
 			case <-time.After(detector.intervalDuration):
 			case <-detector.intervalFuncStop:
