@@ -6,7 +6,6 @@ package fd
 
 import (
 	"fmt"
-	"math"
 
 	"github.com/cybergarage/foreman-go/foreman/discovery"
 )
@@ -74,31 +73,4 @@ func (detector *baseDetector) GetExecutor() (FailureDetectionExecutor, error) {
 		return nil, fmt.Errorf(errorDetectorNotFoundExecutor)
 	}
 	return detector.executor, nil
-}
-
-// ExecuteFailureDetection runs the failure action
-func (detector *baseDetector) ExecuteFailureDetection(node Node) error {
-	executor, err := detector.GetExecutor()
-	if err != nil {
-		return err
-	}
-
-	finder, err := detector.GetFinder()
-	if err != nil {
-		return err
-	}
-
-	targetNodes, err := finder.GetAllNodes()
-	if err != nil {
-		return err
-	}
-
-	targetAllNodeCount := len(targetNodes)
-	targetNodeCount := int(math.Ceil(GossipExecutorDefaultPercentage))
-	for n := 0; n < targetNodeCount; n++ {
-		//targetNode := targetNodes[rand.Intn(targetAllNodeCount)]
-		//executor.ExecuteFailureDetection(detector, targetNode)
-	}
-
-	return nil
 }
