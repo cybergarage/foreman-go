@@ -25,13 +25,8 @@ func NewGossipDetector() Detector {
 	return detector
 }
 
-// Execute runs the failure action
-func (detector *GossipDetector) Execute() error {
-	listener, err := detector.GetListener()
-	if err != nil {
-		return err
-	}
-
+// ExecuteFailureDetection runs the failure action
+func (detector *GossipDetector) ExecuteFailureDetection(node Node) error {
 	executor, err := detector.GetExecutor()
 	if err != nil {
 		return err
