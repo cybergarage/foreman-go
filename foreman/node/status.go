@@ -28,4 +28,6 @@ type Status interface {
 	GetCondition() Condition
 	// GetClock returns the current logical clock
 	GetClock() Clock
+	// GetVersion returns the current repository version
+	GetVersion() Version
 }

@@ -5,7 +5,7 @@
 package foreman
 
 import (
-	"github.com/cybergarage/foreman-go/foreman/discovery"
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
 const (
@@ -30,11 +30,13 @@ type Node interface {
 	GetCondition() NodeCondition
 	// GetClock returns the current logical clock
 	GetClock() NodeClock
+	// GetVersion returns the current repository version
+	GetVersion() NodeVersion
 	// PostQuery posts a query string
 	PostQuery(query string) (interface{}, error)
 }
 
 // NodeEqual returns true if the other node is same with this node
 func NodeEqual(this, other Node) bool {
-	return discovery.NodeEqual(this, other)
+	return node.Equal(this, other)
 }
