@@ -7,6 +7,8 @@ package discovery
 import (
 	"regexp"
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
 const (
@@ -24,7 +26,7 @@ var testFinderNodeNames = []string{
 func setupTestFinderBaseNodes() []Node {
 	nodes := make([]Node, len(testFinderNodeNames))
 	for n, name := range testFinderNodeNames {
-		node := newBaseNode().(*baseNode)
+		node := node.NewBaseNode().(*node.BaseNode)
 		node.Name = name
 		nodes[n] = node
 	}

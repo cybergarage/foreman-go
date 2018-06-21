@@ -4,16 +4,8 @@
 
 package discovery
 
-// Node represents an abstract node interface
-type Node interface {
-	NodeConfig
-	NodeStatus
-}
+import (
+	"github.com/cybergarage/foreman-go/foreman/node"
+)
 
-// NodeEqual returns true if the other node is same with this node
-func NodeEqual(this, other Node) bool {
-	if !NodeConfigEqual(this, other) {
-		return false
-	}
-	return true
-}
+type Node = node.Node

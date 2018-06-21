@@ -6,6 +6,8 @@ package discovery
 
 import (
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
 var testRegexTestCases = [][]string{
@@ -39,7 +41,7 @@ func TestRegexpGraphite(t *testing.T) {
 			continue
 		}
 
-		node := newBaseNode().(*baseNode)
+		node := node.NewBaseNode().(*node.BaseNode)
 		node.Name = name
 
 		ok := re.MatchNode(node)

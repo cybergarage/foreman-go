@@ -5,7 +5,8 @@
 package fd
 
 import (
-	"github.com/cybergarage/foreman-go/foreman/discovery"
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
-type Node = discovery.Node
+type Node = node.Node
+type NodeStatus = node.Status
