@@ -6,9 +6,41 @@ package fd
 
 import (
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/discovery"
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
-func detectorTest(t *testing.T, detector Detector) {
+var testDetectorNodeNames = []string{
+	"org.cybergarage.foreman001",
+	"org.cybergarage.foreman002",
+	"org.cybergarage.foreman003",
+}
+
+type testDetector struct {
+	Detector
+}
+
+func newTestDetectorWithDetector(targetDetector Detector) (Detector, []Node) {
+	detector := &testDetector{
+		Detector: targetDetector,
+	}
+
+	nodes := make([]Node, len(testDetectorNodeNames))
+	for n, name := range testDetectorNodeNames {
+		baseNode := node.NewBaseNode()
+		baseNode.Name = name
+		baseNode.Condition = node.ConditionReady
+		nodes[n] = baseNode
+	}
+
+	finder := discovery.NewStaticFinderWithNodes(nodes)
+	detector.SetFinder(finder)
+
+	return detector, nodes
+}
+
+func detectorTest(t *testing.T, detector Detector, nodes []Node) {
 	err := detector.Start()
 	if err != nil {
 		t.Error(err)
@@ -22,6 +54,7 @@ func detectorTest(t *testing.T, detector Detector) {
 }
 
 func TestNewGossipDetector(t *testing.T) {
-	detector := NewGossipDetector()
-	detectorTest(t, detector)
+	gossipDetector := NewGossipDetector()
+	detector, nodes := newTestDetectorWithDetector(gossipDetector)
+	detectorTest(t, detector, nodes)
 }

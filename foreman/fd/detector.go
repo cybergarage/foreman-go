@@ -14,10 +14,6 @@ type Detector interface {
 	SetListener(FailureDetectionListener) error
 	// GetListener returns a current listener
 	GetListener() (FailureDetectionListener, error)
-	// SetExecutor sets a executor
-	SetExecutor(FailureDetectionExecutor) error
-	// GetExecutor returns a current executor
-	GetExecutor() (FailureDetectionExecutor, error)
 	// Start starts the instance
 	Start() error
 	// Stop stop the instance

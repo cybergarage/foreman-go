@@ -22,16 +22,12 @@ func NewGossipDetector() Detector {
 	detector := &GossipDetector{
 		HeartbeatDetector: NewHeartbeatDetector(),
 	}
+	detector.SetExecutor(detector)
 	return detector
 }
 
 // ExecuteFailureDetection runs the failure action
-func (detector *GossipDetector) ExecuteFailureDetection(node Node) error {
-	executor, err := detector.GetExecutor()
-	if err != nil {
-		return err
-	}
-
+func (detector *GossipDetector) ExecuteFailureDetection(Detector) error {
 	finder, err := detector.GetFinder()
 	if err != nil {
 		return err
@@ -46,7 +42,7 @@ func (detector *GossipDetector) ExecuteFailureDetection(node Node) error {
 	targetNodeCount := int(math.Ceil(GossipExecutorDefaultPercentage))
 	for n := 0; n < targetNodeCount; n++ {
 		targetNode := targetNodes[rand.Intn(targetAllNodeCount)]
-		executor.ExecuteFailureDetection(detector, targetNode)
+		detector.ExecuteNodeFailureDetection(targetNode)
 	}
 
 	return nil

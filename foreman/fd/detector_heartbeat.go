@@ -5,6 +5,7 @@
 package fd
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -12,14 +13,14 @@ const (
 	HeartbeatDetectorDefaultInterval = time.Second * 1
 )
 
-// HeartbeatDetectorExecutor represents an abstract interface
-type HeartbeatDetectorExecutor interface {
-	ExecuteFailureDetection() error
-}
+const (
+	errorDetectorNotFoundExecutor = "Executor Not Found"
+)
 
 // HeartbeatDetector represents a heartbeat based detector.
 type HeartbeatDetector struct {
 	*baseDetector
+	executor         FailureDetectionExecutor
 	intervalDuration time.Duration
 	intervalFuncStop chan bool
 }
@@ -28,6 +29,7 @@ type HeartbeatDetector struct {
 func NewHeartbeatDetector() *HeartbeatDetector {
 	detector := &HeartbeatDetector{
 		baseDetector:     newBaseDetector(),
+		executor:         nil,
 		intervalDuration: HeartbeatDetectorDefaultInterval,
 		intervalFuncStop: nil,
 	}
@@ -39,11 +41,39 @@ func (detector *HeartbeatDetector) SetInterval(d time.Duration) {
 	detector.intervalDuration = d
 }
 
+// SetExecutor sets a executor
+func (detector *HeartbeatDetector) SetExecutor(e FailureDetectionExecutor) error {
+	detector.executor = e
+	return nil
+}
+
+// GetExecutor returns a current executor
+func (detector *HeartbeatDetector) GetExecutor() (FailureDetectionExecutor, error) {
+	if detector.listener == nil {
+		return nil, fmt.Errorf(errorDetectorNotFoundExecutor)
+	}
+	return detector.executor, nil
+}
+
 // Start starts the instance
 func (detector *HeartbeatDetector) Start() error {
 	err := detector.Stop()
 	if err != nil {
 		return err
+	}
+
+	finder, err := detector.GetFinder()
+	if err != nil {
+		return err
+	}
+	if finder == nil {
+		return fmt.Errorf(errorDetectorNotFoundFinder)
+
+	}
+
+	if detector.executor == nil {
+		return fmt.Errorf(errorDetectorNotFoundExecutor)
+
 	}
 
 	heartbeatDetectorExecuter(detector)
@@ -61,17 +91,11 @@ func (detector *HeartbeatDetector) Stop() error {
 }
 
 func heartbeatDetectorExecuter(detector *HeartbeatDetector) {
-	executor, ok := (interface{}(detector)).(HeartbeatDetectorExecutor)
-	if !ok {
-		detector.Stop()
-		return
-	}
-
 	detector.intervalFuncStop = make(chan bool)
 
 	go func() {
 		for {
-			executor.ExecuteFailureDetection()
+			detector.executor.ExecuteFailureDetection(detector)
 			select {
 			case <-time.After(detector.intervalDuration):
 			case <-detector.intervalFuncStop:
