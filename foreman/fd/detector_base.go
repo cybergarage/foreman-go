@@ -6,21 +6,17 @@ package fd
 
 import (
 	"fmt"
-
-	"github.com/cybergarage/foreman-go/foreman/discovery"
 )
 
 const (
 	errorDetectorNotFoundFinder   = "Finder Not Found"
 	errorDetectorNotFoundListener = "Listener Not Found"
-	errorDetectorNotFoundExecutor = "Executor Not Found"
 )
 
 // baseDetector represents a base detector.
 type baseDetector struct {
 	finder   Finder
 	listener FailureDetectionListener
-	executor FailureDetectionExecutor
 }
 
 // newBaseDetector returns a new base detector.
@@ -28,19 +24,18 @@ func newBaseDetector() *baseDetector {
 	detector := &baseDetector{
 		finder:   nil,
 		listener: nil,
-		executor: nil,
 	}
 	return detector
 }
 
 // SetFinder sets the finder to know target nodes
-func (detector *baseDetector) SetFinder(f discovery.Finder) error {
+func (detector *baseDetector) SetFinder(f Finder) error {
 	detector.finder = f
 	return nil
 }
 
 // GetFinder returns a current finder
-func (detector *baseDetector) GetFinder() (discovery.Finder, error) {
+func (detector *baseDetector) GetFinder() (Finder, error) {
 	if detector.finder == nil {
 		return nil, fmt.Errorf(errorDetectorNotFoundFinder)
 	}
@@ -61,16 +56,7 @@ func (detector *baseDetector) GetListener() (FailureDetectionListener, error) {
 	return detector.listener, nil
 }
 
-// SetExecutor sets a executor
-func (detector *baseDetector) SetExecutor(e FailureDetectionExecutor) error {
-	detector.executor = e
+// ExecuteFailureDetection runs the failure action
+func (detector *baseDetector) ExecuteNodeFailureDetection(targetNode Node) error {
 	return nil
-}
-
-// GetExecutor returns a current executor
-func (detector *baseDetector) GetExecutor() (FailureDetectionExecutor, error) {
-	if detector.listener == nil {
-		return nil, fmt.Errorf(errorDetectorNotFoundExecutor)
-	}
-	return detector.executor, nil
 }

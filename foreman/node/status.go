@@ -13,8 +13,6 @@ type Clock uint
 // Version represents a node version type
 type Version uint
 
-// NodeClock represents a node clock type
-
 const (
 	ConditionUnknown = iota
 	ConditionInitial

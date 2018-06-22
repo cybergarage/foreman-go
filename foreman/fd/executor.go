@@ -6,5 +6,5 @@ package fd
 
 // FailureDetectionExecutor represents an abstract interface
 type FailureDetectionExecutor interface {
-	ExecuteFailureDetection(Detector, Node) error
+	ExecuteFailureDetection(Detector) error
 }
