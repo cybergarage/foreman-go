@@ -30,13 +30,13 @@ func nodeMachingTest(t *testing.T, node Node) {
 }
 
 func TestNewBaseNode(t *testing.T) {
-	node := NewBaseNode().(*BaseNode)
+	node := NewBaseNode()
 	node.Name = testNodeName
 	nodeMachingTest(t, node)
 }
 
 func TestNodeHasName(t *testing.T) {
-	node := NewBaseNode().(*BaseNode)
+	node := NewBaseNode()
 	node.Address = "127.0.0.1"
 	if len(node.GetName()) <= 0 {
 		t.Errorf("No name : %s", node.GetAddress())
@@ -44,7 +44,7 @@ func TestNodeHasName(t *testing.T) {
 }
 
 func TestNodeHasAddress(t *testing.T) {
-	node := NewBaseNode().(*BaseNode)
+	node := NewBaseNode()
 	node.Name = "localhost"
 	if len(node.GetAddress()) <= 0 {
 		t.Errorf("No address : %s", node.GetName())
@@ -52,8 +52,8 @@ func TestNodeHasAddress(t *testing.T) {
 }
 
 func TestEqual(t *testing.T) {
-	node01 := NewBaseNode().(*BaseNode)
-	node02 := NewBaseNode().(*BaseNode)
+	node01 := NewBaseNode()
+	node02 := NewBaseNode()
 
 	// name
 

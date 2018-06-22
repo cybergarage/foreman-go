@@ -41,7 +41,7 @@ func TestRegexpGraphite(t *testing.T) {
 			continue
 		}
 
-		node := node.NewBaseNode().(*node.BaseNode)
+		node := node.NewBaseNode()
 		node.Name = name
 
 		ok := re.MatchNode(node)

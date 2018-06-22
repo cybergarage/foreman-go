@@ -23,10 +23,10 @@ var testFinderNodeNames = []string{
 	"org.cybergarage.foreman003",
 }
 
-func setupTestFinderBaseNodes() []Node {
+func setupTestFinderNodes() []Node {
 	nodes := make([]Node, len(testFinderNodeNames))
 	for n, name := range testFinderNodeNames {
-		node := node.NewBaseNode().(*node.BaseNode)
+		node := node.NewBaseNode()
 		node.Name = name
 		nodes[n] = node
 	}
@@ -116,7 +116,7 @@ func finderTest(t *testing.T, finder Finder) {
 }
 
 func TestNewSharedFinder(t *testing.T) {
-	nodes := setupTestFinderBaseNodes()
+	nodes := setupTestFinderNodes()
 
 	finder := NewSharedFinder().(*SharedFinder)
 	for _, node := range nodes {
@@ -127,7 +127,7 @@ func TestNewSharedFinder(t *testing.T) {
 }
 
 func TestNewStaticFinder(t *testing.T) {
-	nodes := setupTestFinderBaseNodes()
+	nodes := setupTestFinderNodes()
 
 	finder := NewStaticFinderWithNodes(nodes)
 	finderTest(t, finder)

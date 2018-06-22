@@ -41,8 +41,13 @@ func (detector *HeartbeatDetector) SetInterval(d time.Duration) {
 
 // Start starts the instance
 func (detector *HeartbeatDetector) Start() error {
-	detector.intervalFuncStop = make(chan bool)
+	err := detector.Stop()
+	if err != nil {
+		return err
+	}
+
 	heartbeatDetectorExecuter(detector)
+
 	return nil
 }
 
@@ -61,6 +66,8 @@ func heartbeatDetectorExecuter(detector *HeartbeatDetector) {
 		detector.Stop()
 		return
 	}
+
+	detector.intervalFuncStop = make(chan bool)
 
 	go func() {
 		for {
