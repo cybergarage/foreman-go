@@ -20,14 +20,19 @@ type BaseNode struct {
 	Version    Version
 }
 
-// NewBaseNode returns a new node.
-func NewBaseNode() Node {
+// NewBaseNode returns a new base node.
+func NewBaseNode() *BaseNode {
 	node := &BaseNode{
 		Condition: ConditionInitial,
 		Clock:     0,
 		Version:   0,
 	}
 	return node
+}
+
+// NewNode returns a new node.
+func NewNode() Node {
+	return NewBaseNode()
 }
 
 // GetCluster returns the cluster name
