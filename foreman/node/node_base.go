@@ -37,6 +37,13 @@ func NewNode() Node {
 	return NewBaseNode()
 }
 
+// SetStatus sets a new status
+func (node *BaseNode) SetStatus(status Status) {
+	node.Clock = status.GetClock()
+	node.Condition = status.GetCondition()
+	node.Version = status.GetVersion()
+}
+
 // GetCluster returns the cluster name
 func (node *BaseNode) GetCluster() string {
 	return node.Cluster
