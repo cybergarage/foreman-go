@@ -4,7 +4,9 @@
 
 package fd
 
-// FailureDetectionListener a listener for detector.
-type FailureDetectionListener interface {
-	NodeStatusChanged(Detector, Node, NodeStatus)
+// FailureDetectorListener a listener for detector.
+type FailureDetectorListener interface {
+	FailureDetectorNodeAdded(Node)
+	FailureDetectorNodeRemoved(Node)
+	FailureDetectorNodeStatusChanged(Node)
 }
