@@ -6,6 +6,8 @@ package fd
 
 import (
 	"fmt"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
 const (
@@ -15,15 +17,17 @@ const (
 
 // baseDetector represents a base detector.
 type baseDetector struct {
-	finder   Finder
-	listener FailureDetectionListener
+	finder       Finder
+	listener     FailureDetectorListener
+	currentNodes map[string]*node.BaseNode
 }
 
 // newBaseDetector returns a new base detector.
 func newBaseDetector() *baseDetector {
 	detector := &baseDetector{
-		finder:   nil,
-		listener: nil,
+		finder:       nil,
+		listener:     nil,
+		currentNodes: make(map[string]*node.BaseNode),
 	}
 	return detector
 }
@@ -43,13 +47,13 @@ func (detector *baseDetector) GetFinder() (Finder, error) {
 }
 
 // SetListener sets a listener
-func (detector *baseDetector) SetListener(l FailureDetectionListener) error {
+func (detector *baseDetector) SetListener(l FailureDetectorListener) error {
 	detector.listener = l
 	return nil
 }
 
 // GetListener returns a current listener
-func (detector *baseDetector) GetListener() (FailureDetectionListener, error) {
+func (detector *baseDetector) GetListener() (FailureDetectorListener, error) {
 	if detector.listener == nil {
 		return nil, fmt.Errorf(errorDetectorNotFoundListener)
 	}
@@ -57,6 +61,24 @@ func (detector *baseDetector) GetListener() (FailureDetectionListener, error) {
 }
 
 // ExecuteFailureDetection runs the failure action
-func (detector *baseDetector) ExecuteNodeFailureDetection(targetNode Node) error {
+func (detector *baseDetector) ExecuteNodeFailureDetection(updatedNode Node) error {
+	nodeID := updatedNode.GetUniqueID()
+	currentNode, ok := detector.currentNodes[nodeID]
+	if !ok {
+		currentNode = node.NewBaseNode()
+		detector.currentNodes[nodeID] = currentNode
+		if detector.listener != nil {
+			detector.listener.FailureDetectorNodeAdded(updatedNode)
+		}
+	}
+
+	if currentNode.GetCondition() != updatedNode.GetCondition() {
+		if detector.listener != nil {
+			detector.listener.FailureDetectorNodeStatusChanged(updatedNode)
+		}
+	}
+
+	currentNode.SetStatus(updatedNode)
+
 	return nil
 }

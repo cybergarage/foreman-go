@@ -11,9 +11,9 @@ type Detector interface {
 	// GetFinder returns a current finder
 	GetFinder() (Finder, error)
 	// SetListener sets a listener
-	SetListener(FailureDetectionListener) error
+	SetListener(FailureDetectorListener) error
 	// GetListener returns a current listener
-	GetListener() (FailureDetectionListener, error)
+	GetListener() (FailureDetectorListener, error)
 	// Start starts the instance
 	Start() error
 	// Stop stop the instance
