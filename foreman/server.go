@@ -9,6 +9,8 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/cybergarage/foreman-go/foreman/node"
+
 	"github.com/cybergarage/go-graphite/net/graphite"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
@@ -170,6 +172,11 @@ func (server *Server) GetAddress() string {
 // GetRPCPort returns the RPC port
 func (server *Server) GetRPCPort() int {
 	return server.GetHTTPPort()
+}
+
+// GetUniqueID returns a unique ID of the node
+func (server *Server) GetUniqueID() string {
+	return node.GetUniqueID(server)
 }
 
 // updateConfig sets latest configurations.

@@ -4,7 +4,9 @@
 
 package node
 
-import "net"
+import (
+	"net"
+)
 
 // BaseNode represents a base node.
 type BaseNode struct {
@@ -104,4 +106,9 @@ func (node *BaseNode) GetClock() Clock {
 // GetVersion returns the current repository version
 func (node *BaseNode) GetVersion() Version {
 	return node.Version
+}
+
+// GetUniqueID returns a unique ID of the node
+func (node *BaseNode) GetUniqueID() string {
+	return GetUniqueID(node)
 }
