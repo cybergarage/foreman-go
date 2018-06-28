@@ -32,6 +32,8 @@ type Node interface {
 	GetClock() NodeClock
 	// GetVersion returns the current repository version
 	GetVersion() NodeVersion
+	// GetUniqueID returns a unique ID of the node
+	GetUniqueID() string
 	// PostQuery posts a query string
 	PostQuery(query string) (interface{}, error)
 }
@@ -39,4 +41,9 @@ type Node interface {
 // NodeEqual returns true if the other node is same with this node
 func NodeEqual(this, other Node) bool {
 	return node.Equal(this, other)
+}
+
+// NodeGetUniqueID returns a unique ID of the node
+func NodeGetUniqueID(this Node) string {
+	return node.GetUniqueID(this)
 }
