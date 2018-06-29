@@ -6,8 +6,13 @@ package fd
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/node"
+)
+
+const (
+	DefaultSuspectionDuration = time.Minute * 2
 )
 
 const (
@@ -17,17 +22,19 @@ const (
 
 // baseDetector represents a base detector.
 type baseDetector struct {
-	finder       Finder
-	listener     FailureDetectorListener
-	currentNodes map[string]*node.BaseNode
+	finder             Finder
+	listener           FailureDetectorListener
+	currentNodes       map[string]*node.BaseNode
+	suspectionDuration time.Duration
 }
 
 // newBaseDetector returns a new base detector.
 func newBaseDetector() *baseDetector {
 	detector := &baseDetector{
-		finder:       nil,
-		listener:     nil,
-		currentNodes: make(map[string]*node.BaseNode),
+		finder:             nil,
+		listener:           nil,
+		currentNodes:       make(map[string]*node.BaseNode),
+		suspectionDuration: DefaultSuspectionDuration,
 	}
 	return detector
 }
@@ -60,9 +67,23 @@ func (detector *baseDetector) GetListener() (FailureDetectorListener, error) {
 	return detector.listener, nil
 }
 
+// SetSuspectionDuration sets a suspection duration for failure detection
+func (detector *baseDetector) SetSuspectionDuration(d time.Duration) error {
+	detector.suspectionDuration = d
+	return nil
+}
+
+// GetSuspectionDuration gets a suspection duration for failure detection
+func (detector *baseDetector) GetSuspectionDuration() time.Duration {
+	return detector.suspectionDuration
+}
+
 // ExecuteFailureDetection runs the failure action
 func (detector *baseDetector) ExecuteNodeFailureDetection(updatedNode Node) error {
 	nodeID := updatedNode.GetUniqueID()
+
+	// New node ?
+
 	currentNode, ok := detector.currentNodes[nodeID]
 	if !ok {
 		currentNode = node.NewBaseNode()
@@ -72,11 +93,15 @@ func (detector *baseDetector) ExecuteNodeFailureDetection(updatedNode Node) erro
 		}
 	}
 
+	// Is status change ?
+
 	if currentNode.GetCondition() != updatedNode.GetCondition() {
 		if detector.listener != nil {
 			detector.listener.FailureDetectorNodeStatusChanged(updatedNode)
 		}
 	}
+
+	// Update node status
 
 	currentNode.SetStatus(updatedNode)
 
