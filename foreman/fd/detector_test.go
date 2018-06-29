@@ -67,7 +67,7 @@ func runTestDetector(t *testing.T, rawDetector interface{}, nodes []Node) {
 		detector.Stop()
 	}
 
-	time.Sleep(HeartbeatDetectorDefaultInterval * 5)
+	time.Sleep(HeartbeatDetectorDefaultIntervalTime * 5)
 
 	err = detector.Stop()
 	if err != nil {

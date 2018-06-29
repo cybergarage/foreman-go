@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-var GossipExecutorDefaultPercentage = 1.0 / float64(((time.Second * 60) / HeartbeatDetectorDefaultInterval))
+var GossipExecutorDefaultPercentage = 1.0 / float64(((time.Second * 60) / HeartbeatDetectorDefaultIntervalTime))
 
 // GossipDetector represents a gossip based detector.
 type GossipDetector struct {

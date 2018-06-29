@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	HeartbeatDetectorDefaultInterval = time.Second * 1
+	HeartbeatDetectorDefaultIntervalTime = time.Minute * 1
 )
 
 const (
@@ -30,7 +30,7 @@ func NewHeartbeatDetector() *HeartbeatDetector {
 	detector := &HeartbeatDetector{
 		baseDetector:     newBaseDetector(),
 		executor:         nil,
-		intervalDuration: HeartbeatDetectorDefaultInterval,
+		intervalDuration: HeartbeatDetectorDefaultIntervalTime,
 		intervalFuncStop: nil,
 	}
 	return detector
