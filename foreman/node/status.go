@@ -16,7 +16,9 @@ type Version uint
 const (
 	ConditionUnknown = iota
 	ConditionInitial
+	ConditionBoostrap
 	ConditionReady
+	ConditionOutOfDate
 	ConditionStop
 )
 
