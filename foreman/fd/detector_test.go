@@ -37,6 +37,9 @@ func (detector *testDetector) FailureDetectorNodeRemoved(node Node) {
 func (detector *testDetector) FailureDetectorNodeStatusChanged(node Node) {
 }
 
+func (detector *testDetector) FailureDetectorNodeOutOfDate(node Node) {
+}
+
 func newTestDetectorWithDetector(targetDetector Detector) (Detector, []Node) {
 	detector := &testDetector{
 		Detector:       targetDetector,

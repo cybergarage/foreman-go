@@ -6,8 +6,11 @@ package fd
 
 import (
 	"fmt"
+	"time"
+)
 
-	"github.com/cybergarage/foreman-go/foreman/node"
+const (
+	DefaultSuspectionDuration = time.Minute * 1
 )
 
 const (
@@ -17,17 +20,19 @@ const (
 
 // baseDetector represents a base detector.
 type baseDetector struct {
-	finder       Finder
-	listener     FailureDetectorListener
-	currentNodes map[string]*node.BaseNode
+	finder             Finder
+	listener           FailureDetectorListener
+	cluster            *cluster
+	suspectionDuration time.Duration
 }
 
 // newBaseDetector returns a new base detector.
 func newBaseDetector() *baseDetector {
 	detector := &baseDetector{
-		finder:       nil,
-		listener:     nil,
-		currentNodes: make(map[string]*node.BaseNode),
+		finder:             nil,
+		listener:           nil,
+		cluster:            newCluster(),
+		suspectionDuration: DefaultSuspectionDuration,
 	}
 	return detector
 }
@@ -60,17 +65,33 @@ func (detector *baseDetector) GetListener() (FailureDetectorListener, error) {
 	return detector.listener, nil
 }
 
+// SetSuspectionDuration sets a suspection duration
+func (detector *baseDetector) SetSuspectionDuration(duration time.Duration) error {
+	detector.suspectionDuration = duration
+	return nil
+}
+
+// GetSuspectionDuration returns a current suspection duration
+func (detector *baseDetector) GetSuspectionDuration() time.Duration {
+	return detector.suspectionDuration
+}
+
 // ExecuteFailureDetection runs the failure action
 func (detector *baseDetector) ExecuteNodeFailureDetection(updatedNode Node) error {
 	nodeID := updatedNode.GetUniqueID()
-	currentNode, ok := detector.currentNodes[nodeID]
+
+	// Is new node ?
+
+	currentNode, ok := detector.cluster.GetNode(nodeID)
 	if !ok {
-		currentNode = node.NewBaseNode()
-		detector.currentNodes[nodeID] = currentNode
 		if detector.listener != nil {
 			detector.listener.FailureDetectorNodeAdded(updatedNode)
 		}
+		detector.cluster.UpdateStatus(updatedNode)
+		return nil
 	}
+
+	// Is status changed ?
 
 	if currentNode.GetCondition() != updatedNode.GetCondition() {
 		if detector.listener != nil {
@@ -78,7 +99,20 @@ func (detector *baseDetector) ExecuteNodeFailureDetection(updatedNode Node) erro
 		}
 	}
 
-	currentNode.SetStatus(updatedNode)
+	// Is out of date ?
+
+	if detector.cluster.IsNodeOutOfDate(updatedNode) {
+		clusterTimestamp := detector.cluster.GetTimestamp()
+		if detector.suspectionDuration < clusterTimestamp.Sub(time.Now()) {
+			if detector.listener != nil {
+				detector.listener.FailureDetectorNodeOutOfDate(updatedNode)
+			}
+		}
+	}
+
+	// Update cluster status
+
+	detector.cluster.UpdateStatus(updatedNode)
 
 	return nil
 }

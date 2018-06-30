@@ -17,6 +17,7 @@ const (
 	ConditionUnknown = iota
 	ConditionInitial
 	ConditionReady
+	ConditionOutOfDate
 	ConditionStop
 )
 

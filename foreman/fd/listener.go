@@ -9,4 +9,5 @@ type FailureDetectorListener interface {
 	FailureDetectorNodeAdded(Node)
 	FailureDetectorNodeRemoved(Node)
 	FailureDetectorNodeStatusChanged(Node)
+	FailureDetectorNodeOutOfDate(Node)
 }
