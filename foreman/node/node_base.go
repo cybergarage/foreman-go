@@ -37,6 +37,16 @@ func NewNode() Node {
 	return NewBaseNode()
 }
 
+// UpdateClock increments the internal clock
+func (node *BaseNode) UpdateClock() {
+	node.Clock++
+}
+
+// UpdateVersion increments the internal version
+func (node *BaseNode) UpdateVersion() {
+	node.Version++
+}
+
 // SetStatus sets a new status
 func (node *BaseNode) SetStatus(status Status) {
 	node.Clock = status.GetClock()

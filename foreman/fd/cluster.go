@@ -35,7 +35,7 @@ func (cluster *cluster) GetNode(nodeID string) (*node.BaseNode, bool) {
 	return node, ok
 }
 
-// IsNodeOutOfDate checkes whether the specified node is out of date
+// IsNodeOutOfDate checks whether the specified node is out of date
 func (cluster *cluster) IsNodeOutOfDate(updatedNode Node) bool {
 	if updatedNode.GetVersion() < cluster.latestVersion {
 		return true
