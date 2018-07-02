@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	errorInvalidNewNodeCount = "Invalid new node count %d != %d"
+	errorInvalidNodeCount = "Invalid node count %d != %d"
+	errorInvalidVersion   = "Invalid version %d != %d"
 )
 
 var testDetectorNodeNames = []string{
@@ -24,7 +25,8 @@ var testDetectorNodeNames = []string{
 
 type testDetector struct {
 	Detector
-	AddedNodeCount int
+	AddedNodeCount     int
+	OutOfDateNodeCount int
 }
 
 func (detector *testDetector) FailureDetectorNodeAdded(node Node) {
@@ -38,31 +40,38 @@ func (detector *testDetector) FailureDetectorNodeStatusChanged(node Node) {
 }
 
 func (detector *testDetector) FailureDetectorNodeOutOfDate(node Node) {
+	detector.OutOfDateNodeCount++
 }
 
-func newTestDetectorWithDetector(targetDetector Detector) (Detector, []Node) {
+func newTestDetectorWithDetector(targetDetector Detector) (*testDetector, []*node.BaseNode) {
 	detector := &testDetector{
-		Detector:       targetDetector,
-		AddedNodeCount: 0,
+		Detector:           targetDetector,
+		AddedNodeCount:     0,
+		OutOfDateNodeCount: 0,
 	}
 
 	nodes := make([]Node, len(testDetectorNodeNames))
+	baseNodes := make([]*node.BaseNode, len(testDetectorNodeNames))
 	for n, name := range testDetectorNodeNames {
 		baseNode := node.NewBaseNode()
 		baseNode.Name = name
 		baseNode.Condition = node.ConditionReady
 		nodes[n] = baseNode
+		baseNodes[n] = baseNode
 	}
 
 	finder := discovery.NewStaticFinderWithNodes(nodes)
 	detector.SetFinder(finder)
 	detector.SetListener(detector)
 
-	return detector, nodes
+	return detector, baseNodes
 }
 
-func runTestDetector(t *testing.T, rawDetector interface{}, nodes []Node) {
+func runTestDetector(t *testing.T, rawDetector interface{}, nodes []*node.BaseNode, waitBaseTime time.Duration) {
 	detector := rawDetector.(Detector)
+	testDetector := rawDetector.(*testDetector)
+
+	// Start detector
 
 	err := detector.Start()
 	if err != nil {
@@ -70,33 +79,62 @@ func runTestDetector(t *testing.T, rawDetector interface{}, nodes []Node) {
 		detector.Stop()
 	}
 
-	time.Sleep(HeartbeatDetectorDefaultIntervalTime * 5)
+	// Check new node detections
+
+	time.Sleep(waitBaseTime * 3)
+
+	// Check new node detections
+
+	nodes[0].UpdateVersion()
+	time.Sleep(waitBaseTime * 3)
+
+	if testDetector.OutOfDateNodeCount <= 0 {
+		t.Errorf(errorInvalidNodeCount, testDetector.OutOfDateNodeCount, 1)
+	}
+
+	// Stop detector
 
 	err = detector.Stop()
 	if err != nil {
 		t.Error(err)
 	}
+
+}
+
+func checkDetectorStatus(t *testing.T, testDetector *testDetector, targetDetector *baseDetector, nodes []*node.BaseNode) {
+	cluster := targetDetector.GetCluster()
+	ver := cluster.GetVersion()
+	if ver <= 0 {
+		t.Errorf(errorInvalidVersion, ver, 1)
+	}
 }
 
 func TestNewBroadcastDetector(t *testing.T) {
-	simpleDetector := NewBroadcastDetector()
+	simpleDetector := NewBroadcastDetector().(*BroadcastDetector)
+	simpleDetector.SetDetectionInterval(time.Second * 1)
+	simpleDetector.SetSuspectionDuration(0)
 	detector, nodes := newTestDetectorWithDetector(simpleDetector)
 
-	runTestDetector(t, detector, nodes)
+	runTestDetector(t, detector, nodes, simpleDetector.GetDetectionInterval())
 
-	testDetector := detector.(*testDetector)
-	if testDetector.AddedNodeCount != len(nodes) {
-		t.Errorf(errorInvalidNewNodeCount, testDetector.AddedNodeCount, len(nodes))
+	if detector.AddedNodeCount != len(nodes) {
+		t.Errorf(errorInvalidNodeCount, detector.AddedNodeCount, len(nodes))
 	}
+
+	checkDetectorStatus(t, detector, simpleDetector.baseDetector, nodes)
 }
 
 func TestNewGossipDetector(t *testing.T) {
-	gossipDetector := NewGossipDetector()
+	gossipDetector := NewGossipDetector().(*GossipDetector)
+	gossipDetector.SetDetectionInterval(time.Second * 1)
+	gossipDetector.SetSuspectionDuration(0)
 	detector, nodes := newTestDetectorWithDetector(gossipDetector)
-	runTestDetector(t, detector, nodes)
 
-	testDetector := detector.(*testDetector)
-	if testDetector.AddedNodeCount <= 0 {
-		t.Errorf(errorInvalidNewNodeCount, testDetector.AddedNodeCount, 1)
+	runTestDetector(t, detector, nodes, gossipDetector.GetDetectionInterval())
+
+	if detector.AddedNodeCount <= 0 {
+		t.Errorf(errorInvalidNodeCount, detector.AddedNodeCount, 1)
 	}
+
+	checkDetectorStatus(t, detector, gossipDetector.baseDetector, nodes)
 }

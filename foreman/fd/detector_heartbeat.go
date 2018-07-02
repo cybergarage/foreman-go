@@ -36,9 +36,14 @@ func NewHeartbeatDetector() *HeartbeatDetector {
 	return detector
 }
 
-// SetInterval sets a heartbeat interval
-func (detector *HeartbeatDetector) SetInterval(d time.Duration) {
+// SetDetectionInterval sets a heartbeat interval
+func (detector *HeartbeatDetector) SetDetectionInterval(d time.Duration) {
 	detector.intervalDuration = d
+}
+
+// GetDetectionInterval returns a current heartbeat interval
+func (detector *HeartbeatDetector) GetDetectionInterval() time.Duration {
+	return detector.intervalDuration
 }
 
 // SetExecutor sets a executor

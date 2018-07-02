@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	DefaultSuspectionDuration = time.Minute * 1
+	DefaultSuspectionDuration = time.Minute * 5
 )
 
 const (
@@ -65,6 +65,11 @@ func (detector *baseDetector) GetListener() (FailureDetectorListener, error) {
 	return detector.listener, nil
 }
 
+// GetCluster returns a cluster status
+func (detector *baseDetector) GetCluster() *cluster {
+	return detector.cluster
+}
+
 // SetSuspectionDuration sets a suspection duration
 func (detector *baseDetector) SetSuspectionDuration(duration time.Duration) error {
 	detector.suspectionDuration = duration
@@ -103,7 +108,7 @@ func (detector *baseDetector) ExecuteNodeFailureDetection(updatedNode Node) erro
 
 	if detector.cluster.IsNodeOutOfDate(updatedNode) {
 		clusterTimestamp := detector.cluster.GetTimestamp()
-		if detector.suspectionDuration < clusterTimestamp.Sub(time.Now()) {
+		if detector.suspectionDuration <= clusterTimestamp.Sub(time.Now()) {
 			if detector.listener != nil {
 				detector.listener.FailureDetectorNodeOutOfDate(updatedNode)
 			}
