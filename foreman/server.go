@@ -14,6 +14,8 @@ import (
 	"github.com/cybergarage/go-graphite/net/graphite"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/discovery"
+	"github.com/cybergarage/foreman-go/foreman/fd"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/kb"
 	"github.com/cybergarage/foreman-go/foreman/logging"
@@ -38,6 +40,8 @@ type Server struct {
 	kb.KnowledgeBaseListener
 
 	*Controller
+	finder discovery.Finder
+	fd     fd.Detector
 
 	graphite    *graphite.Server
 	registerMgr *register.Manager
@@ -68,6 +72,8 @@ func NewServerWithConfigFile(configFile string) *Server {
 		config:      nil,
 		configFile:  configFile,
 		status:      NewStatus(),
+		finder:      discovery.NewEchonetFinder(),
+		fd:          fd.NewGossipDetector(),
 	}
 
 	server.initialize()
@@ -77,6 +83,8 @@ func NewServerWithConfigFile(configFile string) *Server {
 	if err == nil {
 		server.name = hostname
 	}
+
+	// Configuration
 
 	server.config, err = NewConfigWithRegistry(server.registryMgr)
 	if err != nil {
@@ -90,25 +98,42 @@ func NewServerWithConfigFile(configFile string) *Server {
 		return nil
 	}
 
+	// Registry
+
 	server.actionMgr.SetRegistryStore(server.registryMgr.GetStore())
 	server.actionMgr.SetRegisterStore(server.registerMgr.GetStore())
 
+	// Register
+
+	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
+	server.metricMgr.SetRegisterListener(server)
+
+	// Graphite
+
 	server.graphite.SetCarbonListener(server)
 	server.graphite.SetRenderListener(server)
+
+	// QoS
+
+	server.qosMgr.AddListener(server)
+
+	// Failure Detector
+
+	server.fd.SetListener(server)
+	server.fd.SetFinder(server.finder)
+
+	// RPC
+
 	FqlPath, err := server.config.GetString(ConfigFqlPathKey)
 	if err != nil {
 		FqlPath = HttpRequestFqlPath
 	}
 	server.graphite.SetHTTPRequestListener(FqlPath, server)
 
-	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
-	server.metricMgr.SetRegisterListener(server)
-
-	server.qosMgr.AddListener(server)
-
 	return server
 }
 
+// NewServer creates a new server
 func NewServer() *Server {
 	return NewServerWithConfigFile("")
 }
