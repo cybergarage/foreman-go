@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cybergarage/foreman-go/foreman/discovery"
+	"github.com/cybergarage/foreman-go/foreman/node"
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
@@ -32,15 +32,15 @@ func NewRemoteNode() *RemoteNode {
 	return node
 }
 
-// NewRemoteNodeWithDiscoveryNode returns a remote new node.
-func NewRemoteNodeWithDiscoveryNode(discoveryNode discovery.Node) *RemoteNode {
+// NewRemoteNodeWithNode returns a remote new node.
+func NewRemoteNodeWithNode(remoteNode node.Node) *RemoteNode {
 	node := &RemoteNode{
-		Cluster:    discoveryNode.GetCluster(),
-		Name:       discoveryNode.GetName(),
-		Address:    discoveryNode.GetAddress(),
-		RPCPort:    discoveryNode.GetRPCPort(),
-		RenderPort: discoveryNode.GetRenderPort(),
-		CarbonPort: discoveryNode.GetCarbonPort(),
+		Cluster:    remoteNode.GetCluster(),
+		Name:       remoteNode.GetName(),
+		Address:    remoteNode.GetAddress(),
+		RPCPort:    remoteNode.GetRPCPort(),
+		RenderPort: remoteNode.GetRenderPort(),
+		CarbonPort: remoteNode.GetCarbonPort(),
 	}
 	return node
 }

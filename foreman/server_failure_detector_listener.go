@@ -8,13 +8,6 @@ package foreman
 import (
 	"github.com/cybergarage/foreman-go/foreman/fd"
 	"github.com/cybergarage/foreman-go/foreman/fql"
-	"github.com/cybergarage/foreman-go/foreman/node"
-)
-
-const (
-	exportAllQoS     = "EXPORT FROM QOS"
-	exportAllActions = "EXPORT FROM ACTION"
-	exportAllRoutes  = "EXPORT FROM ROUTE"
 )
 
 // FailureDetectorNodeAdded is called when a new node added in the cluster.
@@ -33,8 +26,23 @@ func (server *Server) FailureDetectorNodeStatusChanged(fd.Node) {
 }
 
 // exportAllKnowledgebase export all knowledgebase
-func (server *Server) exportAllKnowledgebase(node node.Node) (fql.Queries, error) {
-	return nil, nil
+func (server *Server) exportAllKnowledgebase(node Node) (fql.Queries, error) {
+	queries := fql.NewQueries()
+
+	exportQueries := []string{
+		"EXPORT FROM QOS",
+		"EXPORT FROM ACTION",
+		"EXPORT FROM ROUTE",
+	}
+
+	for _, exportQuery := range exportQueries {
+		_, err := node.PostQuery(exportQuery)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return queries, nil
 }
 
 // FailureDetectorNodeOutOfDate is called when the node is out of date in the cluster.
@@ -49,7 +57,8 @@ func (server *Server) FailureDetectorNodeOutOfDate(fd.Node) {
 
 	node := nodes[0]
 
-	queries, err := server.exportAllKnowledgebase(node)
+	latestNode := NewRemoteNodeWithNode(node)
+	queries, err := server.exportAllKnowledgebase(latestNode)
 	if err != nil {
 		return
 	}

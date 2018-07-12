@@ -53,7 +53,7 @@ func TestNewServer(t *testing.T) {
 
 func TestNewServerEquals(t *testing.T) {
 	server := NewServer()
-	remoteNode := NewRemoteNodeWithDiscoveryNode(server)
+	remoteNode := NewRemoteNodeWithNode(server)
 
 	if !NodeEqual(server, remoteNode) {
 		t.Errorf("%s != %s", server.GetName(), remoteNode.GetName())
