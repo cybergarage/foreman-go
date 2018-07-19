@@ -6,6 +6,8 @@
 package foreman
 
 import (
+	"fmt"
+
 	"github.com/cybergarage/foreman-go/foreman/fd"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
@@ -36,9 +38,23 @@ func (server *Server) exportAllKnowledgebase(node Node) (fql.Queries, error) {
 	}
 
 	for _, exportQuery := range exportQueries {
-		_, err := node.PostQuery(exportQuery)
+		exportRes, err := node.PostQuery(exportQuery)
 		if err != nil {
 			return nil, err
+		}
+
+		exportedQueryStrings, ok := exportRes.([]string)
+		if !ok {
+			return nil, fmt.Errorf("%s", exportQuery)
+		}
+
+		for _, exportedQueryString := range exportedQueryStrings {
+			fqlParser := fql.NewParser()
+			exportedQueries, err := fqlParser.ParseString(exportedQueryString)
+			if err != nil {
+				return nil, err
+			}
+			queries = append(queries, exportedQueries...)
 		}
 	}
 
