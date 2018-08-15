@@ -14,12 +14,12 @@ type Clock uint
 type Version uint
 
 const (
-	ConditionUnknown = iota
-	ConditionInitial
-	ConditionBoostrap
-	ConditionReady
-	ConditionOutOfDate
-	ConditionStop
+	ConditionUnknown   = 0x00
+	ConditionInitial   = 0x10
+	ConditionBoostrap  = 0x20
+	ConditionReady     = 0x30
+	ConditionStop      = 0x31
+	ConditionOutOfDate = 0x32
 )
 
 // Status represents an abstract node interface for the status
