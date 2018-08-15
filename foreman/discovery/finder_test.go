@@ -115,7 +115,7 @@ func finderTest(t *testing.T, finder Finder) {
 	}
 }
 
-func TestNewSharedFinder(t *testing.T) {
+func TestSharedFinder(t *testing.T) {
 	nodes := setupTestFinderNodes()
 
 	finder := NewSharedFinder().(*SharedFinder)
@@ -137,7 +137,7 @@ func TestNewSharedFinder(t *testing.T) {
 	}
 }
 
-func TestNewStaticFinder(t *testing.T) {
+func TestStaticFinder(t *testing.T) {
 	nodes := setupTestFinderNodes()
 
 	finder := NewStaticFinderWithNodes(nodes)
