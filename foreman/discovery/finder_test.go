@@ -123,12 +123,35 @@ func TestNewSharedFinder(t *testing.T) {
 		finder.addNode(node)
 	}
 
+	err := finder.Start()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	finderTest(t, finder)
+
+	err = finder.Stop()
+	if err != nil {
+		t.Error(err)
+	}
 }
 
 func TestNewStaticFinder(t *testing.T) {
 	nodes := setupTestFinderNodes()
 
 	finder := NewStaticFinderWithNodes(nodes)
+
+	err := finder.Start()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	finderTest(t, finder)
+
+	err = finder.Stop()
+	if err != nil {
+		t.Error(err)
+	}
 }

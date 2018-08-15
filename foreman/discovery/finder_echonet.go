@@ -21,3 +21,13 @@ func NewEchonetFinder() Finder {
 func (finder *EchonetFinder) SearchAll() error {
 	return nil
 }
+
+// Start starts the finder.
+func (finder *EchonetFinder) Start() error {
+	return nil
+}
+
+// Stop stops the finder.
+func (finder *EchonetFinder) Stop() error {
+	return nil
+}
