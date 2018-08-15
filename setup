@@ -24,7 +24,7 @@ dependencies=(
 "github.com/antlr/antlr4/runtime/Go/antlr"
 "github.com/BurntSushi/toml"
 "github.com/romana/rlog"
-"github.com/cybergarage/uecho-go/net/uecho"
+"github.com/cybergarage/uecho-go/net/echonet"
 )
 
 go get "${dependencies[@]}"
