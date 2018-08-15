@@ -32,4 +32,8 @@ type Finder interface {
 	GetPrefixNodes(string) ([]Node, error)
 	// GetRegexpNodes returns only nodes matching with a specified regular expression
 	GetRegexpNodes(*regexp.Regexp) ([]Node, error)
+	// Start starts the finder.
+	Start() error
+	// Stop stops the finder.
+	Stop() error
 }
