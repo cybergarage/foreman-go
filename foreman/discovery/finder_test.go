@@ -7,6 +7,7 @@ package discovery
 import (
 	"regexp"
 	"testing"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/node"
 )
@@ -34,6 +35,16 @@ func setupTestFinderNodes() []Node {
 }
 
 func finderTest(t *testing.T, finder Finder) {
+	err := finder.SearchAll()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	// Check all nodes
+
+	time.Sleep(time.Second)
+
 	// Check all nodes
 
 	nodes, err := finder.GetAllNodes()

@@ -69,7 +69,7 @@ func (node *EchonetNode) MessageReceived(msg *protocol.Message) {
 		return
 	}
 
-	for _, propCode := range getAllFinderDevicePropertyCodes() {
+	for _, propCode := range FinderDeviceAllPropertyCodes() {
 		propData := []byte{}
 		switch propCode {
 		case FinderConditionCode:
@@ -98,6 +98,6 @@ func (node *EchonetNode) MessageReceived(msg *protocol.Message) {
 		default:
 			continue
 		}
-		dev.SetPropertyData(propCode, propData)
+		dev.SetPropertyData(echonet.PropertyCode(propCode), propData)
 	}
 }

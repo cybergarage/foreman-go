@@ -9,8 +9,5 @@ import (
 )
 
 func TestFinderNode(t *testing.T) {
-	_, err := NewFinderNodeWithMesssage(nil)
-	if err != nil {
-		t.Error(err)
-	}
+	NewFinderNodeWithResponseMesssage(nil)
 }
