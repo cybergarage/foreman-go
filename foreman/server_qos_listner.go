@@ -33,6 +33,4 @@ func (server *Server) RuleUnsatisfied(rule kb.Rule) {
 	logging.Info("Unsatisfied : %s", rule.String())
 	e := action.NewEventWithSource(newQosRuleSourceWithRule(rule))
 	server.actionMgr.PostEvent(e)
-
-	server.analyzeQos(rule)
 }
