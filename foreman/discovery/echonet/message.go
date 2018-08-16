@@ -11,5 +11,8 @@ import (
 // NewRequestAllPropertiesMessage create a request message to get all properties.
 func NewRequestAllPropertiesMessage() *protocol.Message {
 	msg := protocol.NewMessage()
+	msg.SetESV(protocol.ESVReadRequest)
+	msg.SetDestinationObjectCode(FinderDeviceCode)
+	msg.AddProperties(protocol.NewPropertiesWithCodes(FinderDeviceAllPropertyCodes()))
 	return msg
 }

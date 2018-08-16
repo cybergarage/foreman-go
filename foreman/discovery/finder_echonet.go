@@ -6,13 +6,13 @@ package discovery
 
 import (
 	discovery_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
-	"github.com/cybergarage/foreman-go/foreman/node"
 
 	"github.com/cybergarage/uecho-go/net/echonet"
 )
 
 // EchonetFinder represents a base finder.
 type EchonetFinder struct {
+	echonet.ControllerListener
 	*baseFinder
 	*echonet.Controller
 }
@@ -23,36 +23,40 @@ func NewEchonetFinder() Finder {
 		baseFinder: newBaseFinder(),
 		Controller: echonet.NewController(),
 	}
+	finder.Controller.SetListener(finder)
 	return finder
 }
 
 // SearchAll searches all nodes.
 func (finder *EchonetFinder) SearchAll() error {
-	return nil
+	return finder.Controller.SearchAllObjects()
 }
 
 // Start starts the finder.
 func (finder *EchonetFinder) Start() error {
-	return nil
+	return finder.Controller.Start()
 }
 
 // Stop stops the finder.
 func (finder *EchonetFinder) Stop() error {
-	return nil
+	return finder.Controller.Stop()
 }
 
-// NewFinderNodeWithNode returns a new finder node with the specified node.
-func (finder *EchonetFinder) createFinderNodeWithNode(echonetNode *echonet.RemoteNode) (node.Node, error) {
+func (finder *EchonetFinder) addedNewNode(echonetNode *echonet.RemoteNode) {
 	reqMsg := discovery_echonet.NewRequestAllPropertiesMessage()
 	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	node, err := discovery_echonet.NewFinderNodeWithMesssage(resMsg)
+	candidateNode, err := discovery_echonet.NewFinderNodeWithResponseMesssage(resMsg)
 	if err != nil {
-		return nil, err
+		return
 	}
 
-	return node, nil
+	if finder.HasNode(candidateNode) {
+		return
+	}
+
+	finder.addNode(candidateNode)
 }
