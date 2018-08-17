@@ -6,8 +6,13 @@ package discovery
 
 import (
 	"testing"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+)
+
+const (
+	errorEchonetFinderIsNotRunning = "Finder is not running"
 )
 
 func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
@@ -36,7 +41,6 @@ func TestEchonetFinder(t *testing.T) {
 			t.Error(err)
 			return
 		}
-		defer node.Stop()
 	}
 
 	finder := NewEchonetFinder()
@@ -47,10 +51,28 @@ func TestEchonetFinder(t *testing.T) {
 		return
 	}
 
+	err = finder.Search()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	time.Sleep(time.Second * 1)
+
 	finderTest(t, finder)
+
+	time.Sleep(time.Second * 1)
 
 	err = finder.Stop()
 	if err != nil {
 		t.Error(err)
+	}
+
+	for _, node := range nodes {
+		err = node.Stop()
+		if err != nil {
+			t.Error(err)
+			return
+		}
 	}
 }
