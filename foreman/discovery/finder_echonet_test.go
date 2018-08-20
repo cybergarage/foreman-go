@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+	"github.com/cybergarage/uecho-go/net/echonet/log"
 )
 
 const (
@@ -29,6 +30,8 @@ func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
 }
 
 func TestEchonetFinder(t *testing.T) {
+	log.SetSharedLogger(log.NewStdoutLogger(log.LoggerLevelTrace))
+
 	nodes, err := setupTestEchonetFinderNodes()
 	if err != nil {
 		t.Error(err)
@@ -57,11 +60,9 @@ func TestEchonetFinder(t *testing.T) {
 		return
 	}
 
-	time.Sleep(time.Second * 1)
-
 	finderTest(t, finder)
 
-	time.Sleep(time.Second * 1)
+	time.Sleep(time.Minute * time.Duration(len(nodes)))
 
 	err = finder.Stop()
 	if err != nil {
