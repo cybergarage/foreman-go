@@ -32,6 +32,7 @@ const (
 // Server represents a Foreman Server.
 type Server struct {
 	Node
+	*baseNode
 
 	cluster string
 	name    string
@@ -75,6 +76,8 @@ func NewServerWithConfigFile(configFile string) *Server {
 		finder:      discovery.NewEchonetFinder(),
 		fd:          fd.NewGossipDetector(),
 	}
+
+	server.baseNode = newBaseNodeWithNode(server)
 
 	server.initialize()
 	runtime.SetFinalizer(server, serverFinalizer)
