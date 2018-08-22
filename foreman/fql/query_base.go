@@ -73,7 +73,7 @@ func (q *baseQuery) GetColumns() (Columns, bool) {
 	return q.Columns, true
 }
 
-// HasColumn returns the columns in the query.
+// HasColumn returns true when the query has the specified column.
 func (q *baseQuery) HasColumn(name string) bool {
 	for _, c := range q.Columns {
 		if c.String() == name {
@@ -83,7 +83,7 @@ func (q *baseQuery) HasColumn(name string) bool {
 	return false
 }
 
-// HasOnlyColumn returns the columns in the query.
+// HasOnlyColumn returns true when the query has only the specified column.
 func (q *baseQuery) HasOnlyColumn(name string) bool {
 	if len(q.Columns) != 1 {
 		return false
@@ -92,6 +92,14 @@ func (q *baseQuery) HasOnlyColumn(name string) bool {
 		return false
 	}
 	return true
+}
+
+// IsAllColumn returns true when the query has only "*" column.
+func (q *baseQuery) IsAllColumn() bool {
+	if len(q.Columns) == 0 {
+		return true
+	}
+	return q.HasColumn(QueryColumnAll)
 }
 
 // AddValue adds a specified value into the query.
@@ -171,16 +179,20 @@ func (q *baseQuery) String() string {
 	// Columns (Select)
 
 	if queryType == QueryTypeSelect {
-		columns, ok := q.GetColumns()
-		if ok {
-			queryString += "("
-			for n, column := range columns {
-				if 0 < n {
-					queryString += ", "
+		if q.IsAllColumn() {
+			queryString += fmt.Sprintf(" %s", QueryColumnAll)
+		} else {
+			columns, ok := q.GetColumns()
+			if ok {
+				queryString += " ("
+				for n, column := range columns {
+					if 0 < n {
+						queryString += ", "
+					}
+					queryString += column.String()
 				}
-				queryString += column.String()
+				queryString += ")"
 			}
-			queryString += ")"
 		}
 	}
 
