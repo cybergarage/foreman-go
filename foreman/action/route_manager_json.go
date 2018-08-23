@@ -35,12 +35,12 @@ func (mgr *RouteManager) importRouteJSONObject(jsonObj interface{}) error {
 
 		src, err := routeMap.GetPathString(RouteColumnSource)
 		if err != nil {
-			return fmt.Errorf(errorRouteInvalidJSONObject, jsonObj)
+			return fmt.Errorf(errorRouteInvalidJSONObject, routeMapObj)
 		}
 
 		dst, err := routeMap.GetPathString(RouteColumnDestination)
 		if err != nil {
-			return fmt.Errorf(errorRouteInvalidJSONObject, jsonObj)
+			return fmt.Errorf(errorRouteInvalidJSONObject, routeMapObj)
 		}
 
 		err = mgr.CreateRoute(name, src, dst)
