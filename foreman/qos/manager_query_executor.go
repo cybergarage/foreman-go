@@ -20,7 +20,7 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	name := values[0].String()
 	formula := values[1].String()
 
-	err := mgr.importQoSFormula(name, formula)
+	err := mgr.CreateQoS(name, formula)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}

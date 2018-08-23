@@ -31,3 +31,23 @@ func (mgr *Manager) Start() error {
 func (mgr *Manager) Stop() error {
 	return nil
 }
+
+// CreateQoS creates a new QoS with the specified parameters,
+func (mgr *Manager) CreateQoS(name string, formula string) error {
+	rule, err := mgr.ParseQoSString(formula)
+	if err != nil {
+		return err
+	}
+
+	err = rule.SetName(name)
+	if err != nil {
+		return err
+	}
+
+	err = mgr.SetRule(rule)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
