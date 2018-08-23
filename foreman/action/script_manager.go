@@ -34,6 +34,17 @@ type ScriptManager struct {
 	RouteContainer
 }
 
+// GetMethodCount returns a count of all methods.
+func (mgr *ScriptManager) GetMethodCount() int {
+	methodCnt := 0
+	method := mgr.GetFirstMethod()
+	for method != nil {
+		methodCnt++
+		method = mgr.GetNextMethod(method)
+	}
+	return methodCnt
+}
+
 // FindRouteDestination returns a destination object with the specified name.
 func (mgr *ScriptManager) FindRouteDestination(name string) RouteDestination {
 	method := mgr.GetMethod(name)
