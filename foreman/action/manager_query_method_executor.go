@@ -9,7 +9,13 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
+
+// GetJSONExportMethodPath returns a JSON path for methods
+func GetJSONExportMethodPath() string {
+	return json.PathSep + strings.Join([]string{getJSONExportActionMapName(), ActionColumnMethods}, json.PathSep)
+}
 
 func (mgr *Manager) executeInsertMethod(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
@@ -55,7 +61,7 @@ func (mgr *Manager) executeSelectMethod(q fql.Query) (interface{}, *errors.Error
 	methodMap[ActionColumnMethods] = methods
 
 	actionContainer := map[string]interface{}{}
-	actionContainer[strings.ToLower(fql.QueryTargetAction)] = methodMap
+	actionContainer[getJSONExportActionMapName()] = methodMap
 
 	return actionContainer, nil
 }

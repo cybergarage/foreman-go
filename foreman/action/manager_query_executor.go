@@ -11,6 +11,10 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
+func getJSONExportActionMapName() string {
+	return strings.ToLower(fql.QueryTargetAction)
+}
+
 // ExecuteQuery must return the result as a standard array or map.
 func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	// Target type

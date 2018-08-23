@@ -9,7 +9,13 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
+
+// GetJSONExportRoutePath returns a JSON path for routes.
+func GetJSONExportRoutePath() string {
+	return json.PathSep + strings.Join([]string{getJSONExportActionMapName(), RouteColumnRoutes}, json.PathSep)
+}
 
 func (mgr *Manager) executeInsertRoute(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
@@ -54,7 +60,7 @@ func (mgr *Manager) executeSelectRoute(q fql.Query) (interface{}, *errors.Error)
 	routeMap[RouteColumnRoutes] = routes
 
 	actionContainer := map[string]interface{}{}
-	actionContainer[strings.ToLower(fql.QueryTargetAction)] = routeMap
+	actionContainer[getJSONExportActionMapName()] = routeMap
 
 	return actionContainer, nil
 }
