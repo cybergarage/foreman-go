@@ -46,7 +46,7 @@ func TestQoSJSONExportImport(t *testing.T) {
 
 	mgr = NewManager()
 
-	err = mgr.importQoSJSONObject(qosJSONObj)
+	err = mgr.ImportQoSJSONObject(qosJSONObj)
 	if err != nil {
 		t.Error(err)
 	}

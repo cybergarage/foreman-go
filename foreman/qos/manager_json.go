@@ -22,10 +22,10 @@ func (mgr *Manager) importQoSJSONString(jsonStr string) error {
 		return err
 	}
 
-	return mgr.importQoSJSONObject(jsonObj)
+	return mgr.ImportQoSJSONObject(jsonObj)
 }
 
-func (mgr *Manager) importQoSJSONObject(jsonObj interface{}) error {
+func (mgr *Manager) ImportQoSJSONObject(jsonObj interface{}) error {
 
 	switch jsonObj.(type) {
 	case map[string]string:

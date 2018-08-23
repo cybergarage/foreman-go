@@ -21,10 +21,10 @@ func (mgr *RouteManager) importRouteJSONString(jsonStr string) error {
 	if err != nil {
 		return err
 	}
-	return mgr.importRouteJSONObject(jsonObj)
+	return mgr.ImportRouteJSONObject(jsonObj)
 }
 
-func (mgr *RouteManager) importRouteJSONObject(jsonObj interface{}) error {
+func (mgr *RouteManager) ImportRouteJSONObject(jsonObj interface{}) error {
 	routesMap, ok := jsonObj.(map[string]interface{})
 	if !ok {
 		return fmt.Errorf(errorRouteInvalidJSONObject, jsonObj)
