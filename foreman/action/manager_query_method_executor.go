@@ -22,7 +22,7 @@ func (mgr *Manager) executeInsertMethod(q fql.Query) (interface{}, *errors.Error
 	code := values[2].String()
 	enc := values[3].String()
 
-	err := mgr.importMethod(name, lang, code, enc)
+	err := mgr.CreateMethod(name, lang, code, enc)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}
