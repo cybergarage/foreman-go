@@ -13,20 +13,19 @@ import (
 
 const (
 	errorMethodInvalidJSONObject = "Invalid JSON Object : %v"
-	errorMethodNotFound          = "Method (%s) Not Found"
 )
 
-func (mgr *ScriptManager) importMethodJSONString(jsonStr string) error {
+func (mgr *ScriptManager) CreateMethodJSONString(jsonStr string) error {
 	jsonDecorder := json.NewDecorder()
 	jsonObj, err := jsonDecorder.Decode(jsonStr)
 	if err != nil {
 		return err
 	}
 
-	return mgr.importMethodJSONObject(jsonObj)
+	return mgr.CreateMethodJSONObject(jsonObj)
 }
 
-func (mgr *ScriptManager) importMethodJSONObject(jsonObj interface{}) error {
+func (mgr *ScriptManager) CreateMethodJSONObject(jsonObj interface{}) error {
 	methodsMap, ok := jsonObj.(map[string]interface{})
 	if !ok {
 		return fmt.Errorf(errorMethodInvalidJSONObject, jsonObj)
@@ -35,43 +34,22 @@ func (mgr *ScriptManager) importMethodJSONObject(jsonObj interface{}) error {
 	for name, methodMapObj := range methodsMap {
 		methodMap := json.NewPathWithObject(methodMapObj)
 
-		lang, err := methodMap.GetPathString(MethodColumnLanguage)
+		lang, err := methodMap.GetPathString(ActionColumnLanguage)
 		if err != nil {
 			return fmt.Errorf(errorMethodInvalidJSONObject, jsonObj)
 		}
 
-		code, err := methodMap.GetPathString(MethodColumnCode)
+		code, err := methodMap.GetPathString(ActionColumnCode)
 		if err != nil {
 			return fmt.Errorf(errorMethodInvalidJSONObject, jsonObj)
 		}
 
-		enc, _ := methodMap.GetPathString(MethodColumnEncoding)
+		enc, _ := methodMap.GetPathString(ActionColumnEncoding)
 
-		err = mgr.importMethod(name, lang, code, enc)
+		err = mgr.CreateMethod(name, lang, code, enc)
 		if err != nil {
 			return err
 		}
-	}
-
-	return nil
-}
-
-func (mgr *ScriptManager) importMethod(name string, lang string, code string, enc string) error {
-	m := NewMethodWithLanguage(lang)
-	m.Name = name
-	if 0 < len(enc) && enc == MethodEncodingBase64 {
-		code, err := base64.StdEncoding.DecodeString(code)
-		if err != nil {
-			return err
-		}
-		m.Code = code
-	} else {
-		m.Code = []byte(code)
-	}
-
-	err := mgr.AddMethod(m)
-	if err != nil {
-		return err
 	}
 
 	return nil
@@ -95,13 +73,17 @@ func (mgr *ScriptManager) exportMethodJSONObjectWithName(name string) (interface
 		}
 
 		methodMap := map[string]interface{}{}
-		methodMap[MethodColumnLanguage] = method.Language
-		methodMap[MethodColumnCode] = base64.StdEncoding.EncodeToString(method.Code)
-		methodMap[MethodColumnEncoding] = MethodEncodingBase64
+		methodMap[ActionColumnLanguage] = method.Language
+		methodMap[ActionColumnCode] = base64.StdEncoding.EncodeToString(method.Code)
+		methodMap[ActionColumnEncoding] = ActionEncodingBase64
 
 		methods[method.Name] = methodMap
 
 		method = mgr.GetNextMethod(method)
+	}
+
+	if hasName && (len(methods) <= 0) {
+		return nil, fmt.Errorf(errorMethodNotFound, name)
 	}
 
 	return methods, nil
