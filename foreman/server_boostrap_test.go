@@ -36,7 +36,7 @@ func TestSeverBoostrapExport(t *testing.T) {
 		t.Error(err)
 	}
 
-	err = node.exportMonitoringConfigurations()
+	_, err = node.exportMonitoringConfigurations()
 	if err != nil {
 		t.Error(err)
 	}

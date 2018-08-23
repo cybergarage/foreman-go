@@ -4,20 +4,42 @@
 
 package foreman
 
-// retrieveMonitoringConfigurationWithRemoteNode gets all monitoring configuration from the specified remote node.
-func (server *Server) retrieveMonitoringConfigurationWithRemoteNode(node *RemoteNode) error {
-	err := node.exportMonitoringConfigurations()
-	if err != nil {
-		return err
+import (
+	"github.com/cybergarage/foreman-go/foreman/fql"
+)
+
+// impportMonitoringConfigurations gets all monitoring configuration.
+func (server *Server) impportMonitoringConfigurations(configMap map[string]interface{}) error {
+	for target, configObj := range configMap {
+		var err error
+		switch target {
+		case fql.QueryTargetQos:
+			err = server.qosMgr.ImportQoSJSONObject(configObj)
+		case fql.QueryTargetAction:
+			err = server.actionMgr.ImportMethodJSONObject(configObj)
+		case fql.QueryTargetRoute:
+			err = server.actionMgr.ImportRouteJSONObject(configObj)
+		}
+
+		if err != nil {
+			return err
+		}
 	}
+
 	return nil
 }
 
 // updateMonitoringConfigurationWithRemoteNode updates the configuration from the specified node
 func (server *Server) updateMonitoringConfigurationWithRemoteNode(node *RemoteNode) error {
-	err := server.retrieveMonitoringConfigurationWithRemoteNode(node)
+	configObj, err := node.exportMonitoringConfigurations()
 	if err != nil {
 		return err
 	}
+
+	err = server.impportMonitoringConfigurations(configObj)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
