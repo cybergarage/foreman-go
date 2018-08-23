@@ -16,17 +16,17 @@ const (
 	errorMethodNotFound          = "Method (%s )Not Found"
 )
 
-func (mgr *ScriptManager) CreateMethodJSONString(jsonStr string) error {
+func (mgr *ScriptManager) importMethodJSONString(jsonStr string) error {
 	jsonDecorder := json.NewDecorder()
 	jsonObj, err := jsonDecorder.Decode(jsonStr)
 	if err != nil {
 		return err
 	}
 
-	return mgr.CreateMethodJSONObject(jsonObj)
+	return mgr.ImportMethodJSONObject(jsonObj)
 }
 
-func (mgr *ScriptManager) CreateMethodJSONObject(jsonObj interface{}) error {
+func (mgr *ScriptManager) ImportMethodJSONObject(jsonObj interface{}) error {
 	methodsMap, ok := jsonObj.(map[string]interface{})
 	if !ok {
 		return fmt.Errorf(errorMethodInvalidJSONObject, jsonObj)

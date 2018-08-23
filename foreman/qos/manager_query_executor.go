@@ -9,7 +9,17 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
+
+func getJSONExportMapName() string {
+	return strings.ToLower(fql.QueryTargetQos)
+}
+
+// GetJSONExportPath returns a JSON path for QoS.
+func GetJSONExportPath() string {
+	return json.PathSep + getJSONExportMapName()
+}
 
 func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
@@ -50,7 +60,7 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 	}
 
 	qosContainer := map[string]interface{}{}
-	qosContainer[strings.ToLower(fql.QueryTargetQos)] = jsonObj
+	qosContainer[getJSONExportMapName()] = jsonObj
 
 	return qosContainer, nil
 }

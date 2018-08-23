@@ -23,7 +23,7 @@ func TestMethodJSONExportImport(t *testing.T) {
 
 	mgr := NewScriptManager()
 
-	err := mgr.CreateMethodJSONString(testActionJSON)
+	err := mgr.importMethodJSONString(testActionJSON)
 	if err != nil {
 		t.Error(err)
 		return
@@ -46,7 +46,7 @@ func TestMethodJSONExportImport(t *testing.T) {
 
 	mgr = NewScriptManager()
 
-	err = mgr.CreateMethodJSONObject(actionJSONObj)
+	err = mgr.ImportMethodJSONObject(actionJSONObj)
 	if err != nil {
 		t.Error(err)
 	}

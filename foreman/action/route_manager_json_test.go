@@ -46,7 +46,7 @@ func TestRouteJSONExportImport(t *testing.T) {
 
 	mgr = NewRouteManager()
 
-	err = mgr.importRouteJSONObject(routeJSONObj)
+	err = mgr.ImportRouteJSONObject(routeJSONObj)
 	if err != nil {
 		t.Error(err)
 		return
