@@ -31,7 +31,7 @@ func (mgr *Manager) importQoSJSONObject(jsonObj interface{}) error {
 	case map[string]string:
 		qosStringMap := jsonObj.(map[string]string)
 		for name, formula := range qosStringMap {
-			err := mgr.importQoSFormula(name, formula)
+			err := mgr.CreateQoS(name, formula)
 			if err != nil {
 				return err
 			}
@@ -44,7 +44,7 @@ func (mgr *Manager) importQoSJSONObject(jsonObj interface{}) error {
 			if !ok {
 				return fmt.Errorf(errorQoSInvalidJSONObject, jsonObj)
 			}
-			err := mgr.importQoSFormula(name, formula)
+			err := mgr.CreateQoS(name, formula)
 			if err != nil {
 				return err
 			}
@@ -53,25 +53,6 @@ func (mgr *Manager) importQoSJSONObject(jsonObj interface{}) error {
 	}
 
 	return fmt.Errorf(errorQoSInvalidJSONObject, jsonObj)
-}
-
-func (mgr *Manager) importQoSFormula(name string, formula string) error {
-	rule, err := mgr.ParseQoSString(formula)
-	if err != nil {
-		return err
-	}
-
-	err = rule.SetName(name)
-	if err != nil {
-		return err
-	}
-
-	err = mgr.SetRule(rule)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (mgr *Manager) exportQoSJSONObjectWithName(name string) (interface{}, error) {
