@@ -17,6 +17,18 @@ func NewRouteManager() *RouteManager {
 	return mgr
 }
 
+// CreateRoute tries to create a new route with the specified parameters.
+func (mgr *RouteManager) CreateRoute(name string, src string, dst string) error {
+	route := NewRouteWithStrings(name, src, dst)
+
+	err := mgr.AddRoute(route)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // AddRoute adds a new route.
 func (mgr RouteManager) AddRoute(route *Route) error {
 	key := route.GetSource()
