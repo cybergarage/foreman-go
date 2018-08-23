@@ -13,6 +13,7 @@ import (
 
 const (
 	errorMethodInvalidJSONObject = "Invalid JSON Object : %v"
+	errorMethodNotFound          = "Method (%s )Not Found"
 )
 
 func (mgr *ScriptManager) CreateMethodJSONString(jsonStr string) error {
@@ -36,12 +37,12 @@ func (mgr *ScriptManager) CreateMethodJSONObject(jsonObj interface{}) error {
 
 		lang, err := methodMap.GetPathString(ActionColumnLanguage)
 		if err != nil {
-			return fmt.Errorf(errorMethodInvalidJSONObject, jsonObj)
+			return fmt.Errorf(errorMethodInvalidJSONObject, methodMapObj)
 		}
 
 		code, err := methodMap.GetPathString(ActionColumnCode)
 		if err != nil {
-			return fmt.Errorf(errorMethodInvalidJSONObject, jsonObj)
+			return fmt.Errorf(errorMethodInvalidJSONObject, methodMapObj)
 		}
 
 		enc, _ := methodMap.GetPathString(ActionColumnEncoding)

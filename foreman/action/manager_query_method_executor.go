@@ -51,10 +51,11 @@ func (mgr *Manager) executeSelectMethod(q fql.Query) (interface{}, *errors.Error
 		return nil, errors.NewErrorWithError(err)
 	}
 
-	actionMap := map[string]interface{}{}
-	actionMap[ActionColumnMethods] = methods
+	methodMap := map[string]interface{}{}
+	methodMap[ActionColumnMethods] = methods
+
 	actionContainer := map[string]interface{}{}
-	actionContainer[strings.ToLower(fql.QueryTargetAction)] = actionMap
+	actionContainer[strings.ToLower(fql.QueryTargetAction)] = methodMap
 
 	return actionContainer, nil
 }

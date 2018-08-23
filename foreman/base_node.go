@@ -4,7 +4,16 @@
 
 package foreman
 
-import "github.com/cybergarage/foreman-go/foreman/fql"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/cybergarage/foreman-go/foreman/fql"
+)
+
+const (
+	errorNodeExportObjectNotFound = "Export Object Not Found (%s) : %v"
+)
 
 // baseNode is a super class to define methods using Node interface.
 type baseNode struct {
@@ -20,17 +29,38 @@ func newBaseNodeWithNode(node Node) *baseNode {
 }
 
 // exportMonitoringConfigurations gets all monitoring configuration.
-func (node *baseNode) exportMonitoringConfigurations() error {
+func (node *baseNode) exportMonitoringConfigurations() (map[string]interface{}, error) {
 	targets := []string{
 		fql.QueryTargetQos,
 		fql.QueryTargetAction,
 		fql.QueryTargetRoute,
 	}
 
+	configMap := map[string]interface{}{}
+
 	for _, target := range targets {
-		q := fql.NewExportQuery()
+		q := fql.NewSelectAllQuery()
 		q.SetTarget(fql.NewTargetWithString(target))
+		qStr := q.String()
+		jsonObj, err := node.Node.PostQuery(qStr)
+		if err != nil {
+			return nil, err
+		}
+
+		jsonMap, ok := jsonObj.(map[string]interface{})
+		if !ok {
+			return nil, fmt.Errorf(errorNodeExportObjectNotFound, target, jsonObj)
+		}
+
+		lowerTarget := strings.ToLower(target)
+
+		jsonMapObj, ok := jsonMap[lowerTarget]
+		if !ok {
+			return nil, fmt.Errorf(errorNodeExportObjectNotFound, target, jsonObj)
+		}
+
+		configMap[lowerTarget] = jsonMapObj
 	}
 
-	return nil
+	return configMap, nil
 }
