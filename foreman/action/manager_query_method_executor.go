@@ -11,7 +11,7 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
-func (mgr *Manager) executeInsertAction(q fql.Query) (interface{}, *errors.Error) {
+func (mgr *Manager) executeInsertMethod(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
 	if !ok || len(values) < 4 {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
@@ -30,7 +30,7 @@ func (mgr *Manager) executeInsertAction(q fql.Query) (interface{}, *errors.Error
 	return nil, nil
 }
 
-func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error) {
+func (mgr *Manager) executeSelectMethod(q fql.Query) (interface{}, *errors.Error) {
 	ope, whereName, hasWhere := q.GetConditionByColumn(fql.QueryColumnName)
 	if hasWhere {
 		if ope.GetType() != fql.OperatorTypeEQ {
@@ -59,7 +59,7 @@ func (mgr *Manager) executeSelectAction(q fql.Query) (interface{}, *errors.Error
 	return actionContainer, nil
 }
 
-func (mgr *Manager) executeDeleteAction(q fql.Query) (interface{}, *errors.Error) {
+func (mgr *Manager) executeDeleteMethod(q fql.Query) (interface{}, *errors.Error) {
 	ope, whereName, hasWhere := q.GetConditionByColumn(fql.QueryColumnName)
 	if hasWhere {
 		if ope.GetType() != fql.OperatorTypeEQ {
@@ -87,7 +87,7 @@ func (mgr *Manager) executeDeleteAction(q fql.Query) (interface{}, *errors.Error
 	return nil, nil
 }
 
-func (mgr *Manager) executeExecuteAction(q fql.Query) (interface{}, *errors.Error) {
+func (mgr *Manager) executeExecuteMethod(q fql.Query) (interface{}, *errors.Error) {
 	targetObj, ok := q.GetTarget()
 	if !ok {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalid)
