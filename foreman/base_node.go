@@ -5,10 +5,11 @@
 package foreman
 
 import (
-	"fmt"
-	"strings"
+	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/qos"
 
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
 const (
@@ -47,19 +48,24 @@ func (node *baseNode) exportMonitoringConfigurations() (map[string]interface{}, 
 			return nil, err
 		}
 
-		jsonMap, ok := jsonObj.(map[string]interface{})
-		if !ok {
-			return nil, fmt.Errorf(errorNodeExportObjectNotFound, target, jsonObj)
+		jsonPath := json.NewPathWithObject(jsonObj)
+
+		var configObj interface{}
+
+		switch target {
+		case fql.QueryTargetQos:
+			configObj, err = jsonPath.GetPathObject(qos.GetJSONExportPath())
+		case fql.QueryTargetAction:
+			configObj, err = jsonPath.GetPathObject(action.GetJSONExportMethodPath())
+		case fql.QueryTargetRoute:
+			configObj, err = jsonPath.GetPathObject(action.GetJSONExportRoutePath())
 		}
 
-		lowerTarget := strings.ToLower(target)
-
-		jsonMapObj, ok := jsonMap[lowerTarget]
-		if !ok {
-			return nil, fmt.Errorf(errorNodeExportObjectNotFound, target, jsonObj)
+		if err != nil {
+			return nil, err
 		}
 
-		configMap[lowerTarget] = jsonMapObj
+		configMap[target] = configObj
 	}
 
 	return configMap, nil
