@@ -346,6 +346,21 @@ func (server *Server) Start() error {
 		return err
 	}
 
+	// Boostrap
+
+	boostrap, err := server.config.GetInt(ConfigBoostrapKey)
+	if err != nil {
+		server.Stop()
+		logging.Error("%s\n", err)
+		return err
+	}
+	if boostrap != 0 {
+		err = server.executeBoostrap()
+		server.Stop()
+		logging.Error("%s\n", err)
+		return err
+	}
+
 	return nil
 }
 
