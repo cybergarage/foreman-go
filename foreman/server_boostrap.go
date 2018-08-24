@@ -8,8 +8,8 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
-// impportMonitoringConfigurations gets all monitoring configuration.
-func (server *Server) impportMonitoringConfigurations(configMap map[string]interface{}) error {
+// importMonitoringConfigurations gets all monitoring configuration.
+func (server *Server) importMonitoringConfigurations(configMap map[string]interface{}) error {
 	for target, configObj := range configMap {
 		var err error
 		switch target {
@@ -36,10 +36,15 @@ func (server *Server) updateMonitoringConfigurationWithRemoteNode(node *RemoteNo
 		return err
 	}
 
-	err = server.impportMonitoringConfigurations(configObj)
+	err = server.importMonitoringConfigurations(configObj)
 	if err != nil {
 		return err
 	}
 
+	return nil
+}
+
+// executeBoostrap executes boostrap.
+func (server *Server) executeBoostrap() error {
 	return nil
 }
