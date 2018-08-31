@@ -7,8 +7,20 @@ package metric
 
 import (
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
-func TestNewData(t *testing.T) {
+func TestNewMetric(t *testing.T) {
 	NewMetric()
+}
+
+func TestNewRegexMetric(t *testing.T) {
+	node := node.NewBaseNode()
+
+	m := NewMetric()
+	_, err := m.GetRegexMetricForNode(node)
+	if err != nil {
+		t.Error(err)
+	}
 }
