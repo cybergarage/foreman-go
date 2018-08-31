@@ -7,6 +7,8 @@ package discovery
 import (
 	"regexp"
 	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
 const (
@@ -21,10 +23,10 @@ var testFinderNodeNames = []string{
 	"org.cybergarage.foreman003",
 }
 
-func setupTestFinderBaseNodes() []Node {
+func setupTestFinderNodes() []Node {
 	nodes := make([]Node, len(testFinderNodeNames))
 	for n, name := range testFinderNodeNames {
-		node := newBaseNode().(*baseNode)
+		node := node.NewBaseNode()
 		node.Name = name
 		nodes[n] = node
 	}
@@ -113,20 +115,43 @@ func finderTest(t *testing.T, finder Finder) {
 	}
 }
 
-func TestNewSharedFinder(t *testing.T) {
-	nodes := setupTestFinderBaseNodes()
+func TestSharedFinder(t *testing.T) {
+	nodes := setupTestFinderNodes()
 
 	finder := NewSharedFinder().(*SharedFinder)
 	for _, node := range nodes {
 		finder.addNode(node)
 	}
 
+	err := finder.Start()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	finderTest(t, finder)
+
+	err = finder.Stop()
+	if err != nil {
+		t.Error(err)
+	}
 }
 
-func TestNewStaticFinder(t *testing.T) {
-	nodes := setupTestFinderBaseNodes()
+func TestStaticFinder(t *testing.T) {
+	nodes := setupTestFinderNodes()
 
 	finder := NewStaticFinderWithNodes(nodes)
+
+	err := finder.Start()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	finderTest(t, finder)
+
+	err = finder.Stop()
+	if err != nil {
+		t.Error(err)
+	}
 }

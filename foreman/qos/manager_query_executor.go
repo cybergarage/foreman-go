@@ -9,7 +9,17 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
+
+func getJSONExportMapName() string {
+	return strings.ToLower(fql.QueryTargetQos)
+}
+
+// GetJSONExportPath returns a JSON path for QoS.
+func GetJSONExportPath() string {
+	return json.PathSep + getJSONExportMapName()
+}
 
 func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
@@ -20,17 +30,7 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 	name := values[0].String()
 	formula := values[1].String()
 
-	rule, err := mgr.ParseQoSString(formula)
-	if err != nil {
-		return nil, errors.NewErrorWithError(err)
-	}
-
-	err = rule.SetName(name)
-	if err != nil {
-		return nil, errors.NewErrorWithError(err)
-	}
-
-	err = mgr.SetRule(rule)
+	err := mgr.CreateQoS(name, formula)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}
@@ -46,23 +46,21 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 		}
 	}
 
-	ruleMap := map[string]string{}
-	for _, rule := range mgr.GetRules() {
-		ruleName := rule.GetName()
-		if hasName {
-			if ruleName != name {
-				continue
-			}
-		}
-		ruleMap[ruleName] = rule.String()
+	var jsonObj interface{}
+	var err error
+
+	if hasName {
+		jsonObj, err = mgr.exportQoSJSONObjectWithName(name)
+	} else {
+		jsonObj, err = mgr.exportQoSJSONObject()
 	}
 
-	if hasName && (len(ruleMap) <= 0) {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryNotFoundData)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
 	}
 
 	qosContainer := map[string]interface{}{}
-	qosContainer[strings.ToLower(fql.QueryTargetQos)] = ruleMap
+	qosContainer[getJSONExportMapName()] = jsonObj
 
 	return qosContainer, nil
 }

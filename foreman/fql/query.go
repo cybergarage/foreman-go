@@ -26,6 +26,7 @@ type Query interface {
 	GetColumns() (Columns, bool)
 	HasColumn(string) bool
 	HasOnlyColumn(string) bool
+	IsAllColumn() bool
 
 	AddValue(*Value) error
 	GetValues() (Values, bool)
@@ -33,6 +34,11 @@ type Query interface {
 	AddCondition(*Condition) error
 	GetConditions() (Conditions, bool)
 	GetConditionByColumn(leftOpe string) (*Operator, string, bool)
+
+	IsStateChangeQuery() bool
+
+	SetRetransmissionFlag(bool)
+	IsRetransmissionQuery() bool
 
 	String() string
 }

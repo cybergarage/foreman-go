@@ -12,12 +12,7 @@ type ExecuteQuery struct {
 // NewExecuteQuery returns a new execute query.
 func NewExecuteQuery() Query {
 	q := &ExecuteQuery{
-		baseQuery: newBaseQuery(),
+		baseQuery: newBaseQueryWithType(QueryTypeExecute),
 	}
 	return q
-}
-
-// GetType returns a stored type.
-func (q *ExecuteQuery) GetType() QueryType {
-	return QueryTypeExecute
 }

@@ -151,6 +151,33 @@ func NewQueryWithQuery(fq fql.Query) (*Query, error) {
 	return q, nil
 }
 
+// SetFrom sets a start time
+func (q *Query) SetFrom(t time.Time) {
+	q.From = &t
+}
+
+// SetFromUnix sets a start Unix time
+func (q *Query) SetFromUnix(ut int64) {
+	from := time.Unix(int64(ut), 0)
+	q.From = &from
+}
+
+// SetUntil sets an end time
+func (q *Query) SetUntil(t time.Time) {
+	q.Until = &t
+}
+
+// SetUntilUnix sets an end Unix time
+func (q *Query) SetUntilUnix(ut int64) {
+	until := time.Unix(int64(ut), 0)
+	q.Until = &until
+}
+
+// SetIntervalSecond set a interval second
+func (q *Query) SetIntervalSecond(ds int64) {
+	q.Interval = time.Duration(ds) * time.Second
+}
+
 // String returns a string description of the instance
 func (q *Query) String() string {
 	target := ""

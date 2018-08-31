@@ -10,11 +10,23 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
 const (
 	errorServerQueryTargetNotFound = "Not found the query target (%s) "
 )
+
+// executeRetransmissionQuery executes the specified query
+func (server *Server) executeRetransmissionQuery(node Node, query fql.Query) error {
+	remoteNode := node.(*RemoteNode)
+	queryString := query.String()
+	_, err := remoteNode.PostRetransmissionQuery(queryString)
+	if err != nil {
+		logging.Error("%s", err)
+	}
+	return err
+}
 
 // ExecuteQuery executes the specified query
 func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
@@ -53,5 +65,23 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 	}
 
-	return executor.ExecuteQuery(q)
+	// Execute query to local node
+
+	resObj, err := executor.ExecuteQuery(q)
+	if err != nil {
+		return nil, err
+	}
+
+	// Execute query to remote nodes
+
+	if q.IsStateChangeQuery() && !q.IsRetransmissionQuery() {
+		for _, node := range server.GetAllClusterNodes() {
+			if NodeEqual(node, server) {
+				continue
+			}
+			go server.executeRetransmissionQuery(node, q)
+		}
+	}
+
+	return resObj, err
 }

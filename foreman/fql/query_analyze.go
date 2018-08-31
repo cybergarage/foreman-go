@@ -12,12 +12,7 @@ type AnalyzeQuery struct {
 // NewAnalyzeQuery returns a new Analyze query.
 func NewAnalyzeQuery() Query {
 	q := &AnalyzeQuery{
-		baseQuery: newBaseQuery(),
+		baseQuery: newBaseQueryWithType(QueryTypeAnalyze),
 	}
 	return q
-}
-
-// GetType returns a stored type.
-func (q *AnalyzeQuery) GetType() QueryType {
-	return QueryTypeAnalyze
 }
