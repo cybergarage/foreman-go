@@ -23,6 +23,16 @@ func NewStaticFinderWithNodes(nodes []Node) Finder {
 }
 
 // SearchAll searches all nodes.
-func (finder *StaticFinder) SearchAll() error {
+func (finder *StaticFinder) Search() error {
+	return nil
+}
+
+// Start starts the finder.
+func (finder *StaticFinder) Start() error {
+	return nil
+}
+
+// Stop stops the finder.
+func (finder *StaticFinder) Stop() error {
 	return nil
 }

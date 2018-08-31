@@ -6,30 +6,43 @@ package fql
 
 import (
 	"fmt"
+	"strings"
 )
 
 // baseQuery represents a parameter.
 type baseQuery struct {
+	Type QueryType
 	*Target
 	Columns
 	Values
 	Conditions
+	forwardingFlag bool
 }
 
 // newQueryWithToken returns a new query with the specified string.
-func newBaseQuery() *baseQuery {
+func newBaseQueryWithType(queryType QueryType) *baseQuery {
 	q := &baseQuery{
-		Target:     nil,
-		Columns:    NewColumns(),
-		Values:     NewValues(),
-		Conditions: NewConditions(),
+		Type:           queryType,
+		Target:         nil,
+		Columns:        NewColumns(),
+		Values:         NewValues(),
+		Conditions:     NewConditions(),
+		forwardingFlag: false,
 	}
 	return q
 }
 
-// GetType returns a stored type in the query.
+// GetType returns a query type.
 func (q *baseQuery) GetType() QueryType {
-	return QueryTypeUnknown
+	return q.Type
+}
+
+// IsStateChangeQuery returns whether state change query
+func (q *baseQuery) IsStateChangeQuery() bool {
+	if (q.Type == QueryTypeInsert) || (q.Type == QueryTypeDelete) {
+		return true
+	}
+	return false
 }
 
 // SetTarget sets a specified target into the query.
@@ -60,7 +73,7 @@ func (q *baseQuery) GetColumns() (Columns, bool) {
 	return q.Columns, true
 }
 
-// HasColumn returns the columns in the query.
+// HasColumn returns true when the query has the specified column.
 func (q *baseQuery) HasColumn(name string) bool {
 	for _, c := range q.Columns {
 		if c.String() == name {
@@ -70,7 +83,7 @@ func (q *baseQuery) HasColumn(name string) bool {
 	return false
 }
 
-// HasOnlyColumn returns the columns in the query.
+// HasOnlyColumn returns true when the query has only the specified column.
 func (q *baseQuery) HasOnlyColumn(name string) bool {
 	if len(q.Columns) != 1 {
 		return false
@@ -79,6 +92,14 @@ func (q *baseQuery) HasOnlyColumn(name string) bool {
 		return false
 	}
 	return true
+}
+
+// IsAllColumn returns true when the query has only "*" column.
+func (q *baseQuery) IsAllColumn() bool {
+	if len(q.Columns) == 0 {
+		return true
+	}
+	return q.HasColumn(QueryColumnAll)
 }
 
 // AddValue adds a specified value into the query.
@@ -119,9 +140,28 @@ func (q *baseQuery) GetConditionByColumn(leftOpe string) (*Operator, string, boo
 	return nil, "", false
 }
 
+// SetRetransmissionFlag sets a retransmission flag.
+func (q *baseQuery) SetRetransmissionFlag(flag bool) {
+	q.forwardingFlag = flag
+}
+
+// IsRetransmissionQuery returns whether retransmission query
+func (q *baseQuery) IsRetransmissionQuery() bool {
+	return q.forwardingFlag
+}
+
 // String returns a string description of the instance
 func (q *baseQuery) String() string {
 
+	// Query Type
+
+	queryType := QueryTypeUnknown
+	qt, ok := (interface{}(q)).(Query)
+	if ok {
+		queryType = qt.GetType()
+	}
+
+	// Query String
 	var queryString string
 
 	queryTypeStrings := map[QueryType]string{
@@ -131,24 +171,28 @@ func (q *baseQuery) String() string {
 		QueryTypeAnalyze: QueryAnalyzeString,
 		QueryTypeExecute: QueryExecuteString,
 	}
-	queryTypeString, ok := queryTypeStrings[q.GetType()]
+	queryTypeString, ok := queryTypeStrings[queryType]
 	if ok {
 		queryString += fmt.Sprintf("%s", queryTypeString)
 	}
 
 	// Columns (Select)
 
-	if q.GetType() == QueryTypeSelect {
-		columns, ok := q.GetColumns()
-		if ok {
-			queryString += "("
-			for n, column := range columns {
-				if 0 < n {
-					queryString += ", "
+	if queryType == QueryTypeSelect {
+		if q.IsAllColumn() {
+			queryString += fmt.Sprintf(" %s", QueryColumnAll)
+		} else {
+			columns, ok := q.GetColumns()
+			if ok {
+				queryString += " ("
+				for n, column := range columns {
+					if 0 < n {
+						queryString += ", "
+					}
+					queryString += column.String()
 				}
-				queryString += column.String()
+				queryString += ")"
 			}
-			queryString += ")"
 		}
 	}
 
@@ -156,17 +200,17 @@ func (q *baseQuery) String() string {
 
 	target, ok := q.GetTarget()
 	if ok {
-		switch q.GetType() {
+		switch queryType {
 		case QueryTypeInsert:
-			queryString += fmt.Sprintf("INTO %s", target)
+			queryString += fmt.Sprintf(" INTO %s", target)
 		case QueryTypeSelect, QueryTypeDelete:
-			queryString += fmt.Sprintf("FROM %s", target)
+			queryString += fmt.Sprintf(" FROM %s", target)
 		}
 	}
 
 	// Columns (Insert)
 
-	if q.GetType() == QueryTypeInsert {
+	if queryType == QueryTypeInsert {
 		columns, ok := q.GetColumns()
 		if ok {
 			queryString += "("
@@ -182,15 +226,19 @@ func (q *baseQuery) String() string {
 
 	// Values (Insert)
 
-	if q.GetType() == QueryTypeInsert {
+	if queryType == QueryTypeInsert {
 		values, ok := q.GetValues()
 		if ok {
-			queryString += "VALUES ("
+			queryString += " VALUES ("
 			for n, value := range values {
 				if 0 < n {
 					queryString += ", "
 				}
-				queryString += value.String()
+				valueString := value.String()
+				if 0 <= strings.IndexAny(valueString, " ") {
+					valueString = fmt.Sprintf("\"%s\"", valueString)
+				}
+				queryString += valueString
 			}
 			queryString += ")"
 		}
@@ -200,7 +248,7 @@ func (q *baseQuery) String() string {
 
 	conditions, ok := q.GetConditions()
 	if ok {
-		queryString += "WHERE "
+		queryString += " WHERE "
 		for _, condition := range conditions {
 			queryString += fmt.Sprintf("%s ", condition.String())
 		}

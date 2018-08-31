@@ -28,10 +28,18 @@ func (ctrl *Controller) AddFinder(finder discovery.Finder) error {
 	return nil
 }
 
+// HasFinders returns whether the controller has no finder.
+func (ctrl *Controller) HasFinders() bool {
+	if len(ctrl.Finders) <= 0 {
+		return false
+	}
+	return true
+}
+
 // SearchAll searches all nodes.
-func (ctrl *Controller) SearchAll() error {
+func (ctrl *Controller) Search() error {
 	for _, finder := range ctrl.Finders {
-		err := finder.SearchAll()
+		err := finder.Search()
 		if err != nil {
 			return err
 		}
@@ -70,7 +78,7 @@ func (ctrl *Controller) GetAllNodes() ([]Node, error) {
 			return nil, err
 		}
 		for _, node := range nodes {
-			allNodes = append(allNodes, (Node)(node))
+			allNodes = append(allNodes, NewRemoteNodeWithNode(node))
 		}
 	}
 	return allNodes, nil
@@ -86,7 +94,7 @@ func (ctrl *Controller) GetResponsibleNodesForMetric(m *metric.Metric) ([]Node, 
 			return nil, err
 		}
 		for _, node := range nodes {
-			respNodes = append(respNodes, (Node)(node))
+			respNodes = append(respNodes, NewRemoteNodeWithNode(node))
 		}
 	}
 	return respNodes, nil

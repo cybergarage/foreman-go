@@ -5,10 +5,15 @@
 
 export GOPATH="$PWD"
 
-export CGO_LDFLAGS="-lforeman++ -lm -lstdc++ -lsqlite3 -luuid -lalglib"
+export CGO_LDFLAGS="-lforeman++ -lfolly -lgflags -lglog -lalglib -lsqlite3 -luuid -lm"
 if command -v python-config; then
 	export CGO_CFLAGS="$CGO_CFLAGS `python-config --includes`"
 	export CGO_LDFLAGS="$CGO_LDFLAGS `python-config --libs`"
+fi
+
+if command -v pkg-config; then
+	export CGO_CFLAGS="$CGO_CFLAGS `pkg-config lua --silence-errors --cflags`"
+	export CGO_LDFLAGS="$CGO_LDFLAGS `pkg-config lua --silence-errors --libs`"
 fi
 
 ########################################
@@ -19,7 +24,7 @@ dependencies=(
 "github.com/antlr/antlr4/runtime/Go/antlr"
 "github.com/BurntSushi/toml"
 "github.com/romana/rlog"
-"github.com/cybergarage/uecho-go/net/uecho"
+"github.com/cybergarage/uecho-go/net/echonet"
 )
 
 go get "${dependencies[@]}"

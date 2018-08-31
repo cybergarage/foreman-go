@@ -65,7 +65,7 @@ func (s *QueryScenario) Execute(e *Event) (*Response, *errors.Error) {
 		return nil, errors.NewErrorWithError(err)
 	}
 
-	resObj, resCode, err := s.client.PostQuery(q.Query)
+	resObj, resCode, err := s.client.PostQueryOverHTTP(q.Query)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}

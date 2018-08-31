@@ -45,6 +45,7 @@ PACKAGES=\
 	${PACKAGE_ID}/rpc/graphite \
 	${PACKAGE_ID}/rpc/json \
 	${PACKAGE_ID}/discovery \
+	${PACKAGE_ID}/fd \
 	${PACKAGE_ID}/test
 
 SOURCE_DIR=src/${GITHUB}/foreman
@@ -77,7 +78,7 @@ CONST_GOS = $(basename $(CONST_GENS))
 GO_FILES = $(shell find $(SOURCE_DIR) -type f -name '*.go')
 ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/fql/fql_, base_listener lexer listener parser))
 
-.PHONY: version clean
+.PHONY: version antlr clean
 
 all: test
 

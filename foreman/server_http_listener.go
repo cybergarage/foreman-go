@@ -15,7 +15,6 @@ import (
 )
 
 const (
-	httpRequestQueryParam       = "q"
 	httpResponseContentType     = "Content-Type"
 	httpResponseContentTypeJSON = "application/json"
 )
@@ -23,7 +22,7 @@ const (
 // HTTPRequestReceived is a listener for FQL
 func (server *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter) {
 	switch r.URL.Path {
-	case HttpServerFqlPath:
+	case HttpRequestFqlPath:
 		server.fqlRequestReceived(r, w)
 		return
 	}
@@ -33,7 +32,7 @@ func (server *Server) HTTPRequestReceived(r *http.Request, w http.ResponseWriter
 
 // fqlRequestReceived handles FQL requests
 func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter) {
-	queryString := r.FormValue(httpRequestQueryParam)
+	queryString := r.FormValue(HttpRequestFqlQueryParam)
 
 	parser := fql.NewParser()
 	queries, err := parser.ParseString(queryString)
@@ -44,32 +43,51 @@ func (server *Server) fqlRequestReceived(r *http.Request, w http.ResponseWriter)
 		return
 	}
 
-	if len(queries) <= 0 {
+	queryCnt := len(queries)
+	if queryCnt <= 0 {
 		server.badRequestReceived(r, w)
 		return
 	}
 
-	// FIXME: Execute all queries
-	query := queries[0]
+	retransParam := r.FormValue(HttpRequestFqlRetransmissionParam)
+	if 0 <= len(retransParam) {
+		for _, query := range queries {
+			query.SetRetransmissionFlag(true)
+		}
+	}
 
-	queryResult, queryErr := server.ExecuteQuery(query)
-	if queryErr == nil {
-		server.httpLogMessage(r, http.StatusOK, queryString)
-	} else {
-		server.httpLogMessage(r, http.StatusBadRequest, queryErr.String())
-		server.httpResponseJSONError(r, w, queryErr)
-		return
+	var queryAllResponse interface{}
+	var queryResponses []interface{}
+	if 1 < queryCnt {
+		queryResponses = make([]interface{}, queryCnt)
+		queryAllResponse = queryResponses
+	}
+
+	for n, query := range queries {
+		queryResponse, queryErr := server.ExecuteQuery(query)
+		if queryErr == nil {
+			server.httpLogMessage(r, http.StatusOK, query.String())
+		} else {
+			server.httpLogMessage(r, http.StatusBadRequest, queryErr.String())
+			server.httpResponseJSONError(r, w, queryErr)
+			return
+		}
+		if queryCnt == 1 {
+			queryAllResponse = queryResponse
+		} else {
+			queryResponses[n] = queryResponse
+		}
 	}
 
 	w.Header().Set(httpResponseContentType, httpResponseContentTypeJSON)
 	w.WriteHeader(http.StatusOK)
 
-	if queryResult == nil {
+	if queryAllResponse == nil {
 		return
 	}
 
 	encorder := json.NewEncorder()
-	content, ok := encorder.Encode(queryResult)
+	content, ok := encorder.Encode(queryAllResponse)
 	if ok != nil {
 		return
 	}

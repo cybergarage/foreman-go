@@ -17,12 +17,17 @@ const (
 	QueryTargetRegistry       = "REGISTRY"
 	QueryTargetAction         = "ACTION"
 	QueryTargetRoute          = "ROUTE"
+	QueryTargetTypeNone       = 0
+	QueryTargetTypeShared     = 1
+	QueryTargetTypeFederated  = 2
+	QueryTargetTypeStandalone = 3
 	QueryConditionOperatorLt  = "<"
 	QueryConditionOperatorLe  = "<="
 	QueryConditionOperatorGt  = ">"
 	QueryConditionOperatorGe  = ">="
 	QueryConditionOperatorEq  = "=="
 	QueryConditionOperatorNeq = "!="
+	QueryColumnAll            = "*"
 	QueryColumnName           = "name"
 	QueryColumnTimestamp      = "ts"
 	QueryColumnValue          = "value"

@@ -4,14 +4,8 @@
 
 package discovery
 
-// Node represents an abstract node interface
-type Node interface {
-	// GetCuster returns the cluster name
-	GetCuster() string
-	// GetName returns the host name
-	GetName() string
-	// GetAddress returns the interface address
-	GetAddress() string
-	// GetRPCPort returns the RPC port
-	GetRPCPort() int
-}
+import (
+	"github.com/cybergarage/foreman-go/foreman/node"
+)
+
+type Node = node.Node

@@ -8,6 +8,12 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
+)
+
+const (
+	errorFinderHasSameNode = "Node (%s) is already added"
 )
 
 // baseFinder represents a base finder.
@@ -39,8 +45,21 @@ func (finder *baseFinder) SetNotifyListener(l FinderNotifyListener) error {
 	return nil
 }
 
+// HasNode returns true when the specified node is added already, otherwise false.
+func (finder *baseFinder) HasNode(targetNode Node) bool {
+	for _, addedNode := range finder.nodes {
+		if node.Equal(targetNode, addedNode) {
+			return true
+		}
+	}
+	return false
+}
+
 // addNodes adds a specified node.
 func (finder *baseFinder) addNode(node Node) error {
+	if finder.HasNode(node) {
+		return fmt.Errorf(errorFinderHasSameNode, node)
+	}
 	finder.nodes = append(finder.nodes, node)
 	return nil
 }

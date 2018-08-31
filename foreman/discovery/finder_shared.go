@@ -19,6 +19,16 @@ func NewSharedFinder() Finder {
 }
 
 // SearchAll searches all nodes.
-func (finder *SharedFinder) SearchAll() error {
+func (finder *SharedFinder) Search() error {
+	return nil
+}
+
+// Start starts the finder.
+func (finder *SharedFinder) Start() error {
+	return nil
+}
+
+// Stop stops the finder.
+func (finder *SharedFinder) Stop() error {
 	return nil
 }

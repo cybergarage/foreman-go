@@ -8,7 +8,9 @@ package foreman
 import (
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/metric"
-	"github.com/cybergarage/go-graphite/net/graphite"
+	"github.com/cybergarage/foreman-go/foreman/rpc/graphite"
+
+	go_graphite "github.com/cybergarage/go-graphite/net/graphite"
 )
 
 const (
@@ -18,8 +20,8 @@ const (
 	graphiteRenderQuery = "RENDER"
 )
 
-// InsertMetricRequestReceived is a listener for Graphite Carbon
-func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err error) {
+// InsertMetricsRequestReceived is a listener for Graphite Carbon
+func (server *Server) InsertMetricsRequestReceived(gm *go_graphite.Metrics, err error) {
 	// Ignore error requests
 	if err != nil {
 		logging.Error("[GRAPHITE:BAD] %s", err.Error())
@@ -44,7 +46,7 @@ func (server *Server) InsertMetricsRequestReceived(gm *graphite.Metrics, err err
 }
 
 // FindMetricsRequestReceived is a listener for Graphite Render
-func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metrics, error) {
+func (server *Server) FindMetricsRequestReceived(gq *go_graphite.Query, err error) ([]*go_graphite.Metrics, error) {
 	// Ignore error requests
 	if err != nil {
 		logging.Error("%s %s %s", graphitePrefix, graphiteFindQuery, gq.Target)
@@ -62,11 +64,11 @@ func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) 
 	}
 
 	mCount := rs.GetMetricsCount()
-	m := make([]*graphite.Metrics, mCount)
+	m := make([]*go_graphite.Metrics, mCount)
 
 	ms := rs.GetFirstMetrics()
 	for n := 0; n < mCount; n++ {
-		m[n] = graphite.NewMetrics()
+		m[n] = go_graphite.NewMetrics()
 		if ms == nil {
 			break
 		}
@@ -79,49 +81,81 @@ func (server *Server) FindMetricsRequestReceived(gq *graphite.Query, err error) 
 	return m, nil
 }
 
+// queryMetricsRequest request a query into a node
+func (server *Server) queryMetricsRequest(node Node, gq *go_graphite.Query) ([]*go_graphite.Metrics, error) {
+	mq := graphite.NewMetricQueryWithGraphiteQuery(gq)
+
+	var rs metric.ResultSet
+	var err error
+
+	if NodeEqual(node, server) { // For local node
+		rs, err = server.metricMgr.Query(mq)
+	} else { // For remote node
+		gc := NewClientWithNode(node)
+		rs, err = gc.GetMetrics(mq)
+	}
+
+	if err != nil {
+		logging.Error("%s %s %s", graphitePrefix, graphiteRenderQuery, gq.Target)
+		return nil, err
+	}
+
+	gms, err := graphite.NewGraphiteMetricsWithResultSet(rs)
+	if err != nil {
+		logging.Error("%s %s %s", graphitePrefix, graphiteRenderQuery, gq.Target)
+		return nil, err
+	}
+
+	return gms, nil
+}
+
+// queryFederatedMetricsRequest request a query into appropriate nodes
+func (server *Server) queryFederatedMetricsRequest(gq *go_graphite.Query) ([]*go_graphite.Metrics, error) {
+	re := NewRegexp()
+	err := re.CompileGraphite(gq.Target)
+	if err != nil {
+		return nil, err
+	}
+
+	gmsAll := make([]*go_graphite.Metrics, 0)
+
+	for _, node := range server.GetAllClusterNodes() {
+		if !re.MatchNode(node) {
+			continue
+		}
+
+		expandTarget, ok := re.ExpandNode(node)
+		if !ok {
+			continue
+		}
+
+		egq := go_graphite.NewQueryWithQuery(gq)
+		egq.Target = expandTarget
+		gms, err := server.queryMetricsRequest(node, egq)
+		if (err != nil) || (len(gms) <= 0) {
+			continue
+		}
+		gmsAll = append(gmsAll, gms...)
+	}
+
+	return gmsAll, nil
+}
+
 // QueryMetricsRequestReceived is a listener for Graphite Render
-func (server *Server) QueryMetricsRequestReceived(gq *graphite.Query, err error) ([]*graphite.Metrics, error) {
+func (server *Server) QueryMetricsRequestReceived(gq *go_graphite.Query, err error) ([]*go_graphite.Metrics, error) {
 	// Ignore error requests
 	if err != nil {
 		logging.Error("%s %s %s", graphitePrefix, graphiteRenderQuery, gq.Target)
 		return nil, nil
 	}
 
-	// graphite.Query to foreman.Query
-	fq := metric.NewDataQuery()
-	fq.Target = gq.Target
-	fq.From = gq.From
-	fq.Until = gq.Until
-
-	rs, err := server.metricMgr.Query(fq)
+	gms, err := server.queryFederatedMetricsRequest(gq)
 	if err != nil {
 		logging.Error("%s %s %s", graphitePrefix, graphiteRenderQuery, gq.Target)
 		return nil, err
 	}
 
-	mCount := rs.GetMetricsCount()
-	m := make([]*graphite.Metrics, mCount)
-
-	ms := rs.GetFirstMetrics()
-	for n := 0; n < mCount; n++ {
-		m[n] = graphite.NewMetrics()
-		if ms == nil {
-			break
-		}
-		m[n].Name = ms.Name
-		dpCount := len(ms.Values)
-		m[n].DataPoints = graphite.NewDataPoints(dpCount)
-		for i := 0; i < dpCount; i++ {
-			dp := graphite.NewDataPoint()
-			dp.Timestamp = ms.Values[i].Timestamp
-			dp.Value = ms.Values[i].Value
-			m[n].DataPoints[i] = dp
-		}
-
-		ms = rs.GetNextMetrics()
-	}
-
 	logging.Info("%s %s %s %s %s", graphitePrefix, graphiteRenderQuery, gq.Target, gq.From.String(), gq.Until.String())
 
-	return m, nil
+	return gms, nil
 }

@@ -6,16 +6,17 @@ package foreman
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/metric"
-	rpc "github.com/cybergarage/foreman-go/foreman/rpc/graphite"
-	"github.com/cybergarage/go-graphite/net/graphite"
+	"github.com/cybergarage/foreman-go/foreman/rpc/graphite"
+	go_graphite "github.com/cybergarage/go-graphite/net/graphite"
 )
 
 // Client represents a client for the server.
 type Client struct {
-	Scheme   string
-	Host     string
-	HTTPPort int
-	graphite *graphite.Client
+	Scheme     string
+	Host       string
+	HTTPPort   int
+	CarbonPort int
+	RenderPort int
 	*Controller
 }
 
@@ -25,7 +26,21 @@ func NewClient() *Client {
 		Scheme:     DefaultRpcProtocol,
 		Host:       DefaultServerHost,
 		HTTPPort:   DefaultHttpPort,
-		graphite:   graphite.NewClient(),
+		CarbonPort: go_graphite.DefaultCarbonPort,
+		RenderPort: go_graphite.DefaultRenderPort,
+		Controller: NewController(),
+	}
+	return client
+}
+
+// NewClientWithNode returns a new client for a specified node.
+func NewClientWithNode(node Node) *Client {
+	client := &Client{
+		Scheme:     DefaultRpcProtocol,
+		Host:       node.GetName(),
+		HTTPPort:   node.GetRPCPort(),
+		CarbonPort: node.GetCarbonPort(),
+		RenderPort: node.GetRenderPort(),
 		Controller: NewController(),
 	}
 	return client
@@ -37,20 +52,34 @@ func (client *Client) SetHost(host string) error {
 	return nil
 }
 
-// SetHTTPPort sets the specified point into the client.
+// SetHTTPPort sets the specified port.
 func (client *Client) SetHTTPPort(port int) error {
 	client.HTTPPort = port
 	return nil
 }
 
+// SetCarbonPort sets the specified port.
+func (client *Client) SetCarbonPort(port int) error {
+	client.CarbonPort = port
+	return nil
+}
+
+// SetRenderPort sets the specified port.
+func (client *Client) SetRenderPort(port int) error {
+	client.RenderPort = port
+	return nil
+}
+
 // PostMetric posts a metric over Graphite interface
 func (client *Client) PostMetric(m *metric.Metric) error {
-	gm, err := rpc.NewGraphiteMetricsWithMetric(m)
+	gm, err := graphite.NewGraphiteMetricsWithMetric(m)
 	if err != nil {
 		return err
 	}
 
-	err = client.graphite.PostMetrics(gm)
+	graphite := go_graphite.NewClient()
+	graphite.CarbonPort = client.CarbonPort
+	err = graphite.PostMetrics(gm)
 	if err != nil {
 		return err
 	}
@@ -58,10 +87,36 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 	return nil
 }
 
+// GetMetrics gets the specified metrics over Graphite interface
+func (client *Client) GetMetrics(q *metric.Query) (metric.ResultSet, error) {
+	gq := graphite.NewGraphiteQueryWithMetricQuery(q)
+	gc := go_graphite.NewClient()
+	gc.RenderPort = client.RenderPort
+	gms, err := gc.PostQuery(gq)
+	if err != nil {
+		return nil, err
+	}
+
+	rs, err := graphite.NewResultSetWithGraphiteMetrics(gms)
+	if err != nil {
+		return nil, err
+	}
+
+	return rs, nil
+}
+
 // PostQuery posts a query string
-func (client *Client) PostQuery(query string) (interface{}, int, error) {
+func (client *Client) PostQuery(query string) (interface{}, error) {
 	node := NewRemoteNode()
 	node.Address = client.Host
 	node.RPCPort = client.HTTPPort
 	return node.PostQuery(query)
+}
+
+// PostQueryOverHTTP posts a query string over HTTP
+func (client *Client) PostQueryOverHTTP(query string) (interface{}, int, error) {
+	node := NewRemoteNode()
+	node.Address = client.Host
+	node.RPCPort = client.HTTPPort
+	return node.PostQueryOverHTTP(query)
 }

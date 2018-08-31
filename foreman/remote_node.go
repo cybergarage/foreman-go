@@ -10,26 +10,50 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/cybergarage/foreman-go/foreman/node"
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
-// Remote represents a remote node.
+// RemoteNode represents a remote node.
 type RemoteNode struct {
 	Node
-	Cluster string
-	Address string
-	RPCPort int
+	*baseNode
+	Cluster    string
+	Name       string
+	Address    string
+	RPCPort    int
+	RenderPort int
+	CarbonPort int
 }
 
-// NewNode returns a new node.
+// NewRemoteNode returns a remote new node.
 func NewRemoteNode() *RemoteNode {
 	node := &RemoteNode{}
 	return node
 }
 
-// GetCuster returns the cluster name
-func (node *RemoteNode) GetCuster() string {
+// NewRemoteNodeWithNode returns a remote new node.
+func NewRemoteNodeWithNode(remoteNode node.Node) *RemoteNode {
+	node := &RemoteNode{
+		Cluster:    remoteNode.GetCluster(),
+		Name:       remoteNode.GetName(),
+		Address:    remoteNode.GetAddress(),
+		RPCPort:    remoteNode.GetRPCPort(),
+		RenderPort: remoteNode.GetRenderPort(),
+		CarbonPort: remoteNode.GetCarbonPort(),
+	}
+	node.baseNode = newBaseNodeWithNode(node)
+	return node
+}
+
+// GetCluster returns the cluster name
+func (node *RemoteNode) GetCluster() string {
 	return node.Cluster
+}
+
+// GetName returns the host name
+func (node *RemoteNode) GetName() string {
+	return node.Name
 }
 
 // GetAddress returns the interface address
@@ -42,18 +66,41 @@ func (node *RemoteNode) GetRPCPort() int {
 	return node.RPCPort
 }
 
-// PostQuery posts a query string
-func (node *RemoteNode) PostQuery(queryString string) (interface{}, int, error) {
+// GetRenderPort returns the Graphite render port
+func (node *RemoteNode) GetRenderPort() int {
+	return node.RenderPort
+}
+
+// GetCarbonPort returns the Graphite carbon port
+func (node *RemoteNode) GetCarbonPort() int {
+	return node.CarbonPort
+}
+
+// PostQueryOverHTTP posts a query string over HTTP
+func (node *RemoteNode) PostQueryOverHTTP(query string) (interface{}, int, error) {
+	return node.postQueryOverHTTPWithRetransmissionFlag(query, false)
+}
+
+// postQueryOverHTTPWithRetransmissionFlag posts a query string over HTTP
+func (node *RemoteNode) postQueryOverHTTPWithRetransmissionFlag(query string, retransmissionFlag bool) (interface{}, int, error) {
+	rawQuery := fmt.Sprintf("%s=%s",
+		HttpRequestFqlQueryParam,
+		url.QueryEscape(query))
+
+	if retransmissionFlag {
+		rawQuery += fmt.Sprintf("&%s=%t",
+			HttpRequestFqlRetransmissionParam,
+			retransmissionFlag)
+	}
+
 	url := url.URL{
 		Scheme: DefaultRpcProtocol,
 		Host: fmt.Sprintf(
 			"%s:%d",
 			node.GetAddress(),
 			node.GetRPCPort()),
-		Path: HttpServerFqlPath,
-		RawQuery: fmt.Sprintf("%s=%s",
-			HttpServerFqlQuery,
-			url.QueryEscape(queryString)),
+		Path:     HttpRequestFqlPath,
+		RawQuery: rawQuery,
 	}
 
 	res, err := http.Get(url.String())
@@ -82,4 +129,16 @@ func (node *RemoteNode) PostQuery(queryString string) (interface{}, int, error) 
 	}
 
 	return resObj, resCode, nil
+}
+
+// PostQuery posts a query string
+func (node *RemoteNode) PostQuery(query string) (interface{}, error) {
+	resObj, _, err := node.postQueryOverHTTPWithRetransmissionFlag(query, false)
+	return resObj, err
+}
+
+// PostRetransmissionQuery posts a query string
+func (node *RemoteNode) PostRetransmissionQuery(query string) (interface{}, error) {
+	resObj, _, err := node.postQueryOverHTTPWithRetransmissionFlag(query, true)
+	return resObj, err
 }

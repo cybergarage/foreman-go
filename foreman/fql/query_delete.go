@@ -12,12 +12,7 @@ type DeleteQuery struct {
 // NewDeleteQuery returns a new delete query.
 func NewDeleteQuery() Query {
 	q := &DeleteQuery{
-		baseQuery: newBaseQuery(),
+		baseQuery: newBaseQueryWithType(QueryTypeDelete),
 	}
 	return q
-}
-
-// GetType returns a stored type.
-func (q *DeleteQuery) GetType() QueryType {
-	return QueryTypeDelete
 }

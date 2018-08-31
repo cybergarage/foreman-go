@@ -9,7 +9,13 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
+
+// GetJSONExportRoutePath returns a JSON path for routes.
+func GetJSONExportRoutePath() string {
+	return json.PathSep + strings.Join([]string{getJSONExportActionMapName(), RouteColumnRoutes}, json.PathSep)
+}
 
 func (mgr *Manager) executeInsertRoute(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
@@ -18,10 +24,10 @@ func (mgr *Manager) executeInsertRoute(q fql.Query) (interface{}, *errors.Error)
 	}
 
 	name := values[0].String()
-	source := values[1].String()
-	dest := values[2].String()
+	src := values[1].String()
+	dst := values[2].String()
 
-	err := mgr.CreateRoute(name, source, dest)
+	err := mgr.CreateRoute(name, src, dst)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}
@@ -37,30 +43,24 @@ func (mgr *Manager) executeSelectRoute(q fql.Query) (interface{}, *errors.Error)
 		}
 	}
 
-	routes := map[string]interface{}{}
-	for _, route := range mgr.GetAllRoutes() {
-		if hasName {
-			if route.Name != name {
-				continue
-			}
-		}
+	var routes interface{}
+	var err error
 
-		routeMap := map[string]string{}
-		routeMap[RouteColumnSource] = route.GetSource()
-		routeMap[RouteColumnDestination] = route.GetDestination()
-
-		routes[route.GetName()] = routeMap
+	if hasName {
+		routes, err = mgr.exportRouteJSONObjectWithName(name)
+	} else {
+		routes, err = mgr.exportRouteJSONObject()
 	}
 
-	if hasName && (len(routes) <= 0) {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryNotFoundData)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
 	}
 
 	routeMap := map[string]interface{}{}
 	routeMap[RouteColumnRoutes] = routes
 
 	actionContainer := map[string]interface{}{}
-	actionContainer[strings.ToLower(fql.QueryTargetAction)] = routeMap
+	actionContainer[getJSONExportActionMapName()] = routeMap
 
 	return actionContainer, nil
 }
