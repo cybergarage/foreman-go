@@ -36,20 +36,6 @@ func (mgr *Manager) AddRouteContainer(c RouteContainer) error {
 	return nil
 }
 
-// CreateRoute tries to creat a new route with the specified route names.
-func (mgr *Manager) CreateRoute(name string, src string, dest string) error {
-	// Added a new route
-
-	route := NewRouteWithStrings(name, src, dest)
-
-	err := mgr.RouteManager.AddRoute(route)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // findRouteDestination returns a destination in the all route containers.
 func (mgr *Manager) findRouteDestination(name string) RouteDestination {
 	for _, c := range mgr.routeContainers {

@@ -16,3 +16,10 @@ func NewSelectQuery() Query {
 	}
 	return q
 }
+
+// NewSelectAllQuery returns a new select query with an asterisk column.
+func NewSelectAllQuery() Query {
+	q := NewSelectQuery()
+	q.AddColumn(NewColumnWithString(QueryColumnAll))
+	return q
+}

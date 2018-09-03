@@ -5,6 +5,8 @@
 package action
 
 import (
+	"encoding/base64"
+
 	"github.com/cybergarage/foreman-go/foreman/register"
 	"github.com/cybergarage/foreman-go/foreman/registry"
 )
@@ -32,6 +34,39 @@ type Scripting interface {
 type ScriptManager struct {
 	Scripting
 	RouteContainer
+}
+
+// GetMethodCount returns a count of all methods.
+func (mgr *ScriptManager) GetMethodCount() int {
+	methodCnt := 0
+	method := mgr.GetFirstMethod()
+	for method != nil {
+		methodCnt++
+		method = mgr.GetNextMethod(method)
+	}
+	return methodCnt
+}
+
+// CreateMethod creates a new method with the specified parameters
+func (mgr *ScriptManager) CreateMethod(name string, lang string, code string, enc string) error {
+	m := NewMethodWithLanguage(lang)
+	m.Name = name
+	if 0 < len(enc) && enc == ActionEncodingBase64 {
+		code, err := base64.StdEncoding.DecodeString(code)
+		if err != nil {
+			return err
+		}
+		m.Code = code
+	} else {
+		m.Code = []byte(code)
+	}
+
+	err := mgr.AddMethod(m)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // FindRouteDestination returns a destination object with the specified name.
