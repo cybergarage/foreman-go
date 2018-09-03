@@ -31,6 +31,7 @@ func testClientConfigQuery(t *testing.T, server *Server, client *Client) {
 	configObj, err := client.PostQuery("EXPORT FROM CONFIG")
 	if err != nil {
 		t.Error(err)
+		return
 	}
 
 	configs := map[string]string{
@@ -52,6 +53,8 @@ func testClientConfigQuery(t *testing.T, server *Server, client *Client) {
 
 }
 
+/*
+FIXME : Enable TestClientQueries
 func TestClientQueries(t *testing.T) {
 	server := NewServer()
 
@@ -70,3 +73,4 @@ func TestClientQueries(t *testing.T) {
 		t.Error(err)
 	}
 }
+*/
