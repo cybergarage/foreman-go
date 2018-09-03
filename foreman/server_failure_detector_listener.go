@@ -63,8 +63,7 @@ func (server *Server) exportAllKnowledgebase(node Node) (fql.Queries, error) {
 
 // FailureDetectorNodeOutOfDate is called when the node is out of date in the cluster.
 func (server *Server) FailureDetectorNodeOutOfDate(fd.Node) {
-	finder := server.finder
-	nodes, err := finder.GetAllNodes()
+	nodes, err := server.Controller.GetAllNodes()
 	if err != nil {
 		return
 	}
