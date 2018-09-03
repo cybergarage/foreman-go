@@ -37,9 +37,9 @@ func (ctrl *Controller) HasFinders() bool {
 }
 
 // SearchAll searches all nodes.
-func (ctrl *Controller) SearchAll() error {
+func (ctrl *Controller) Search() error {
 	for _, finder := range ctrl.Finders {
-		err := finder.SearchAll()
+		err := finder.Search()
 		if err != nil {
 			return err
 		}

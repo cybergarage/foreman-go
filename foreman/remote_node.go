@@ -17,7 +17,7 @@ import (
 // RemoteNode represents a remote node.
 type RemoteNode struct {
 	Node
-
+	*baseNode
 	Cluster    string
 	Name       string
 	Address    string
@@ -42,6 +42,7 @@ func NewRemoteNodeWithNode(remoteNode node.Node) *RemoteNode {
 		RenderPort: remoteNode.GetRenderPort(),
 		CarbonPort: remoteNode.GetCarbonPort(),
 	}
+	node.baseNode = newBaseNodeWithNode(node)
 	return node
 }
 

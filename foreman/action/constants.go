@@ -8,6 +8,7 @@ const (
 	ActionEncodingBase64   = "base64"
 	ActionLanguagePython   = "python"
 	ActionLanguageLua      = "lua"
+	ActionLanguageSystem   = "system"
 	ActionColumnMethods    = "methods"
 	ActionColumnName       = "name"
 	ActionColumnCode       = "code"
