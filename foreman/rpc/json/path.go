@@ -145,6 +145,13 @@ func (p *Path) getChildObject(obj interface{}, key string) (interface{}, error) 
 			return nil, fmt.Errorf(errorDecorderNotFoundKey, key)
 		}
 		return keyObj, nil
+	case map[string]string:
+		jsonDir, _ := obj.(map[string]string)
+		keyObj, hasKey := jsonDir[key]
+		if !hasKey {
+			return nil, fmt.Errorf(errorDecorderNotFoundKey, key)
+		}
+		return keyObj, nil
 	case []interface{}:
 		arrayIndexRegexp := regexp.MustCompile(PathArrayIndexRegexp)
 		if !arrayIndexRegexp.MatchString(key) {
