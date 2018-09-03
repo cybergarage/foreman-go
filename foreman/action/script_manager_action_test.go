@@ -17,7 +17,6 @@ const (
 )
 
 const (
-	errorMethodNotFound  = "Method (%s) is not found"
 	errorEngineNotFound  = "Script Engine (%s) is not found"
 	errorObjectNotEquals = "Object does not equal (%v != %v)"
 )

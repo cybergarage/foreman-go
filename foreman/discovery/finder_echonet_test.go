@@ -8,6 +8,10 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/discovery/echonet"
 )
 
+const (
+	errorEchonetFinderIsNotRunning = "Finder is not running"
+)
+
 func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
 	nodes := setupTestFinderNodes()
 	echonetNodes := make([]*echonet.EchonetNode, len(nodes))
@@ -24,6 +28,8 @@ func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
 /*
 FIXME : Enable TestEchonetFinder
 func TestEchonetFinder(t *testing.T) {
+	log.SetSharedLogger(log.NewStdoutLogger(log.LoggerLevelTrace))
+
 	nodes, err := setupTestEchonetFinderNodes()
 	if err != nil {
 		t.Error(err)
@@ -36,7 +42,6 @@ func TestEchonetFinder(t *testing.T) {
 			t.Error(err)
 			return
 		}
-		defer node.Stop()
 	}
 
 	finder := NewEchonetFinder()
@@ -47,11 +52,27 @@ func TestEchonetFinder(t *testing.T) {
 		return
 	}
 
+	err = finder.Search()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	finderTest(t, finder)
+
+	time.Sleep(time.Minute * time.Duration(len(nodes)))
 
 	err = finder.Stop()
 	if err != nil {
 		t.Error(err)
+	}
+
+	for _, node := range nodes {
+		err = node.Stop()
+		if err != nil {
+			t.Error(err)
+			return
+		}
 	}
 }
 */

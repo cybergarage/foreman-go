@@ -31,6 +31,7 @@ const (
 // Server represents a Foreman Server.
 type Server struct {
 	Node
+	*baseNode
 
 	cluster string
 	name    string
@@ -72,6 +73,8 @@ func NewServerWithConfigFile(configFile string) *Server {
 		status:      NewStatus(),
 		fd:          fd.NewGossipDetector(),
 	}
+
+	server.baseNode = newBaseNodeWithNode(server)
 
 	server.initialize()
 	runtime.SetFinalizer(server, serverFinalizer)
@@ -290,19 +293,34 @@ func (server *Server) PostQuery(query string) (interface{}, error) {
 	return resObjects, nil
 }
 
+// getStartupManagers returns all managers which should be started
+func (server *Server) getStartupManagers() []Manager {
+	managers := []Manager{
+		server.registerMgr,
+		server.metricMgr,
+		server.qosMgr,
+	}
+	return managers
+}
+
 // Start starts the server.
 func (server *Server) Start() error {
-	if server == nil {
-		return nil
-	}
-
 	err := server.updateConfig()
 	if err != nil {
 		logging.Error("%s\n", err)
 		return err
 	}
 
-	// Start all managers without the register manager
+	// Start all managers without graphite
+
+	for _, mgr := range server.getStartupManagers() {
+		err = mgr.Start()
+		if err != nil {
+			return err
+		}
+	}
+
+	// Start Graphite manager
 
 	graphiteRetryCount := 0
 	err = server.graphite.Start()
@@ -318,22 +336,16 @@ func (server *Server) Start() error {
 		return err
 	}
 
-	err = server.registerMgr.Start()
+	// Boostrap
+
+	boostrap, err := server.config.GetInt(ConfigBoostrapKey)
 	if err != nil {
 		server.Stop()
 		logging.Error("%s\n", err)
 		return err
 	}
-
-	err = server.metricMgr.Start()
-	if err != nil {
-		server.Stop()
-		logging.Error("%s\n", err)
-		return err
-	}
-
-	err = server.qosMgr.Start()
-	if err != nil {
+	if boostrap != 0 {
+		err = server.executeBoostrap()
 		server.Stop()
 		logging.Error("%s\n", err)
 		return err
@@ -342,39 +354,27 @@ func (server *Server) Start() error {
 	return nil
 }
 
+// getRunningMangers returns all managers which should be stopped.
+func (server *Server) getRunningMangers() []Manager {
+	managers := server.getStartupManagers()
+	managers = append(managers, server.graphite)
+	return managers
+}
+
 // Stop stops the server.
 func (server *Server) Stop() error {
-	if server == nil {
-		return nil
+
+	// Start all managers
+
+	var lastError error
+	for _, mgr := range server.getRunningMangers() {
+		err := mgr.Stop()
+		if err != nil {
+			lastError = err
+		}
 	}
 
-	// Stop all managers without the register manager
-
-	err := server.graphite.Stop()
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-
-	err = server.registerMgr.Stop()
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-
-	err = server.metricMgr.Stop()
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-
-	err = server.qosMgr.Stop()
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-
-	return nil
+	return lastError
 }
 
 // Restart restats the server.

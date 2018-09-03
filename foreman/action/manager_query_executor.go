@@ -11,6 +11,10 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
+func getJSONExportActionMapName() string {
+	return strings.ToLower(fql.QueryTargetAction)
+}
+
 // ExecuteQuery must return the result as a standard array or map.
 func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	// Target type
@@ -24,13 +28,13 @@ func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	case fql.QueryTargetAction:
 		switch q.GetType() {
 		case fql.QueryTypeInsert:
-			return mgr.executeInsertAction(q)
+			return mgr.executeInsertMethod(q)
 		case fql.QueryTypeSelect:
-			return mgr.executeSelectAction(q)
+			return mgr.executeSelectMethod(q)
 		case fql.QueryTypeDelete:
-			return mgr.executeDeleteAction(q)
+			return mgr.executeDeleteMethod(q)
 		case fql.QueryTypeExecute:
-			return mgr.executeExecuteAction(q)
+			return mgr.executeExecuteMethod(q)
 		}
 	case fql.QueryTargetRoute:
 		switch q.GetType() {
@@ -47,7 +51,7 @@ func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 
 	switch q.GetType() {
 	case fql.QueryTypeExecute:
-		return mgr.executeExecuteAction(q)
+		return mgr.executeExecuteMethod(q)
 	}
 
 	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)

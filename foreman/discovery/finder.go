@@ -21,7 +21,7 @@ type FinderNotifyListener interface {
 // Finder represents an abstract interface
 type Finder interface {
 	// SearchAll searches all nodes.
-	SearchAll() error
+	Search() error
 	// SetSearchListener sets a specified listener.
 	SetSearchListener(FinderSearchListener) error
 	// SetNotifyListener sets a specified listener.

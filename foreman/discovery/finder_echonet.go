@@ -28,7 +28,7 @@ func NewEchonetFinder() Finder {
 }
 
 // SearchAll searches all nodes.
-func (finder *EchonetFinder) SearchAll() error {
+func (finder *EchonetFinder) Search() error {
 	return finder.Controller.SearchAllObjects()
 }
 
