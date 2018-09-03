@@ -29,6 +29,7 @@ type ServerConfig struct {
 	Host       string
 	CarbonPort int
 	HTTPPort   int
+	Boostrap   int
 }
 
 type FQLConfig struct {
@@ -44,9 +45,11 @@ func DefaultTOMLConfig() TOMLConfig {
 	t.Server.Host = DefaultServerHost
 	t.Server.HTTPPort = DefaultHttpPort
 	t.Server.CarbonPort = DefaultCarbonPort
+	t.Server.Boostrap = DefaultBoostrapMode
 
 	t.FQL.Path = HttpRequestFqlPath
 	t.FQL.Query = HttpRequestFqlQueryParam
+
 	return t
 }
 
@@ -85,6 +88,7 @@ func (config *Config) initialize() error {
 		ConfigHostKey:       DefaultServerHost,
 		ConfigCarbonPortKey: strconv.Itoa(DefaultCarbonPort),
 		ConfigHttpPortKey:   strconv.Itoa(DefaultHttpPort),
+		ConfigBoostrapKey:   strconv.Itoa(DefaultBoostrapMode),
 	}
 
 	for key, value := range initialKeys {
@@ -121,6 +125,12 @@ func (config *Config) loadTOMLConfig(t TOMLConfig) (err error) {
 		return
 	}
 	err = config.SetKey(ConfigHttpPortKey, strconv.Itoa(t.Server.HTTPPort))
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+
+	err = config.SetKey(ConfigBoostrapKey, strconv.Itoa(t.Server.Boostrap))
 	if err != nil {
 		logging.Trace("Error: %s\n", err)
 		return
@@ -163,6 +173,11 @@ func (config Config) toTOMLConfig() (t TOMLConfig, err error) {
 		return
 	}
 	t.Server.HTTPPort, err = config.GetInt(ConfigHttpPortKey)
+	if err != nil {
+		logging.Trace("Error: %s\n", err)
+		return
+	}
+	t.Server.Boostrap, err = config.GetInt(ConfigBoostrapKey)
 	if err != nil {
 		logging.Trace("Error: %s\n", err)
 		return

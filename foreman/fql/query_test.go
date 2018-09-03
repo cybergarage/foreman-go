@@ -59,3 +59,23 @@ func TestQueryToString(t *testing.T) {
 		}
 	}
 }
+
+func TestSelectAllQuery(t *testing.T) {
+	testQuery := "SELECT * FROM QOS"
+
+	for n := 0; n < 2; n++ {
+		parser := NewParser()
+		queries, err := parser.ParseString(testQuery)
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		query := queries[0]
+		if !query.IsAllColumn() {
+			t.Errorf("%s", testQuery)
+		}
+
+		testQuery = query.String()
+	}
+}

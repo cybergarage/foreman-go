@@ -12,6 +12,7 @@ const (
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"
+	DefaultBoostrapMode               = 0
 	HttpRequestFqlPath                = "/fql"
 	HttpRequestFqlQueryParam          = "q"
 	HttpRequestFqlRetransmissionParam = "r"
@@ -25,4 +26,5 @@ const (
 	ConfigFqlQueryKey                 = "fql_query"
 	ConfigLogFileKey                  = "log_file"
 	ConfigLogLevelKey                 = "log_level"
+	ConfigBoostrapKey                 = "boostrap"
 )
