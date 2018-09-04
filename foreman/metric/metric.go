@@ -8,6 +8,8 @@ package metric
 import (
 	"fmt"
 	"time"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
 )
 
 // Metric represents a Foreman metric.
@@ -46,6 +48,11 @@ func (m *Metric) GetValue() float64 {
 // GetTimestamp returns the stored timestamp
 func (m *Metric) GetTimestamp() time.Time {
 	return m.Timestamp
+}
+
+// GetRegexMetricForNode returns a regular expression metrics which the name prefix is replaced to '*'
+func (m *Metric) GetRegexMetricForNode(node node.Node) (*Metric, error) {
+	return nil, nil
 }
 
 // String returns a string description of the instance

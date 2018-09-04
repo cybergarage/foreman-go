@@ -14,7 +14,6 @@ import (
 	"github.com/cybergarage/go-graphite/net/graphite"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
-	"github.com/cybergarage/foreman-go/foreman/discovery"
 	"github.com/cybergarage/foreman-go/foreman/fd"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/kb"
@@ -41,8 +40,7 @@ type Server struct {
 	kb.KnowledgeBaseListener
 
 	*Controller
-	finder discovery.Finder
-	fd     fd.Detector
+	fd fd.Detector
 
 	graphite    *graphite.Server
 	registerMgr *register.Manager
@@ -73,7 +71,6 @@ func NewServerWithConfigFile(configFile string) *Server {
 		config:      nil,
 		configFile:  configFile,
 		status:      NewStatus(),
-		finder:      discovery.NewEchonetFinder(),
 		fd:          fd.NewGossipDetector(),
 	}
 
@@ -123,7 +120,6 @@ func NewServerWithConfigFile(configFile string) *Server {
 	// Failure Detector
 
 	server.fd.SetListener(server)
-	server.fd.SetFinder(server.finder)
 
 	// RPC
 
