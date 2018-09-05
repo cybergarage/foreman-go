@@ -8,7 +8,7 @@ const (
 	ProductName                       = "foreman"
 	DefaultServerHost                 = "localhost"
 	DefaultCarbonPort                 = 2003
-	DefaultHttpPort                   = 8080
+	DefaultHttpPort                   = 8188
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"
@@ -27,4 +27,8 @@ const (
 	ConfigLogFileKey                  = "log_file"
 	ConfigLogLevelKey                 = "log_level"
 	ConfigBoostrapKey                 = "boostrap"
+	MetricStoreEmpty                  = "empty"
+	MetricStoreSqlite                 = "sqlite"
+	MetricStoreTsmap                  = "tsmap"
+	MetricStoreRingmap                = "ringmap"
 )

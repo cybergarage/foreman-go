@@ -9,8 +9,13 @@ package metric
 import "C"
 
 import (
+	"fmt"
 	"runtime"
 	"unsafe"
+)
+
+const (
+	errorMetricStoreNotFound = "Store (%s) Not Found"
 )
 
 func newStoreWithInterface(storeImpl Storing) *Store {
@@ -37,9 +42,27 @@ func storeFinalizer(self *cgoStore) {
 	}
 }
 
-// NewSQLiteStore returns a new Store of SQLite.
+// NewSQLiteStore returns a new store of SQLite.
 func NewSQLiteStore() *Store {
 	store := newStoreWithCObject(C.foreman_metric_store_sqlite_create())
+	return store
+}
+
+// NewEmptyStore returns a new empty store.
+func NewEmptyStore() *Store {
+	store := newStoreWithCObject(C.foreman_metric_store_empty_create())
+	return store
+}
+
+// NewGorillaStore returns a new store of Facebook's Gorilla.
+func NewGorillaStore() *Store {
+	store := newStoreWithCObject(C.foreman_metric_store_tsmap_create())
+	return store
+}
+
+// NewRingMapStore returns a new store of RingMap.
+func NewRingMapStore() *Store {
+	store := newStoreWithCObject(C.foreman_metric_store_ringmap_create())
 	return store
 }
 
@@ -48,4 +71,19 @@ func NewStore() *Store {
 	store := NewSQLiteStore()
 	store.SetRetentionInterval(DefaultRetentionInterval)
 	return store
+}
+
+// NewStoreWithName returns a new store with specified name.
+func NewStoreWithName(name string) (*Store, error) {
+	switch name {
+	case MetricStoreEmpty:
+		return NewEmptyStore(), nil
+	case MetricStoreSqlite:
+		return NewEmptyStore(), nil
+	case MetricStoreTsmap:
+		return NewGorillaStore(), nil
+	case MetricStoreRingmap:
+		return NewRingMapStore(), nil
+	}
+	return nil, fmt.Errorf(errorMetricStoreNotFound, name)
 }
