@@ -8,7 +8,7 @@ const (
 	ProductName                       = "foreman"
 	DefaultServerHost                 = "localhost"
 	DefaultCarbonPort                 = 2003
-	DefaultHttpPort                   = 8080
+	DefaultHttpPort                   = 8188
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"
