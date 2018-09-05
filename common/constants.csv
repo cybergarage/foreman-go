@@ -10,7 +10,7 @@ product_name,"foreman"
 
 default_server_host,"localhost"
 default_carbon_port,2003
-default_http_port,8080
+default_http_port,8188
 default_rpc_protocol,"http"
 default_log_file,"-"
 default_log_level,"INFO"
@@ -25,7 +25,7 @@ http_request_fql_query_param,"q"
 http_request_fql_retransmission_param,"r"
 
 ########################################
-# Registry
+# Config
 ########################################
 
 config_category_key,"config"
@@ -39,6 +39,15 @@ config_fql_query_key,"fql_query"
 config_log_file_key,"log_file"
 config_log_level_key,"log_level"
 config_boostrap_key,"boostrap"
+
+########################################
+# Metric 
+########################################
+
+metric_store_empty,"empty"
+metric_store_sqlite,"sqlite"
+metric_store_tsmap,"tsmap"
+metric_store_ringmap,"ringmap"
 
 ########################################
 # Action 
