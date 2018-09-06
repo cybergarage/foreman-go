@@ -14,6 +14,7 @@ default_http_port,8188
 default_rpc_protocol,"http"
 default_log_file,"-"
 default_log_level,"INFO"
+default_metrics_store,"empty"
 default_boostrap_mode,0
 
 ########################################

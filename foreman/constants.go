@@ -12,6 +12,7 @@ const (
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"
+	DefaultMetricsStore               = "empty"
 	DefaultBoostrapMode               = 0
 	HttpRequestFqlPath                = "/fql"
 	HttpRequestFqlQueryParam          = "q"
@@ -27,8 +28,4 @@ const (
 	ConfigLogFileKey                  = "log_file"
 	ConfigLogLevelKey                 = "log_level"
 	ConfigBoostrapKey                 = "boostrap"
-	MetricStoreEmpty                  = "empty"
-	MetricStoreSqlite                 = "sqlite"
-	MetricStoreTsmap                  = "tsmap"
-	MetricStoreRingmap                = "ringmap"
 )
