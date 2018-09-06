@@ -55,8 +55,8 @@ type Server struct {
 	status *Status
 }
 
-// NewServerWithConfigFile returns a new server with a specified configuration file.
-func NewServerWithConfigFile(configFile string) *Server {
+// NewServerWithConfig returns a new server with a specified configuration.
+func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	server := &Server{
 		cluster:     "",
@@ -66,10 +66,10 @@ func NewServerWithConfigFile(configFile string) *Server {
 		registryMgr: registry.NewManager(),
 		registerMgr: register.NewManager(),
 		qosMgr:      qos.NewManager(),
-		metricMgr:   metric.NewManager(),
+		metricMgr:   nil,
 		actionMgr:   action.NewManager(),
-		config:      nil,
-		configFile:  configFile,
+		config:      conf,
+		configFile:  "",
 		status:      NewStatus(),
 		fd:          fd.NewGossipDetector(),
 	}
@@ -84,26 +84,20 @@ func NewServerWithConfigFile(configFile string) *Server {
 		server.name = hostname
 	}
 
-	// Configuration
+	// Metric Store
 
-	server.config, err = NewConfigWithRegistry(server.registryMgr)
+	metricStore, err := metric.NewStoreWithName(conf.Server.MetricsStore)
 	if err != nil {
-		logging.Fatal("Could not create config registry!")
-		logging.Fatal("%s", err)
-		return nil
+		return nil, err
 	}
+	server.metricMgr = metric.NewManagerWithStore(metricStore)
 
-	err = server.LoadConfig(server.configFile)
-	if err != nil {
-		return nil
-	}
-
-	// Registry
+	// Registry Store
 
 	server.actionMgr.SetRegistryStore(server.registryMgr.GetStore())
 	server.actionMgr.SetRegisterStore(server.registerMgr.GetStore())
 
-	// Register
+	// Register Store
 
 	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
 	server.metricMgr.SetRegisterListener(server)
@@ -123,18 +117,35 @@ func NewServerWithConfigFile(configFile string) *Server {
 
 	// RPC
 
-	FqlPath, err := server.config.GetString(ConfigFqlPathKey)
-	if err != nil {
-		FqlPath = HttpRequestFqlPath
-	}
-	server.graphite.SetHTTPRequestListener(FqlPath, server)
+	fqlPath := server.config.FQL.Path
+	server.graphite.SetHTTPRequestListener(fqlPath, server)
 
-	return server
+	return server, nil
+}
+
+// NewServerWithConfigFile returns a new server with a specified configuration file.
+func NewServerWithConfigFile(confFile string) (*Server, error) {
+	conf := NewDefaultConfig()
+
+	err := conf.LoadFile(confFile)
+	if err != nil {
+		return nil, err
+	}
+
+	server, err := NewServerWithConfig(conf)
+	if err != nil {
+		return nil, err
+	}
+
+	return server, nil
 }
 
 // NewServer creates a new server
 func NewServer() *Server {
-	return NewServerWithConfigFile("")
+	conf := NewDefaultConfig()
+	conf.Server.MetricsStore = metric.MetricStoreSqlite
+	server, _ := NewServerWithConfig(conf)
+	return server
 }
 
 // initialize initialize the server.
@@ -206,22 +217,10 @@ func (server *Server) GetUniqueID() string {
 // updateConfig sets latest configurations.
 func (server *Server) updateConfig() error {
 	// Set latest network configurations
+	server.graphite.Carbon.Port = server.config.Server.CarbonPort
+	server.graphite.Render.Port = server.config.Server.HTTPPort
 
-	port, err := server.config.GetInt(ConfigCarbonPortKey)
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-	server.graphite.Carbon.Port = port
-
-	port, err = server.config.GetInt(ConfigHttpPortKey)
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-	server.graphite.Render.Port = port
-
-	return err
+	return nil
 }
 
 // LoadConfig sets the configurations in the specified file.
@@ -338,12 +337,7 @@ func (server *Server) Start() error {
 
 	// Boostrap
 
-	boostrap, err := server.config.GetInt(ConfigBoostrapKey)
-	if err != nil {
-		server.Stop()
-		logging.Error("%s\n", err)
-		return err
-	}
+	boostrap := server.config.Server.Boostrap
 	if boostrap != 0 {
 		err = server.executeBoostrap()
 		server.Stop()

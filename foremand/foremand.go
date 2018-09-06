@@ -27,6 +27,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -61,9 +62,14 @@ func main() {
 	logging.SetVerbose(*verbose)
 
 	// Load configuration
-	server := foreman.NewServerWithConfigFile(*configFile)
+	conf, err := foreman.NewConfigWithFile(*configFile)
+	if err != nil {
+		logging.Fatal(fmt.Sprintf("Could not load %s", *configFile))
+		os.Exit(1)
+	}
 
-	if server == nil {
+	server, err := foreman.NewServerWithConfig(conf)
+	if err != nil {
 		logging.Fatal("Could not start server. Terminating...")
 		os.Exit(1)
 	}
@@ -71,7 +77,7 @@ func main() {
 	// Start Server
 	logging.Info("%s is starting ...", ProgramName)
 
-	err := server.Start()
+	err = server.Start()
 	if err != nil {
 		logging.Fatal("%s couldn't be started (%s)", ProgramName, err.Error())
 		os.Exit(1)
