@@ -4,13 +4,13 @@
 
 package foreman
 
-import (
-	"strconv"
-	"testing"
+import "testing"
 
-	"github.com/cybergarage/foreman-go/foreman/registry"
-)
+func TestDefaultConfig(t *testing.T) {
+	NewDefaultConfig()
+}
 
+/*
 func TestConfigInitialKeys(t *testing.T) {
 	reg := registry.NewManager()
 
@@ -94,3 +94,4 @@ func TestConfigIntKeys(t *testing.T) {
 		t.Error(err)
 	}
 }
+*/
