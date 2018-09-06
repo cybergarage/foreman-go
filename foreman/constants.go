@@ -12,6 +12,7 @@ const (
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"
+	DefaultMetricsStore               = "empty"
 	DefaultBoostrapMode               = 0
 	HttpRequestFqlPath                = "/fql"
 	HttpRequestFqlQueryParam          = "q"
