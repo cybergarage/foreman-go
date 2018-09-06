@@ -30,6 +30,7 @@ func newStoreWithCObject(cObject unsafe.Pointer) *Store {
 		cStore:   cObject,
 		listener: nil,
 	}
+	storeImp.SetRetentionInterval(DefaultRetentionInterval)
 	runtime.SetFinalizer(storeImp, storeFinalizer)
 	return newStoreWithInterface(storeImp)
 }
@@ -66,10 +67,15 @@ func NewRingMapStore() *Store {
 	return store
 }
 
-// NewStore returns a new Store.
-func NewStore() *Store {
+// NewDefaultStore returns a new default store.
+func NewDefaultStore() *Store {
+	store := NewEmptyStore()
+	return store
+}
+
+// newDefaultTestStore returns a new default store for testing.
+func newDefaultTestStore() *Store {
 	store := NewSQLiteStore()
-	store.SetRetentionInterval(DefaultRetentionInterval)
 	return store
 }
 
