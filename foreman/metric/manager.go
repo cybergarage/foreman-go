@@ -18,14 +18,22 @@ type Manager struct {
 	fql.QueryExecutor
 }
 
-// NewManager returns a new metric manager.
-func NewManager() *Manager {
+// NewManagerWithStore returns a new metric manager with the specified store.
+func NewManagerWithStore(store *Store) *Manager {
 	mgr := &Manager{
-		Store:    NewStore(),
+		Store:    store,
 		Register: nil,
 	}
-
 	return mgr
+}
+
+// NewManagerWithStoreName returns a new metric manager with the specified store name.
+func NewManagerWithStoreName(name string) (*Manager, error) {
+	store, err := NewStoreWithName(name)
+	if err != nil {
+		return nil, err
+	}
+	return NewManagerWithStore(store), nil
 }
 
 // SetRegisterStore sets a raw register store.
