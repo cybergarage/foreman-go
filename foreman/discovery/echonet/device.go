@@ -32,8 +32,8 @@ const (
 	FinderVersionSize = 8
 )
 
-func FinderDeviceAllPropertyCodes() []byte {
-	props := []byte{
+func FinderDeviceAllPropertyCodes() []echonet.PropertyCode {
+	props := []echonet.PropertyCode{
 		FinderConditionCode,
 		FinderClusterCode,
 		FinderNameCode,
@@ -53,7 +53,7 @@ func NewDevice() (*echonet.Device, error) {
 	dev.SetCode(FinderDeviceCode)
 
 	for _, propCode := range FinderDeviceAllPropertyCodes() {
-		dev.CreateProperty(echonet.PropertyCode(propCode), echonet.PropertyAttributeRead)
+		dev.CreateProperty(propCode, echonet.PropertyAttributeRead)
 	}
 
 	return dev, nil
