@@ -1,8 +1,9 @@
 #! /bin/sh
 
 set -xue
+mode=${1:-test}
 
-yum install foreman-cc --enablerepo=apj-platform_rpms-test -y
+yum install foreman-cc --enablerepo=apj-platform_rpms-"$mode" -y
 
 if ! [ -d src/github.com/cybergarage/foreman-go ]
 then
