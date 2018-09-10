@@ -5,8 +5,6 @@
 package discovery
 
 import (
-	discovery_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
-
 	"github.com/cybergarage/uecho-go/net/echonet"
 )
 
@@ -40,23 +38,4 @@ func (finder *EchonetFinder) Start() error {
 // Stop stops the finder.
 func (finder *EchonetFinder) Stop() error {
 	return finder.Controller.Stop()
-}
-
-func (finder *EchonetFinder) addedNewNode(echonetNode *echonet.RemoteNode) {
-	reqMsg := discovery_echonet.NewRequestAllPropertiesMessage()
-	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
-	if err != nil {
-		return
-	}
-
-	candidateNode, err := discovery_echonet.NewFinderNodeWithResponseMesssage(resMsg)
-	if err != nil {
-		return
-	}
-
-	if finder.HasNode(candidateNode) {
-		return
-	}
-
-	finder.addNode(candidateNode)
 }
