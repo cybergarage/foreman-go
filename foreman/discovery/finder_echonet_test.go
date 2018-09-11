@@ -25,8 +25,7 @@ func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
 	return echonetNodes, nil
 }
 
-/*
-FIXME : Enable TestEchonetFinder
+/* FIXME
 func TestEchonetFinder(t *testing.T) {
 	log.SetSharedLogger(log.NewStdoutLogger(log.LoggerLevelTrace))
 
@@ -58,9 +57,10 @@ func TestEchonetFinder(t *testing.T) {
 		return
 	}
 
-	finderTest(t, finder)
+	//time.Sleep((500 * time.Millisecond) * time.Duration(len(nodes)))
+	time.Sleep((500 * time.Second) * time.Duration(len(nodes)))
 
-	time.Sleep(time.Minute * time.Duration(len(nodes)))
+	finderTest(t, finder)
 
 	err = finder.Stop()
 	if err != nil {
