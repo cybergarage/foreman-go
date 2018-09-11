@@ -11,11 +11,11 @@ import (
 	discovery_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
 )
 
-func (finder *EchonetFinder) RequestMessageReceived(*protocol.Message) {
+func (finder *EchonetFinder) ControllerMessageReceived(*protocol.Message) {
 
 }
 
-func (finder *EchonetFinder) NewNodeFound(echonetNode *echonet.RemoteNode) {
+func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *echonet.RemoteNode) {
 	reqMsg := discovery_echonet.NewRequestAllPropertiesMessage()
 	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
 	if err != nil {

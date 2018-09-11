@@ -54,7 +54,7 @@ func (node *EchonetNode) GetNodeDevice() (*echonet.Device, error) {
 }
 
 // MessageReceived updates local properties for the source node.
-func (node *EchonetNode) MessageReceived(msg *protocol.Message) {
+func (node *EchonetNode) NodeMessageReceived(msg *protocol.Message) {
 	if !msg.IsReadRequest() {
 		return
 	}
