@@ -15,10 +15,17 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
+const (
+	// FIXME : Support auto vacuum
+	cgoStoreVacuumInterval = 1000
+)
+
 // Store represents a metric store for Foreman.
 type cgoStore struct {
 	cStore   unsafe.Pointer
 	listener StoreListener
+	// FIXME : Support auto vacuum
+	vacuumCounter uint
 }
 
 // Open initializes the store.
@@ -114,6 +121,16 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 		store.listener.StoreMetricAdded(m)
 	}
 
+	// FIXME : Support auto vacuum
+	store.vacuumCounter++
+	if cgoStoreVacuumInterval < store.vacuumCounter {
+		err = store.Vacuum()
+		if err != nil {
+			return err
+		}
+		store.vacuumCounter = 0
+	}
+
 	return nil
 }
 
@@ -174,6 +191,17 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 	}
 
 	return NewResultSetWithCObject(crs), nil
+}
+
+// Query gets the specified metrics.
+func (store *cgoStore) Vacuum() error {
+	if store.cStore == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	C.foreman_metric_store_query_delete_expired_metrics(store.cStore)
+
+	return nil
 }
 
 // String returns a string description of the instance
