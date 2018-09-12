@@ -26,6 +26,8 @@ type Storing interface {
 	AddMetric(m *Metric) error
 	Query(q *Query) (ResultSet, error)
 
+	Vacuum() error
+
 	String() string
 }
 

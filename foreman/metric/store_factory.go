@@ -27,8 +27,9 @@ func newStoreWithInterface(storeImpl Storing) *Store {
 
 func newStoreWithCObject(cObject unsafe.Pointer) *Store {
 	storeImp := &cgoStore{
-		cStore:   cObject,
-		listener: nil,
+		cStore:        cObject,
+		listener:      nil,
+		vacuumCounter: 0,
 	}
 	storeImp.SetRetentionInterval(DefaultRetentionInterval)
 	runtime.SetFinalizer(storeImp, storeFinalizer)
