@@ -71,7 +71,7 @@ func NewRingMapStore() *Store {
 
 // NewDefaultStore returns a new default store.
 func NewDefaultStore() *Store {
-	store := NewEmptyStore()
+	store := NewSQLiteStore()
 	return store
 }
 
