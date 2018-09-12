@@ -18,5 +18,6 @@ const (
 const (
 	RetentionIntervalFiveMinute = time.Duration(5) * time.Minute
 	DefaultRetentionInterval    = RetentionIntervalFiveMinute
+	DefaultRetentionPeriod      = time.Duration(60) * time.Minute
 	QueryDefaultFromOffset      = -time.Duration(60) * time.Minute
 )
