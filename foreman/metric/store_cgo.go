@@ -28,6 +28,52 @@ type cgoStore struct {
 	vacuumCounter uint
 }
 
+// SetRetentionInterval sets the specified retention duration.
+func (store *cgoStore) SetRetentionInterval(value time.Duration) error {
+	if store.cStore == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	C.foreman_metric_store_setretentioninterval(store.cStore, C.time_t(value.Seconds()))
+
+	return nil
+}
+
+// GetRetentionInterval returns the retention duration.
+func (store *cgoStore) GetRetentionInterval() (time.Duration, error) {
+	if store.cStore == nil {
+		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	durationSec := C.foreman_metric_store_getretentioninterval(store.cStore)
+	duration := time.Second * time.Duration(durationSec)
+
+	return duration, nil
+}
+
+// SetRetentionPeriod sets the specified retention period.
+func (store *cgoStore) SetRetentionPeriod(value time.Duration) error {
+	if store.cStore == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	C.foreman_metric_store_setretentionperiod(store.cStore, C.time_t(value.Seconds()))
+
+	return nil
+}
+
+// GetRetentionPeriod returns the retention period.
+func (store *cgoStore) GetRetentionPeriod() (time.Duration, error) {
+	if store.cStore == nil {
+		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	durationSec := C.foreman_metric_store_getretentionperiod(store.cStore)
+	duration := time.Second * time.Duration(durationSec)
+
+	return duration, nil
+}
+
 // Open initializes the store.
 func (store *cgoStore) Open() error {
 	if store.cStore == nil {
@@ -76,29 +122,6 @@ func (store *cgoStore) SetStoreListener(listener StoreListener) error {
 	store.listener = listener
 
 	return nil
-}
-
-// SetRetentionInterval sets the retention duration.
-func (store *cgoStore) SetRetentionInterval(value time.Duration) error {
-	if store.cStore == nil {
-		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
-	}
-
-	C.foreman_metric_store_setretentioninterval(store.cStore, C.time_t(value.Seconds()))
-
-	return nil
-}
-
-// GetRetentionInterval returns the retention duration.
-func (store *cgoStore) GetRetentionInterval() (time.Duration, error) {
-	if store.cStore == nil {
-		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
-	}
-
-	durationSec := C.foreman_metric_store_getretentioninterval(store.cStore)
-	duration := time.Second * time.Duration(durationSec)
-
-	return duration, nil
 }
 
 // AddMetric adds a new metric.

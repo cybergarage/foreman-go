@@ -22,6 +22,8 @@ func newStoreWithInterface(storeImpl Storing) *Store {
 	store := &Store{
 		Storing: storeImpl,
 	}
+	store.SetRetentionInterval(DefaultRetentionInterval)
+	store.SetRetentionPeriod(DefaultRetentionPeriod)
 	return store
 }
 
@@ -31,12 +33,11 @@ func newStoreWithCObject(cObject unsafe.Pointer) *Store {
 		listener:      nil,
 		vacuumCounter: 0,
 	}
-	storeImp.SetRetentionInterval(DefaultRetentionInterval)
-	runtime.SetFinalizer(storeImp, storeFinalizer)
+	runtime.SetFinalizer(storeImp, cObjectStoreFinalizer)
 	return newStoreWithInterface(storeImp)
 }
 
-func storeFinalizer(self *cgoStore) {
+func cObjectStoreFinalizer(self *cgoStore) {
 	if self.cStore != nil {
 		if C.foreman_metric_store_delete(self.cStore) {
 			self.cStore = nil
