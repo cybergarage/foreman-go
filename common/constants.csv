@@ -15,6 +15,8 @@ default_rpc_protocol,"http"
 default_log_file,"-"
 default_log_level,"INFO"
 default_metrics_store,"empty"
+default_metrics_interval,300
+default_metrics_period,3600
 default_boostrap_mode,0
 
 ########################################
