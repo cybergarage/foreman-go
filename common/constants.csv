@@ -14,7 +14,9 @@ default_http_port,8188
 default_rpc_protocol,"http"
 default_log_file,"-"
 default_log_level,"INFO"
-default_metrics_store,"empty"
+default_metrics_store,"sqlite"
+default_metrics_interval,300
+default_metrics_period,3600
 default_boostrap_mode,0
 
 ########################################
@@ -113,3 +115,14 @@ query_column_version,"ver"
 
 graphite_response_target,"target"
 graphite_response_datapoints,"datapoints"
+
+########################################
+# RPC Response
+########################################
+
+rpc_error,"error"
+rpc_error_code,"code"
+rpc_error_message,"message"
+rpc_error_detail,"detail"
+rpc_error_detail_code,"code"
+rpc_error_detail_message,"message"
