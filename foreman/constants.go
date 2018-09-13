@@ -12,7 +12,9 @@ const (
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"
-	DefaultMetricsStore               = "empty"
+	DefaultMetricsStore               = "sqlite"
+	DefaultMetricsInterval            = 300
+	DefaultMetricsPeriod              = 3600
 	DefaultBoostrapMode               = 0
 	HttpRequestFqlPath                = "/fql"
 	HttpRequestFqlQueryParam          = "q"
@@ -28,4 +30,10 @@ const (
 	ConfigLogFileKey                  = "log_file"
 	ConfigLogLevelKey                 = "log_level"
 	ConfigBoostrapKey                 = "boostrap"
+	RpcError                          = "error"
+	RpcErrorCode                      = "code"
+	RpcErrorMessage                   = "message"
+	RpcErrorDetail                    = "detail"
+	RpcErrorDetailCode                = "code"
+	RpcErrorDetailMessage             = "message"
 )
