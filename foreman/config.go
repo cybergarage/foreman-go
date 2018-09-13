@@ -15,6 +15,7 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/logging"
+	"github.com/cybergarage/foreman-go/foreman/rpc"
 
 	"github.com/BurntSushi/toml"
 )
@@ -118,11 +119,17 @@ func (conf *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 	}
 
-	configMap := map[string]string{}
+	configMap := map[string]interface{}{}
 
-	// TODO : Export all configuration keys
 	configMap[ConfigProductKey] = ProductName
 	configMap[ConfigVersionKey] = Version
+
+	configMap[rpc.ConfigHttpPortKey] = conf.Server.HTTPPort
+	configMap[rpc.ConfigCarbonPortKey] = conf.Server.CarbonPort
+
+	configMap[rpc.ConfigLogLevelKey] = conf.Log.Level
+
+	configMap[rpc.ConfigBoostrapKey] = conf.Server.Boostrap
 
 	configContainer := map[string]interface{}{}
 	configContainer[strings.ToLower(fql.QueryTargetConfig)] = configMap
