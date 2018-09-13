@@ -58,9 +58,6 @@ func main() {
 	configFile := flag.String("config", ConfigFile, "Path to an configuration file")
 	flag.Parse()
 
-	// logging Level
-	logging.SetVerbose(*verbose)
-
 	// Load configuration
 	conf, err := foreman.NewConfigWithFile(*configFile)
 	if err != nil {
@@ -72,6 +69,13 @@ func main() {
 	if err != nil {
 		logging.Fatal("Could not start server. Terminating...")
 		os.Exit(1)
+	}
+
+	// logging Level
+	logging.SetLogLevel(conf.GetLogLevel())
+	logging.SetLogFile(conf.Log.File)
+	if *verbose {
+		logging.SetVerbose(*verbose)
 	}
 
 	// Start Server
