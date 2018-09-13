@@ -42,6 +42,7 @@ PACKAGES=\
 	${PACKAGE_ID}/kb \
 	${PACKAGE_ID}/qos \
 	${PACKAGE_ID}/fql \
+	${PACKAGE_ID}/rpc \
 	${PACKAGE_ID}/rpc/graphite \
 	${PACKAGE_ID}/rpc/json \
 	${PACKAGE_ID}/discovery \
