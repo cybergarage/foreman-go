@@ -87,7 +87,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	logging.Info("%s started", ProgramName)
+	logging.Info("%s started RPC:%d Carbon:%d Render:%d",
+		ProgramName,
+		server.GetHTTPPort(),
+		server.GetCarbonPort(),
+		server.GetRenderPort())
 
 	sigCh := make(chan os.Signal, 1)
 
