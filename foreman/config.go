@@ -73,6 +73,11 @@ func NewConfigWithFile(filename string) (*Config, error) {
 	return conf, nil
 }
 
+// GetLogLevel returns the log level type.
+func (conf *Config) GetLogLevel() logging.LogLevel {
+	return logging.LogLevelFromString(conf.Log.Level)
+}
+
 // LoadFile loads a specified Config file.
 func (conf *Config) LoadFile(filename string) error {
 	if filename != "" {
