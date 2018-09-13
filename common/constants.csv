@@ -113,3 +113,14 @@ query_column_version,"ver"
 
 graphite_response_target,"target"
 graphite_response_datapoints,"datapoints"
+
+########################################
+# RPC Response
+########################################
+
+rpc_error,"error"
+rpc_error_code,"code"
+rpc_error_message,"message"
+rpc_error_detail,"detail"
+rpc_error_detail_code,"code"
+rpc_error_detail_message,"message"
