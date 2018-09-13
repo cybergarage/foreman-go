@@ -8,27 +8,18 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-const (
-	errorContainerTag     = "error"
-	errorCodeTag          = "code"
-	errorMessageTag       = "message"
-	errorDetailTag        = "detail"
-	errorDetailCodeTag    = "code"
-	errorDetailMessageTag = "message"
-)
-
 // NewError returns a new error of the specified parameters.
 func NewError(code int, msg string) interface{} {
 	errObj := map[string]interface{}{}
 	if 0 < code {
-		errObj[errorCodeTag] = code
+		errObj[RpcErrorCode] = code
 	}
 	if 0 < len(msg) {
-		errObj[errorMessageTag] = code
+		errObj[RpcErrorMessage] = code
 	}
 
 	err := map[string]interface{}{
-		errorContainerTag: errObj,
+		RpcError: errObj,
 	}
 
 	return err
@@ -38,26 +29,26 @@ func NewError(code int, msg string) interface{} {
 func NewErrorWithError(err *errors.Error) interface{} {
 	errObj := map[string]interface{}{}
 	if 0 < err.Code {
-		errObj[errorCodeTag] = err.Code
+		errObj[RpcErrorCode] = err.Code
 	}
 	if 0 < len(err.Message) {
-		errObj[errorMessageTag] = err.Message
+		errObj[RpcErrorMessage] = err.Message
 	}
 
 	// Detail Errors
 	if 0 < err.DetailCode || 0 < len(err.DetailMessage) {
 		errDetailObj := map[string]interface{}{}
 		if 0 < err.DetailCode {
-			errDetailObj[errorDetailCodeTag] = err.DetailCode
+			errDetailObj[RpcErrorDetailCode] = err.DetailCode
 		}
 		if 0 < len(err.DetailMessage) {
-			errDetailObj[errorDetailMessageTag] = err.DetailMessage
+			errDetailObj[RpcErrorDetailMessage] = err.DetailMessage
 		}
-		errObj[errorDetailTag] = errDetailObj
+		errObj[RpcErrorDetail] = errDetailObj
 	}
 
 	jsonError := map[string]interface{}{
-		errorContainerTag: errObj,
+		RpcError: errObj,
 	}
 
 	return jsonError

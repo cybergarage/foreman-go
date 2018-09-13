@@ -1,2 +1,2 @@
 #!/bin/bash
-../../../common/constants.go.gen json ../../../common/constants.csv '^(graphite)'
+../../../common/constants.go.gen json ../../../common/constants.csv '^(rpc|graphite)'
