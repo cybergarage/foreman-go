@@ -4,8 +4,32 @@
 
 package foreman
 
-import "testing"
+import (
+	"fmt"
+	"os"
+	"testing"
+
+	"github.com/cybergarage/foreman-go/foreman/metric"
+)
+
+const (
+	errorConfigTestFilename = "config_test.conf"
+)
 
 func TestDefaultConfig(t *testing.T) {
 	NewDefaultConfig()
+}
+
+func TestConfigLoadFile(t *testing.T) {
+	testDir, _ := os.Getwd()
+	filename := fmt.Sprintf("%s/%s", testDir, errorConfigTestFilename)
+	conf, err := NewConfigWithFile(filename)
+	if err != nil {
+		t.Error(err)
+	}
+
+	_, err = metric.NewStoreWithName(conf.Metrics.Store)
+	if err != nil {
+		t.Error(err)
+	}
 }
