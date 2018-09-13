@@ -88,8 +88,6 @@ func (conf *Config) LoadFile(filename string) error {
 		}
 		logging.Trace("Got config: %s", filename)
 	}
-	logging.SetLogLevel(logging.LogLevelFromString(conf.Log.Level))
-	logging.SetLogFile(conf.Log.File)
 	return nil
 }
 
