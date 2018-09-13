@@ -25,11 +25,10 @@ type LogConfig struct {
 }
 
 type ServerConfig struct {
-	Host         string
-	CarbonPort   int
-	HTTPPort     int
-	Boostrap     int
-	MetricsStore string
+	Host       string
+	CarbonPort int
+	HTTPPort   int
+	Boostrap   int
 }
 
 type FQLConfig struct {
@@ -37,11 +36,18 @@ type FQLConfig struct {
 	Query string
 }
 
+type MetricsConfig struct {
+	Store    string
+	Period   int
+	Interval int
+}
+
 // Config represents a configuration.
 type Config struct {
-	Log    LogConfig
-	Server ServerConfig
-	FQL    FQLConfig
+	Log     LogConfig
+	Server  ServerConfig
+	FQL     FQLConfig
+	Metrics MetricsConfig
 }
 
 // NewDefaultConfig return a default configuration.
@@ -54,11 +60,14 @@ func NewDefaultConfig() *Config {
 	conf.Server.Host = DefaultServerHost
 	conf.Server.HTTPPort = DefaultHttpPort
 	conf.Server.CarbonPort = DefaultCarbonPort
-	conf.Server.MetricsStore = DefaultMetricsStore
 	conf.Server.Boostrap = DefaultBoostrapMode
 
 	conf.FQL.Path = HttpRequestFqlPath
 	conf.FQL.Query = HttpRequestFqlQueryParam
+
+	conf.Metrics.Store = DefaultMetricsStore
+	conf.Metrics.Period = DefaultMetricsPeriod
+	conf.Metrics.Interval = DefaultMetricsInterval
 
 	return &conf
 }
@@ -73,6 +82,11 @@ func NewConfigWithFile(filename string) (*Config, error) {
 	return conf, nil
 }
 
+// GetLogLevel returns the log level type.
+func (conf *Config) GetLogLevel() logging.LogLevel {
+	return logging.LogLevelFromString(conf.Log.Level)
+}
+
 // LoadFile loads a specified Config file.
 func (conf *Config) LoadFile(filename string) error {
 	if filename != "" {
@@ -83,8 +97,6 @@ func (conf *Config) LoadFile(filename string) error {
 		}
 		logging.Trace("Got config: %s", filename)
 	}
-	logging.SetLogLevel(logging.LogLevelFromString(conf.Log.Level))
-	logging.SetLogFile(conf.Log.File)
 	return nil
 }
 

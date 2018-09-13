@@ -8,6 +8,7 @@ package foreman
 import (
 	"os"
 	"runtime"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/node"
 
@@ -86,10 +87,12 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	// Metric Store
 
-	metricStore, err := metric.NewStoreWithName(conf.Server.MetricsStore)
+	metricStore, err := metric.NewStoreWithName(conf.Metrics.Store)
 	if err != nil {
 		return nil, err
 	}
+	metricStore.SetRetentionPeriod(time.Duration(conf.Metrics.Period) * time.Second)
+	metricStore.SetRetentionInterval(time.Duration(conf.Metrics.Interval) * time.Second)
 	server.metricMgr = metric.NewManagerWithStore(metricStore)
 
 	// Registry Store
@@ -143,7 +146,6 @@ func NewServerWithConfigFile(confFile string) (*Server, error) {
 // NewServer creates a new server
 func NewServer() *Server {
 	conf := NewDefaultConfig()
-	conf.Server.MetricsStore = metric.MetricStoreSqlite
 	server, _ := NewServerWithConfig(conf)
 	return server
 }

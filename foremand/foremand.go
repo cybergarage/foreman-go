@@ -58,9 +58,6 @@ func main() {
 	configFile := flag.String("config", ConfigFile, "Path to an configuration file")
 	flag.Parse()
 
-	// logging Level
-	logging.SetVerbose(*verbose)
-
 	// Load configuration
 	conf, err := foreman.NewConfigWithFile(*configFile)
 	if err != nil {
@@ -74,6 +71,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	// logging Level
+	logging.SetLogLevel(conf.GetLogLevel())
+	logging.SetLogFile(conf.Log.File)
+	if *verbose {
+		logging.SetVerbose(*verbose)
+	}
+
 	// Start Server
 	logging.Info("%s is starting ...", ProgramName)
 
@@ -83,7 +87,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	logging.Info("%s started", ProgramName)
+	logging.Info("%s started RPC:%d Carbon:%d Render:%d",
+		ProgramName,
+		server.GetHTTPPort(),
+		server.GetCarbonPort(),
+		server.GetRenderPort())
 
 	sigCh := make(chan os.Signal, 1)
 

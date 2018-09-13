@@ -5,5 +5,5 @@
 package foreman
 
 const (
-	Version = "0.5.6"
+	Version = "0.8.1"
 )

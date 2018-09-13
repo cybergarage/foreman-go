@@ -12,22 +12,23 @@ const (
 	errorContainerTag     = "error"
 	errorCodeTag          = "code"
 	errorMessageTag       = "message"
-	errorDetailCodeTag    = "detailCode"
-	errorDetailMessageTag = "detailMessage"
+	errorDetailTag        = "detail"
+	errorDetailCodeTag    = "code"
+	errorDetailMessageTag = "message"
 )
 
 // NewError returns a new error of the specified parameters.
 func NewError(code int, msg string) interface{} {
-	errDetail := map[string]interface{}{}
+	errObj := map[string]interface{}{}
 	if 0 < code {
-		errDetail[errorCodeTag] = code
+		errObj[errorCodeTag] = code
 	}
 	if 0 < len(msg) {
-		errDetail[errorMessageTag] = code
+		errObj[errorMessageTag] = code
 	}
 
 	err := map[string]interface{}{
-		errorContainerTag: errDetail,
+		errorContainerTag: errObj,
 	}
 
 	return err
@@ -35,22 +36,28 @@ func NewError(code int, msg string) interface{} {
 
 // NewErrorWithError returns a new error of the specified error.
 func NewErrorWithError(err *errors.Error) interface{} {
-	errDetail := map[string]interface{}{}
+	errObj := map[string]interface{}{}
 	if 0 < err.Code {
-		errDetail[errorCodeTag] = err.Code
+		errObj[errorCodeTag] = err.Code
 	}
 	if 0 < len(err.Message) {
-		errDetail[errorMessageTag] = err.Message
+		errObj[errorMessageTag] = err.Message
 	}
-	if 0 < err.DetailCode {
-		errDetail[errorDetailCodeTag] = err.DetailCode
-	}
-	if 0 < len(err.DetailMessage) {
-		errDetail[errorDetailMessageTag] = err.DetailMessage
+
+	// Detail Errors
+	if 0 < err.DetailCode || 0 < len(err.DetailMessage) {
+		errDetailObj := map[string]interface{}{}
+		if 0 < err.DetailCode {
+			errDetailObj[errorDetailCodeTag] = err.DetailCode
+		}
+		if 0 < len(err.DetailMessage) {
+			errDetailObj[errorDetailMessageTag] = err.DetailMessage
+		}
+		errObj[errorDetailTag] = errDetailObj
 	}
 
 	jsonError := map[string]interface{}{
-		errorContainerTag: errDetail,
+		errorContainerTag: errObj,
 	}
 
 	return jsonError
