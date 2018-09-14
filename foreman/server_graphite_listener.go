@@ -24,7 +24,7 @@ const (
 func (server *Server) InsertMetricsRequestReceived(gm *go_graphite.Metrics, err error) {
 	// Ignore error requests
 	if err != nil {
-		logging.Error("[GRAPHITE:BAD] %s", err.Error())
+		logging.Error("%s %s", graphitePrefix, err.Error())
 		return
 	}
 
