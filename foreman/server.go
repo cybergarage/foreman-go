@@ -325,7 +325,7 @@ func (server *Server) Start() error {
 
 	graphiteRetryCount := 0
 	err = server.graphite.Start()
-	for (err != nil) || (graphiteRetryCount < serverBindRetryCount) {
+	for (err != nil) && (graphiteRetryCount < serverBindRetryCount) {
 		server.graphite.SetCarbonPort(server.graphite.GetCarbonPort() + 1)
 		server.graphite.SetRenderPort(server.graphite.GetRenderPort() + 1)
 		graphiteRetryCount++
