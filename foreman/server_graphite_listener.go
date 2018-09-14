@@ -49,7 +49,7 @@ func (server *Server) InsertMetricsRequestReceived(gm *go_graphite.Metrics, err 
 func (server *Server) FindMetricsRequestReceived(gq *go_graphite.Query, err error) ([]*go_graphite.Metrics, error) {
 	// Ignore error requests
 	if err != nil {
-		logging.Error("%s %s %s", graphitePrefix, graphiteFindQuery, gq.Target)
+		logging.Error("%s %s %s (%s)", graphitePrefix, graphiteFindQuery, gq.Target, err)
 		return nil, nil
 	}
 
@@ -59,7 +59,7 @@ func (server *Server) FindMetricsRequestReceived(gq *go_graphite.Query, err erro
 
 	rs, err := server.metricMgr.Query(fq)
 	if err != nil {
-		logging.Error("%s %s %s", graphitePrefix, graphiteFindQuery, gq.Target)
+		logging.Error("%s %s %s (%s)", graphitePrefix, graphiteFindQuery, gq.Target, err)
 		return nil, err
 	}
 
