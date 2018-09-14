@@ -5,7 +5,11 @@
 package discovery
 
 import (
+	"testing"
+	"time"
+
 	"github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+	"github.com/cybergarage/uecho-go/net/echonet/log"
 )
 
 const (
@@ -25,7 +29,6 @@ func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
 	return echonetNodes, nil
 }
 
-/* FIXME
 func TestEchonetFinder(t *testing.T) {
 	log.SetSharedLogger(log.NewStdoutLogger(log.LoggerLevelTrace))
 
@@ -75,4 +78,3 @@ func TestEchonetFinder(t *testing.T) {
 		}
 	}
 }
-*/
