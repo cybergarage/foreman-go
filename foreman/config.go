@@ -10,12 +10,8 @@ import "C"
 import (
 	"bufio"
 	"os"
-	"strings"
 
-	"github.com/cybergarage/foreman-go/foreman/errors"
-	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/logging"
-	"github.com/cybergarage/foreman-go/foreman/rpc"
 
 	"github.com/BurntSushi/toml"
 )
@@ -111,28 +107,4 @@ func (conf *Config) ToFile(filename string) error {
 	}()
 	out := toml.NewEncoder(bufio.NewWriter(outfile))
 	return out.Encode(conf)
-}
-
-// ExecuteQuery must return the result as a standard array or map.
-func (conf *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
-	if q.GetType() != fql.QueryTypeSelect {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
-	}
-
-	configMap := map[string]interface{}{}
-
-	configMap[ConfigProductKey] = ProductName
-	configMap[ConfigVersionKey] = Version
-
-	configMap[rpc.ConfigHttpPortKey] = conf.Server.HTTPPort
-	configMap[rpc.ConfigCarbonPortKey] = conf.Server.CarbonPort
-
-	configMap[rpc.ConfigLogLevelKey] = conf.Log.Level
-
-	configMap[rpc.ConfigBoostrapKey] = conf.Server.Boostrap
-
-	configContainer := map[string]interface{}{}
-	configContainer[strings.ToLower(fql.QueryTargetConfig)] = configMap
-
-	return configContainer, nil
 }
