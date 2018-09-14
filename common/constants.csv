@@ -42,6 +42,7 @@ config_fql_query_key,"fql_query"
 config_log_file_key,"log_file"
 config_log_level_key,"log_level"
 config_boostrap_key,"boostrap"
+config_metrics_store,"metrics_store"
 
 ########################################
 # Metric 
