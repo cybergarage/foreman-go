@@ -5,6 +5,7 @@
 package discovery
 
 import (
+	foreman_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
 	"github.com/cybergarage/uecho-go/net/echonet"
 )
 
@@ -19,13 +20,13 @@ type EchonetFinder struct {
 func NewEchonetFinder() Finder {
 	finder := &EchonetFinder{
 		baseFinder: newBaseFinder(),
-		Controller: echonet.NewController(),
+		Controller: foreman_echonet.NewController(),
 	}
 	finder.Controller.SetListener(finder)
 	return finder
 }
 
-// SearchAll searches all nodes.
+// Search searches all nodes.
 func (finder *EchonetFinder) Search() error {
 	return finder.Controller.SearchAllObjects()
 }

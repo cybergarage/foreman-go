@@ -34,6 +34,7 @@ func NewEchonetNodeWithNode(srcNode node.Node) (*EchonetNode, error) {
 
 	node.SetManufacturerCode(ManufacturerCode)
 	node.SetListener(node)
+	node.SetConfig(NewDefaultConfig())
 
 	dev, err := NewDevice()
 	if err != nil {
