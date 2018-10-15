@@ -37,6 +37,7 @@ To setup an initial develop environment for `foreman-go` in your comupter, you h
 
 ```
 git clone https://github.com/cybergarage/foreman-go.git
+cd foreman-go
 source ./setup
 make test
 ```
