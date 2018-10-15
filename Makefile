@@ -121,7 +121,7 @@ build: antlr vet
 	go build -v ${PACKAGES}
 
 test: antlr vet
-	go test -v -cover ${PACKAGES}
+	go test -v -cover -timeout 30s ${PACKAGES}
 
 install: antlr vet
 	go install -ldflags '${go_linker_flags}' -v ${BINARIES}
