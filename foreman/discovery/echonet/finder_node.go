@@ -35,10 +35,11 @@ func NewFinderNodeWithResponseMesssage(msg *protocol.Message) (node.Node, error)
 		return nil, fmt.Errorf(errorEchonetFinderMessageInvalidObject, msg.GetSourceObjectCode(), FinderDeviceCode)
 	}
 
-	if int(msg.OPC) != len(FinderDeviceAllPropertyCodes()) {
-		return nil, fmt.Errorf(errorEchonetFinderMessageInvalidOPC, int(msg.OPC), len(FinderDeviceAllPropertyCodes()))
+	for _, propCode := range FinderDeviceAllPropertyCodes() {
+		if !msg.HasProperty(propCode) {
+			return nil, fmt.Errorf(errorEchonetFinderInvalidMessage, msg)
+		}
 	}
-
 	// Create a candidate from the specified message
 
 	candidateNode := &finderNode{
