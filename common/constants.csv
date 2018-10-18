@@ -42,6 +42,7 @@ config_fql_query_key,"fql_query"
 config_log_file_key,"log_file"
 config_log_level_key,"log_level"
 config_boostrap_key,"boostrap"
+config_finder_key,"finder"
 config_metrics_store,"metrics_store"
 
 ########################################
@@ -52,6 +53,12 @@ metric_store_empty,"empty"
 metric_store_sqlite,"sqlite"
 metric_store_tsmap,"tsmap"
 metric_store_ringmap,"ringmap"
+
+########################################
+# Finder
+########################################
+
+finder_echonet,"echonet"
 
 ########################################
 # Action 

@@ -15,6 +15,7 @@ import (
 	"github.com/cybergarage/go-graphite/net/graphite"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/discovery"
 	"github.com/cybergarage/foreman-go/foreman/fd"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/kb"
@@ -83,6 +84,13 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 	hostname, err := os.Hostname()
 	if err == nil {
 		server.name = hostname
+	}
+
+	// Controller
+
+	switch conf.Server.Finder {
+	case FinderEchonet:
+		server.Controller.AddFinder(discovery.NewEchonetFinder())
 	}
 
 	// Metric Store
