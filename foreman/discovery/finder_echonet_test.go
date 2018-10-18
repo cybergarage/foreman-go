@@ -61,7 +61,6 @@ func TestEchonetFinder(t *testing.T) {
 	}
 
 	time.Sleep((500 * time.Millisecond) * time.Duration(len(nodes)))
-	//time.Sleep((500 * time.Second) * time.Duration(len(nodes)))
 
 	finderTest(t, finder)
 
