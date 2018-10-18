@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+	foreman_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
 	"github.com/cybergarage/uecho-go/net/echonet/log"
 )
 
@@ -16,11 +16,11 @@ const (
 	errorEchonetFinderIsNotRunning = "Finder is not running"
 )
 
-func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
+func setupTestEchonetFinderNodes() ([]*foreman_echonet.EchonetNode, error) {
 	nodes := setupTestFinderNodes()
-	echonetNodes := make([]*echonet.EchonetNode, len(nodes))
+	echonetNodes := make([]*foreman_echonet.EchonetNode, len(nodes))
 	for n, node := range nodes {
-		echonetNode, err := echonet.NewEchonetNodeWithNode(node)
+		echonetNode, err := foreman_echonet.NewEchonetNodeWithNode(node)
 		if err != nil {
 			return nil, err
 		}
