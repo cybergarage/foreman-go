@@ -16,6 +16,7 @@ const (
 	ConfigLogFileKey      = "log_file"
 	ConfigLogLevelKey     = "log_level"
 	ConfigBoostrapKey     = "boostrap"
+	ConfigFinderKey       = "finder"
 	ConfigMetricsStore    = "metrics_store"
 	RpcError              = "error"
 	RpcErrorCode          = "code"

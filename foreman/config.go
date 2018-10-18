@@ -26,6 +26,7 @@ type ServerConfig struct {
 	CarbonPort int
 	HTTPPort   int
 	Boostrap   int
+	Finder     string
 }
 
 type FQLConfig struct {
