@@ -27,7 +27,7 @@ dependencies=(
 "github.com/cybergarage/uecho-go/net/echonet"
 )
 
-go get "${dependencies[@]}"
+go get -u "${dependencies[@]}"
 
 ########################################
 # Get latest source codes.
