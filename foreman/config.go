@@ -12,7 +12,6 @@ import (
 	"os"
 
 	"github.com/cybergarage/foreman-go/foreman/logging"
-
 	"github.com/BurntSushi/toml"
 )
 
@@ -22,6 +21,7 @@ type LogConfig struct {
 }
 
 type ServerConfig struct {
+	Cluster    string
 	Host       string
 	CarbonPort int
 	HTTPPort   int

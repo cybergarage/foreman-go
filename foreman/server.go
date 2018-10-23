@@ -10,10 +10,6 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/cybergarage/foreman-go/foreman/node"
-
-	"github.com/cybergarage/go-graphite/net/graphite"
-
 	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/discovery"
 	"github.com/cybergarage/foreman-go/foreman/fd"
@@ -21,9 +17,11 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/kb"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/metric"
+	"github.com/cybergarage/foreman-go/foreman/node"
 	"github.com/cybergarage/foreman-go/foreman/qos"
 	"github.com/cybergarage/foreman-go/foreman/register"
 	"github.com/cybergarage/foreman-go/foreman/registry"
+	"github.com/cybergarage/go-graphite/net/graphite"
 )
 
 const (
@@ -81,9 +79,21 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 	server.initialize()
 	runtime.SetFinalizer(server, serverFinalizer)
 
-	hostname, err := os.Hostname()
-	if err == nil {
-		server.name = hostname
+	// Cluster
+
+	if 0 < len(conf.Server.Cluster) {
+		server.cluster = conf.Server.Cluster
+	}
+
+	// Hostname
+
+	if 0 < len(conf.Server.Host) {
+		server.name = conf.Server.Host
+	} else {
+		hostname, err := os.Hostname()
+		if err == nil {
+			server.name = hostname
+		}
 	}
 
 	// Controller
