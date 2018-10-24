@@ -15,6 +15,7 @@ const (
 	DefaultMetricsStore               = "sqlite"
 	DefaultMetricsInterval            = 300
 	DefaultMetricsPeriod              = 3600
+	DefaultCluster                    = "foreman"
 	DefaultBoostrapMode               = 0
 	HttpRequestFqlPath                = "/fql"
 	HttpRequestFqlQueryParam          = "q"
