@@ -55,6 +55,7 @@ func NewDefaultConfig() *Config {
 	conf.Log.File = DefaultLogFile
 	conf.Log.Level = DefaultLogLevel
 
+	conf.Server.Cluster = DefaultCluster
 	conf.Server.Host = DefaultServerHost
 	conf.Server.HTTPPort = DefaultHttpPort
 	conf.Server.CarbonPort = DefaultCarbonPort
