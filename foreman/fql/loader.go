@@ -5,6 +5,7 @@
 package fql
 
 import (
+	"fmt"
 	"io/ioutil"
 	"strings"
 )
@@ -28,7 +29,7 @@ func (loader *Loader) LoadFromFile(filename string) ([]Query, error) {
 
 	queries := make([]Query, 0)
 
-	for _, line := range strings.Split(string(content), "\n") {
+	for n, line := range strings.Split(string(content), "\n") {
 
 		if len(line) <= 0 {
 			continue
@@ -40,7 +41,7 @@ func (loader *Loader) LoadFromFile(filename string) ([]Query, error) {
 		parser := NewParser()
 		newQueries, err := parser.ParseString(line)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("[%d] : %s (%s)", (n + 1), line, err.Error())
 		}
 
 		queries = append(queries, newQueries...)
