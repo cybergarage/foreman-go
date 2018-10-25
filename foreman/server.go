@@ -33,9 +33,6 @@ type Server struct {
 	Node
 	*baseNode
 
-	cluster string
-	name    string
-
 	metric.RegisterListener
 	kb.KnowledgeBaseListener
 
@@ -59,8 +56,6 @@ type Server struct {
 func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	server := &Server{
-		cluster:     "",
-		name:        "",
 		Controller:  NewController(),
 		graphite:    graphite.NewServer(),
 		registryMgr: registry.NewManager(),
@@ -78,23 +73,6 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	server.initialize()
 	runtime.SetFinalizer(server, serverFinalizer)
-
-	// Cluster
-
-	if 0 < len(conf.Server.Cluster) {
-		server.cluster = conf.Server.Cluster
-	}
-
-	// Hostname
-
-	if 0 < len(conf.Server.Host) {
-		server.name = conf.Server.Host
-	} else {
-		hostname, err := os.Hostname()
-		if err == nil {
-			server.name = hostname
-		}
-	}
 
 	// Controller
 
@@ -186,22 +164,32 @@ func serverFinalizer(server *Server) {
 
 // SetCluster sets a cluster name
 func (server *Server) SetCluster(name string) {
-	server.cluster = name
+	server.config.Server.Cluster = name
 }
 
 // GetCluster returns the cluster name
 func (server *Server) GetCluster() string {
-	return server.cluster
+	return server.config.Server.Cluster
 }
 
 // SetName sets a host name
 func (server *Server) SetName(name string) {
-	server.name = name
+	server.config.Server.Host = name
 }
 
 // GetName returns the host name
 func (server *Server) GetName() string {
-	return server.name
+	host := server.config.Server.Host
+	if 0 < len(host) {
+		return host
+	}
+
+	hostname, err := os.Hostname()
+	if err == nil {
+		return hostname
+	}
+
+	return DefaultServerHost
 }
 
 // GetHTTPPort returns the graphite HTTP port.
@@ -375,12 +363,13 @@ func (server *Server) Start() error {
 
 	// Boostrap
 
-	boostrap := server.config.Server.Boostrap
-	if boostrap != 0 {
+	if server.config.IsBoostrapEnabled() {
 		err = server.executeBoostrap()
-		server.Stop()
-		logging.Error("%s\n", err)
-		return err
+		if err != nil {
+			server.Stop()
+			logging.Error("%s\n", err)
+			return err
+		}
 	}
 
 	return nil

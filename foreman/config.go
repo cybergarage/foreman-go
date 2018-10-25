@@ -86,6 +86,23 @@ func (conf *Config) GetLogLevel() logging.LogLevel {
 	return logging.LogLevelFromString(conf.Log.Level)
 }
 
+// SetBoostrapEnabled set the boostrap flag.
+func (conf *Config) SetBoostrapEnabled(flag bool) {
+	if flag {
+		conf.Server.Boostrap = 1
+		return
+	}
+	conf.Server.Boostrap = 0
+}
+
+// IsBoostrapEnabled returns true when the boostrap flag is true, otherwise false.
+func (conf *Config) IsBoostrapEnabled() bool {
+	if conf.Server.Boostrap == 0 {
+		return false
+	}
+	return true
+}
+
 // LoadFile loads a specified Config file.
 func (conf *Config) LoadFile(filename string) error {
 	if filename != "" {
