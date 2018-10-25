@@ -254,6 +254,24 @@ func (server *Server) LoadConfig(filename string) error {
 	return server.updateConfig()
 }
 
+// LoadQuery executes the queries in the specified file.
+func (server *Server) LoadQuery(filename string) error {
+	loader := fql.NewLoader()
+	queries, err := loader.LoadFromFile(filename)
+	if err != nil {
+		return err
+	}
+
+	for _, query := range queries {
+		_, err := server.ExecuteQuery(query)
+		if err != nil {
+			return err.Error()
+		}
+	}
+
+	return nil
+}
+
 // GetAllClusterNodes returns all nodes in the same cluster
 func (server *Server) GetAllClusterNodes() []Node {
 	// Return only the server if the server has no finder
