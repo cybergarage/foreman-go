@@ -5,8 +5,8 @@
 package foreman
 
 import (
-	"fmt"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/cybergarage/foreman-go/foreman/metric"
@@ -22,7 +22,8 @@ func TestDefaultConfig(t *testing.T) {
 
 func TestConfigLoadFile(t *testing.T) {
 	testDir, _ := os.Getwd()
-	filename := fmt.Sprintf("%s/%s", testDir, errorConfigTestFilename)
+	filename := filepath.Join(testDir, errorConfigTestFilename)
+
 	conf, err := NewConfigWithFile(filename)
 	if err != nil {
 		t.Error(err)

@@ -21,7 +21,7 @@ func NewLoader() *Loader {
 }
 
 // LoadFromFile loads queries from the specified file.
-func (loader *Loader) LoadFromFile(filename string) ([]Query, error) {
+func (loader *Loader) LoadFromFile(filename string) (Queries, error) {
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err

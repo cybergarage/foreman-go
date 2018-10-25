@@ -5,8 +5,8 @@
 package fql
 
 import (
-	"fmt"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -16,7 +16,7 @@ const (
 
 func TestLoadQueryFromFile(t *testing.T) {
 	testDir, _ := os.Getwd()
-	filename := fmt.Sprintf("%s/%s", testDir, loaderTestFilename)
+	filename := filepath.Join(testDir, loaderTestFilename)
 
 	loader := NewLoader()
 	_, err := loader.LoadFromFile(filename)
