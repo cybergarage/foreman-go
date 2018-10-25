@@ -83,7 +83,7 @@ func (finder *baseFinder) GetNeighborhoodNode(node Node) (Node, error) {
 	}
 
 	// FIXME : Return  a neighborhood node of the specified node instead of the random node
-	nodeIdx := rand.Int() % nodeCount
+	nodeIdx := rand.Intn(nodeCount)
 
 	return nodes[nodeIdx], nil
 }
