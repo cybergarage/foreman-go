@@ -99,3 +99,14 @@ func (ctrl *Controller) GetResponsibleNodesForMetric(m *metric.Metric) ([]Node, 
 	}
 	return respNodes, nil
 }
+
+// GetNeighborhoodRemoteNode returns a neighborhood remote node of this node.
+func (ctrl *Controller) GetNeighborhoodRemoteNode(node Node) (*RemoteNode, error) {
+	for _, finder := range ctrl.Finders {
+		node, err := finder.GetNeighborhoodNode(node)
+		if err != nil {
+			return NewRemoteNodeWithNode(node), nil
+		}
+	}
+	return nil, nil
+}
