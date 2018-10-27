@@ -46,7 +46,7 @@ type Server struct {
 	metricMgr   *metric.Manager
 	actionMgr   *action.Manager
 
-	config     *Config
+	*Config
 	configFile string
 
 	status *Status
@@ -63,7 +63,7 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 		qosMgr:      qos.NewManager(),
 		metricMgr:   nil,
 		actionMgr:   action.NewManager(),
-		config:      conf,
+		Config:      conf,
 		configFile:  "",
 		status:      NewStatus(),
 		fd:          fd.NewGossipDetector(),
@@ -71,40 +71,17 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	server.baseNode = newBaseNodeWithNode(server)
 
-	server.initialize()
 	runtime.SetFinalizer(server, serverFinalizer)
-
-	// Controller
-
-	switch conf.Server.Finder {
-	case FinderEchonet:
-		server.Controller.AddFinder(discovery.NewEchonetFinder())
-	}
-
-	// Metric Store
-
-	metricStore, err := metric.NewStoreWithName(conf.Metrics.Store)
-	if err != nil {
-		return nil, err
-	}
-	metricStore.SetRetentionPeriod(time.Duration(conf.Metrics.Period) * time.Second)
-	metricStore.SetRetentionInterval(time.Duration(conf.Metrics.Interval) * time.Second)
-	server.metricMgr = metric.NewManagerWithStore(metricStore)
-
-	// Registry Store
-
-	server.actionMgr.SetRegistryStore(server.registryMgr.GetStore())
-	server.actionMgr.SetRegisterStore(server.registerMgr.GetStore())
-
-	// Register Store
-
-	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
-	server.metricMgr.SetRegisterListener(server)
 
 	// Graphite
 
 	server.graphite.SetCarbonListener(server)
 	server.graphite.SetRenderListener(server)
+
+	// Registry Store
+
+	server.actionMgr.SetRegistryStore(server.registryMgr.GetStore())
+	server.actionMgr.SetRegisterStore(server.registerMgr.GetStore())
 
 	// QoS
 
@@ -114,10 +91,12 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	server.fd.SetListener(server)
 
-	// RPC
+	// Apply configuration
 
-	fqlPath := server.config.FQL.Path
-	server.graphite.SetHTTPRequestListener(fqlPath, server)
+	err := server.applyConfig()
+	if err != nil {
+		return nil, err
+	}
 
 	return server, nil
 }
@@ -146,40 +125,29 @@ func NewServer() *Server {
 	return server
 }
 
-// initialize initialize the server.
-func (server *Server) initialize() error {
-	err := server.registryMgr.Start()
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-
-	return nil
-}
-
 // serverFinalizer closes all managers.
 func serverFinalizer(server *Server) {
-	server.registryMgr.Stop()
+	server.Stop()
 }
 
 // SetCluster sets a cluster name
 func (server *Server) SetCluster(name string) {
-	server.config.Server.Cluster = name
+	server.Server.Cluster = name
 }
 
 // GetCluster returns the cluster name
 func (server *Server) GetCluster() string {
-	return server.config.Server.Cluster
+	return server.Server.Cluster
 }
 
 // SetName sets a host name
 func (server *Server) SetName(name string) {
-	server.config.Server.Host = name
+	server.Server.Host = name
 }
 
 // GetName returns the host name
 func (server *Server) GetName() string {
-	host := server.config.Server.Host
+	host := server.Server.Host
 	if 0 < len(host) {
 		return host
 	}
@@ -222,24 +190,15 @@ func (server *Server) GetUniqueID() string {
 	return node.GetUniqueID(server)
 }
 
-// updateConfig sets latest configurations.
-func (server *Server) updateConfig() error {
-	// Set latest network configurations
-	server.graphite.Carbon.Port = server.config.Server.CarbonPort
-	server.graphite.Render.Port = server.config.Server.HTTPPort
-
-	return nil
-}
-
 // LoadConfig sets the configurations in the specified file.
 func (server *Server) LoadConfig(filename string) error {
 	logging.Trace("Server loading config file from %s.", filename)
-	err := server.config.LoadFile(filename)
+	err := server.LoadFile(filename)
 	if err != nil {
 		logging.Error("%s\n", err)
 		return err
 	}
-	return server.updateConfig()
+	return server.applyConfig()
 }
 
 // LoadQuery executes the queries in the specified file.
@@ -318,9 +277,44 @@ func (server *Server) PostQuery(query string) (interface{}, error) {
 	return resObjects, nil
 }
 
+// applyConfig sets latest configurations to the server
+func (server *Server) applyConfig() error {
+	// Controller
+
+	switch server.Server.Finder {
+	case FinderEchonet:
+		server.Controller.SetFinder(discovery.NewEchonetFinder())
+	}
+
+	// Metric Store
+
+	metricStore, err := metric.NewStoreWithName(server.Metrics.Store)
+	if err != nil {
+		return err
+	}
+	metricStore.SetRetentionPeriod(time.Duration(server.Metrics.Period) * time.Second)
+	metricStore.SetRetentionInterval(time.Duration(server.Metrics.Interval) * time.Second)
+
+	server.metricMgr = metric.NewManagerWithStore(metricStore)
+	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
+	server.metricMgr.SetRegisterListener(server)
+
+	// Graphite Ports
+
+	server.graphite.Carbon.Port = server.Server.CarbonPort
+	server.graphite.Render.Port = server.Server.HTTPPort
+
+	// RPC
+
+	server.graphite.SetHTTPRequestListener(server.FQL.Path, server)
+
+	return nil
+}
+
 // getStartupManagers returns all managers which should be started
 func (server *Server) getStartupManagers() []Manager {
 	managers := []Manager{
+		server.registryMgr,
 		server.registerMgr,
 		server.metricMgr,
 		server.qosMgr,
@@ -330,16 +324,10 @@ func (server *Server) getStartupManagers() []Manager {
 
 // Start starts the server.
 func (server *Server) Start() error {
-	err := server.updateConfig()
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-
 	// Start all managers without graphite
 
 	for _, mgr := range server.getStartupManagers() {
-		err = mgr.Start()
+		err := mgr.Start()
 		if err != nil {
 			return err
 		}
@@ -348,7 +336,7 @@ func (server *Server) Start() error {
 	// Start Graphite manager
 
 	graphiteRetryCount := 0
-	err = server.graphite.Start()
+	err := server.graphite.Start()
 	for (err != nil) && (graphiteRetryCount < serverBindRetryCount) {
 		server.graphite.SetCarbonPort(server.graphite.GetCarbonPort() + 1)
 		server.graphite.SetRenderPort(server.graphite.GetRenderPort() + 1)
@@ -363,7 +351,7 @@ func (server *Server) Start() error {
 
 	// Boostrap
 
-	if server.config.IsBoostrapEnabled() {
+	if server.IsBoostrapEnabled() {
 		err = server.executeBoostrap()
 		if err != nil {
 			server.Stop()
