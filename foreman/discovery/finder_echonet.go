@@ -5,8 +5,14 @@
 package discovery
 
 import (
+	"time"
+
 	foreman_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
 	"github.com/cybergarage/uecho-go/net/echonet"
+)
+
+const (
+	echonetFinderSearchSleepSecond = 1
 )
 
 // EchonetFinder represents a base finder.
@@ -28,7 +34,12 @@ func NewEchonetFinder() Finder {
 
 // Search searches all nodes.
 func (finder *EchonetFinder) Search() error {
-	return finder.Controller.SearchAllObjects()
+	err := finder.Controller.SearchAllObjects()
+	if err != nil {
+		return err
+	}
+	time.Sleep(time.Second * echonetFinderSearchSleepSecond)
+	return nil
 }
 
 // Start starts the finder.
