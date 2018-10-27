@@ -9,6 +9,10 @@ import (
 	"fmt"
 )
 
+const (
+	queriesErrorEmpty = "Empty queries"
+)
+
 // Queries represents a query list.
 type Queries []Query
 
@@ -26,7 +30,7 @@ func NewQueriesWithArray(queries []Query) Queries {
 // Hash returns a hash string of the all queries.
 func (queries Queries) Hash() (string, error) {
 	if queries.Size() <= 0 {
-		return "", fmt.Errorf("Empty queries")
+		return "", fmt.Errorf(queriesErrorEmpty)
 	}
 
 	queryStrs := ""
