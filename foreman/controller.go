@@ -5,8 +5,14 @@
 package foreman
 
 import (
+	"fmt"
+
 	"github.com/cybergarage/foreman-go/foreman/discovery"
 	"github.com/cybergarage/foreman-go/foreman/metric"
+)
+
+const (
+	controllerErrorNoFinder = "Finder not found"
 )
 
 // Controller represents a controller.
@@ -28,8 +34,8 @@ func (ctrl *Controller) SetFinder(finder discovery.Finder) error {
 	return nil
 }
 
-// HasFinders returns whether the controller has no finder.
-func (ctrl *Controller) HasFinders() bool {
+// HasFinder returns whether the controller has no finder.
+func (ctrl *Controller) HasFinder() bool {
 	if ctrl.Finder == nil {
 		return false
 	}
@@ -38,21 +44,34 @@ func (ctrl *Controller) HasFinders() bool {
 
 // Search searches all nodes.
 func (ctrl *Controller) Search() error {
+	if ctrl.Finder == nil {
+		return fmt.Errorf(controllerErrorNoFinder)
+	}
 	return ctrl.Finder.Search()
 }
 
 // SetSearchListener sets a specified listener.
 func (ctrl *Controller) SetSearchListener(l discovery.FinderSearchListener) error {
+	if ctrl.Finder == nil {
+		return fmt.Errorf(controllerErrorNoFinder)
+	}
 	return ctrl.Finder.SetSearchListener(l)
 }
 
 // SetNotifyListener sets a specified listener.
 func (ctrl *Controller) SetNotifyListener(l discovery.FinderNotifyListener) error {
+	if ctrl.Finder == nil {
+		return fmt.Errorf(controllerErrorNoFinder)
+	}
 	return ctrl.Finder.SetNotifyListener(l)
 }
 
 // GetAllNodes returns all found nodes.
 func (ctrl *Controller) GetAllNodes() ([]Node, error) {
+	if ctrl.Finder == nil {
+		return nil, fmt.Errorf(controllerErrorNoFinder)
+	}
+
 	finderNodes, err := ctrl.Finder.GetAllNodes()
 	if err != nil {
 		return nil, err
@@ -68,6 +87,10 @@ func (ctrl *Controller) GetAllNodes() ([]Node, error) {
 
 // GetResponsibleNodesForMetric returns a responsible node for a specified metric.
 func (ctrl *Controller) GetResponsibleNodesForMetric(m *metric.Metric) ([]Node, error) {
+	if ctrl.Finder == nil {
+		return nil, fmt.Errorf(controllerErrorNoFinder)
+	}
+
 	name := m.GetName()
 	finderNodes, err := ctrl.Finder.GetPrefixNodes(name)
 	if err != nil {
@@ -84,6 +107,10 @@ func (ctrl *Controller) GetResponsibleNodesForMetric(m *metric.Metric) ([]Node, 
 
 // GetNeighborhoodRemoteNode returns a neighborhood remote node of this node.
 func (ctrl *Controller) GetNeighborhoodRemoteNode(node Node) (*RemoteNode, error) {
+	if ctrl.Finder == nil {
+		return nil, fmt.Errorf(controllerErrorNoFinder)
+	}
+
 	finderNode, err := ctrl.Finder.GetNeighborhoodNode(node)
 	if err != nil {
 		return nil, err
