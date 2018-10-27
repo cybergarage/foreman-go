@@ -91,13 +91,6 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	server.fd.SetListener(server)
 
-	// Apply configuration
-
-	err := server.applyConfig()
-	if err != nil {
-		return nil, err
-	}
-
 	return server, nil
 }
 
@@ -193,12 +186,7 @@ func (server *Server) GetUniqueID() string {
 // LoadConfig sets the configurations in the specified file.
 func (server *Server) LoadConfig(filename string) error {
 	logging.Trace("Server loading config file from %s.", filename)
-	err := server.LoadFile(filename)
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-	return server.applyConfig()
+	return server.LoadFile(filename)
 }
 
 // LoadQuery executes the queries in the specified file.
@@ -223,7 +211,7 @@ func (server *Server) LoadQuery(filename string) error {
 func (server *Server) GetAllClusterNodes() []Node {
 	// Return only the server if the server has no finder
 
-	if !server.Controller.HasFinders() {
+	if !server.Controller.HasFinder() {
 		return []Node{server}
 	}
 
@@ -324,6 +312,13 @@ func (server *Server) getStartupManagers() []Manager {
 
 // Start starts the server.
 func (server *Server) Start() error {
+	// Apply configuration
+
+	err := server.applyConfig()
+	if err != nil {
+		return err
+	}
+
 	// Start all managers without graphite
 
 	for _, mgr := range server.getStartupManagers() {
@@ -336,7 +331,7 @@ func (server *Server) Start() error {
 	// Start Graphite manager
 
 	graphiteRetryCount := 0
-	err := server.graphite.Start()
+	err = server.graphite.Start()
 	for (err != nil) && (graphiteRetryCount < serverBindRetryCount) {
 		server.graphite.SetCarbonPort(server.graphite.GetCarbonPort() + 1)
 		server.graphite.SetRenderPort(server.graphite.GetRenderPort() + 1)
