@@ -42,6 +42,34 @@ func (ctrl *Controller) HasFinder() bool {
 	return true
 }
 
+// Start starts the controller.
+func (ctrl *Controller) Start() error {
+	if ctrl.Finder == nil {
+		return fmt.Errorf(controllerErrorNoFinder)
+	}
+
+	err := ctrl.Finder.Start()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Stop stops the controller.
+func (ctrl *Controller) Stop() error {
+	if ctrl.Finder == nil {
+		return fmt.Errorf(controllerErrorNoFinder)
+	}
+
+	err := ctrl.Finder.Stop()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // Search searches all nodes.
 func (ctrl *Controller) Search() error {
 	if ctrl.Finder == nil {
