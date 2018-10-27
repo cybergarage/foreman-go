@@ -100,10 +100,10 @@ func TestStandaloneNodeMetricsWithStaticFinder(t *testing.T) {
 	node := setupFederatedTestNode(t, 0)
 	nodes := []*Server{node}
 	finder := setupStaticFinderWithServers(t, nodes)
-	node.AddFinder(finder)
+	node.SetFinder(finder)
 
 	client := NewClient()
-	client.AddFinder(finder)
+	client.SetFinder(finder)
 
 	federatedMetricsTest(t, client, nodes)
 
@@ -118,11 +118,11 @@ func TestFederatedMultiNodeMetricsWithStaticFinder(t *testing.T) {
 	finder := setupStaticFinderWithServers(t, nodes)
 
 	for _, node := range nodes {
-		node.AddFinder(finder)
+		node.SetFinder(finder)
 	}
 
 	client := NewClient()
-	client.AddFinder(finder)
+	client.SetFinder(finder)
 
 	federatedMetricsTest(t, client, nodes)
 

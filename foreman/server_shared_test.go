@@ -101,9 +101,9 @@ func TestStandaloneSharedRegistryWithStaticFinder(t *testing.T) {
 	node := setupSharedTestNode(t, 0)
 	nodes := []*Server{node}
 	finder := setupStaticFinderWithServers(t, nodes)
-	node.AddFinder(finder)
+	node.SetFinder(finder)
 	client := NewClient()
-	client.AddFinder(finder)
+	client.SetFinder(finder)
 
 	sharedRegistryTest(t, client, nodes)
 
@@ -118,7 +118,7 @@ func TestMultiNodeSharedRegistryWithStaticFinder(t *testing.T) {
 	finder := setupStaticFinderWithServers(t, nodes)
 
 	for n, node := range nodes {
-		node.AddFinder(finder)
+		node.SetFinder(finder)
 		q := fmt.Sprintf(testSharedTestQosSetQuery, n, n, n)
 		_, err := node.PostQuery(q)
 		if err != nil {
@@ -130,7 +130,7 @@ func TestMultiNodeSharedRegistryWithStaticFinder(t *testing.T) {
 	}
 
 	client := NewClient()
-	client.AddFinder(finder)
+	client.SetFinder(finder)
 
 	sharedRegistryTest(t, client, nodes)
 
