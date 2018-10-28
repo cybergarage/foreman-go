@@ -5,9 +5,9 @@
 package echonet
 
 import (
-	"testing"
+	uecho_echonet "github.com/cybergarage/uecho-go/net/echonet"
 )
 
-func TestNewDevice(t *testing.T) {
-	NewDevice()
-}
+const (
+	ManufacturerCode = uecho_echonet.NodeManufacturerUnknown
+)
