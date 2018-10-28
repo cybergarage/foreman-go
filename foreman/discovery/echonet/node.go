@@ -6,14 +6,8 @@ package echonet
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/node"
-
 	uecho_echonet "github.com/cybergarage/uecho-go/net/echonet"
-	uecho_encoding "github.com/cybergarage/uecho-go/net/echonet/encoding"
 	uecho_protocol "github.com/cybergarage/uecho-go/net/echonet/protocol"
-)
-
-const (
-	ManufacturerCode = uecho_echonet.NodeManufacturerUnknown
 )
 
 const (
@@ -22,26 +16,24 @@ const (
 
 type EchonetNode struct {
 	*uecho_echonet.LocalNode
+	*EchonetDevice
 	sourceNode node.Node
 }
 
 // NewEchonetNodeWithNode returns a new finder node.
 func NewEchonetNodeWithNode(srcNode node.Node) (*EchonetNode, error) {
 	node := &EchonetNode{
-		LocalNode:  uecho_echonet.NewLocalNode(),
-		sourceNode: srcNode,
+		LocalNode:     uecho_echonet.NewLocalNode(),
+		EchonetDevice: NewDevice(),
+		sourceNode:    srcNode,
 	}
 
-	node.SetManufacturerCode(ManufacturerCode)
-	node.SetListener(node)
 	node.SetConfig(NewDefaultConfig())
+	node.SetManufacturerCode(ManufacturerCode)
 
-	dev, err := NewDevice()
-	if err != nil {
-		return nil, err
-	}
+	node.SetListener(node)
 
-	err = node.AddDevice(dev)
+	err := node.AddDevice(node.EchonetDevice.Device)
 	if err != nil {
 		return nil, err
 	}
@@ -65,40 +57,5 @@ func (node *EchonetNode) NodeMessageReceived(msg *uecho_protocol.Message) {
 		return
 	}
 
-	dev, err := node.GetNodeDevice()
-	if err != nil {
-		return
-	}
-
-	for _, propCode := range FinderDeviceAllPropertyCodes() {
-		propData := []byte{}
-		switch propCode {
-		case FinderConditionCode:
-			propData = []byte{byte(srcNode.GetCondition())}
-		case FinderClusterCode:
-			propData = []byte(srcNode.GetCluster())
-		case FinderNameCode:
-			propData = []byte(srcNode.GetName())
-		case FinderAddressCode:
-			propData = []byte(srcNode.GetAddress())
-		case FinderRPCPortCode:
-			propData := make([]byte, FinderRPCPortSize)
-			uecho_encoding.IntegerToByte(uint(srcNode.GetRPCPort()), propData)
-		case FinderRenderPortCode:
-			propData := make([]byte, FinderRenderPortSize)
-			uecho_encoding.IntegerToByte(uint(srcNode.GetRenderPort()), propData)
-		case FinderCarbonPortCode:
-			propData := make([]byte, FinderCarbonPortSize)
-			uecho_encoding.IntegerToByte(uint(srcNode.GetCarbonPort()), propData)
-		case FinderClockCode:
-			propData := make([]byte, FinderClockSize)
-			uecho_encoding.IntegerToByte(uint(srcNode.GetClock()), propData)
-		case FinderVersionCode:
-			propData := make([]byte, FinderVersionSize)
-			uecho_encoding.IntegerToByte(uint(srcNode.GetVersion()), propData)
-		default:
-			continue
-		}
-		dev.SetPropertyData(uecho_protocol.PropertyCode(propCode), propData)
-	}
+	node.EchonetDevice.UpdatePropertyWithNode(srcNode)
 }

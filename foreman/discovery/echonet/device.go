@@ -4,7 +4,14 @@
 
 package echonet
 
-import "github.com/cybergarage/uecho-go/net/echonet"
+import (
+	"reflect"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
+	"github.com/cybergarage/uecho-go/net/echonet"
+	uecho_encoding "github.com/cybergarage/uecho-go/net/echonet/encoding"
+	uecho_protocol "github.com/cybergarage/uecho-go/net/echonet/protocol"
+)
 
 const (
 	FinderDeviceCode = 0x0F9101
@@ -47,8 +54,13 @@ func FinderDeviceAllPropertyCodes() []echonet.PropertyCode {
 	return props
 }
 
+// EchonetDevice represents a base device for Echonet.
+type EchonetDevice struct {
+	*echonet.Device
+}
+
 // NewDevice returns a finder device.
-func NewDevice() (*echonet.Device, error) {
+func NewDevice() *EchonetDevice {
 	dev := echonet.NewDevice()
 	dev.SetCode(FinderDeviceCode)
 
@@ -56,5 +68,44 @@ func NewDevice() (*echonet.Device, error) {
 		dev.CreateProperty(propCode, echonet.PropertyAttributeRead)
 	}
 
-	return dev, nil
+	return &EchonetDevice{Device: dev}
+}
+
+// UpdatePropertyWithNode updates the device property with the specified node.
+func (dev *EchonetDevice) UpdatePropertyWithNode(node node.Node) {
+	if node == nil || reflect.ValueOf(node).IsNil() {
+		return
+	}
+
+	for _, propCode := range FinderDeviceAllPropertyCodes() {
+		propData := []byte{}
+		switch propCode {
+		case FinderConditionCode:
+			propData = []byte{byte(node.GetCondition())}
+		case FinderClusterCode:
+			propData = []byte(node.GetCluster())
+		case FinderNameCode:
+			propData = []byte(node.GetName())
+		case FinderAddressCode:
+			propData = []byte(node.GetAddress())
+		case FinderRPCPortCode:
+			propData := make([]byte, FinderRPCPortSize)
+			uecho_encoding.IntegerToByte(uint(node.GetRPCPort()), propData)
+		case FinderRenderPortCode:
+			propData := make([]byte, FinderRenderPortSize)
+			uecho_encoding.IntegerToByte(uint(node.GetRenderPort()), propData)
+		case FinderCarbonPortCode:
+			propData := make([]byte, FinderCarbonPortSize)
+			uecho_encoding.IntegerToByte(uint(node.GetCarbonPort()), propData)
+		case FinderClockCode:
+			propData := make([]byte, FinderClockSize)
+			uecho_encoding.IntegerToByte(uint(node.GetClock()), propData)
+		case FinderVersionCode:
+			propData := make([]byte, FinderVersionSize)
+			uecho_encoding.IntegerToByte(uint(node.GetVersion()), propData)
+		default:
+			continue
+		}
+		dev.SetPropertyData(uecho_protocol.PropertyCode(propCode), propData)
+	}
 }
