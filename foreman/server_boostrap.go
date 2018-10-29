@@ -5,10 +5,20 @@
 package foreman
 
 import (
+	"fmt"
+
 	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/qos"
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
+)
+
+const (
+	boostrapRetryCount = 5
+)
+
+const (
+	boostrapErrorNeighborhoodNode = "Neighborhood node is not found"
 )
 
 // importBoostrapConfig gets all monitoring configuration.
@@ -92,9 +102,16 @@ func (server *Server) executeBoostrapWithRemoteNode(srcNode *RemoteNode) error {
 
 // executeBoostrap executes boostrap.
 func (server *Server) executeBoostrap() error {
-	srcNode, err := server.Controller.GetNeighborhoodRemoteNode(server)
-	if err != nil {
-		return err
+	for retryCount := 0; retryCount < boostrapRetryCount; retryCount++ {
+		srcNode, err := server.Controller.GetNeighborhoodRemoteNode(server)
+		if err != nil || srcNode == nil {
+			err = server.Search()
+			if err != nil {
+				return err
+			}
+			continue
+		}
+		return server.executeBoostrapWithRemoteNode(srcNode)
 	}
-	return server.executeBoostrapWithRemoteNode(srcNode)
+	return fmt.Errorf(boostrapErrorNeighborhoodNode)
 }

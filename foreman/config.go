@@ -60,6 +60,7 @@ func NewDefaultConfig() *Config {
 	conf.Server.HTTPPort = DefaultHttpPort
 	conf.Server.CarbonPort = DefaultCarbonPort
 	conf.Server.Boostrap = DefaultBoostrapMode
+	conf.Server.Finder = DefaultFinder
 
 	conf.FQL.Path = HttpRequestFqlPath
 	conf.FQL.Query = HttpRequestFqlQueryParam

@@ -123,6 +123,11 @@ func serverFinalizer(server *Server) {
 	server.Stop()
 }
 
+// GetController returns a controller of the node.
+func (server *Server) GetController() *Controller {
+	return server.Controller
+}
+
 // SetCluster sets a cluster name
 func (server *Server) SetCluster(name string) {
 	server.Server.Cluster = name
@@ -271,7 +276,7 @@ func (server *Server) applyConfig() error {
 
 	switch server.Server.Finder {
 	case FinderEchonet:
-		server.Controller.SetFinder(discovery.NewEchonetFinder())
+		server.Controller.SetFinder(discovery.NewEchonetFinderWithLocalNode(server))
 	}
 
 	// Metric Store
@@ -340,7 +345,23 @@ func (server *Server) Start() error {
 	}
 	if err != nil {
 		server.Stop()
-		logging.Error("%s\n", err)
+		logging.Error("%s", err)
+		return err
+	}
+
+	// Controller
+
+	err = server.Controller.Start()
+	if err != nil {
+		server.Stop()
+		logging.Error("%s", err)
+		return err
+	}
+
+	err = server.Controller.Search()
+	if err != nil {
+		server.Stop()
+		logging.Error("%s", err)
 		return err
 	}
 
@@ -350,7 +371,7 @@ func (server *Server) Start() error {
 		err = server.executeBoostrap()
 		if err != nil {
 			server.Stop()
-			logging.Error("%s\n", err)
+			logging.Error("%s", err)
 			return err
 		}
 	}
@@ -368,12 +389,22 @@ func (server *Server) getRunningMangers() []Manager {
 // Stop stops the server.
 func (server *Server) Stop() error {
 
+	var lastError error
+
+	// Controller
+
+	err := server.Controller.Stop()
+	if err != nil {
+		logging.Error("%s", err)
+		lastError = err
+	}
+
 	// Start all managers
 
-	var lastError error
 	for _, mgr := range server.getRunningMangers() {
 		err := mgr.Stop()
 		if err != nil {
+			logging.Error("%s", err)
 			lastError = err
 		}
 	}
