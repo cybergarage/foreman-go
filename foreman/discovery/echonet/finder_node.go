@@ -8,7 +8,6 @@ import (
 	"fmt"
 
 	"github.com/cybergarage/foreman-go/foreman/node"
-
 	"github.com/cybergarage/uecho-go/net/echonet/protocol"
 )
 
@@ -40,6 +39,7 @@ func NewFinderNodeWithResponseMesssage(msg *protocol.Message) (node.Node, error)
 			return nil, fmt.Errorf(errorEchonetFinderInvalidMessage, msg)
 		}
 	}
+
 	// Create a candidate from the specified message
 
 	candidateNode := &finderNode{

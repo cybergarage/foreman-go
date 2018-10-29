@@ -41,15 +41,15 @@ const (
 
 func FinderDeviceAllPropertyCodes() []echonet.PropertyCode {
 	props := []echonet.PropertyCode{
-		FinderConditionCode,
 		FinderClusterCode,
 		FinderNameCode,
 		FinderAddressCode,
 		FinderRPCPortCode,
 		FinderRenderPortCode,
 		FinderCarbonPortCode,
-		FinderClockCode,
-		FinderVersionCode,
+		//FinderConditionCode,
+		//FinderClockCode,
+		//FinderVersionCode,
 	}
 	return props
 }

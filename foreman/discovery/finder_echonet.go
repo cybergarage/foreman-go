@@ -5,6 +5,7 @@
 package discovery
 
 import (
+	"reflect"
 	"time"
 
 	foreman_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
@@ -19,17 +20,16 @@ const (
 
 // EchonetFinder represents a base finder.
 type EchonetFinder struct {
-	node.Node
-	echonet.ControllerListener
 	*baseFinder
+	localNode node.Node
 	*foreman_echonet.EchonetController
 }
 
-// NewEchonetFinderWithNode returns a new finder with the specified node.
-func NewEchonetFinderWithNode(node node.Node) Finder {
+// NewEchonetFinderWithLocalNode returns a new finder with the specified node.
+func NewEchonetFinderWithLocalNode(node node.Node) Finder {
 	finder := &EchonetFinder{
-		Node:              node,
 		baseFinder:        newBaseFinder(),
+		localNode:         node,
 		EchonetController: foreman_echonet.NewController(),
 	}
 	finder.EchonetController.SetListener(finder)
@@ -38,7 +38,7 @@ func NewEchonetFinderWithNode(node node.Node) Finder {
 
 // NewEchonetFinder returns a new finder of Echonet.
 func NewEchonetFinder() Finder {
-	return NewEchonetFinderWithNode(nil)
+	return NewEchonetFinderWithLocalNode(nil)
 }
 
 // Search searches all nodes.
@@ -66,7 +66,7 @@ func (finder *EchonetFinder) ControllerMessageReceived(msg *protocol.Message) {
 		return
 	}
 
-	finder.EchonetController.EchonetDevice.UpdatePropertyWithNode(finder.Node)
+	finder.EchonetController.EchonetDevice.UpdatePropertyWithNode(finder.localNode)
 }
 
 func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *echonet.RemoteNode) {
@@ -79,6 +79,12 @@ func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *echonet.RemoteN
 	candidateNode, err := foreman_echonet.NewFinderNodeWithResponseMesssage(resMsg)
 	if err != nil {
 		return
+	}
+
+	if finder.localNode != nil && !reflect.ValueOf(finder.localNode).IsNil() {
+		if node.Equal(finder.localNode, candidateNode) {
+			return
+		}
 	}
 
 	if finder.HasNode(candidateNode) {
