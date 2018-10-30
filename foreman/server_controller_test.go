@@ -48,9 +48,8 @@ func testServerController(t *testing.T, server *Server) {
 	}
 }
 
-/* FIXME : server_controller_test.go:47: 3 != 2
 func TestServerControllerDefaultFinders(t *testing.T) {
-	servers := setupFederatedTestNodes(t)
+	servers := setupControllerTestServers(t)
 
 	for _, server := range servers {
 		err := server.Start()
@@ -60,6 +59,7 @@ func TestServerControllerDefaultFinders(t *testing.T) {
 	}
 
 	for n, server := range servers {
+		fmt.Printf("[%d] %s:%d\n", n, server.GetAddress(), server.GetRPCPort())
 		t.Logf("[%d] %s:%d", n, server.GetAddress(), server.GetRPCPort())
 	}
 
@@ -74,4 +74,3 @@ func TestServerControllerDefaultFinders(t *testing.T) {
 		}
 	}
 }
-*/
