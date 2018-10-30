@@ -9,6 +9,7 @@ import (
 	"time"
 
 	foreman_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/node"
 	"github.com/cybergarage/uecho-go/net/echonet"
 	"github.com/cybergarage/uecho-go/net/echonet/protocol"
@@ -51,6 +52,15 @@ func (finder *EchonetFinder) Search() error {
 	return nil
 }
 
+// IsLocalNode returns true when the specified node is the local node, otherwise false.
+func (finder *EchonetFinder) IsLocalNode(candidateNode node.Node) bool {
+	if finder.localNode == nil || reflect.ValueOf(finder.localNode).IsNil() {
+		return false
+	}
+
+	return node.Equal(finder.localNode, candidateNode)
+}
+
 // Start starts the finder.
 func (finder *EchonetFinder) Start() error {
 	return finder.EchonetController.Start()
@@ -73,18 +83,18 @@ func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *echonet.RemoteN
 	reqMsg := foreman_echonet.NewRequestAllPropertiesMessage()
 	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
 	if err != nil {
+		logging.Error("%s", err.Error())
 		return
 	}
 
 	candidateNode, err := foreman_echonet.NewFinderNodeWithResponseMesssage(resMsg)
 	if err != nil {
+		logging.Error("%s", err.Error())
 		return
 	}
 
-	if finder.localNode != nil && !reflect.ValueOf(finder.localNode).IsNil() {
-		if node.Equal(finder.localNode, candidateNode) {
-			return
-		}
+	if finder.IsLocalNode(candidateNode) {
+		return
 	}
 
 	if finder.HasNode(candidateNode) {
