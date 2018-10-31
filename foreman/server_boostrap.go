@@ -22,7 +22,7 @@ const (
 )
 
 // importBoostrapConfig gets all monitoring configuration.
-func (server *Server) importBoostrapConfig(config *boostracConfig) error {
+func (server *Server) importBoostrapConfig(config *boostrapConfig) error {
 	configMap := config.Objects
 	for target, configObj := range configMap {
 		var err error
@@ -44,7 +44,7 @@ func (server *Server) importBoostrapConfig(config *boostracConfig) error {
 }
 
 // exportBoostrapConfig gets all monitoring configuration.
-func (node *baseNode) exportBoostrapConfig() (*boostracConfig, error) {
+func (node *baseNode) exportBoostrapConfig() (*boostrapConfig, error) {
 	targets := []string{
 		fql.QueryTargetQos,
 		fql.QueryTargetAction,
