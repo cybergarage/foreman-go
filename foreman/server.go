@@ -75,6 +75,8 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	// Graphite
 
+	server.graphiteMgr.SetAutoInterfaceBindingEnabled(true)
+	server.graphiteMgr.SetEachInterfaceBindingEnabled(true)
 	server.graphiteMgr.SetCarbonListener(server)
 	server.graphiteMgr.SetRenderListener(server)
 
