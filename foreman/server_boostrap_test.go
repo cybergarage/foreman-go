@@ -73,11 +73,6 @@ func TestSeverBoostrapConfigStaticTransport(t *testing.T) {
 		t.Error(err)
 	}
 
-	_, err = srcConfig.Hash()
-	if err != nil {
-		t.Error(err)
-	}
-
 	// Import
 
 	dstNode, err := setupBoostrapTestNodeWithoutConfig(t, 1)
@@ -92,11 +87,6 @@ func TestSeverBoostrapConfigStaticTransport(t *testing.T) {
 	}
 
 	dstConfig, err := dstNode.exportBoostrapConfig()
-	if err != nil {
-		t.Error(err)
-	}
-
-	_, err = dstConfig.Hash()
 	if err != nil {
 		t.Error(err)
 	}
