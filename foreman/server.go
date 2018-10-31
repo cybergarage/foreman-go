@@ -39,7 +39,7 @@ type Server struct {
 	*Controller
 	fd fd.Detector
 
-	graphite    *graphite.Server
+	graphiteMgr *graphite.Manager
 	registerMgr *register.Manager
 	registryMgr *registry.Manager
 	qosMgr      *qos.Manager
@@ -57,7 +57,7 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	server := &Server{
 		Controller:  NewController(),
-		graphite:    graphite.NewServer(),
+		graphiteMgr: graphite.NewManager(),
 		registryMgr: registry.NewManager(),
 		registerMgr: register.NewManager(),
 		qosMgr:      qos.NewManager(),
@@ -75,8 +75,8 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	// Graphite
 
-	server.graphite.SetCarbonListener(server)
-	server.graphite.SetRenderListener(server)
+	server.graphiteMgr.SetCarbonListener(server)
+	server.graphiteMgr.SetRenderListener(server)
 
 	// Registry Store
 
@@ -160,22 +160,22 @@ func (server *Server) GetName() string {
 
 // GetHTTPPort returns the graphite HTTP port.
 func (server *Server) GetHTTPPort() int {
-	return server.graphite.Render.Port
+	return server.GetRenderPort()
 }
 
 // GetCarbonPort returns the graphite carbon port.
 func (server *Server) GetCarbonPort() int {
-	return server.graphite.Carbon.Port
+	return server.graphiteMgr.GetCarbonPort()
 }
 
 // GetRenderPort returns the graphite render port.
 func (server *Server) GetRenderPort() int {
-	return server.graphite.Render.Port
+	return server.graphiteMgr.GetRenderPort()
 }
 
 // GetAddress returns the interface address
 func (server *Server) GetAddress() string {
-	return server.graphite.GetAddress()
+	return server.graphiteMgr.GetAddress()
 }
 
 // GetRPCPort returns the RPC port
@@ -294,12 +294,12 @@ func (server *Server) applyConfig() error {
 
 	// Graphite Ports
 
-	server.graphite.Carbon.Port = server.Server.CarbonPort
-	server.graphite.Render.Port = server.Server.HTTPPort
+	server.graphiteMgr.SetCarbonPort(server.Server.CarbonPort)
+	server.graphiteMgr.SetRenderPort(server.Server.HTTPPort)
 
 	// RPC
 
-	server.graphite.SetHTTPRequestListener(server.FQL.Path, server)
+	server.graphiteMgr.SetHTTPRequestListener(server.FQL.Path, server)
 
 	return nil
 }
@@ -336,13 +336,14 @@ func (server *Server) Start() error {
 	// Start Graphite manager
 
 	graphiteRetryCount := 0
-	err = server.graphite.Start()
+	err = server.graphiteMgr.Start()
 	for (err != nil) && (graphiteRetryCount < serverBindRetryCount) {
-		server.graphite.SetCarbonPort(server.graphite.GetCarbonPort() + 1)
-		server.graphite.SetRenderPort(server.graphite.GetRenderPort() + 1)
+		server.graphiteMgr.SetCarbonPort(server.graphiteMgr.GetCarbonPort() + 1)
+		server.graphiteMgr.SetRenderPort(server.graphiteMgr.GetRenderPort() + 1)
 		graphiteRetryCount++
-		err = server.graphite.Start()
+		err = server.graphiteMgr.Start()
 	}
+
 	if err != nil {
 		server.Stop()
 		logging.Error("%s", err)
@@ -382,7 +383,7 @@ func (server *Server) Start() error {
 // getRunningMangers returns all managers which should be stopped.
 func (server *Server) getRunningMangers() []Manager {
 	managers := server.getStartupManagers()
-	managers = append(managers, server.graphite)
+	managers = append(managers, server.graphiteMgr)
 	return managers
 }
 
