@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"testing"
 	"time"
+	//"github.com/cybergarage/uecho-go/net/echonet/log"
 )
 
 const (
@@ -49,6 +50,7 @@ func testServerController(t *testing.T, server *Server) {
 }
 
 func TestServerControllerDefaultFinders(t *testing.T) {
+	//log.SetStdoutDebugEnbled(true)
 	servers := setupControllerTestServers(t)
 
 	for _, server := range servers {

@@ -47,6 +47,7 @@ func FinderDeviceAllPropertyCodes() []echonet.PropertyCode {
 		FinderRPCPortCode,
 		FinderRenderPortCode,
 		FinderCarbonPortCode,
+		// TODO : Send condition properties too if you neet
 		//FinderConditionCode,
 		//FinderClockCode,
 		//FinderVersionCode,
@@ -89,23 +90,24 @@ func (dev *EchonetDevice) UpdatePropertyWithNode(node node.Node) {
 		case FinderAddressCode:
 			propData = []byte(node.GetAddress())
 		case FinderRPCPortCode:
-			propData := make([]byte, FinderRPCPortSize)
+			propData = make([]byte, FinderRPCPortSize)
 			uecho_encoding.IntegerToByte(uint(node.GetRPCPort()), propData)
 		case FinderRenderPortCode:
-			propData := make([]byte, FinderRenderPortSize)
+			propData = make([]byte, FinderRenderPortSize)
 			uecho_encoding.IntegerToByte(uint(node.GetRenderPort()), propData)
 		case FinderCarbonPortCode:
-			propData := make([]byte, FinderCarbonPortSize)
+			propData = make([]byte, FinderCarbonPortSize)
 			uecho_encoding.IntegerToByte(uint(node.GetCarbonPort()), propData)
 		case FinderClockCode:
-			propData := make([]byte, FinderClockSize)
+			propData = make([]byte, FinderClockSize)
 			uecho_encoding.IntegerToByte(uint(node.GetClock()), propData)
 		case FinderVersionCode:
-			propData := make([]byte, FinderVersionSize)
+			propData = make([]byte, FinderVersionSize)
 			uecho_encoding.IntegerToByte(uint(node.GetVersion()), propData)
 		default:
 			continue
 		}
+
 		dev.SetPropertyData(uecho_protocol.PropertyCode(propCode), propData)
 	}
 }
