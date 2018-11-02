@@ -130,20 +130,22 @@ func TestSeverBoostrap(t *testing.T) {
 		return
 	}
 
-	// Compare
-
-	nodeConfig, err := nodes[0].exportBoostrapConfig()
-	if err != nil {
-		t.Error(err)
-	}
+	// Compare the new node with other running nodes
 
 	newConfig, err := newNode.exportBoostrapConfig()
 	if err != nil {
 		t.Error(err)
 	}
 
-	if !newConfig.Equals(nodeConfig) {
-		t.Errorf("%v != %v", newConfig, nodeConfig)
+	for _, node := range nodes {
+		nodeConfig, err := node.exportBoostrapConfig()
+		if err != nil {
+			t.Error(err)
+		}
+
+		if !newConfig.Equals(nodeConfig) {
+			t.Errorf("%v != %v", newConfig, nodeConfig)
+		}
 	}
 
 	// Finalize
