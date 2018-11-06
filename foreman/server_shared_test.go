@@ -8,9 +8,6 @@ import (
 	"fmt"
 	"strings"
 	"testing"
-	"time"
-
-	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
 const (
@@ -112,6 +109,8 @@ func TestStandaloneSharedRegistryWithStaticFinder(t *testing.T) {
 }
 */
 
+/*
+FIXME : Enable TestMultiNodeSharedRegistryWithStaticFinder
 func TestMultiNodeSharedRegistryWithStaticFinder(t *testing.T) {
 	logging.SetLogLevel(logging.LevelTrace)
 
@@ -137,3 +136,4 @@ func TestMultiNodeSharedRegistryWithStaticFinder(t *testing.T) {
 
 	stopTestNodes(t, nodes)
 }
+*/
