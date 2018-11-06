@@ -40,12 +40,11 @@ func testServerController(t *testing.T, server *Server) {
 		t.Error(err)
 	}
 
-	for n, node := range nodes {
-		t.Logf("[%d] %s:%d", n, node.GetAddress(), node.GetRPCPort())
-	}
-
 	if len(nodes) != (testServerControllerCont - 1) {
 		t.Errorf("%d != %d", len(nodes), (testServerControllerCont - 1))
+		for n, node := range nodes {
+			t.Logf("[%d] %s:%d", n, node.GetAddress(), node.GetRPCPort())
+		}
 	}
 }
 
@@ -58,11 +57,6 @@ func TestServerControllerDefaultFinders(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		}
-	}
-
-	for n, server := range servers {
-		fmt.Printf("[%d] %s:%d\n", n, server.GetAddress(), server.GetRPCPort())
-		t.Logf("[%d] %s:%d", n, server.GetAddress(), server.GetRPCPort())
 	}
 
 	for _, server := range servers {
