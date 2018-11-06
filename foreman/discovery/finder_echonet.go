@@ -71,6 +71,11 @@ func (finder *EchonetFinder) Stop() error {
 	return finder.EchonetController.Stop()
 }
 
+// IsRunning returns true when the finder is running, otherwise false.
+func (finder *EchonetFinder) IsRunning() bool {
+	return finder.EchonetController.IsRunning()
+}
+
 func (finder *EchonetFinder) ControllerMessageReceived(msg *protocol.Message) {
 	if !msg.IsReadRequest() {
 		return
@@ -80,6 +85,10 @@ func (finder *EchonetFinder) ControllerMessageReceived(msg *protocol.Message) {
 }
 
 func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *echonet.RemoteNode) {
+	if !finder.IsRunning() {
+		return
+	}
+
 	reqMsg := foreman_echonet.NewRequestAllPropertiesMessage()
 	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
 	if err != nil {
