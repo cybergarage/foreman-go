@@ -6,6 +6,7 @@ package foreman
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/fql"
@@ -14,7 +15,8 @@ import (
 )
 
 const (
-	boostrapRetryCount = 5
+	boostrapRetryCount       = 5
+	boostrapRetrySleepSecond = 1
 )
 
 const (
@@ -109,6 +111,7 @@ func (server *Server) executeBoostrap() error {
 			if err != nil {
 				return err
 			}
+			time.Sleep(time.Second * boostrapRetrySleepSecond)
 			continue
 		}
 		return server.executeBoostrapWithRemoteNode(srcNode)
