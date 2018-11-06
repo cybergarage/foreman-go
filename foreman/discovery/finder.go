@@ -38,4 +38,6 @@ type Finder interface {
 	Start() error
 	// Stop stops the finder.
 	Stop() error
+	// IsRunning returns true when the finder is running, otherwise false.
+	IsRunning() bool
 }

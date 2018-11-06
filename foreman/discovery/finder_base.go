@@ -23,6 +23,7 @@ type baseFinder struct {
 	nodes          []Node
 	searchListener FinderSearchListener
 	notifyListener FinderNotifyListener
+	status         int
 }
 
 // newBaseFinder returns a new base finder.

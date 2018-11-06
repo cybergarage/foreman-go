@@ -32,3 +32,8 @@ func (finder *SharedFinder) Start() error {
 func (finder *SharedFinder) Stop() error {
 	return nil
 }
+
+// IsRunning returns true when the finder is running, otherwise false.
+func (finder *SharedFinder) IsRunning() bool {
+	return true
+}
