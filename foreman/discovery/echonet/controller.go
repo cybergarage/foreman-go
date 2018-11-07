@@ -5,18 +5,18 @@
 package echonet
 
 import (
-	"github.com/cybergarage/uecho-go/net/echonet"
+	uecno_echonet "github.com/cybergarage/uecho-go/net/echonet"
 )
 
 // EchonetController represents a base controller for Echonet.
 type EchonetController struct {
-	*echonet.Controller
+	*uecno_echonet.Controller
 	*EchonetDevice
 }
 
 // NewController returns a default controller for Echonet.
 func NewController() *EchonetController {
-	ctrl := echonet.NewController()
+	ctrl := uecno_echonet.NewController()
 
 	ctrl.SetConfig(NewDefaultConfig())
 	ctrl.SetManufacturerCode(ManufacturerCode)

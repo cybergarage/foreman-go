@@ -11,8 +11,9 @@ import (
 	foreman_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/node"
-	"github.com/cybergarage/uecho-go/net/echonet"
-	"github.com/cybergarage/uecho-go/net/echonet/protocol"
+
+	uecho_echonet "github.com/cybergarage/uecho-go/net/echonet"
+	uecho_protocol "github.com/cybergarage/uecho-go/net/echonet/protocol"
 )
 
 const (
@@ -76,7 +77,7 @@ func (finder *EchonetFinder) IsRunning() bool {
 	return finder.EchonetController.IsRunning()
 }
 
-func (finder *EchonetFinder) ControllerMessageReceived(msg *protocol.Message) {
+func (finder *EchonetFinder) ControllerMessageReceived(msg *uecho_protocol.Message) {
 	if !msg.IsReadRequest() {
 		return
 	}
@@ -84,7 +85,7 @@ func (finder *EchonetFinder) ControllerMessageReceived(msg *protocol.Message) {
 	finder.EchonetController.EchonetDevice.UpdatePropertyWithNode(finder.localNode)
 }
 
-func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *echonet.RemoteNode) {
+func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *uecho_echonet.RemoteNode) {
 	if !finder.IsRunning() {
 		return
 	}
