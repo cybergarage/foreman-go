@@ -8,7 +8,7 @@ import (
 	"reflect"
 
 	"github.com/cybergarage/foreman-go/foreman/node"
-	"github.com/cybergarage/uecho-go/net/echonet"
+	uecho_echonet "github.com/cybergarage/uecho-go/net/echonet"
 	uecho_encoding "github.com/cybergarage/uecho-go/net/echonet/encoding"
 	uecho_protocol "github.com/cybergarage/uecho-go/net/echonet/protocol"
 )
@@ -39,8 +39,8 @@ const (
 	FinderVersionSize = 8
 )
 
-func FinderDeviceAllPropertyCodes() []echonet.PropertyCode {
-	props := []echonet.PropertyCode{
+func FinderDeviceAllPropertyCodes() []uecho_echonet.PropertyCode {
+	props := []uecho_echonet.PropertyCode{
 		FinderClusterCode,
 		FinderNameCode,
 		FinderAddressCode,
@@ -57,16 +57,16 @@ func FinderDeviceAllPropertyCodes() []echonet.PropertyCode {
 
 // EchonetDevice represents a base device for Echonet.
 type EchonetDevice struct {
-	*echonet.Device
+	*uecho_echonet.Device
 }
 
 // NewDevice returns a finder device.
 func NewDevice() *EchonetDevice {
-	dev := echonet.NewDevice()
+	dev := uecho_echonet.NewDevice()
 	dev.SetCode(FinderDeviceCode)
 
 	for _, propCode := range FinderDeviceAllPropertyCodes() {
-		dev.CreateProperty(propCode, echonet.PropertyAttributeRead)
+		dev.CreateProperty(propCode, uecho_echonet.PropertyAttributeRead)
 	}
 
 	return &EchonetDevice{Device: dev}

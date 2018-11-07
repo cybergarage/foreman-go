@@ -8,14 +8,17 @@ import (
 	"fmt"
 
 	"github.com/cybergarage/foreman-go/foreman/node"
-	"github.com/cybergarage/uecho-go/net/echonet/protocol"
+
+	uecho_protocol "github.com/cybergarage/uecho-go/net/echonet/protocol"
+	uecho_transport "github.com/cybergarage/uecho-go/net/echonet/transport"
 )
 
 const (
-	errorEchonetFinderInvalidMessage         = "Invalid message : %s"
-	errorEchonetFinderMessageInvalidObject   = "Invalid object code : %X != %X"
-	errorEchonetFinderMessageInvalidOPC      = "Invalid OPC : %d != %d"
-	errorEchonetFinderMessageInvalidProperty = "Invalid property code : %X"
+	errorEchonetFinderInvalidNodeAddress     = "Invalid Echonet node address : '%s'"
+	errorEchonetFinderInvalidMessage         = "Invalid Echonet message : %s"
+	errorEchonetFinderMessageInvalidObject   = "Invalid Echonet object code : %X != %X"
+	errorEchonetFinderMessageInvalidOPC      = "Invalid Echonet OPC : %d != %d"
+	errorEchonetFinderMessageInvalidProperty = "Invalid Echonet property code : %X"
 )
 
 type finderNode struct {
@@ -23,7 +26,7 @@ type finderNode struct {
 }
 
 // NewFinderNodeWithResponseMesssage returns a new finder node with the specified message.
-func NewFinderNodeWithResponseMesssage(msg *protocol.Message) (node.Node, error) {
+func NewFinderNodeWithResponseMesssage(msg *uecho_protocol.Message) (node.Node, error) {
 	// Valdate the specified message
 
 	if msg == nil {
@@ -69,6 +72,12 @@ func NewFinderNodeWithResponseMesssage(msg *protocol.Message) (node.Node, error)
 		default:
 			return nil, fmt.Errorf(errorEchonetFinderMessageInvalidProperty, prop.GetCode())
 		}
+	}
+
+	// FIXME : Why invalid messages of empty or loopback address are sent
+	addr := candidateNode.GetAddress()
+	if !uecho_transport.IsCommunicableAddress(addr) {
+		return nil, fmt.Errorf(errorEchonetFinderInvalidNodeAddress, addr)
 	}
 
 	return candidateNode, nil

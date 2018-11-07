@@ -177,7 +177,11 @@ func (server *Server) GetRenderPort() int {
 
 // GetAddress returns the interface address
 func (server *Server) GetAddress() string {
-	return server.graphiteMgr.GetAddress()
+	addr, err := server.graphiteMgr.GetBoundAddress()
+	if err != nil {
+		return ""
+	}
+	return addr
 }
 
 // GetRPCPort returns the RPC port
