@@ -21,7 +21,7 @@ const (
 type EchonetNode struct {
 	*uecho_echonet.LocalNode
 	*EchonetDevice
-	sourceNode node.Node
+	node.Node
 }
 
 // NewEchonetNodeWithNode returns a new finder node.
@@ -29,7 +29,7 @@ func NewEchonetNodeWithNode(srcNode node.Node) (*EchonetNode, error) {
 	node := &EchonetNode{
 		LocalNode:     uecho_echonet.NewLocalNode(),
 		EchonetDevice: NewDevice(),
-		sourceNode:    srcNode,
+		Node:          srcNode,
 	}
 
 	node.SetConfig(NewDefaultConfig())
@@ -45,6 +45,15 @@ func NewEchonetNodeWithNode(srcNode node.Node) (*EchonetNode, error) {
 	return node, nil
 }
 
+// GetAddress returns the interface address
+func (node *EchonetNode) GetAddress() string {
+	addrs, err := node.LocalNode.GetBoundAddresses()
+	if err != nil || len(addrs) <= 0 {
+		return ""
+	}
+	return addrs[0]
+}
+
 // GetLocalNode returns the local echonet node in the node
 func (node *EchonetNode) GetLocalNode() *uecho_echonet.LocalNode {
 	return node.LocalNode
@@ -57,7 +66,7 @@ func (node *EchonetNode) GetLocalDevice() *uecho_echonet.Device {
 
 // HasSourceNode returns true when this node has a source node, otherwise false.
 func (node *EchonetNode) HasSourceNode() bool {
-	if node.sourceNode == nil || reflect.ValueOf(node.sourceNode).IsNil() {
+	if node.Node == nil || reflect.ValueOf(node.Node).IsNil() {
 		return false
 	}
 	return true
@@ -65,7 +74,7 @@ func (node *EchonetNode) HasSourceNode() bool {
 
 // GetSourceNode returns the local souce node in the node.
 func (node *EchonetNode) GetSourceNode() node.Node {
-	return node.sourceNode
+	return node.Node
 }
 
 // NodeMessageReceived updates local properties for the source node.
@@ -82,7 +91,7 @@ func (node *EchonetNode) NodeMessageReceived(msg *uecho_protocol.Message) error 
 		return nil
 	}
 
-	node.EchonetDevice.UpdatePropertyWithNode(node.GetSourceNode())
+	node.EchonetDevice.UpdatePropertyWithNode(node)
 
 	return nil
 }

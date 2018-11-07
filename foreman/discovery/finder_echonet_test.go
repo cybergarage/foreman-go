@@ -52,7 +52,6 @@ func TestEchonetFinder(t *testing.T) {
 		err = node.Start()
 		if err != nil {
 			t.Error(err)
-			return
 		}
 	}
 
