@@ -5,6 +5,7 @@
 package echonet
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/cybergarage/foreman-go/foreman/node"
@@ -13,7 +14,8 @@ import (
 )
 
 const (
-	errorNodeNotFound = "Node Not Found : %s:%d"
+	errorNodeNotRunning = "Node is not running"
+	errorNodeNotFound   = "Node Not Found : %s:%d"
 )
 
 type EchonetNode struct {
@@ -67,14 +69,20 @@ func (node *EchonetNode) GetSourceNode() node.Node {
 }
 
 // NodeMessageReceived updates local properties for the source node.
-func (node *EchonetNode) NodeMessageReceived(msg *uecho_protocol.Message) {
+func (node *EchonetNode) NodeMessageReceived(msg *uecho_protocol.Message) error {
+	if !node.IsRunning() {
+		return fmt.Errorf(errorNodeNotRunning)
+	}
+
 	if !msg.IsReadRequest() {
-		return
+		return nil
 	}
 
 	if !node.HasSourceNode() {
-		return
+		return nil
 	}
 
 	node.EchonetDevice.UpdatePropertyWithNode(node.GetSourceNode())
+
+	return nil
 }
