@@ -5,6 +5,7 @@ After=network.target
 
 [Service]
 Type=simple
+Restart = always
 ExecStart=/usr/sbin/foremand -config /etc/foreman/foremand.conf
 ExecReload=/bin/kill -s HUP $MAINPID
 
