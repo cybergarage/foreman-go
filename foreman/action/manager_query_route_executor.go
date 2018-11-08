@@ -85,8 +85,8 @@ func (mgr *Manager) executeDeleteRoute(q fql.Query) (interface{}, *errors.Error)
 
 	// Remove all routes
 
-	ok := mgr.RemoveAllRoutes()
-	if !ok {
+	err := mgr.RemoveAllRoutes()
+	if err != nil {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 	}
 
