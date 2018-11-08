@@ -118,3 +118,20 @@ func (server *Server) executeBoostrap() error {
 	}
 	return fmt.Errorf(boostrapErrorNeighborhoodNode)
 }
+
+// clearBoostrapConfig clears all boostrap configurations
+func (server *Server) clearBoostrapConfig() error {
+	var lastError error
+
+	err := server.qosMgr.Clear()
+	if err != nil {
+		lastError = err
+	}
+
+	err = server.actionMgr.Clear()
+	if err != nil {
+		lastError = err
+	}
+
+	return lastError
+}
