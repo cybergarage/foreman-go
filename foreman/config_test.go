@@ -5,15 +5,13 @@
 package foreman
 
 import (
-	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/cybergarage/foreman-go/foreman/metric"
 )
 
 const (
-	errorConfigTestFilename = "config_test.conf"
+	configTestFilename = "config_test.conf"
 )
 
 func TestDefaultConfig(t *testing.T) {
@@ -21,10 +19,7 @@ func TestDefaultConfig(t *testing.T) {
 }
 
 func TestConfigLoadFile(t *testing.T) {
-	testDir, _ := os.Getwd()
-	filename := filepath.Join(testDir, errorConfigTestFilename)
-
-	conf, err := NewConfigWithFile(filename)
+	conf, err := NewConfigWithFile(configTestFilename)
 	if err != nil {
 		t.Error(err)
 	}
