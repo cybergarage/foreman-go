@@ -9,5 +9,20 @@ import (
 )
 
 func TestNewManager(t *testing.T) {
-	NewManager()
+	mgr := NewManager()
+
+	err := mgr.Start()
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = mgr.Clear()
+	if err != nil {
+		t.Error(err)
+	}
+
+	err = mgr.Stop()
+	if err != nil {
+		t.Error(err)
+	}
 }
