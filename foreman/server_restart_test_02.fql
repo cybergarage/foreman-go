@@ -1,0 +1,1 @@
+SET ("action02", "system","ls -l","none") INTO ACTION

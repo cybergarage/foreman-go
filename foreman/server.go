@@ -48,6 +48,7 @@ type Server struct {
 
 	*Config
 	configFile string
+	queryFile  string
 
 	status *Status
 }
@@ -65,6 +66,7 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 		actionMgr:   action.NewManager(),
 		Config:      conf,
 		configFile:  "",
+		queryFile:   "",
 		status:      NewStatus(),
 		fd:          fd.NewGossipDetector(),
 	}
@@ -194,14 +196,35 @@ func (server *Server) GetUniqueID() string {
 	return node.GetUniqueID(server)
 }
 
+// SetConfigFile sets a initial configuration file for reloading.
+func (server *Server) SetConfigFile(filename string) {
+	server.configFile = filename
+}
+
+// GetConfigFile returns a configuration file for reloading.
+func (server *Server) GetConfigFile() string {
+	return server.configFile
+}
+
 // LoadConfig sets the configurations in the specified file.
 func (server *Server) LoadConfig(filename string) error {
 	logging.Trace("Server loading config file from %s.", filename)
 	return server.LoadFile(filename)
 }
 
+// SetQueryFile sets a initial query file for reloading.
+func (server *Server) SetQueryFile(filename string) {
+	server.queryFile = filename
+}
+
+// GetQueryFile return a initial query file for reloading.
+func (server *Server) GetQueryFile() string {
+	return server.queryFile
+}
+
 // LoadQuery executes the queries in the specified file.
 func (server *Server) LoadQuery(filename string) error {
+	logging.Trace("Server loading query file from %s.", filename)
 	loader := fql.NewLoader()
 	queries, err := loader.LoadFromFile(filename)
 	if err != nil {
@@ -317,6 +340,7 @@ func (server *Server) getStartupManagers() []Manager {
 		server.registerMgr,
 		server.metricMgr,
 		server.qosMgr,
+		server.actionMgr,
 	}
 	return managers
 }
@@ -417,27 +441,4 @@ func (server *Server) Stop() error {
 	}
 
 	return lastError
-}
-
-// Restart restats the server.
-func (server *Server) Restart() error {
-	logging.Info("Stopping server for restart...\n")
-	err := server.Stop()
-	if err != nil {
-		logging.Error("Could not stop server: %s\n", err)
-		return err
-	}
-
-	logging.Info("Reloading config...")
-	server.LoadConfig(server.configFile)
-
-	logging.Info("Restarting server...")
-	err = server.Start()
-	if err != nil {
-		logging.Error("Could not start server: %s\n", err)
-		return err
-	}
-	logging.Info("Restarted.")
-
-	return nil
 }
