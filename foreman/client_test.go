@@ -12,22 +12,7 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
-func testClientExportQuery(t *testing.T, server *Server, client *Client) {
-	testTargets := []string{
-		fql.QueryTargetConfig,
-		fql.QueryTargetRegistry,
-	}
-
-	for _, target := range testTargets {
-		query := "EXPORT " + target
-		_, err := client.PostQuery(query)
-		if err != nil {
-			t.Error(err)
-		}
-	}
-}
-
-func testClientConfigQuery(t *testing.T, server *Server, client *Client) {
+func testClientExportConfigQuery(t *testing.T, server *Server, client *Client) {
 	configObj, err := client.PostQuery("EXPORT FROM CONFIG")
 	if err != nil {
 		t.Error(err)
@@ -53,8 +38,6 @@ func testClientConfigQuery(t *testing.T, server *Server, client *Client) {
 
 }
 
-/*
-FIXME : Enable TestClientQueries
 func TestClientQueries(t *testing.T) {
 	server := NewServer()
 
@@ -65,12 +48,10 @@ func TestClientQueries(t *testing.T) {
 	}
 
 	client := NewClient()
-	testClientExportQuery(t, server, client)
-	testClientConfigQuery(t, server, client)
+	testClientExportConfigQuery(t, server, client)
 
 	err = server.Stop()
 	if err != nil {
 		t.Error(err)
 	}
 }
-*/
