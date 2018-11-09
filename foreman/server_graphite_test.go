@@ -43,7 +43,6 @@ func TestGraphiteAPIs(t *testing.T) {
 	// Setup a client for the target server
 
 	client := go_graphite.NewClient()
-	client.SetTimeout(time.Second)
 	client.SetHost(server.GetAddress())
 	client.SetCarbonPort(server.GetCarbonPort())
 	client.SetRenderPort(server.GetRenderPort())
@@ -114,6 +113,7 @@ func TestGraphiteAPIs(t *testing.T) {
 			}
 		} else {
 			t.Error(err)
+			continue
 		}
 	}
 
