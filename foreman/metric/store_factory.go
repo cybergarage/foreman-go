@@ -87,7 +87,7 @@ func NewStoreWithName(name string) (*Store, error) {
 	case MetricStoreEmpty:
 		return NewEmptyStore(), nil
 	case MetricStoreSqlite:
-		return NewEmptyStore(), nil
+		return NewSQLiteStore(), nil
 	case MetricStoreTsmap:
 		return NewGorillaStore(), nil
 	case MetricStoreRingmap:
