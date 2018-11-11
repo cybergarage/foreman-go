@@ -18,8 +18,8 @@ const (
 	testGrahiteMetricsCount          = 10
 	testGrahiteMetricsIntervalSecond = (5 * 60)
 	testGrahiteMetricsDurationSecond = (60 * 60)
-	testGrahiteMetricsDataCount      = testGrahiteMetricsDurationSecond / testGrahiteMetricsIntervalSecond
-	testGrahiteMetricsTotalDataCount = testGrahiteMetricsDataCount * testGrahiteMetricsCount
+	testGrahiteMetricsEachDataCount  = testGrahiteMetricsDurationSecond / testGrahiteMetricsIntervalSecond
+	testGrahiteMetricsTotalDataCount = testGrahiteMetricsEachDataCount * testGrahiteMetricsCount
 )
 
 func TestGraphiteAPIs(t *testing.T) {
@@ -100,7 +100,7 @@ func TestGraphiteAPIs(t *testing.T) {
 		t.Error(err)
 	}
 
-	// Get all inserted metrics data (Render API)
+	// Get each inserted metrics data (Render API)
 
 	for n := 0; n < testGrahiteMetricsCount; n++ {
 		q := go_graphite.NewQuery()
@@ -109,14 +109,30 @@ func TestGraphiteAPIs(t *testing.T) {
 		q.Until = &untilTs
 		ms, err = client.QueryRender(q)
 		if err == nil {
-			if len(ms) != testGrahiteMetricsDataCount {
+			if len(ms) != testGrahiteMetricsEachDataCount {
 				// FIXME
-				t.Skipf("%d != %d", len(ms), testGrahiteMetricsDataCount)
+				t.Skipf("%d != %d", len(ms), testGrahiteMetricsEachDataCount)
 			}
 		} else {
 			t.Error(err)
 			continue
 		}
+	}
+
+	// Get all inserted metrics data (Render API)
+
+	q = go_graphite.NewQuery()
+	q.Target = "*"
+	q.From = &fromTs
+	q.Until = &untilTs
+	ms, err = client.QueryRender(q)
+	if err == nil {
+		if len(ms) != testGrahiteMetricsTotalDataCount {
+			// FIXME
+			t.Skipf("%d != %d", len(ms), testGrahiteMetricsTotalDataCount)
+		}
+	} else {
+		t.Error(err)
 	}
 
 	// Stop the target server
