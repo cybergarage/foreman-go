@@ -26,6 +26,7 @@ func (conf *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	configMap[ConfigProductKey] = ProductName
 	configMap[ConfigVersionKey] = Version
 
+	configMap[rpc.ConfigHostKey] = conf.Server.Host
 	configMap[rpc.ConfigHttpPortKey] = conf.Server.HTTPPort
 	configMap[rpc.ConfigCarbonPortKey] = conf.Server.CarbonPort
 
