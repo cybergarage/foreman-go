@@ -22,12 +22,10 @@ const (
 	testGrahiteMetricsTotalDataCount = testGrahiteMetricsEachDataCount * testGrahiteMetricsCount
 )
 
-func TestGraphiteAPIs(t *testing.T) {
+func testGraphiteAPIsWithConfig(t *testing.T, conf *Config) {
 
 	// Setup a target server
 
-	conf := NewDefaultConfig()
-	conf.Server.Host = testGrahiteHost
 	server, err := NewServerWithConfig(conf)
 	if err != nil {
 		t.Error(err)
@@ -93,7 +91,7 @@ func TestGraphiteAPIs(t *testing.T) {
 	ms, err = client.FindMetrics(q)
 	if err == nil {
 		if len(ms) != testGrahiteMetricsCount {
-			// FIXME
+			// FIXME on Screwdriver
 			t.Skipf("%d != %d", len(ms), testGrahiteMetricsCount)
 		}
 	} else {
@@ -110,7 +108,7 @@ func TestGraphiteAPIs(t *testing.T) {
 		ms, err = client.QueryRender(q)
 		if err == nil {
 			if len(ms) != testGrahiteMetricsEachDataCount {
-				// FIXME
+				// FIXME on Screwdriver
 				t.Skipf("%d != %d", len(ms), testGrahiteMetricsEachDataCount)
 			}
 		} else {
@@ -128,7 +126,7 @@ func TestGraphiteAPIs(t *testing.T) {
 	ms, err = client.QueryRender(q)
 	if err == nil {
 		if len(ms) != testGrahiteMetricsTotalDataCount {
-			// FIXME
+			// FIXME on Screwdriver
 			t.Skipf("%d != %d", len(ms), testGrahiteMetricsTotalDataCount)
 		}
 	} else {
@@ -142,3 +140,17 @@ func TestGraphiteAPIs(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestGraphiteAPIsWithLocalhost(t *testing.T) {
+	conf := NewDefaultConfig()
+	conf.Server.Host = testGrahiteHost
+	testGraphiteAPIsWithConfig(t, conf)
+}
+
+/*
+func TestGraphiteAPIsWithHostName(t *testing.T) {
+	conf := NewDefaultConfig()
+	conf.Server.Host = testGrahiteHost
+	testGraphiteAPIsWithConfig(t, conf)
+}
+*/

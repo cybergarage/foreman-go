@@ -229,6 +229,18 @@ func (store *cgoStore) Vacuum() error {
 
 // String returns a string description of the instance
 func (store *cgoStore) String() string {
-	// FIXME : Not implemented
-	return fmt.Sprintf("")
+	name := ""
+	ver := ""
+
+	var cname *C.char
+	if C.foreman_metric_store_getname(store.cStore, &cname) {
+		name = C.GoString(cname)
+	}
+
+	var cver *C.char
+	if C.foreman_metric_store_getversion(store.cStore, &cver) {
+		ver = C.GoString(cver)
+	}
+
+	return fmt.Sprintf("%s/%s", name, ver)
 }

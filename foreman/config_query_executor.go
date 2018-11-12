@@ -15,8 +15,8 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/rpc"
 )
 
-// ExecuteQuery must return the result as a standard array or map.
-func (conf *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
+// ExecuteConfigQuery must return the result as a standard array or map.
+func (server *Server) ExecuteConfigQuery(q fql.Query) (interface{}, *errors.Error) {
 	if q.GetType() != fql.QueryTypeSelect {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 	}
@@ -26,15 +26,13 @@ func (conf *Config) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	configMap[ConfigProductKey] = ProductName
 	configMap[ConfigVersionKey] = Version
 
-	configMap[rpc.ConfigHostKey] = conf.Server.Host
-	configMap[rpc.ConfigHttpPortKey] = conf.Server.HTTPPort
-	configMap[rpc.ConfigCarbonPortKey] = conf.Server.CarbonPort
+	configMap[rpc.ConfigHostKey] = server.GetName()
+	configMap[rpc.ConfigHttpPortKey] = server.GetRPCPort()
+	configMap[rpc.ConfigCarbonPortKey] = server.GetCarbonPort()
 
-	configMap[rpc.ConfigLogLevelKey] = conf.Log.Level
-
-	configMap[rpc.ConfigBoostrapKey] = conf.Server.Boostrap
-
-	configMap[rpc.ConfigMetricsStore] = conf.Metrics.Store
+	configMap[rpc.ConfigLogLevelKey] = server.Log.Level
+	configMap[rpc.ConfigBoostrapKey] = server.Server.Boostrap
+	configMap[rpc.ConfigMetricsStore] = server.metricMgr.String()
 
 	configContainer := map[string]interface{}{}
 	configContainer[strings.ToLower(fql.QueryTargetConfig)] = configMap
