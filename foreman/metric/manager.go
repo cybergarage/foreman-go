@@ -67,3 +67,9 @@ func (mgr *Manager) Stop() error {
 
 	return nil
 }
+
+// String return the store infomation.
+
+func (mgr *Manager) String() string {
+	return mgr.Store.String()
+}
