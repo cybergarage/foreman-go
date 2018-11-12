@@ -6,6 +6,7 @@ package foreman
 
 import (
 	"fmt"
+	"os"
 	"testing"
 	"time"
 
@@ -147,10 +148,14 @@ func TestGraphiteAPIsWithLocalhost(t *testing.T) {
 	testGraphiteAPIsWithConfig(t, conf)
 }
 
-/*
 func TestGraphiteAPIsWithHostName(t *testing.T) {
+	hostname, err := os.Hostname()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
 	conf := NewDefaultConfig()
-	conf.Server.Host = testGrahiteHost
+	conf.Server.Host = hostname
 	testGraphiteAPIsWithConfig(t, conf)
 }
-*/
