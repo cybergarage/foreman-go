@@ -6,6 +6,7 @@ package foreman
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"testing"
 	"time"
@@ -25,11 +26,13 @@ const (
 
 type testGraphiteAPIConfig struct {
 	insertRepeadCount int
+	timestampJitter   bool
 }
 
 func newtestGraphiteAPIsConfig() *testGraphiteAPIConfig {
 	conf := &testGraphiteAPIConfig{
 		insertRepeadCount: 1,
+		timestampJitter:   false,
 	}
 	return conf
 }
@@ -70,9 +73,14 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 
 			ts := fromTs
 			for ts.Before(untilTs) {
+				mts := ts
+				if testConf.timestampJitter {
+					mtsJitter := rand.Intn(testGrahiteMetricsIntervalSecond / 2)
+					mts = mts.Add(time.Second * time.Duration(mtsJitter))
+				}
 				dp := go_graphite.NewDataPoint()
 				dp.SetValue(float64(n))
-				dp.SetTimestamp(ts)
+				dp.SetTimestamp(mts)
 				m.AddDataPoint(dp)
 				ts = ts.Add(time.Second * testGrahiteMetricsIntervalSecond)
 			}
@@ -197,6 +205,16 @@ func TestGraphiteAPIsForRepeatedInsert(t *testing.T) {
 
 	testConf := newtestGraphiteAPIsConfig()
 	testConf.insertRepeadCount = 2
+
+	testGraphiteAPIsWithConfig(t, serverConf, testConf)
+}
+
+func TestGraphiteAPIsWithTimestampJitter(t *testing.T) {
+	serverConf := NewDefaultConfig()
+	serverConf.Server.Host = testGrahiteHost
+
+	testConf := newtestGraphiteAPIsConfig()
+	testConf.timestampJitter = true
 
 	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
