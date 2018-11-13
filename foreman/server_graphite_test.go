@@ -23,11 +23,22 @@ const (
 	testGrahiteMetricsTotalDataCount = testGrahiteMetricsEachDataCount * testGrahiteMetricsCount
 )
 
-func testGraphiteAPIsWithConfig(t *testing.T, conf *Config) {
+type testGraphiteAPIConfig struct {
+	insertRepeadCount int
+}
+
+func newtestGraphiteAPIsConfig() *testGraphiteAPIConfig {
+	conf := &testGraphiteAPIConfig{
+		insertRepeadCount: 1,
+	}
+	return conf
+}
+
+func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *testGraphiteAPIConfig) {
 
 	// Setup a target server
 
-	server, err := NewServerWithConfig(conf)
+	server, err := NewServerWithConfig(serverConf)
 	if err != nil {
 		t.Error(err)
 		return
@@ -52,24 +63,26 @@ func testGraphiteAPIsWithConfig(t *testing.T, conf *Config) {
 	untilTs := nowTs.Truncate(time.Second * testGrahiteMetricsIntervalSecond)
 	fromTs := untilTs.Add(-(time.Second * testGrahiteMetricsDurationSecond))
 
-	for n := 0; n < testGrahiteMetricsCount; n++ {
-		m := go_graphite.NewMetrics()
-		m.SetName(fmt.Sprintf(testGrahiteMetricsNameFormat, n))
+	for i := 0; i < testConf.insertRepeadCount; i++ {
+		for n := 0; n < testGrahiteMetricsCount; n++ {
+			m := go_graphite.NewMetrics()
+			m.SetName(fmt.Sprintf(testGrahiteMetricsNameFormat, n))
 
-		ts := fromTs
-		for ts.Before(untilTs) {
-			dp := go_graphite.NewDataPoint()
-			dp.SetValue(float64(n))
-			dp.SetTimestamp(ts)
-			m.AddDataPoint(dp)
-			ts = ts.Add(time.Second * testGrahiteMetricsIntervalSecond)
-		}
+			ts := fromTs
+			for ts.Before(untilTs) {
+				dp := go_graphite.NewDataPoint()
+				dp.SetValue(float64(n))
+				dp.SetTimestamp(ts)
+				m.AddDataPoint(dp)
+				ts = ts.Add(time.Second * testGrahiteMetricsIntervalSecond)
+			}
 
-		err := client.PostMetrics(m)
-		if err != nil {
-			t.Error(err)
-			server.Stop()
-			return
+			err := client.PostMetrics(m)
+			if err != nil {
+				t.Error(err)
+				server.Stop()
+				return
+			}
 		}
 	}
 
@@ -143,9 +156,12 @@ func testGraphiteAPIsWithConfig(t *testing.T, conf *Config) {
 }
 
 func TestGraphiteAPIsWithLocalhost(t *testing.T) {
-	conf := NewDefaultConfig()
-	conf.Server.Host = testGrahiteHost
-	testGraphiteAPIsWithConfig(t, conf)
+	serverConf := NewDefaultConfig()
+	serverConf.Server.Host = testGrahiteHost
+
+	testConf := newtestGraphiteAPIsConfig()
+
+	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
 
 func TestGraphiteAPIsWithHostName(t *testing.T) {
@@ -155,17 +171,32 @@ func TestGraphiteAPIsWithHostName(t *testing.T) {
 		return
 	}
 
-	conf := NewDefaultConfig()
-	conf.Server.Host = hostname
-	testGraphiteAPIsWithConfig(t, conf)
+	serverConf := NewDefaultConfig()
+	serverConf.Server.Host = hostname
+
+	testConf := newtestGraphiteAPIsConfig()
+
+	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
 
 func TestGraphiteAPIsWithDefaultConfigFile(t *testing.T) {
-	conf, err := NewConfigWithFile(configTestFilename)
+	serverConf, err := NewConfigWithFile(configTestFilename)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	testGraphiteAPIsWithConfig(t, conf)
+	testConf := newtestGraphiteAPIsConfig()
+
+	testGraphiteAPIsWithConfig(t, serverConf, testConf)
+}
+
+func TestGraphiteAPIsForRepeatedInsert(t *testing.T) {
+	serverConf := NewDefaultConfig()
+	serverConf.Server.Host = testGrahiteHost
+
+	testConf := newtestGraphiteAPIsConfig()
+	testConf.insertRepeadCount = 2
+
+	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
