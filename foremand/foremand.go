@@ -18,7 +18,7 @@ foremand is a deamon command of Forman.
 
 	OPTIONS
 	-config : Path to a configuration file.
-	-query  : Path to a queryfile.
+	-query  : Path to a query file.
 	-v      : Enable verbose output.
 
 	RETURN VALUE
