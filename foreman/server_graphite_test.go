@@ -159,3 +159,13 @@ func TestGraphiteAPIsWithHostName(t *testing.T) {
 	conf.Server.Host = hostname
 	testGraphiteAPIsWithConfig(t, conf)
 }
+
+func TestGraphiteAPIsWithDefaultConfigFile(t *testing.T) {
+	conf, err := NewConfigWithFile(configTestFilename)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	testGraphiteAPIsWithConfig(t, conf)
+}
