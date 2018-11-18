@@ -8,20 +8,20 @@ package foreman
 import (
 	"os"
 	"runtime"
-
-	"github.com/cybergarage/foreman-go/foreman/node"
-
-	"github.com/cybergarage/go-graphite/net/graphite"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/discovery"
 	"github.com/cybergarage/foreman-go/foreman/fd"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/kb"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/metric"
+	"github.com/cybergarage/foreman-go/foreman/node"
 	"github.com/cybergarage/foreman-go/foreman/qos"
 	"github.com/cybergarage/foreman-go/foreman/register"
 	"github.com/cybergarage/foreman-go/foreman/registry"
+	"github.com/cybergarage/go-graphite/net/graphite"
 )
 
 const (
@@ -33,85 +33,59 @@ type Server struct {
 	Node
 	*baseNode
 
-	cluster string
-	name    string
-
 	metric.RegisterListener
 	kb.KnowledgeBaseListener
 
 	*Controller
 	fd fd.Detector
 
-	graphite    *graphite.Server
+	graphiteMgr *graphite.Manager
 	registerMgr *register.Manager
 	registryMgr *registry.Manager
 	qosMgr      *qos.Manager
 	metricMgr   *metric.Manager
 	actionMgr   *action.Manager
 
-	config     *Config
+	*Config
 	configFile string
+	queryFile  string
 
 	status *Status
 }
 
-// NewServerWithConfigFile returns a new server with a specified configuration file.
-func NewServerWithConfigFile(configFile string) *Server {
+// NewServerWithConfig returns a new server with a specified configuration.
+func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	server := &Server{
-		cluster:     "",
-		name:        "",
 		Controller:  NewController(),
-		graphite:    graphite.NewServer(),
+		graphiteMgr: graphite.NewManager(),
 		registryMgr: registry.NewManager(),
 		registerMgr: register.NewManager(),
 		qosMgr:      qos.NewManager(),
-		metricMgr:   metric.NewManager(),
+		metricMgr:   nil,
 		actionMgr:   action.NewManager(),
-		config:      nil,
-		configFile:  configFile,
+		Config:      conf,
+		configFile:  "",
+		queryFile:   "",
 		status:      NewStatus(),
 		fd:          fd.NewGossipDetector(),
 	}
 
 	server.baseNode = newBaseNodeWithNode(server)
 
-	server.initialize()
 	runtime.SetFinalizer(server, serverFinalizer)
-
-	hostname, err := os.Hostname()
-	if err == nil {
-		server.name = hostname
-	}
-
-	// Configuration
-
-	server.config, err = NewConfigWithRegistry(server.registryMgr)
-	if err != nil {
-		logging.Fatal("Could not create config registry!")
-		logging.Fatal("%s", err)
-		return nil
-	}
-
-	err = server.LoadConfig(server.configFile)
-	if err != nil {
-		return nil
-	}
-
-	// Registry
-
-	server.actionMgr.SetRegistryStore(server.registryMgr.GetStore())
-	server.actionMgr.SetRegisterStore(server.registerMgr.GetStore())
-
-	// Register
-
-	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
-	server.metricMgr.SetRegisterListener(server)
 
 	// Graphite
 
-	server.graphite.SetCarbonListener(server)
-	server.graphite.SetRenderListener(server)
+	server.graphiteMgr.SetAutoInterfaceBindingEnabled(true)
+	server.graphiteMgr.SetEachInterfaceBindingEnabled(true)
+	server.graphiteMgr.SetCarbonListener(server)
+	server.graphiteMgr.SetRenderListener(server)
+
+	// Registry Store
+
+	server.actionMgr.SetRegistryStore(server.registryMgr.GetStore())
+	server.actionMgr.SetRegisterStore(server.registerMgr.GetStore())
 
 	// QoS
 
@@ -121,76 +95,95 @@ func NewServerWithConfigFile(configFile string) *Server {
 
 	server.fd.SetListener(server)
 
-	// RPC
+	return server, nil
+}
 
-	FqlPath, err := server.config.GetString(ConfigFqlPathKey)
+// NewServerWithConfigFile returns a new server with a specified configuration file.
+func NewServerWithConfigFile(confFile string) (*Server, error) {
+	conf := NewDefaultConfig()
+
+	err := conf.LoadFile(confFile)
 	if err != nil {
-		FqlPath = HttpRequestFqlPath
+		return nil, err
 	}
-	server.graphite.SetHTTPRequestListener(FqlPath, server)
 
-	return server
+	server, err := NewServerWithConfig(conf)
+	if err != nil {
+		return nil, err
+	}
+
+	return server, nil
 }
 
 // NewServer creates a new server
 func NewServer() *Server {
-	return NewServerWithConfigFile("")
-}
-
-// initialize initialize the server.
-func (server *Server) initialize() error {
-	err := server.registryMgr.Start()
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-
-	return nil
+	conf := NewDefaultConfig()
+	server, _ := NewServerWithConfig(conf)
+	return server
 }
 
 // serverFinalizer closes all managers.
 func serverFinalizer(server *Server) {
-	server.registryMgr.Stop()
+	server.Stop()
+}
+
+// GetController returns a controller of the node.
+func (server *Server) GetController() *Controller {
+	return server.Controller
 }
 
 // SetCluster sets a cluster name
 func (server *Server) SetCluster(name string) {
-	server.cluster = name
+	server.Server.Cluster = name
 }
 
 // GetCluster returns the cluster name
 func (server *Server) GetCluster() string {
-	return server.cluster
+	return server.Server.Cluster
 }
 
 // SetName sets a host name
 func (server *Server) SetName(name string) {
-	server.name = name
+	server.Server.Host = name
 }
 
 // GetName returns the host name
 func (server *Server) GetName() string {
-	return server.name
+	host := server.Server.Host
+	if 0 < len(host) {
+		return host
+	}
+
+	hostname, err := os.Hostname()
+	if err == nil {
+		return hostname
+	}
+
+	return DefaultServerHost
 }
 
 // GetHTTPPort returns the graphite HTTP port.
 func (server *Server) GetHTTPPort() int {
-	return server.graphite.Render.Port
+	return server.GetRenderPort()
 }
 
 // GetCarbonPort returns the graphite carbon port.
 func (server *Server) GetCarbonPort() int {
-	return server.graphite.Carbon.Port
+	return server.graphiteMgr.GetCarbonPort()
 }
 
 // GetRenderPort returns the graphite render port.
 func (server *Server) GetRenderPort() int {
-	return server.graphite.Render.Port
+	return server.graphiteMgr.GetRenderPort()
 }
 
 // GetAddress returns the interface address
 func (server *Server) GetAddress() string {
-	return server.graphite.GetAddress()
+	addr, err := server.graphiteMgr.GetBoundAddress()
+	if err != nil {
+		return ""
+	}
+	return addr
 }
 
 // GetRPCPort returns the RPC port
@@ -203,43 +196,56 @@ func (server *Server) GetUniqueID() string {
 	return node.GetUniqueID(server)
 }
 
-// updateConfig sets latest configurations.
-func (server *Server) updateConfig() error {
-	// Set latest network configurations
+// SetConfigFile sets a initial configuration file for reloading.
+func (server *Server) SetConfigFile(filename string) {
+	server.configFile = filename
+}
 
-	port, err := server.config.GetInt(ConfigCarbonPortKey)
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-	server.graphite.Carbon.Port = port
-
-	port, err = server.config.GetInt(ConfigHttpPortKey)
-	if err != nil {
-		logging.Error("%s\n", err)
-		return err
-	}
-	server.graphite.Render.Port = port
-
-	return err
+// GetConfigFile returns a configuration file for reloading.
+func (server *Server) GetConfigFile() string {
+	return server.configFile
 }
 
 // LoadConfig sets the configurations in the specified file.
 func (server *Server) LoadConfig(filename string) error {
 	logging.Trace("Server loading config file from %s.", filename)
-	err := server.config.LoadFile(filename)
+	return server.LoadFile(filename)
+}
+
+// SetQueryFile sets a initial query file for reloading.
+func (server *Server) SetQueryFile(filename string) {
+	server.queryFile = filename
+}
+
+// GetQueryFile return a initial query file for reloading.
+func (server *Server) GetQueryFile() string {
+	return server.queryFile
+}
+
+// LoadQuery executes the queries in the specified file.
+func (server *Server) LoadQuery(filename string) error {
+	logging.Trace("Server loading query file from %s.", filename)
+	loader := fql.NewLoader()
+	queries, err := loader.LoadFromFile(filename)
 	if err != nil {
-		logging.Error("%s\n", err)
 		return err
 	}
-	return server.updateConfig()
+
+	for _, query := range queries {
+		_, err := server.ExecuteQuery(query)
+		if err != nil {
+			return err.Error()
+		}
+	}
+
+	return nil
 }
 
 // GetAllClusterNodes returns all nodes in the same cluster
 func (server *Server) GetAllClusterNodes() []Node {
 	// Return only the server if the server has no finder
 
-	if !server.Controller.HasFinders() {
+	if !server.Controller.HasFinder() {
 		return []Node{server}
 	}
 
@@ -293,28 +299,65 @@ func (server *Server) PostQuery(query string) (interface{}, error) {
 	return resObjects, nil
 }
 
+// applyConfig sets latest configurations to the server
+func (server *Server) applyConfig() error {
+	// Controller
+
+	switch server.Server.Finder {
+	case FinderEchonet:
+		server.Controller.SetFinder(discovery.NewEchonetFinderWithLocalNode(server))
+	}
+
+	// Metric Store
+
+	metricStore, err := metric.NewStoreWithName(server.Metrics.Store)
+	if err != nil {
+		return err
+	}
+	metricStore.SetRetentionPeriod(time.Duration(server.Metrics.Period) * time.Second)
+	metricStore.SetRetentionInterval(time.Duration(server.Metrics.Interval) * time.Second)
+
+	server.metricMgr = metric.NewManagerWithStore(metricStore)
+	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
+	server.metricMgr.SetRegisterListener(server)
+
+	// Graphite Ports
+
+	server.graphiteMgr.SetCarbonPort(server.Server.CarbonPort)
+	server.graphiteMgr.SetRenderPort(server.Server.HTTPPort)
+
+	// RPC
+
+	server.graphiteMgr.SetHTTPRequestListener(server.FQL.Path, server)
+
+	return nil
+}
+
 // getStartupManagers returns all managers which should be started
 func (server *Server) getStartupManagers() []Manager {
 	managers := []Manager{
+		server.registryMgr,
 		server.registerMgr,
 		server.metricMgr,
 		server.qosMgr,
+		server.actionMgr,
 	}
 	return managers
 }
 
 // Start starts the server.
 func (server *Server) Start() error {
-	err := server.updateConfig()
+	// Apply configuration
+
+	err := server.applyConfig()
 	if err != nil {
-		logging.Error("%s\n", err)
 		return err
 	}
 
 	// Start all managers without graphite
 
 	for _, mgr := range server.getStartupManagers() {
-		err = mgr.Start()
+		err := mgr.Start()
 		if err != nil {
 			return err
 		}
@@ -323,32 +366,45 @@ func (server *Server) Start() error {
 	// Start Graphite manager
 
 	graphiteRetryCount := 0
-	err = server.graphite.Start()
-	for (err != nil) || (graphiteRetryCount < serverBindRetryCount) {
-		server.graphite.SetCarbonPort(server.graphite.GetCarbonPort() + 1)
-		server.graphite.SetRenderPort(server.graphite.GetRenderPort() + 1)
+	err = server.graphiteMgr.Start()
+	for (err != nil) && (graphiteRetryCount < serverBindRetryCount) {
+		server.graphiteMgr.SetCarbonPort(server.graphiteMgr.GetCarbonPort() + 1)
+		server.graphiteMgr.SetRenderPort(server.graphiteMgr.GetRenderPort() + 1)
 		graphiteRetryCount++
-		err = server.graphite.Start()
+		err = server.graphiteMgr.Start()
 	}
+
 	if err != nil {
 		server.Stop()
-		logging.Error("%s\n", err)
+		logging.Error("%s", err)
+		return err
+	}
+
+	// Controller
+
+	err = server.Controller.Start()
+	if err != nil {
+		server.Stop()
+		logging.Error("%s", err)
+		return err
+	}
+
+	err = server.Controller.Search()
+	if err != nil {
+		server.Stop()
+		logging.Error("%s", err)
 		return err
 	}
 
 	// Boostrap
 
-	boostrap, err := server.config.GetInt(ConfigBoostrapKey)
-	if err != nil {
-		server.Stop()
-		logging.Error("%s\n", err)
-		return err
-	}
-	if boostrap != 0 {
+	if server.IsBoostrapEnabled() {
 		err = server.executeBoostrap()
-		server.Stop()
-		logging.Error("%s\n", err)
-		return err
+		if err != nil {
+			server.Stop()
+			logging.Error("%s", err)
+			return err
+		}
 	}
 
 	return nil
@@ -357,45 +413,32 @@ func (server *Server) Start() error {
 // getRunningMangers returns all managers which should be stopped.
 func (server *Server) getRunningMangers() []Manager {
 	managers := server.getStartupManagers()
-	managers = append(managers, server.graphite)
+	managers = append(managers, server.graphiteMgr)
 	return managers
 }
 
 // Stop stops the server.
 func (server *Server) Stop() error {
 
+	var lastError error
+
+	// Controller
+
+	err := server.Controller.Stop()
+	if err != nil {
+		logging.Error("%s", err)
+		lastError = err
+	}
+
 	// Start all managers
 
-	var lastError error
 	for _, mgr := range server.getRunningMangers() {
 		err := mgr.Stop()
 		if err != nil {
+			logging.Error("%s", err)
 			lastError = err
 		}
 	}
 
 	return lastError
-}
-
-// Restart restats the server.
-func (server *Server) Restart() error {
-	logging.Info("Stopping server for restart...\n")
-	err := server.Stop()
-	if err != nil {
-		logging.Error("Could not stop server: %s\n", err)
-		return err
-	}
-
-	logging.Info("Reloading config...")
-	server.LoadConfig(server.configFile)
-
-	logging.Info("Restarting server...")
-	err = server.Start()
-	if err != nil {
-		logging.Error("Could not start server: %s\n", err)
-		return err
-	}
-	logging.Info("Restarted.")
-
-	return nil
 }

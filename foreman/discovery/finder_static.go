@@ -36,3 +36,8 @@ func (finder *StaticFinder) Start() error {
 func (finder *StaticFinder) Stop() error {
 	return nil
 }
+
+// IsRunning returns true when the finder is running, otherwise false.
+func (finder *StaticFinder) IsRunning() bool {
+	return true
+}

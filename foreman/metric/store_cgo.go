@@ -15,10 +15,63 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
+const (
+	// FIXME : Support auto vacuum
+	cgoStoreVacuumInterval = 1000
+)
+
 // Store represents a metric store for Foreman.
 type cgoStore struct {
 	cStore   unsafe.Pointer
 	listener StoreListener
+	// FIXME : Support auto vacuum
+	vacuumCounter uint
+}
+
+// SetRetentionInterval sets the specified retention duration.
+func (store *cgoStore) SetRetentionInterval(value time.Duration) error {
+	if store.cStore == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	C.foreman_metric_store_setretentioninterval(store.cStore, C.time_t(value.Seconds()))
+
+	return nil
+}
+
+// GetRetentionInterval returns the retention duration.
+func (store *cgoStore) GetRetentionInterval() (time.Duration, error) {
+	if store.cStore == nil {
+		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	durationSec := C.foreman_metric_store_getretentioninterval(store.cStore)
+	duration := time.Second * time.Duration(durationSec)
+
+	return duration, nil
+}
+
+// SetRetentionPeriod sets the specified retention period.
+func (store *cgoStore) SetRetentionPeriod(value time.Duration) error {
+	if store.cStore == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	C.foreman_metric_store_setretentionperiod(store.cStore, C.time_t(value.Seconds()))
+
+	return nil
+}
+
+// GetRetentionPeriod returns the retention period.
+func (store *cgoStore) GetRetentionPeriod() (time.Duration, error) {
+	if store.cStore == nil {
+		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	durationSec := C.foreman_metric_store_getretentionperiod(store.cStore)
+	duration := time.Second * time.Duration(durationSec)
+
+	return duration, nil
 }
 
 // Open initializes the store.
@@ -71,29 +124,6 @@ func (store *cgoStore) SetStoreListener(listener StoreListener) error {
 	return nil
 }
 
-// SetRetentionInterval sets the retention duration.
-func (store *cgoStore) SetRetentionInterval(value time.Duration) error {
-	if store.cStore == nil {
-		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
-	}
-
-	C.foreman_metric_store_setretentioninterval(store.cStore, C.time_t(value.Seconds()))
-
-	return nil
-}
-
-// GetRetentionInterval returns the retention duration.
-func (store *cgoStore) GetRetentionInterval() (time.Duration, error) {
-	if store.cStore == nil {
-		return 0, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
-	}
-
-	durationSec := C.foreman_metric_store_getretentioninterval(store.cStore)
-	duration := time.Second * time.Duration(durationSec)
-
-	return duration, nil
-}
-
 // AddMetric adds a new metric.
 func (store *cgoStore) AddMetric(m *Metric) error {
 	if store.cStore == nil {
@@ -112,6 +142,16 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 
 	if store.listener != nil {
 		store.listener.StoreMetricAdded(m)
+	}
+
+	// FIXME : Support auto vacuum
+	store.vacuumCounter++
+	if cgoStoreVacuumInterval < store.vacuumCounter {
+		err = store.Vacuum()
+		if err != nil {
+			return err
+		}
+		store.vacuumCounter = 0
 	}
 
 	return nil
@@ -176,8 +216,31 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 	return NewResultSetWithCObject(crs), nil
 }
 
+// Query gets the specified metrics.
+func (store *cgoStore) Vacuum() error {
+	if store.cStore == nil {
+		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
+	}
+
+	C.foreman_metric_store_query_delete_expired_metrics(store.cStore)
+
+	return nil
+}
+
 // String returns a string description of the instance
 func (store *cgoStore) String() string {
-	// FIXME : Not implemented
-	return fmt.Sprintf("")
+	name := ""
+	ver := ""
+
+	var cname *C.char
+	if C.foreman_metric_store_getname(store.cStore, &cname) {
+		name = C.GoString(cname)
+	}
+
+	var cver *C.char
+	if C.foreman_metric_store_getversion(store.cStore, &cver) {
+		ver = C.GoString(cver)
+	}
+
+	return fmt.Sprintf("%s/%s", name, ver)
 }

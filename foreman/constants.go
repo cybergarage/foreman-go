@@ -8,11 +8,16 @@ const (
 	ProductName                       = "foreman"
 	DefaultServerHost                 = "localhost"
 	DefaultCarbonPort                 = 2003
-	DefaultHttpPort                   = 8080
+	DefaultHttpPort                   = 8188
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"
+	DefaultMetricsStore               = "sqlite"
+	DefaultMetricsInterval            = 300
+	DefaultMetricsPeriod              = 3600
+	DefaultCluster                    = "foreman"
 	DefaultBoostrapMode               = 0
+	DefaultFinder                     = "echonet"
 	HttpRequestFqlPath                = "/fql"
 	HttpRequestFqlQueryParam          = "q"
 	HttpRequestFqlRetransmissionParam = "r"
@@ -27,4 +32,13 @@ const (
 	ConfigLogFileKey                  = "log_file"
 	ConfigLogLevelKey                 = "log_level"
 	ConfigBoostrapKey                 = "boostrap"
+	ConfigFinderKey                   = "finder"
+	ConfigMetricsStore                = "metrics_store"
+	FinderEchonet                     = "echonet"
+	RpcError                          = "error"
+	RpcErrorCode                      = "code"
+	RpcErrorMessage                   = "message"
+	RpcErrorDetail                    = "detail"
+	RpcErrorDetailCode                = "code"
+	RpcErrorDetailMessage             = "message"
 )

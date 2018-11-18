@@ -52,6 +52,7 @@ func (s *QueryScenario) Setup() error {
 		return err
 	}
 
+	s.client.SetHost(s.server.GetAddress())
 	s.client.SetHTTPPort(s.server.GetHTTPPort())
 
 	return nil

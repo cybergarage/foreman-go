@@ -5,11 +5,27 @@
 package foreman
 
 import (
+	"fmt"
+	"time"
+
+	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/qos"
+	"github.com/cybergarage/foreman-go/foreman/rpc/json"
 )
 
-// importMonitoringConfigurations gets all monitoring configuration.
-func (server *Server) importMonitoringConfigurations(configMap map[string]interface{}) error {
+const (
+	boostrapRetryCount       = 5
+	boostrapRetrySleepSecond = 1
+)
+
+const (
+	boostrapErrorNeighborhoodNode = "Neighborhood node is not found"
+)
+
+// importBoostrapConfig gets all monitoring configuration.
+func (server *Server) importBoostrapConfig(config *boostrapConfig) error {
+	configMap := config.Objects
 	for target, configObj := range configMap {
 		var err error
 		switch target {
@@ -29,14 +45,56 @@ func (server *Server) importMonitoringConfigurations(configMap map[string]interf
 	return nil
 }
 
-// updateMonitoringConfigurationWithRemoteNode updates the configuration from the specified node
-func (server *Server) updateMonitoringConfigurationWithRemoteNode(node *RemoteNode) error {
-	configObj, err := node.exportMonitoringConfigurations()
+// exportBoostrapConfig gets all monitoring configuration.
+func (node *baseNode) exportBoostrapConfig() (*boostrapConfig, error) {
+	targets := []string{
+		fql.QueryTargetQos,
+		fql.QueryTargetAction,
+		fql.QueryTargetRoute,
+	}
+
+	configMap := map[string]interface{}{}
+
+	for _, target := range targets {
+		q := fql.NewSelectAllQuery()
+		q.SetTarget(fql.NewTargetWithString(target))
+		qStr := q.String()
+		jsonObj, err := node.Node.PostQuery(qStr)
+		if err != nil {
+			return nil, err
+		}
+
+		jsonPath := json.NewPathWithObject(jsonObj)
+
+		var configObj interface{}
+
+		switch target {
+		case fql.QueryTargetQos:
+			configObj, err = jsonPath.GetPathObject(qos.GetJSONExportPath())
+		case fql.QueryTargetAction:
+			configObj, err = jsonPath.GetPathObject(action.GetJSONExportMethodPath())
+		case fql.QueryTargetRoute:
+			configObj, err = jsonPath.GetPathObject(action.GetJSONExportRoutePath())
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		configMap[target] = configObj
+	}
+
+	return NewBoostrapConfigWithObject(configMap), nil
+}
+
+// executeBoostrapWithRemoteNode executes boostrap with the specified node.
+func (server *Server) executeBoostrapWithRemoteNode(srcNode *RemoteNode) error {
+	configObj, err := srcNode.exportBoostrapConfig()
 	if err != nil {
 		return err
 	}
 
-	err = server.importMonitoringConfigurations(configObj)
+	err = server.importBoostrapConfig(configObj)
 	if err != nil {
 		return err
 	}
@@ -46,5 +104,34 @@ func (server *Server) updateMonitoringConfigurationWithRemoteNode(node *RemoteNo
 
 // executeBoostrap executes boostrap.
 func (server *Server) executeBoostrap() error {
-	return nil
+	for retryCount := 0; retryCount < boostrapRetryCount; retryCount++ {
+		srcNode, err := server.Controller.GetNeighborhoodRemoteNode(server)
+		if err != nil || srcNode == nil {
+			err = server.Search()
+			if err != nil {
+				return err
+			}
+			time.Sleep(time.Second * boostrapRetrySleepSecond)
+			continue
+		}
+		return server.executeBoostrapWithRemoteNode(srcNode)
+	}
+	return fmt.Errorf(boostrapErrorNeighborhoodNode)
+}
+
+// clearBoostrapConfig clears all boostrap configurations
+func (server *Server) clearBoostrapConfig() error {
+	var lastError error
+
+	err := server.qosMgr.Clear()
+	if err != nil {
+		lastError = err
+	}
+
+	err = server.actionMgr.Clear()
+	if err != nil {
+		lastError = err
+	}
+
+	return lastError
 }

@@ -14,7 +14,7 @@ func TestNode(t *testing.T) {
 		t.Error(err)
 	}
 
-	_, err = node.GetNodeDevice()
+	_, err = node.GetLocalDevice()
 	if err != nil {
 		t.Error(err)
 	}

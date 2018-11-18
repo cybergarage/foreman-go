@@ -5,52 +5,105 @@
 package discovery
 
 import (
-	discovery_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+	"reflect"
+	"time"
 
-	"github.com/cybergarage/uecho-go/net/echonet"
+	foreman_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+	"github.com/cybergarage/foreman-go/foreman/logging"
+	"github.com/cybergarage/foreman-go/foreman/node"
+
+	uecho_echonet "github.com/cybergarage/uecho-go/net/echonet"
+	uecho_protocol "github.com/cybergarage/uecho-go/net/echonet/protocol"
+)
+
+const (
+	echonetFinderSearchSleepSecond = 1
 )
 
 // EchonetFinder represents a base finder.
 type EchonetFinder struct {
-	echonet.ControllerListener
 	*baseFinder
-	*echonet.Controller
+	localNode node.Node
+	*foreman_echonet.EchonetController
+}
+
+// NewEchonetFinderWithLocalNode returns a new finder with the specified node.
+func NewEchonetFinderWithLocalNode(node node.Node) Finder {
+	finder := &EchonetFinder{
+		baseFinder:        newBaseFinder(),
+		localNode:         node,
+		EchonetController: foreman_echonet.NewController(),
+	}
+	finder.EchonetController.SetListener(finder)
+	return finder
 }
 
 // NewEchonetFinder returns a new finder of Echonet.
 func NewEchonetFinder() Finder {
-	finder := &EchonetFinder{
-		baseFinder: newBaseFinder(),
-		Controller: echonet.NewController(),
-	}
-	finder.Controller.SetListener(finder)
-	return finder
+	return NewEchonetFinderWithLocalNode(nil)
 }
 
-// SearchAll searches all nodes.
+// Search searches all nodes.
 func (finder *EchonetFinder) Search() error {
-	return finder.Controller.SearchAllObjects()
+	err := finder.EchonetController.SearchAllObjects()
+	if err != nil {
+		return err
+	}
+	time.Sleep(time.Second * echonetFinderSearchSleepSecond)
+	return nil
+}
+
+// IsLocalNode returns true when the specified node is the local node, otherwise false.
+func (finder *EchonetFinder) IsLocalNode(candidateNode node.Node) bool {
+	if finder.localNode == nil || reflect.ValueOf(finder.localNode).IsNil() {
+		return false
+	}
+
+	return node.Equal(finder.localNode, candidateNode)
 }
 
 // Start starts the finder.
 func (finder *EchonetFinder) Start() error {
-	return finder.Controller.Start()
+	return finder.EchonetController.Start()
 }
 
 // Stop stops the finder.
 func (finder *EchonetFinder) Stop() error {
-	return finder.Controller.Stop()
+	return finder.EchonetController.Stop()
 }
 
-func (finder *EchonetFinder) addedNewNode(echonetNode *echonet.RemoteNode) {
-	reqMsg := discovery_echonet.NewRequestAllPropertiesMessage()
-	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
-	if err != nil {
+// IsRunning returns true when the finder is running, otherwise false.
+func (finder *EchonetFinder) IsRunning() bool {
+	return finder.EchonetController.IsRunning()
+}
+
+func (finder *EchonetFinder) ControllerMessageReceived(msg *uecho_protocol.Message) {
+	if !msg.IsReadRequest() {
 		return
 	}
 
-	candidateNode, err := discovery_echonet.NewFinderNodeWithResponseMesssage(resMsg)
+	finder.EchonetController.EchonetDevice.UpdatePropertyWithNode(finder.localNode)
+}
+
+func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *uecho_echonet.RemoteNode) {
+	if !finder.IsRunning() {
+		return
+	}
+
+	reqMsg := foreman_echonet.NewRequestAllPropertiesMessage()
+	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
 	if err != nil {
+		logging.Error("%s", err.Error())
+		return
+	}
+
+	candidateNode, err := foreman_echonet.NewFinderNodeWithResponseMesssage(resMsg)
+	if err != nil {
+		logging.Error("%s", err.Error())
+		return
+	}
+
+	if finder.IsLocalNode(candidateNode) {
 		return
 	}
 

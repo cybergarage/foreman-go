@@ -9,8 +9,5 @@ import (
 )
 
 func TestNewDevice(t *testing.T) {
-	_, err := NewDevice()
-	if err != nil {
-		t.Error(err)
-	}
+	NewDevice()
 }
