@@ -79,7 +79,7 @@ func (client *Client) PostMetric(m *metric.Metric) error {
 
 	graphite := go_graphite.NewClient()
 	graphite.CarbonPort = client.CarbonPort
-	err = graphite.PostMetrics(gm)
+	err = graphite.FeedMetrics(gm)
 	if err != nil {
 		return err
 	}

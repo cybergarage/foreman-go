@@ -85,7 +85,7 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 				ts = ts.Add(time.Second * testGrahiteMetricsIntervalSecond)
 			}
 
-			err := client.PostMetrics(m)
+			err := client.FeedMetrics(m)
 			if err != nil {
 				t.Error(err)
 				server.Stop()
