@@ -5,18 +5,22 @@
 package discovery
 
 import (
-	"github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+	"testing"
+	"time"
+
+	foreman_echonet "github.com/cybergarage/foreman-go/foreman/discovery/echonet"
+	//echonet_log "github.com/cybergarage/uecho-go/net/echonet/log"
 )
 
 const (
 	errorEchonetFinderIsNotRunning = "Finder is not running"
 )
 
-func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
+func setupTestEchonetFinderNodes() ([]*foreman_echonet.EchonetNode, error) {
 	nodes := setupTestFinderNodes()
-	echonetNodes := make([]*echonet.EchonetNode, len(nodes))
+	echonetNodes := make([]*foreman_echonet.EchonetNode, len(nodes))
 	for n, node := range nodes {
-		echonetNode, err := echonet.NewEchonetNodeWithNode(node)
+		echonetNode, err := foreman_echonet.NewEchonetNodeWithNode(node)
 		if err != nil {
 			return nil, err
 		}
@@ -25,10 +29,18 @@ func setupTestEchonetFinderNodes() ([]*echonet.EchonetNode, error) {
 	return echonetNodes, nil
 }
 
-/*
-FIXME : Enable TestEchonetFinder
+func finderEchonetTest(t *testing.T, finder Finder, nodes []*foreman_echonet.EchonetNode) {
+	// Check all nodes
+
+	_, err := finder.GetAllNodes()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+}
+
 func TestEchonetFinder(t *testing.T) {
-	log.SetSharedLogger(log.NewStdoutLogger(log.LoggerLevelTrace))
+	//echonet_log.SetSharedLogger(echonet_log.NewStdoutLogger(echonet_log.LevelTrace))
 
 	nodes, err := setupTestEchonetFinderNodes()
 	if err != nil {
@@ -40,7 +52,6 @@ func TestEchonetFinder(t *testing.T) {
 		err = node.Start()
 		if err != nil {
 			t.Error(err)
-			return
 		}
 	}
 
@@ -58,9 +69,10 @@ func TestEchonetFinder(t *testing.T) {
 		return
 	}
 
-	finderTest(t, finder)
+	time.Sleep((500 * time.Millisecond) * time.Duration(len(nodes)))
 
-	time.Sleep(time.Minute * time.Duration(len(nodes)))
+	finderTest(t, finder)
+	finderEchonetTest(t, finder, nodes)
 
 	err = finder.Stop()
 	if err != nil {
@@ -75,4 +87,3 @@ func TestEchonetFinder(t *testing.T) {
 		}
 	}
 }
-*/

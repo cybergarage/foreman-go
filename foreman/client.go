@@ -92,7 +92,7 @@ func (client *Client) GetMetrics(q *metric.Query) (metric.ResultSet, error) {
 	gq := graphite.NewGraphiteQueryWithMetricQuery(q)
 	gc := go_graphite.NewClient()
 	gc.RenderPort = client.RenderPort
-	gms, err := gc.PostQuery(gq)
+	gms, err := gc.QueryRender(gq)
 	if err != nil {
 		return nil, err
 	}

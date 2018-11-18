@@ -65,3 +65,30 @@ func (mgr *Manager) PostEvent(e *Event) error {
 
 	return nil
 }
+
+// Start starts the manager
+func (mgr *Manager) Start() error {
+	return nil
+}
+
+// Stop stops the manager
+func (mgr *Manager) Stop() error {
+	return nil
+}
+
+// Clear removes all actions and routes int the manager
+func (mgr *Manager) Clear() error {
+	var lastError error
+
+	err := mgr.ScriptManager.RemoveAllMethods()
+	if err != nil {
+		lastError = err
+	}
+
+	err = mgr.RouteManager.RemoveAllRoutes()
+	if err != nil {
+		lastError = err
+	}
+
+	return lastError
+}

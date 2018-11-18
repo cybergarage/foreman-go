@@ -69,7 +69,7 @@ func (mgr RouteManager) RemoveRoute(name string) bool {
 }
 
 // RemoveAllRoutes deletes all routes.
-func (mgr RouteManager) RemoveAllRoutes() bool {
+func (mgr RouteManager) RemoveAllRoutes() error {
 	mgr.routeMap = make(map[string][]*Route)
-	return true
+	return nil
 }

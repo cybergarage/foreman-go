@@ -11,7 +11,7 @@ import (
 )
 
 func TestNewManager(t *testing.T) {
-	mgr := NewManager()
+	mgr := NewManagerWithStore(newDefaultTestStore())
 	mgr.SetRegisterStore(register.NewManager().GetStore())
 	err := mgr.Start()
 	if err != nil {

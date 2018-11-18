@@ -19,12 +19,17 @@ type Storing interface {
 	SetRetentionInterval(value time.Duration) error
 	GetRetentionInterval() (time.Duration, error)
 
+	SetRetentionPeriod(value time.Duration) error
+	GetRetentionPeriod() (time.Duration, error)
+
 	Open() error
 	Close() error
 	Clear() error
 
 	AddMetric(m *Metric) error
 	Query(q *Query) (ResultSet, error)
+
+	Vacuum() error
 
 	String() string
 }

@@ -42,17 +42,7 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 		return executor.ExecuteQuery(q)
 	}
 
-	// Target type
-
-	targetExecutors := map[string]fql.QueryExecutor{
-		fql.QueryTargetQos:      server.qosMgr,
-		fql.QueryTargetConfig:   server.config,
-		fql.QueryTargetMetrics:  server.metricMgr,
-		fql.QueryTargetRegister: server.registerMgr,
-		fql.QueryTargetRegistry: server.registryMgr,
-		fql.QueryTargetAction:   server.actionMgr,
-		fql.QueryTargetRoute:    server.actionMgr,
-	}
+	// Target type (Config)
 
 	targetObj, ok := q.GetTarget()
 	if !ok {
@@ -60,6 +50,26 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	}
 
 	target := strings.ToUpper(targetObj.String())
+
+	// Target type (Config)
+
+	switch target {
+	case fql.QueryTargetConfig:
+		return server.ExecuteConfigQuery(q)
+	}
+
+	// Target type
+
+	targetExecutors := map[string]fql.QueryExecutor{
+		fql.QueryTargetQos:      server.qosMgr,
+		fql.QueryTargetConfig:   server,
+		fql.QueryTargetMetrics:  server.metricMgr,
+		fql.QueryTargetRegister: server.registerMgr,
+		fql.QueryTargetRegistry: server.registryMgr,
+		fql.QueryTargetAction:   server.actionMgr,
+		fql.QueryTargetRoute:    server.actionMgr,
+	}
+
 	executor, ok = targetExecutors[target]
 	if !ok {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)

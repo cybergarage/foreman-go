@@ -1,0 +1,2 @@
+#!/bin/bash
+../../common/constants.go.gen rpc ../../common/constants.csv '^(rpc|config)'

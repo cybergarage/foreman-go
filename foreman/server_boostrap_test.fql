@@ -1,0 +1,3 @@
+SET ("action01", "system","ls -l","none") INTO ACTION
+SET (qos01, "localhost.cpu < 10") INTO QOS
+SET (route01, qos01, action01) INTO ROUTE

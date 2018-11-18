@@ -6,6 +6,7 @@ package discovery
 
 import (
 	"fmt"
+	"math/rand"
 	"regexp"
 	"strings"
 
@@ -13,6 +14,7 @@ import (
 )
 
 const (
+	errorFinderHasNoNodes  = "Finder hasnt' find any nodes"
 	errorFinderHasSameNode = "Node (%s) is already added"
 )
 
@@ -21,6 +23,7 @@ type baseFinder struct {
 	nodes          []Node
 	searchListener FinderSearchListener
 	notifyListener FinderNotifyListener
+	status         int
 }
 
 // newBaseFinder returns a new base finder.
@@ -67,6 +70,23 @@ func (finder *baseFinder) addNode(node Node) error {
 // GetAllNodes returns all found nodes.
 func (finder *baseFinder) GetAllNodes() ([]Node, error) {
 	return finder.nodes, nil
+}
+
+// GetNeighborhoodNode returns a neighborhood node of the specified node.
+func (finder *baseFinder) GetNeighborhoodNode(node Node) (Node, error) {
+	nodes, err := finder.GetAllNodes()
+	if err != nil {
+		return nil, err
+	}
+	nodeCount := len(nodes)
+	if nodeCount <= 0 {
+		return nil, fmt.Errorf(errorFinderHasNoNodes)
+	}
+
+	// FIXME : Return  a neighborhood node of the specified node instead of the random node
+	nodeIdx := rand.Int() % nodeCount
+
+	return nodes[nodeIdx], nil
 }
 
 // GetPrefixNodes returns only nodes matching with a specified start string

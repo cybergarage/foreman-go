@@ -42,6 +42,7 @@ PACKAGES=\
 	${PACKAGE_ID}/kb \
 	${PACKAGE_ID}/qos \
 	${PACKAGE_ID}/fql \
+	${PACKAGE_ID}/rpc \
 	${PACKAGE_ID}/rpc/graphite \
 	${PACKAGE_ID}/rpc/json \
 	${PACKAGE_ID}/discovery \
@@ -78,6 +79,14 @@ CONST_GOS = $(basename $(CONST_GENS))
 GO_FILES = $(shell find $(SOURCE_DIR) -type f -name '*.go')
 ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/fql/fql_, base_listener lexer listener parser))
 
+HAVE_ANTLR4 := $(shell which antlr4)
+all:
+ifdef HAVE_ANTLR4
+    ANTLR=antlr4
+else
+    ANTLR=antlr
+endif
+
 .PHONY: version antlr clean
 
 all: test
@@ -93,7 +102,7 @@ $(CONST_GOS):  $(CONST_GENS) $(CONST_CSVS)
 	cd $(dir $@) && ./$(notdir $@).gen > $(notdir $@)
 
 $(ANTLR_FILES): $(SOURCE_DIR)/fql/FQL.g4
-	- cd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4
+	- cd ${SOURCE_DIR}/fql && ${ANTLR} -package fql -Dlanguage=Go FQL.g4
 
 antlr: $(ANTLR_FILES)
 
@@ -106,11 +115,12 @@ const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go  && popd
 	pushd ${SOURCE_DIR}/fql && ./constants.go.gen > constants.go  && popd
 	pushd ${SOURCE_DIR}/action && ./constants.go.gen > constants.go  && popd
+	pushd ${SOURCE_DIR}/rpc && ./constants.go.gen > constants.go  && popd
 	pushd ${SOURCE_DIR}/rpc/json && ./constants.go.gen > constants.go  && popd
 	pushd ${SOURCE_DIR}/errors && ./errors.go.gen > errors.go  && popd
 	
 antlr:
-	- pushd ${SOURCE_DIR}/fql && antlr4 -package fql -Dlanguage=Go FQL.g4 && popd
+	- pushd ${SOURCE_DIR}/fql && ${ANTLR} -package fql -Dlanguage=Go FQL.g4 && popd
 
 vet: format
 	go vet ${PACKAGES}
@@ -119,7 +129,7 @@ build: antlr vet
 	go build -v ${PACKAGES}
 
 test: antlr vet
-	go test -v -cover ${PACKAGES}
+	go test -v -cover -timeout 60s ${PACKAGES}
 
 install: antlr vet
 	go install -ldflags '${go_linker_flags}' -v ${BINARIES}
