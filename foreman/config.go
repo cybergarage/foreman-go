@@ -10,6 +10,7 @@ import "C"
 import (
 	"bufio"
 	"os"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/BurntSushi/toml"
@@ -102,6 +103,16 @@ func (conf *Config) IsBoostrapEnabled() bool {
 		return false
 	}
 	return true
+}
+
+// GetMetricsStorePeriod returns the metrics period duration.
+func (conf *Config) GetMetricsStorePeriod() time.Duration {
+	return time.Second * time.Duration(conf.Metrics.Period)
+}
+
+// GetMetricsStoreInterval returns the metrics period duration.
+func (conf *Config) GetMetricsStoreInterval() time.Duration {
+	return time.Second * time.Duration(conf.Metrics.Interval)
 }
 
 // LoadFile loads a specified Config file.
