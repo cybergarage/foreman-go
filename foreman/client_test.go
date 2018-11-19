@@ -48,6 +48,7 @@ func TestClientQueries(t *testing.T) {
 	}
 
 	client := NewClient()
+	client.SetNode(server)
 	testClientExportConfigQuery(t, server, client)
 
 	err = server.Stop()

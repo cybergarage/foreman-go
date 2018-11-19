@@ -64,9 +64,7 @@ func federatedMetricsTest(t *testing.T, client *Client, nodes []*Server) {
 	q.SetIntervalSecond(testFederatedMetricsInterval)
 
 	for _, node := range nodes {
-		client.SetHTTPPort(node.GetHTTPPort())
-		client.SetCarbonPort(node.GetCarbonPort())
-		client.SetRenderPort(node.GetRenderPort())
+		client.SetNode(node)
 
 		for n := 0; n < testFederatedMetricsCount; n++ {
 			q.Target = fmt.Sprintf(testFederatedQueryPrefix, n)
