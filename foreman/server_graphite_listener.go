@@ -40,6 +40,7 @@ func (server *Server) InsertMetricsRequestReceived(gm *go_graphite.Metrics, err 
 		err = server.metricMgr.AddMetric(fm)
 		if err != nil {
 			logging.Error("%s %s %s %s %f (%s)", graphitePrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value, err.Error())
+			err = server.metricMgr.AddMetric(fm)
 			continue
 		}
 
@@ -112,13 +113,18 @@ func (server *Server) queryMetricsRequest(node Node, gq *go_graphite.Query) ([]*
 
 // queryFederatedMetricsRequest request a query into appropriate nodes
 func (server *Server) queryFederatedMetricsRequest(gq *go_graphite.Query) ([]*go_graphite.Metrics, error) {
-	gmsAll := make([]*go_graphite.Metrics, 0)
+	// Is a regular expression query ?
 
 	re := NewRegexp()
 	err := re.CompileGraphite(gq.Target)
 	if err != nil {
-		return gmsAll, err
+		return server.queryMetricsRequest(server, gq)
 	}
+
+	// Is a regular expression query ?
+
+	hasMatchNodes := false
+	gmsAll := make([]*go_graphite.Metrics, 0)
 
 	for _, node := range server.GetAllClusterNodes() {
 		if !re.MatchNode(node) {
@@ -139,7 +145,15 @@ func (server *Server) queryFederatedMetricsRequest(gq *go_graphite.Query) ([]*go
 		gmsAll = append(gmsAll, gms...)
 	}
 
-	return gmsAll, nil
+	// Has any match nodes for the regular expression query ?
+
+	if hasMatchNodes {
+		return gmsAll, nil
+	}
+
+	// Handle in the local node
+
+	return server.queryMetricsRequest(server, gq)
 }
 
 // QueryMetricsRequestReceived is a listener for Graphite Render
