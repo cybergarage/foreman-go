@@ -82,7 +82,7 @@ func (server *Server) FindMetricsRequestReceived(gq *go_graphite.Query, err erro
 	return m, nil
 }
 
-// queryMetricsRequest request a query into a node
+// queryMetricsRequest requests a query into a node
 func (server *Server) queryMetricsRequest(node Node, gq *go_graphite.Query) ([]*go_graphite.Metrics, error) {
 	mq := graphite.NewMetricQueryWithGraphiteQuery(gq)
 
@@ -112,13 +112,13 @@ func (server *Server) queryMetricsRequest(node Node, gq *go_graphite.Query) ([]*
 
 // queryFederatedMetricsRequest request a query into appropriate nodes
 func (server *Server) queryFederatedMetricsRequest(gq *go_graphite.Query) ([]*go_graphite.Metrics, error) {
+	gmsAll := make([]*go_graphite.Metrics, 0)
+
 	re := NewRegexp()
 	err := re.CompileGraphite(gq.Target)
 	if err != nil {
-		return nil, err
+		return gmsAll, err
 	}
-
-	gmsAll := make([]*go_graphite.Metrics, 0)
 
 	for _, node := range server.GetAllClusterNodes() {
 		if !re.MatchNode(node) {
