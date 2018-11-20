@@ -41,10 +41,7 @@ func sharedRegistryTest(t *testing.T, client *Client, nodes []*Server) {
 	testNodeCount := len(nodes)
 
 	for _, node := range nodes {
-		client.SetHost(node.GetAddress())
-		client.SetHTTPPort(node.GetHTTPPort())
-		client.SetCarbonPort(node.GetCarbonPort())
-		client.SetRenderPort(node.GetRenderPort())
+		client.SetNode(node)
 
 		for n := 0; n < testNodeCount; n++ {
 			q := fmt.Sprintf(testSharedTestQosGetQuery, n)

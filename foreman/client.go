@@ -70,6 +70,15 @@ func (client *Client) SetRenderPort(port int) error {
 	return nil
 }
 
+// SetNode sets the target node to the client.
+func (client *Client) SetNode(node Node) error {
+	client.SetHost(node.GetAddress())
+	client.SetHTTPPort(node.GetRPCPort())
+	client.SetCarbonPort(node.GetCarbonPort())
+	client.SetRenderPort(node.GetRenderPort())
+	return nil
+}
+
 // PostMetric posts a metric over Graphite interface
 func (client *Client) PostMetric(m *metric.Metric) error {
 	gm, err := graphite.NewGraphiteMetricsWithMetric(m)

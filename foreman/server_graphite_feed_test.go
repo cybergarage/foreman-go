@@ -6,7 +6,6 @@ package foreman
 
 import (
 	"io/ioutil"
-	"os"
 	"testing"
 
 	"github.com/cybergarage/foreman-go/foreman/logging"
@@ -15,6 +14,22 @@ import (
 )
 
 func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename string) {
+
+	// Feed metrics (Carbon API)
+
+	feedBytes, err := ioutil.ReadFile(feedDataFilename)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	feedData := string(feedBytes)
+
+	feedMetrics, err := go_graphite.NewMetricsWithPlainText(feedData)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	// Setup a client for the target server
 
@@ -25,21 +40,64 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 
 	// Feed metrics (Carbon API)
 
-	feedData, err := ioutil.ReadFile(feedDataFilename)
+	err = client.FeedString(feedData)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	err = client.FeedString(string(feedData))
-	if err != nil {
-		t.Error(err)
-		return
+	// Find inserted metrics (Metrics API)
+
+	for _, m := range feedMetrics {
+		q := go_graphite.NewQuery()
+		q.Target = m.GetName()
+		/*
+			ms, err := client.FindMetrics(q)
+			if err != nil {
+				t.Error(err)
+				continue
+			}
+				if len(ms) != 1 {
+					t.Errorf("%d != %d", len(ms), 1)
+				}
+		*/
 	}
 
+	// Get each inserted metrics data (Render API)
+
+	/*
+		storeInterval := server.GetMetricsStoreInterval()
+
+		for _, m := range feedMetrics {
+			dp, err := m.GetDataPoint(0)
+			if err != nil {
+				t.Error(err)
+				continue
+			}
+
+			ts := dp.GetTimestamp()
+			from := ts.Add(-storeInterval)
+			until := ts.Add(storeInterval)
+
+			q := go_graphite.NewQuery()
+			q.Target = m.GetName()
+			q.From = &from
+			q.Until = &until
+
+			ms, err := client.QueryRender(q)
+			if err != nil {
+				t.Error(err)
+			}
+
+			if len(ms) <= 1 {
+				t.Errorf("%d <= %d", len(ms), 1)
+			}
+		}
+	*/
 }
 
 func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config) {
+	logging.SetVerbose(true)
 
 	feedDataFilenames := []string{
 		"server_graphite_feed_test_01.dat",
@@ -77,16 +135,15 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config) {
 	}
 }
 
-func TestGraphiteFeedWithLocalhost(t *testing.T) {
-	logging.SetVerbose(true)
-
+/*
+func TestGraphiteFeedAPIWithLocalhost(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
 
 	testGraphiteFeedWithConfig(t, serverConf)
 }
 
-func TestGraphiteFeedWithHostName(t *testing.T) {
+func TestGraphiteFeedAPIWithHostName(t *testing.T) {
 	hostname, err := os.Hostname()
 	if err != nil {
 		t.Error(err)
@@ -99,12 +156,12 @@ func TestGraphiteFeedWithHostName(t *testing.T) {
 	testGraphiteFeedWithConfig(t, serverConf)
 }
 
-func TestGraphiteFeedWithDefaultConfigFile(t *testing.T) {
+func TestGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
 	serverConf, err := NewConfigWithFile(configTestFilename)
 	if err != nil {
 		t.Error(err)
 		return
 	}
-
 	testGraphiteFeedWithConfig(t, serverConf)
 }
+*/
