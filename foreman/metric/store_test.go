@@ -33,10 +33,15 @@ func testStore(t *testing.T, store *Store) {
 		m[n].Name = fmt.Sprintf("%s%d", testStoreMetricsPrefix, n)
 	}
 
+	// Testing range
+
+	now := time.Now()
+	diff := now.Unix() % int64(testStoreMetricsInterval.Seconds())
+	from := now.Add(-(time.Duration(diff) * time.Second))
+	until := from
+
 	// Insert metrics
 
-	from := time.Now()
-	until := from
 	for i := 0; i < testStoreMetricsPeriodCount; i++ {
 		for j := 0; j < testStoreMetricsCount; j++ {
 			m[j].Timestamp = until
