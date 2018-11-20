@@ -132,14 +132,14 @@ func (s *Scenario) LoadFile(filename string) *errors.Error {
 
 	s.SetName(filepath.Base(filename))
 
-	for _, line := range strings.Split(string(content), "\n") {
+	for n, line := range strings.Split(string(content), "\n") {
 		if len(line) <= 0 {
 			continue
 		}
 		if line[0] == '#' {
 			continue
 		}
-		e := NewEvent(line)
+		e := NewEvent((n + 1), line)
 		if e == nil {
 			continue
 		}

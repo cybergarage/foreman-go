@@ -19,15 +19,16 @@ func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, conf
 	for _, file := range scenarioFiles {
 		err := s.ExecuteFile(testScenarioDirectory + file)
 		if err != nil {
+			lastEvent := s.GetLastEvent()
 			if conf.EnableSkipError {
-				t.Skip(err)
+				t.Skipf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
 			} else {
-				t.Error(err)
+				t.Errorf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
 			}
-			res := s.GetLastResponse()
-			if res != nil {
-				t.Logf("%d : %s\n", res.GetStatusCode(), res.GetQuery())
-				t.Logf("%s", res.GetContent())
+			lastRes := s.GetLastResponse()
+			if lastRes != nil {
+				t.Logf("%d : %s\n", lastRes.GetStatusCode(), lastRes.GetQuery())
+				t.Logf("%s", lastRes.GetContent())
 			}
 			break
 		}

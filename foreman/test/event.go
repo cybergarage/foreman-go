@@ -6,15 +6,22 @@ package test
 
 // Event represents a scenario event.
 type Event struct {
+	No   int
 	Data string
 }
 
 // NewEvent create an scenario event with the specified string.
-func NewEvent(data string) *Event {
+func NewEvent(n int, data string) *Event {
 	e := &Event{
+		No:   n,
 		Data: data,
 	}
 	return e
+}
+
+// GetNo returns the scenario number.
+func (e *Event) GetNo() int {
+	return e.No
 }
 
 // GetData returns the scenario data.
