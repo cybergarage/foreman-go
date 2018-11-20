@@ -6,7 +6,6 @@ package foreman
 
 import (
 	"io/ioutil"
-	"os"
 	"testing"
 
 	"github.com/cybergarage/foreman-go/foreman/logging"
@@ -136,6 +135,7 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config) {
 	}
 }
 
+/*
 func TestGraphiteFeedAPIWithLocalhost(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
@@ -162,6 +162,6 @@ func TestGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
 		t.Error(err)
 		return
 	}
-
 	testGraphiteFeedWithConfig(t, serverConf)
 }
+*/
