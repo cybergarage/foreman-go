@@ -1,4 +1,4 @@
-# echo command
+# system command
 SET ("system_ls","system","ls -l","none") INTO ACTION;200;
 EXPORT FROM ACTION;200;/action/methods/system_ls
 EXPORT FROM ACTION WHERE name == "system_ls";200;/action/methods/system_ls
