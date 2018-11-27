@@ -6,9 +6,8 @@ package foreman
 
 import (
 	"io/ioutil"
+	"os"
 	"testing"
-
-	"github.com/cybergarage/foreman-go/foreman/logging"
 
 	go_graphite "github.com/cybergarage/go-graphite/net/graphite"
 )
@@ -51,53 +50,49 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 	for _, m := range feedMetrics {
 		q := go_graphite.NewQuery()
 		q.Target = m.GetName()
-		/*
-			ms, err := client.FindMetrics(q)
-			if err != nil {
-				t.Error(err)
-				continue
-			}
-				if len(ms) != 1 {
-					t.Errorf("%d != %d", len(ms), 1)
-				}
-		*/
+		ms, err := client.FindMetrics(q)
+		if err != nil {
+			t.Error(err)
+			continue
+		}
+		if len(ms) != 1 {
+			t.Errorf("%d != %d", len(ms), 1)
+		}
 	}
 
 	// Get each inserted metrics data (Render API)
 
-	/*
-		storeInterval := server.GetMetricsStoreInterval()
+	storeInterval := server.GetMetricsStoreInterval()
 
-		for _, m := range feedMetrics {
-			dp, err := m.GetDataPoint(0)
-			if err != nil {
-				t.Error(err)
-				continue
-			}
-
-			ts := dp.GetTimestamp()
-			from := ts.Add(-storeInterval)
-			until := ts.Add(storeInterval)
-
-			q := go_graphite.NewQuery()
-			q.Target = m.GetName()
-			q.From = &from
-			q.Until = &until
-
-			ms, err := client.QueryRender(q)
-			if err != nil {
-				t.Error(err)
-			}
-
-			if len(ms) <= 1 {
-				t.Errorf("%d <= %d", len(ms), 1)
-			}
+	for _, m := range feedMetrics {
+		dp, err := m.GetDataPoint(0)
+		if err != nil {
+			t.Error(err)
+			continue
 		}
-	*/
+
+		ts := dp.GetTimestamp()
+		from := ts.Add(-storeInterval)
+		until := ts.Add(storeInterval)
+
+		q := go_graphite.NewQuery()
+		q.Target = m.GetName()
+		q.From = &from
+		q.Until = &until
+
+		ms, err := client.QueryRender(q)
+		if err != nil {
+			t.Error(err)
+		}
+
+		if len(ms) <= 1 {
+			t.Errorf("%d <= %d", len(ms), 1)
+		}
+	}
 }
 
 func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config) {
-	logging.SetVerbose(true)
+	//logging.SetVerbose(true)
 
 	feedDataFilenames := []string{
 		"server_graphite_feed_test_01.dat",
@@ -135,7 +130,6 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config) {
 	}
 }
 
-/*
 func TestGraphiteFeedAPIWithLocalhost(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
@@ -164,4 +158,3 @@ func TestGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
 	}
 	testGraphiteFeedWithConfig(t, serverConf)
 }
-*/
