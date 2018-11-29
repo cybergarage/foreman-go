@@ -9,12 +9,7 @@ import (
 )
 
 func TestNode(t *testing.T) {
-	node, err := NewEchonetNodeWithNode(nil)
-	if err != nil {
-		t.Error(err)
-	}
-
-	_, err = node.GetLocalDevice()
+	_, err := NewEchonetNodeWithNode(nil)
 	if err != nil {
 		t.Error(err)
 	}
