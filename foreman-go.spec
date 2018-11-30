@@ -9,7 +9,7 @@ URL: http://github.com/cybergarage/foreman-cc
 %{?systemd_requires}
 BuildRequires: systemd
 BuildRequires: foreman-cc, sqlite-devel, curl-devel, libuuid-devel, python-devel, alglib-devel
-Requires: sqlite3, libuuid, python, alglib
+Requires: sqlite, libuuid, python, alglib
 
 Source: %{expand:%%(pwd)}
 
