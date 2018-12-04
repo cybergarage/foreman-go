@@ -143,7 +143,10 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 	}
 
 	if store.listener != nil {
-		store.listener.StoreMetricAdded(m)
+		err = store.listener.StoreMetricAdded(m)
+		if err != nil {
+			lastErr = err
+		}
 	}
 
 	// FIXME : Support auto vacuum
