@@ -135,9 +135,11 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 		return err
 	}
 
+	var lastErr error
+
 	isSuccess := C.foreman_metric_store_addmetric(store.cStore, cm)
 	if !isSuccess {
-		return fmt.Errorf(errorStoreCouldNotAddMetric, m.String())
+		lastErr = fmt.Errorf(errorStoreCouldNotAddMetric, m.String())
 	}
 
 	if store.listener != nil {
@@ -145,16 +147,18 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 	}
 
 	// FIXME : Support auto vacuum
+
 	store.vacuumCounter++
 	if cgoStoreVacuumInterval < store.vacuumCounter {
 		err = store.Vacuum()
-		if err != nil {
-			return err
+		if err == nil {
+			store.vacuumCounter = 0
+		} else {
+			lastErr = err
 		}
-		store.vacuumCounter = 0
 	}
 
-	return nil
+	return lastErr
 }
 
 // Query gets the specified metrics.
