@@ -5,6 +5,11 @@
 package metric
 
 // StoreMetricAdded is a listener for Store
-func (rs *Register) StoreMetricAdded(m *Metric) {
-	rs.UpdateMetric(m)
+func (rs *Register) StoreMetricAdded(m *Metric) error {
+	err := rs.UpdateMetric(m)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

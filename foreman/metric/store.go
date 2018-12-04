@@ -9,7 +9,7 @@ import "time"
 
 // StoreListener represents a listener for metric store.
 type StoreListener interface {
-	StoreMetricAdded(*Metric)
+	StoreMetricAdded(*Metric) error
 }
 
 // Storing represents an abstract interface of metric store
