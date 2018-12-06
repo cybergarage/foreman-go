@@ -199,6 +199,7 @@ func TestGraphiteAPIsWithDefaultConfigFile(t *testing.T) {
 	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
 
+/* FIXME : Enable the following tests
 func TestGraphiteAPIsForRepeatedInsert(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
@@ -218,3 +219,4 @@ func TestGraphiteAPIsWithTimestampJitter(t *testing.T) {
 
 	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
+*/
