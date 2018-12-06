@@ -133,7 +133,7 @@ test: antlr vet
 	go test -v -cover -timeout 300s ${PACKAGES}
 
 install: antlr vet
-	go install -ldflags '${go_linker_flags}' -v ${BINARIES}
+	go install -v ${BINARIES}
 
 clean:
 	-rm ${PREFIX}/bin/*
