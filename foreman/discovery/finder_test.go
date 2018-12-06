@@ -5,8 +5,8 @@
 package discovery
 
 import (
+	"fmt"
 	"regexp"
-	"testing"
 
 	"github.com/cybergarage/foreman-go/foreman/node"
 )
@@ -33,18 +33,16 @@ func setupTestFinderNodes() []Node {
 	return nodes
 }
 
-func finderTest(t *testing.T, finder Finder) {
+func finderTest(finder Finder) error {
 	// Check all nodes
 
 	nodes, err := finder.GetAllNodes()
 	if err != nil {
-		t.Error(err)
-		return
+		return err
 	}
 
 	if len(nodes) != len(testFinderNodeNames) {
-		t.Errorf(testFinderNodeCountError, len(nodes), len(testFinderNodeNames))
-		return
+		return fmt.Errorf(testFinderNodeCountError, len(nodes), len(testFinderNodeNames))
 	}
 
 	// Check regexp names for a node
@@ -53,16 +51,13 @@ func finderTest(t *testing.T, finder Finder) {
 		re := regexp.MustCompile(nodeName)
 		nodes, err := finder.GetRegexpNodes(re)
 		if err != nil {
-			t.Error(err)
-			return
+			return err
 		}
 		if len(nodes) != 1 {
-			t.Errorf(testFinderNodeCountError, len(nodes), 1)
-			return
+			return fmt.Errorf(testFinderNodeCountError, len(nodes), 1)
 		}
 		if nodes[0].GetName() != nodeName {
-			t.Errorf(testFinderMatchingError, nodeName, nodes[0].GetName())
-			return
+			return fmt.Errorf(testFinderMatchingError, nodeName, nodes[0].GetName())
 		}
 	}
 
@@ -79,12 +74,10 @@ func finderTest(t *testing.T, finder Finder) {
 		re := regexp.MustCompile(reName)
 		nodes, err := finder.GetRegexpNodes(re)
 		if err != nil {
-			t.Error(err)
-			return
+			return err
 		}
 		if len(nodes) != len(testFinderNodeNames) {
-			t.Errorf(testFinderMatchingCountError, reName, len(nodes), len(testFinderNodeNames))
-			return
+			return fmt.Errorf(testFinderMatchingCountError, reName, len(nodes), len(testFinderNodeNames))
 		}
 	}
 
@@ -105,12 +98,12 @@ func finderTest(t *testing.T, finder Finder) {
 	for _, metricsName := range metricsNames {
 		nodes, err := finder.GetPrefixNodes(metricsName)
 		if err != nil {
-			t.Error(err)
-			return
+			return err
 		}
 		if len(nodes) != 1 {
-			t.Errorf(testFinderMatchingCountError, metricsName, len(nodes), 1)
-			return
+			return fmt.Errorf(testFinderMatchingCountError, metricsName, len(nodes), 1)
 		}
 	}
+
+	return nil
 }
