@@ -1,0 +1,8 @@
+# INSERT METRICS
+
+INSERT INTO metrics VALUES (test.nodestatus, 1, 1544405974);200
+INSERT INTO metrics VALUES (test.nodestatus, 0, 1544406050);200
+INSERT INTO metrics VALUES (test.nodestatus, 1, 1544406149);200
+INSERT INTO metrics VALUES (test.nodestatus, 1, 1544406202);200
+INSERT INTO metrics VALUES (test.nodestatus, 1, 1544406220);200
+INSERT INTO metrics VALUES (test.nodestatus, 1, 1544406337);200
