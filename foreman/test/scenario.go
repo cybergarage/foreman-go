@@ -149,11 +149,16 @@ func (s *Scenario) LoadFile(filename string) *errors.Error {
 	return nil
 }
 
-// ExecuteFile loads a specified scenario file and runs it
-func (s *Scenario) ExecuteFile(filename string) *errors.Error {
+// ExecuteFileWithOption loads a specified scenario file and runs it with an option
+func (s *Scenario) ExecuteFileWithOption(filename string, option *ScenarioOption) *errors.Error {
 	err := s.LoadFile(filename)
 	if err != nil {
 		return err
 	}
 	return s.ExecuteAll()
+}
+
+// ExecuteFile loads a specified scenario file and runs it
+func (s *Scenario) ExecuteFile(filename string) *errors.Error {
+	return s.ExecuteFileWithOption(filename, NewDefaultScenarioOption())
 }
