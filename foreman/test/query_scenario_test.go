@@ -6,21 +6,23 @@ package test
 
 import (
 	"testing"
+	"time"
 )
 
 const (
 	testScenarioDirectory = "../../test/scenarios/"
 )
 
-func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, conf *Config) {
+func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, testConf *Config, scenarioOpt *ScenarioOption) {
 
 	s := NewQueryScenario()
 
 	for _, file := range scenarioFiles {
-		err := s.ExecuteFile(testScenarioDirectory + file)
+		filePath := testScenarioDirectory + file
+		err := s.ExecuteFileWithOption(filePath, scenarioOpt)
 		if err != nil {
 			lastEvent := s.GetLastEvent()
-			if conf.EnableSkipError {
+			if testConf.EnableSkipError {
 				t.Skipf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
 			} else {
 				t.Errorf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
@@ -47,8 +49,23 @@ func TestQueryBasicScenarios(t *testing.T) {
 	}
 
 	conf := NewDefaultConfig()
+	opt := NewDefaultScenarioOption()
 
-	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf)
+	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
+}
+
+func TestQueryBasicScenariosWithSleep(t *testing.T) {
+
+	scenarioFiles := []string{
+		"scenario_metrics_02.csv",
+	}
+
+	conf := NewDefaultConfig()
+
+	opt := NewDefaultScenarioOption()
+	opt.SetStepDuration(time.Second)
+
+	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
 }
 
 func TestQueryExtraScenarios(t *testing.T) {
@@ -59,5 +76,7 @@ func TestQueryExtraScenarios(t *testing.T) {
 	conf := NewDefaultConfig()
 	conf.EnableSkipError = true
 
-	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf)
+	opt := NewDefaultScenarioOption()
+
+	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
 }

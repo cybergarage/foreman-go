@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
@@ -93,7 +94,7 @@ func (s *Scenario) GetEvents() []*Event {
 }
 
 // ExecuteAll runs all scenario events.
-func (s *Scenario) ExecuteAll() *errors.Error {
+func (s *Scenario) ExecuteAll(opt *ScenarioOption) *errors.Error {
 	err := s.executor.Setup()
 	if err != nil {
 		return errors.NewErrorWithError(err)
@@ -112,6 +113,11 @@ func (s *Scenario) ExecuteAll() *errors.Error {
 
 		if err != nil {
 			return err
+		}
+
+		stepWait := opt.GetStepDuration()
+		if 0 < stepWait {
+			time.Sleep(stepWait)
 		}
 	}
 
@@ -150,12 +156,12 @@ func (s *Scenario) LoadFile(filename string) *errors.Error {
 }
 
 // ExecuteFileWithOption loads a specified scenario file and runs it with an option
-func (s *Scenario) ExecuteFileWithOption(filename string, option *ScenarioOption) *errors.Error {
+func (s *Scenario) ExecuteFileWithOption(filename string, opt *ScenarioOption) *errors.Error {
 	err := s.LoadFile(filename)
 	if err != nil {
 		return err
 	}
-	return s.ExecuteAll()
+	return s.ExecuteAll(opt)
 }
 
 // ExecuteFile loads a specified scenario file and runs it
