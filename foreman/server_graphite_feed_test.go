@@ -7,9 +7,65 @@ package foreman
 import (
 	"io/ioutil"
 	"testing"
+	"time"
 
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	go_graphite "github.com/cybergarage/go-graphite/net/graphite"
 )
+
+type testFeedGraphiteConf struct {
+	feedFilenames []string
+	feedDuration  time.Duration
+}
+
+func newTestFeedGraphiteDefaultConf() *testFeedGraphiteConf {
+	return newTestFeedGraphite60SecConf()
+}
+
+func newTestFeedGraphite60SecConf() *testFeedGraphiteConf {
+	return &testFeedGraphiteConf{
+		feedFilenames: []string{
+			"server_graphite_feed_test_01_01.dat",
+			"server_graphite_feed_test_01_02.dat",
+			"server_graphite_feed_test_01_03.dat",
+			"server_graphite_feed_test_01_04.dat",
+			"server_graphite_feed_test_01_05.dat",
+		},
+		feedDuration: 60 * time.Microsecond * 100,
+	}
+}
+
+func newTestFeedGraphite10SecConf() *testFeedGraphiteConf {
+	return &testFeedGraphiteConf{
+		feedFilenames: []string{
+			"server_graphite_feed_test_02_01_01.dat",
+			"server_graphite_feed_test_02_01_02.dat",
+			"server_graphite_feed_test_02_02_01.dat",
+			"server_graphite_feed_test_02_02_02.dat",
+			"server_graphite_feed_test_02_02_03.dat",
+			"server_graphite_feed_test_02_03_01.dat",
+			"server_graphite_feed_test_02_03_02.dat",
+			"server_graphite_feed_test_02_04_01.dat",
+			"server_graphite_feed_test_02_04_02.dat",
+			"server_graphite_feed_test_02_05_01.dat",
+			"server_graphite_feed_test_02_05_02.dat",
+			"server_graphite_feed_test_02_05_03.dat",
+			"server_graphite_feed_test_02_06_01.dat",
+			"server_graphite_feed_test_02_06_02.dat",
+			"server_graphite_feed_test_02_07_01.dat",
+			"server_graphite_feed_test_02_07_02.dat",
+			"server_graphite_feed_test_02_07_03.dat",
+			"server_graphite_feed_test_02_08_01.dat",
+			"server_graphite_feed_test_02_08_02.dat",
+			"server_graphite_feed_test_02_09_01.dat",
+			"server_graphite_feed_test_02_09_02.dat",
+			"server_graphite_feed_test_02_09_03.dat",
+			"server_graphite_feed_test_02_10_01.dat",
+			"server_graphite_feed_test_02_10_02.dat",
+		},
+		feedDuration: 10 * time.Microsecond * 100,
+	}
+}
 
 func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename string) {
 
@@ -90,16 +146,8 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 	}
 }
 
-func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config) {
-	//logging.SetVerbose(true)
-
-	feedDataFilenames := []string{
-		"server_graphite_feed_test_01.dat",
-		"server_graphite_feed_test_02.dat",
-		"server_graphite_feed_test_03.dat",
-		"server_graphite_feed_test_04.dat",
-		"server_graphite_feed_test_05.dat",
-	}
+func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *testFeedGraphiteConf) {
+	logging.SetVerbose(true)
 
 	// Setup a target server
 
@@ -117,8 +165,9 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config) {
 
 	// Feed metrics (Carbon API)
 
-	for _, feedDataFilename := range feedDataFilenames {
+	for _, feedDataFilename := range testConf.feedFilenames {
 		testFeedGraphiteDataToServer(t, server, feedDataFilename)
+		time.Sleep(testConf.feedDuration)
 	}
 
 	// Stop the target server
@@ -134,7 +183,7 @@ func TestGraphiteFeedAPIWithLocalhost(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
 
-	testGraphiteFeedWithConfig(t, serverConf)
+	testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphiteDefaultConf())
 }
 
 func TestGraphiteFeedAPIWithHostName(t *testing.T) {
@@ -147,7 +196,7 @@ func TestGraphiteFeedAPIWithHostName(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = hostname
 
-	testGraphiteFeedWithConfig(t, serverConf)
+	testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphiteDefaultConf())
 }
 
 func TestGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
@@ -156,6 +205,30 @@ func TestGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	testGraphiteFeedWithConfig(t, serverConf)
+
+	testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphiteDefaultConf())
+}
+
+func TestMultiGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
+	serverConf, err := NewConfigWithFile(configTestFilename)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(2)
+
+	go func() {
+		defer wg.Done()
+		testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphite60SecConf())
+	}()
+
+	go func() {
+		defer wg.Done()
+		testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphite10SecConf())
+	}()
+
+	wg.Wait()
 }
 */
