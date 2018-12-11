@@ -7,7 +7,6 @@ package foreman
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"testing"
 	"time"
 
@@ -163,6 +162,7 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 	}
 }
 
+/*
 func TestGraphiteAPIsWithLocalhost(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
@@ -229,3 +229,4 @@ func TestGraphiteAPIsWithRepeatedAndTimestampJitter(t *testing.T) {
 
 	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
+*/
