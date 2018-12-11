@@ -18,8 +18,8 @@ const (
 	testGrahiteHost                  = "localhost"
 	testGrahiteMetricsNameFormat     = "localhost.metrics%d"
 	testGrahiteMetricsCount          = 10
-	testGrahiteMetricsIntervalSecond = (5 * 60)
-	testGrahiteMetricsDurationSecond = (60 * 60)
+	testGrahiteMetricsIntervalSecond = (60 * 5)
+	testGrahiteMetricsDurationSecond = (60 * 15)
 	testGrahiteMetricsEachDataCount  = testGrahiteMetricsDurationSecond / testGrahiteMetricsIntervalSecond
 	testGrahiteMetricsTotalDataCount = testGrahiteMetricsEachDataCount * testGrahiteMetricsCount
 )
@@ -199,7 +199,6 @@ func TestGraphiteAPIsWithDefaultConfigFile(t *testing.T) {
 	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
 
-/* FIXME : Enable the following tests
 func TestGraphiteAPIsForRepeatedInsert(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
@@ -219,4 +218,14 @@ func TestGraphiteAPIsWithTimestampJitter(t *testing.T) {
 
 	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
-*/
+
+func TestGraphiteAPIsWithRepeatedAndTimestampJitter(t *testing.T) {
+	serverConf := NewDefaultConfig()
+	serverConf.Server.Host = testGrahiteHost
+
+	testConf := newtestGraphiteAPIsConfig()
+	testConf.timestampJitter = true
+	testConf.insertRepeadCount = 2
+
+	testGraphiteAPIsWithConfig(t, serverConf, testConf)
+}
