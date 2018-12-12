@@ -10,11 +10,16 @@ package foreman
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	go_graphite "github.com/cybergarage/go-graphite/net/graphite"
+)
+
+const (
+	testGraphiteFeedDataDirectory = "../test/data/graphite/"
 )
 
 type testFeedGraphiteConf struct {
@@ -75,7 +80,9 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 
 	// Feed metrics (Carbon API)
 
-	feedBytes, err := ioutil.ReadFile(feedDataFilename)
+	feedDataFilePath := filepath.Join(testGraphiteFeedDataDirectory, feedDataFilename)
+
+	feedBytes, err := ioutil.ReadFile(feedDataFilePath)
 	if err != nil {
 		t.Error(err)
 		return
