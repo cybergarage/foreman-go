@@ -2,10 +2,14 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// FIXME : Disable TestGraphiteFeedAPI*() for Linux because of these tests timeout On CentOS
+// +build !linux
+
 package foreman
 
 import (
 	"io/ioutil"
+	"os"
 	"testing"
 	"time"
 
@@ -178,7 +182,6 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *test
 	}
 }
 
-/* FIXME : Enable the following tests
 func TestGraphiteFeedAPIWithLocalhost(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
@@ -209,6 +212,7 @@ func TestGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
 	testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphiteDefaultConf())
 }
 
+/*
 func TestMultiGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
 	serverConf, err := NewConfigWithFile(configTestFilename)
 	if err != nil {

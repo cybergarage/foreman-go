@@ -2,11 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// FIXME : Disable TestGraphiteAPI*() for Linux because of these tests timeout On CentOS
+// +build !linux
+
 package foreman
 
 import (
 	"fmt"
 	"math/rand"
+	"os"
 	"testing"
 	"time"
 
@@ -162,7 +166,6 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 	}
 }
 
-/*
 func TestGraphiteAPIsWithLocalhost(t *testing.T) {
 	serverConf := NewDefaultConfig()
 	serverConf.Server.Host = testGrahiteHost
@@ -229,4 +232,3 @@ func TestGraphiteAPIsWithRepeatedAndTimestampJitter(t *testing.T) {
 
 	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
-*/
