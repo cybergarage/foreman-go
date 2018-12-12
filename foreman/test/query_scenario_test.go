@@ -5,6 +5,7 @@
 package test
 
 import (
+	"path/filepath"
 	"testing"
 	"time"
 )
@@ -18,7 +19,7 @@ func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, test
 	s := NewQueryScenario()
 
 	for _, file := range scenarioFiles {
-		filePath := testScenarioDirectory + file
+		filePath := filepath.Join(testScenarioDirectory, file)
 		err := s.ExecuteFileWithOption(filePath, scenarioOpt)
 		if err != nil {
 			lastEvent := s.GetLastEvent()
