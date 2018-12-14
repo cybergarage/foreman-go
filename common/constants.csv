@@ -66,6 +66,8 @@ finder_echonet,"echonet"
 # Action 
 ########################################
 
+action_file_extention,"fql"
+
 action_encoding_base64,"base64"
 
 action_language_python,"python"
