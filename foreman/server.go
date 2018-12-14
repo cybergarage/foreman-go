@@ -396,15 +396,13 @@ func (server *Server) Start() error {
 		return err
 	}
 
-	// Boostrap
+	// Bootstrap
 
-	if server.IsBoostrapEnabled() {
-		err = server.executeBoostrap()
-		if err != nil {
-			server.Stop()
-			logging.Error("%s", err)
-			return err
-		}
+	err = server.executeBootstrap()
+	if err != nil {
+		server.Stop()
+		logging.Error("%s", err)
+		return err
 	}
 
 	return nil

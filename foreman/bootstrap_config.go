@@ -16,8 +16,8 @@ type boostrapConfig struct {
 	Objects map[string]interface{}
 }
 
-// NewBoostrapConfigWithObject returns a new cofiguration of the specified object
-func NewBoostrapConfigWithObject(obj map[string]interface{}) *boostrapConfig {
+// NewBootstrapConfigWithObject returns a new cofiguration of the specified object
+func NewBootstrapConfigWithObject(obj map[string]interface{}) *boostrapConfig {
 	config := &boostrapConfig{
 		Objects: obj,
 	}
