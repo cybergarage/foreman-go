@@ -5,31 +5,24 @@
 package foreman
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 const (
-	testBoostrapNodeCont        = 2
-	testBoostrapConfigQueryFile = "server_boostrap_test.fql"
+	testBootstrapNodeCont        = 2
+	testBootstrapConfigQueryFile = "server_bootstrap_config_test.fql"
 )
 
-func setupBoostrapTestNodeWithConfigFlag(t *testing.T, nodeNo int, configFlag bool) (*Server, error) {
+func setupBootstrapConfigTestNodeWithConfigFlag(t *testing.T, nodeNo int, configFlag bool) (*Server, error) {
 	server := NewServer()
-
-	// Set basic configurations
-
-	conf := NewDefaultConfig()
-	conf.Server.Host = fmt.Sprintf(testNodeNamePrefix, nodeNo)
-	conf.Server.Boostrap = 1
 
 	// Load monitoring configurations
 
 	if configFlag {
 		testDir, _ := os.Getwd()
-		filename := filepath.Join(testDir, testBoostrapConfigQueryFile)
+		filename := filepath.Join(testDir, testBootstrapConfigQueryFile)
 		err := server.LoadQuery(filename)
 		if err != nil {
 			return nil, err
@@ -39,18 +32,18 @@ func setupBoostrapTestNodeWithConfigFlag(t *testing.T, nodeNo int, configFlag bo
 	return server, nil
 }
 
-func setupBoostrapTestNode(t *testing.T, nodeNo int) (*Server, error) {
-	return setupBoostrapTestNodeWithConfigFlag(t, nodeNo, true)
+func setupBootstrapConfigTestNode(t *testing.T, nodeNo int) (*Server, error) {
+	return setupBootstrapConfigTestNodeWithConfigFlag(t, nodeNo, true)
 }
 
-func setupBoostrapTestNodeWithoutConfig(t *testing.T, nodeNo int) (*Server, error) {
-	return setupBoostrapTestNodeWithConfigFlag(t, nodeNo, false)
+func setupBootstrapConfigTestNodeWithoutConfig(t *testing.T, nodeNo int) (*Server, error) {
+	return setupBootstrapConfigTestNodeWithConfigFlag(t, nodeNo, false)
 }
 
-func setupBoostrapTestNodes(t *testing.T) ([]*Server, error) {
+func setupBootstrapConfigTestNodes(t *testing.T) ([]*Server, error) {
 	servers := make([]*Server, testFederatedNodeCont)
 	for n := 0; n < testFederatedNodeCont; n++ {
-		server, err := setupBoostrapTestNode(t, n)
+		server, err := setupBootstrapConfigTestNode(t, n)
 		if err != nil {
 			return nil, err
 		}
@@ -59,34 +52,34 @@ func setupBoostrapTestNodes(t *testing.T) ([]*Server, error) {
 	return servers, nil
 }
 
-func TestSeverBoostrapConfigStaticTransport(t *testing.T) {
+func TestSeverBootstrapConfigStaticTransport(t *testing.T) {
 	// Export
 
-	srcNode, err := setupBoostrapTestNode(t, 0)
+	srcNode, err := setupBootstrapConfigTestNode(t, 0)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	srcConfig, err := srcNode.exportBoostrapConfig()
+	srcConfig, err := srcNode.exportBootstrapConfig()
 	if err != nil {
 		t.Error(err)
 	}
 
 	// Import
 
-	dstNode, err := setupBoostrapTestNodeWithoutConfig(t, 1)
+	dstNode, err := setupBootstrapConfigTestNodeWithoutConfig(t, 1)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	err = dstNode.importBoostrapConfig(srcConfig)
+	err = dstNode.importBootstrapConfig(srcConfig)
 	if err != nil {
 		t.Error(err)
 	}
 
-	dstConfig, err := dstNode.exportBoostrapConfig()
+	dstConfig, err := dstNode.exportBootstrapConfig()
 	if err != nil {
 		t.Error(err)
 	}
@@ -98,10 +91,10 @@ func TestSeverBoostrapConfigStaticTransport(t *testing.T) {
 	}
 }
 
-func TestSeverBoostrap(t *testing.T) {
+func TestSeverBootstrapConfig(t *testing.T) {
 	// Start source nodes with default configuration
 
-	nodes, err := setupBoostrapTestNodes(t)
+	nodes, err := setupBootstrapConfigTestNodes(t)
 	if err != nil {
 		t.Error(err)
 		return
@@ -116,13 +109,13 @@ func TestSeverBoostrap(t *testing.T) {
 
 	// Start a new node with boostrap option
 
-	newNode, err := setupBoostrapTestNodeWithoutConfig(t, len(nodes)+1)
+	newNode, err := setupBootstrapConfigTestNodeWithoutConfig(t, len(nodes)+1)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
-	newNode.SetBoostrapEnabled(true)
+	newNode.SetBootstrapEnabled(true)
 
 	err = newNode.Start()
 	if err != nil {
@@ -133,13 +126,13 @@ func TestSeverBoostrap(t *testing.T) {
 
 	// Compare the new node with other running nodes
 
-	newConfig, err := newNode.exportBoostrapConfig()
+	newConfig, err := newNode.exportBootstrapConfig()
 	if err != nil {
 		t.Error(err)
 	}
 
 	for _, node := range nodes {
-		nodeConfig, err := node.exportBoostrapConfig()
+		nodeConfig, err := node.exportBootstrapConfig()
 		if err != nil {
 			t.Error(err)
 		}

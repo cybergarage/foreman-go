@@ -16,7 +16,7 @@ const (
 	DefaultMetricsInterval            = 300
 	DefaultMetricsPeriod              = 3600
 	DefaultCluster                    = "foreman"
-	DefaultBoostrapMode               = 0
+	DefaultBootstrapMode              = 0
 	DefaultFinder                     = "echonet"
 	HttpRequestFqlPath                = "/fql"
 	HttpRequestFqlQueryParam          = "q"
@@ -31,7 +31,7 @@ const (
 	ConfigFqlQueryKey                 = "fql_query"
 	ConfigLogFileKey                  = "log_file"
 	ConfigLogLevelKey                 = "log_level"
-	ConfigBoostrapKey                 = "boostrap"
+	ConfigBootstrapKey                = "boostrap"
 	ConfigFinderKey                   = "finder"
 	ConfigMetricsStore                = "metrics_store"
 	FinderEchonet                     = "echonet"

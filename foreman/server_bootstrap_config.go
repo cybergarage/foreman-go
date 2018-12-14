@@ -23,8 +23,8 @@ const (
 	boostrapErrorNeighborhoodNode = "Neighborhood node is not found"
 )
 
-// importBoostrapConfig gets all monitoring configuration.
-func (server *Server) importBoostrapConfig(config *boostrapConfig) error {
+// importBootstrapConfig gets all monitoring configuration.
+func (server *Server) importBootstrapConfig(config *boostrapConfig) error {
 	configMap := config.Objects
 	for target, configObj := range configMap {
 		var err error
@@ -45,8 +45,8 @@ func (server *Server) importBoostrapConfig(config *boostrapConfig) error {
 	return nil
 }
 
-// exportBoostrapConfig gets all monitoring configuration.
-func (node *baseNode) exportBoostrapConfig() (*boostrapConfig, error) {
+// exportBootstrapConfig gets all monitoring configuration.
+func (node *baseNode) exportBootstrapConfig() (*boostrapConfig, error) {
 	targets := []string{
 		fql.QueryTargetQos,
 		fql.QueryTargetAction,
@@ -84,17 +84,17 @@ func (node *baseNode) exportBoostrapConfig() (*boostrapConfig, error) {
 		configMap[target] = configObj
 	}
 
-	return NewBoostrapConfigWithObject(configMap), nil
+	return NewBootstrapConfigWithObject(configMap), nil
 }
 
-// executeBoostrapWithRemoteNode executes boostrap with the specified node.
-func (server *Server) executeBoostrapWithRemoteNode(srcNode *RemoteNode) error {
-	configObj, err := srcNode.exportBoostrapConfig()
+// executeBootstrapWithRemoteNode executes boostrap with the specified node.
+func (server *Server) executeBootstrapWithRemoteNode(srcNode *RemoteNode) error {
+	configObj, err := srcNode.exportBootstrapConfig()
 	if err != nil {
 		return err
 	}
 
-	err = server.importBoostrapConfig(configObj)
+	err = server.importBootstrapConfig(configObj)
 	if err != nil {
 		return err
 	}
@@ -102,8 +102,8 @@ func (server *Server) executeBoostrapWithRemoteNode(srcNode *RemoteNode) error {
 	return nil
 }
 
-// executeBoostrap executes boostrap.
-func (server *Server) executeBoostrap() error {
+// executeBootstrapConfig executes to get configuration from other node in the cluster.
+func (server *Server) executeBootstrapConfig() error {
 	for retryCount := 0; retryCount < boostrapRetryCount; retryCount++ {
 		srcNode, err := server.Controller.GetNeighborhoodRemoteNode(server)
 		if err != nil || srcNode == nil {
@@ -114,13 +114,13 @@ func (server *Server) executeBoostrap() error {
 			time.Sleep(time.Second * boostrapRetrySleepSecond)
 			continue
 		}
-		return server.executeBoostrapWithRemoteNode(srcNode)
+		return server.executeBootstrapWithRemoteNode(srcNode)
 	}
 	return fmt.Errorf(boostrapErrorNeighborhoodNode)
 }
 
-// clearBoostrapConfig clears all boostrap configurations
-func (server *Server) clearBoostrapConfig() error {
+// clearBootstrapConfig clears all boostrap configurations
+func (server *Server) clearBootstrapConfig() error {
 	var lastError error
 
 	err := server.qosMgr.Clear()

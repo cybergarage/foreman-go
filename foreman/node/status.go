@@ -16,7 +16,7 @@ type Version uint
 const (
 	ConditionUnknown   = 0x00
 	ConditionInitial   = 0x10
-	ConditionBoostrap  = 0x20
+	ConditionBootstrap = 0x20
 	ConditionReady     = 0x30
 	ConditionStop      = 0x31
 	ConditionOutOfDate = 0x32

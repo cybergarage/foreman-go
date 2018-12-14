@@ -15,7 +15,7 @@ const (
 	ConfigFqlQueryKey     = "fql_query"
 	ConfigLogFileKey      = "log_file"
 	ConfigLogLevelKey     = "log_level"
-	ConfigBoostrapKey     = "boostrap"
+	ConfigBootstrapKey    = "boostrap"
 	ConfigFinderKey       = "finder"
 	ConfigMetricsStore    = "metrics_store"
 	RpcError              = "error"
