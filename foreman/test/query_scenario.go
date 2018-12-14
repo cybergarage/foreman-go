@@ -29,11 +29,11 @@ type QueryScenario struct {
 	client *foreman.Client
 }
 
-// NewQueryScenario returns create a query scenario.
-func NewQueryScenario() *QueryScenario {
+// NewQueryScenarioWithServer returns create a query scenario with the specified server.
+func NewQueryScenarioWithServer(server *foreman.Server) *QueryScenario {
 	s := &QueryScenario{
 		Scenario: NewScenario(),
-		server:   nil,
+		server:   server,
 		client:   foreman.NewClient(),
 	}
 
@@ -43,10 +43,13 @@ func NewQueryScenario() *QueryScenario {
 	return s
 }
 
+// NewQueryScenario returns create a query scenario.
+func NewQueryScenario() *QueryScenario {
+	return NewQueryScenarioWithServer(foreman.NewServer())
+}
+
 // Setup initializes the scenario.
 func (s *QueryScenario) Setup() error {
-	s.server = foreman.NewServer()
-
 	err := s.server.Start()
 	if err != nil {
 		return err
@@ -173,8 +176,6 @@ func (s *QueryScenario) Cleanup() error {
 	if err != nil {
 		return err
 	}
-
-	s.server = nil
 
 	return nil
 }
