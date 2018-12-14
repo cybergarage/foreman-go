@@ -4,18 +4,19 @@
 
 package action
 
-const (
-	ActionEncodingBase64   = "base64"
-	ActionLanguagePython   = "python"
-	ActionLanguageLua      = "lua"
-	ActionLanguageSystem   = "system"
-	ActionColumnMethods    = "methods"
-	ActionColumnName       = "name"
-	ActionColumnCode       = "code"
-	ActionColumnEncoding   = "encoding"
-	ActionColumnLanguage   = "language"
-	RouteColumnRoutes      = "routes"
-	RouteColumnName        = "name"
-	RouteColumnSource      = "src"
-	RouteColumnDestination = "dest"
+const ( 
+ActionFileExtention = "fql"
+ActionEncodingBase64 = "base64"
+ActionLanguagePython = "python"
+ActionLanguageLua = "lua"
+ActionLanguageSystem = "system"
+ActionColumnMethods = "methods"
+ActionColumnName = "name"
+ActionColumnCode = "code"
+ActionColumnEncoding = "encoding"
+ActionColumnLanguage = "language"
+RouteColumnRoutes = "routes"
+RouteColumnName = "name"
+RouteColumnSource = "src"
+RouteColumnDestination = "dest"
 )
