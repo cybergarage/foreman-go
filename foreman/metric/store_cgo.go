@@ -9,6 +9,7 @@ import "C"
 
 import (
 	"fmt"
+	"sync"
 	"time"
 	"unsafe"
 
@@ -24,6 +25,7 @@ const (
 type cgoStore struct {
 	cStore   unsafe.Pointer
 	listener StoreListener
+	*sync.Mutex
 	// FIXME : Support auto vacuum
 	vacuumCounter uint
 }
@@ -106,6 +108,9 @@ func (store *cgoStore) Clear() error {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
+	store.Lock()
+	defer store.Unlock()
+
 	if !C.foreman_metric_store_clear(store.cStore) {
 		return fmt.Errorf(errorStoreCouldNotClose, store)
 	}
@@ -126,6 +131,7 @@ func (store *cgoStore) SetStoreListener(listener StoreListener) error {
 
 // AddMetric adds a new metric.
 func (store *cgoStore) AddMetric(m *Metric) error {
+
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
@@ -137,10 +143,14 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 
 	var lastErr error
 
+	store.Lock()
+
 	isSuccess := C.foreman_metric_store_addmetric(store.cStore, cm)
 	if !isSuccess {
 		lastErr = fmt.Errorf(errorStoreCouldNotAddMetric, m.String())
 	}
+
+	store.Unlock()
 
 	if store.listener != nil {
 		err = store.listener.StoreMetricAdded(m)
@@ -151,13 +161,16 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 
 	// FIXME : Support auto vacuum
 
-	store.vacuumCounter++
-	if cgoStoreVacuumInterval < store.vacuumCounter {
-		err = store.Vacuum()
-		if err == nil {
-			store.vacuumCounter = 0
-		} else {
-			lastErr = err
+	ri, err := store.GetRetentionPeriod()
+	if (err == nil) && (0 < ri) {
+		store.vacuumCounter++
+		if cgoStoreVacuumInterval < store.vacuumCounter {
+			err = store.Vacuum()
+			if err == nil {
+				store.vacuumCounter = 0
+			} else {
+				lastErr = err
+			}
 		}
 	}
 
@@ -192,6 +205,8 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 
 	crs := C.foreman_metric_resultset_new()
 
+	store.Lock()
+
 	executed := false
 	switch q.Type {
 	case QueryTypeSelect:
@@ -207,6 +222,8 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 			executed = bool(C.foreman_metric_store_analyzedata(store.cStore, cq, crs, cerr))
 		}
 	}
+
+	store.Unlock()
 
 	if !executed {
 		C.foreman_metric_resultset_delete(crs)
@@ -225,11 +242,16 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 
 // Query gets the specified metrics.
 func (store *cgoStore) Vacuum() error {
+
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
+	store.Lock()
+
 	C.foreman_metric_store_query_delete_expired_metrics(store.cStore)
+
+	store.Unlock()
 
 	return nil
 }
