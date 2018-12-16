@@ -11,10 +11,10 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sync"
 	"testing"
 	"time"
 
-	"github.com/cybergarage/foreman-go/foreman/logging"
 	go_graphite "github.com/cybergarage/go-graphite/net/graphite"
 )
 
@@ -23,15 +23,16 @@ const (
 )
 
 type testFeedGraphiteConf struct {
-	feedFilenames []string
-	feedDuration  time.Duration
+	feedFilenames     []string
+	retentionInterval time.Duration
+	feedDuration      time.Duration
 }
 
 func newTestFeedGraphiteDefaultConf() *testFeedGraphiteConf {
-	return newTestFeedGraphite60SecConf()
+	return newTestCassandraFeedDataConf()
 }
 
-func newTestFeedGraphite60SecConf() *testFeedGraphiteConf {
+func newTestCassandraFeedDataConf() *testFeedGraphiteConf {
 	return &testFeedGraphiteConf{
 		feedFilenames: []string{
 			"server_graphite_feed_test_01_01.dat",
@@ -40,11 +41,12 @@ func newTestFeedGraphite60SecConf() *testFeedGraphiteConf {
 			"server_graphite_feed_test_01_04.dat",
 			"server_graphite_feed_test_01_05.dat",
 		},
-		feedDuration: 60 * time.Microsecond * 100,
+		retentionInterval: 60 * time.Second,
+		feedDuration:      60 * time.Microsecond * 100,
 	}
 }
 
-func newTestFeedGraphite10SecConf() *testFeedGraphiteConf {
+func newTestCollectdFeedDataConf() *testFeedGraphiteConf {
 	return &testFeedGraphiteConf{
 		feedFilenames: []string{
 			"server_graphite_feed_test_02_01_01.dat",
@@ -72,7 +74,8 @@ func newTestFeedGraphite10SecConf() *testFeedGraphiteConf {
 			"server_graphite_feed_test_02_10_01.dat",
 			"server_graphite_feed_test_02_10_02.dat",
 		},
-		feedDuration: 10 * time.Microsecond * 100,
+		retentionInterval: 10 * time.Second,
+		feedDuration:      10 * time.Microsecond * 100,
 	}
 }
 
@@ -122,13 +125,17 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 			continue
 		}
 		if len(ms) != 1 {
-			t.Errorf("%d != %d", len(ms), 1)
+			t.Errorf("%s : %s (%d != %d)", feedDataFilename, q.Target, len(ms), 1)
 		}
 	}
 
 	// Get each inserted metrics data (Render API)
 
 	storeInterval := server.GetMetricsStoreInterval()
+	storeIntervalSec := storeInterval.Seconds()
+	if storeIntervalSec <= 60 { /* Render API does not specify the seconds format */
+		storeInterval += time.Second * 60
+	}
 
 	for _, m := range feedMetrics {
 		dp, err := m.GetDataPoint(0)
@@ -152,17 +159,29 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 		}
 
 		if len(ms) <= 1 {
-			t.Errorf("%d <= %d", len(ms), 1)
+			t.Errorf("%s : %s (%d <= %d)", feedDataFilename, q.Target, len(ms), 1)
 		}
 	}
 }
 
 func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *testFeedGraphiteConf) {
-	logging.SetVerbose(true)
+	//logging.SetVerbose(true)
 
 	// Setup a target server
 
 	server, err := NewServerWithConfig(serverConf)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	err = server.SetMetricsStoreInterval(testConf.retentionInterval)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	err = server.SetMetricsStorePeriod(0)
 	if err != nil {
 		t.Error(err)
 		return
@@ -216,30 +235,86 @@ func TestGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
 		return
 	}
 
-	testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphiteDefaultConf())
+	feedDataConfs := []*testFeedGraphiteConf{
+		newTestCassandraFeedDataConf(),
+		newTestCollectdFeedDataConf(),
+	}
+
+	for _, feedDataConf := range feedDataConfs {
+		testGraphiteFeedWithConfig(t, serverConf, feedDataConf)
+	}
 }
 
-/*
 func TestMultiGraphiteFeedAPIWithDefaultConfigFile(t *testing.T) {
+	//logging.SetVerbose(true)
+
 	serverConf, err := NewConfigWithFile(configTestFilename)
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
+	// Feed data configurations
+
+	feedData60Sec := newTestCassandraFeedDataConf()
+	feedData10Sec := newTestCollectdFeedDataConf()
+
+	// Setup a target server
+
+	server, err := NewServerWithConfig(serverConf)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	err = server.SetMetricsStoreInterval(feedData10Sec.retentionInterval)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	err = server.SetMetricsStorePeriod(0)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	err = server.Start()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	// Feed catpured metrics (Carbon API)
+
 	var wg sync.WaitGroup
 	wg.Add(2)
 
 	go func() {
 		defer wg.Done()
-		testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphite60SecConf())
+		conf := feedData60Sec
+		for _, feelFilename := range conf.feedFilenames {
+			testFeedGraphiteDataToServer(t, server, feelFilename)
+			time.Sleep(conf.feedDuration)
+		}
 	}()
 
 	go func() {
 		defer wg.Done()
-		testGraphiteFeedWithConfig(t, serverConf, newTestFeedGraphite10SecConf())
+		conf := feedData10Sec
+		for _, feelFilename := range conf.feedFilenames {
+			testFeedGraphiteDataToServer(t, server, feelFilename)
+			time.Sleep(conf.feedDuration)
+		}
 	}()
 
 	wg.Wait()
+
+	// Stop the target server
+
+	err = server.Stop()
+	if err != nil {
+		t.Error(err)
+	}
+
 }
-*/
