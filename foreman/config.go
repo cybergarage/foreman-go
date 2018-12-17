@@ -95,12 +95,24 @@ func (conf *Config) GetLogLevel() logging.LogLevel {
 	return logging.LogLevelFromString(conf.Log.Level)
 }
 
+// SetMetricsStorePeriod sets a metrics period duration.
+func (conf *Config) SetMetricsStorePeriod(d time.Duration) error {
+	conf.Metrics.Period = int(d / time.Second)
+	return nil
+}
+
 // GetMetricsStorePeriod returns the metrics period duration.
 func (conf *Config) GetMetricsStorePeriod() time.Duration {
 	return time.Second * time.Duration(conf.Metrics.Period)
 }
 
-// GetMetricsStoreInterval returns the metrics period duration.
+// SetMetricsStoreInterval sets a metrics intervale.
+func (conf *Config) SetMetricsStoreInterval(d time.Duration) error {
+	conf.Metrics.Interval = int(d / time.Second)
+	return nil
+}
+
+// GetMetricsStoreInterval returns the metrics interval.
 func (conf *Config) GetMetricsStoreInterval() time.Duration {
 	return time.Second * time.Duration(conf.Metrics.Interval)
 }
