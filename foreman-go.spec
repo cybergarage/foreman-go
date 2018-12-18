@@ -48,9 +48,9 @@ mkdir -p %{buildroot}/var/log/foreman
 /usr/sbin/foremantest
 %defattr(644,root,root,755)
 /etc/foreman
-/etc/foreman/bootstrap
 %{_unitdir}/foremand.service
 %dir /var/log/foreman
+%dir /etc/foreman/bootstrap
 
 %post
 %systemd_post foremand.service
