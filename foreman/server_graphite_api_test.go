@@ -191,7 +191,7 @@ func TestGraphiteAPIsWithHostName(t *testing.T) {
 }
 
 func TestGraphiteAPIsWithDefaultConfigFile(t *testing.T) {
-	serverConf, err := NewConfigWithFile(configTestFilename)
+	serverConf, err := newDefaultTestServerConfig()
 	if err != nil {
 		t.Error(err)
 		return

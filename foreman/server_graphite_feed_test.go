@@ -245,7 +245,7 @@ func TestGraphiteFeedAPIWithHostName(t *testing.T) {
 }
 
 func TestGraphiteFeedAPIWithNanFeedData(t *testing.T) {
-	serverConf, err := NewConfigWithFile(configTestFilename)
+	serverConf, err := newDefaultTestServerConfig()
 	if err != nil {
 		t.Error(err)
 		return
@@ -255,7 +255,7 @@ func TestGraphiteFeedAPIWithNanFeedData(t *testing.T) {
 }
 
 func TestGraphiteFeedAPIWithDefaultFeedData(t *testing.T) {
-	serverConf, err := NewConfigWithFile(configTestFilename)
+	serverConf, err := newDefaultTestServerConfig()
 	if err != nil {
 		t.Error(err)
 		return
@@ -274,7 +274,7 @@ func TestGraphiteFeedAPIWithDefaultFeedData(t *testing.T) {
 func TestMultipleGraphiteFeedAPIWithDefaultFeedData(t *testing.T) {
 	logging.SetVerbose(true)
 
-	serverConf, err := NewConfigWithFile(configTestFilename)
+	serverConf, err := newDefaultTestServerConfig()
 	if err != nil {
 		t.Error(err)
 		return

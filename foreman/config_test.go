@@ -19,7 +19,7 @@ func TestDefaultConfig(t *testing.T) {
 }
 
 func TestConfigLoadFile(t *testing.T) {
-	conf, err := NewConfigWithFile(configTestFilename)
+	conf, err := newDefaultTestServerConfig()
 	if err != nil {
 		t.Error(err)
 	}
@@ -28,4 +28,16 @@ func TestConfigLoadFile(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+}
+
+func newDefaultTestServerConfig() (*Config, error) {
+	conf, err := NewConfigWithFile(configTestFilename)
+	if err != nil {
+		return nil, err
+	}
+
+	// Disable : [Bootstrap] query = "/etc/foreman/bootstrap"
+	conf.SetBootstrapQuery("")
+
+	return conf, nil
 }
