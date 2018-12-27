@@ -4,16 +4,16 @@
 
 package foreman
 
-// #include <foreman/foreman-c.h>
-import "C"
-
 import (
 	"bufio"
 	"os"
 	"time"
 
-	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/BurntSushi/toml"
+
+	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/logging"
+	"github.com/cybergarage/foreman-go/foreman/util"
 )
 
 type LogConfig struct {
@@ -26,7 +26,7 @@ type ServerConfig struct {
 	Host       string
 	CarbonPort int
 	HTTPPort   int
-	Boostrap   int
+	Bootstrap  int
 	Finder     string
 }
 
@@ -41,12 +41,17 @@ type MetricsConfig struct {
 	Interval int
 }
 
+type BootstrapConfig struct {
+	Query string
+}
+
 // Config represents a configuration.
 type Config struct {
-	Log     LogConfig
-	Server  ServerConfig
-	FQL     FQLConfig
-	Metrics MetricsConfig
+	Log       LogConfig
+	Server    ServerConfig
+	FQL       FQLConfig
+	Metrics   MetricsConfig
+	Bootstrap BootstrapConfig
 }
 
 // NewDefaultConfig return a default configuration.
@@ -60,7 +65,7 @@ func NewDefaultConfig() *Config {
 	conf.Server.Host = DefaultServerHost
 	conf.Server.HTTPPort = DefaultHttpPort
 	conf.Server.CarbonPort = DefaultCarbonPort
-	conf.Server.Boostrap = DefaultBoostrapMode
+	conf.Server.Bootstrap = DefaultBootstrapMode
 	conf.Server.Finder = DefaultFinder
 
 	conf.FQL.Path = HttpRequestFqlPath
@@ -69,6 +74,8 @@ func NewDefaultConfig() *Config {
 	conf.Metrics.Store = DefaultMetricsStore
 	conf.Metrics.Period = DefaultMetricsPeriod
 	conf.Metrics.Interval = DefaultMetricsInterval
+
+	conf.Bootstrap.Query = ""
 
 	return &conf
 }
@@ -88,21 +95,10 @@ func (conf *Config) GetLogLevel() logging.LogLevel {
 	return logging.LogLevelFromString(conf.Log.Level)
 }
 
-// SetBoostrapEnabled set the boostrap flag.
-func (conf *Config) SetBoostrapEnabled(flag bool) {
-	if flag {
-		conf.Server.Boostrap = 1
-		return
-	}
-	conf.Server.Boostrap = 0
-}
-
-// IsBoostrapEnabled returns true when the boostrap flag is true, otherwise false.
-func (conf *Config) IsBoostrapEnabled() bool {
-	if conf.Server.Boostrap == 0 {
-		return false
-	}
-	return true
+// SetMetricsStorePeriod sets a metrics period duration.
+func (conf *Config) SetMetricsStorePeriod(d time.Duration) error {
+	conf.Metrics.Period = int(d / time.Second)
+	return nil
 }
 
 // GetMetricsStorePeriod returns the metrics period duration.
@@ -110,7 +106,13 @@ func (conf *Config) GetMetricsStorePeriod() time.Duration {
 	return time.Second * time.Duration(conf.Metrics.Period)
 }
 
-// GetMetricsStoreInterval returns the metrics period duration.
+// SetMetricsStoreInterval sets a metrics intervale.
+func (conf *Config) SetMetricsStoreInterval(d time.Duration) error {
+	conf.Metrics.Interval = int(d / time.Second)
+	return nil
+}
+
+// GetMetricsStoreInterval returns the metrics interval.
 func (conf *Config) GetMetricsStoreInterval() time.Duration {
 	return time.Second * time.Duration(conf.Metrics.Interval)
 }
@@ -128,6 +130,59 @@ func (conf *Config) LoadFile(filename string) error {
 	return nil
 }
 
+// SetBootstrapEnabled set the boostrap flag.
+func (conf *Config) SetBootstrapEnabled(flag bool) {
+	if flag {
+		conf.Server.Bootstrap = 1
+		return
+	}
+	conf.Server.Bootstrap = 0
+}
+
+// IsBootstrapEnabled returns true when the boostrap flag is true, otherwise false.
+func (conf *Config) IsBootstrapEnabled() bool {
+	if conf.Server.Bootstrap == 0 {
+		return false
+	}
+	return true
+}
+
+// SetBootstrapQuery set a boostrap query file or directory.
+func (conf *Config) SetBootstrapQuery(query string) bool {
+	conf.Bootstrap.Query = query
+	return true
+}
+
+// HasBootstrapQuery returns true when the query file is specified, otherwise false.
+func (conf *Config) HasBootstrapQuery() bool {
+	if len(conf.Bootstrap.Query) <= 0 {
+		return false
+	}
+	return true
+}
+
+// GetBootstrapQueryFiles returns all boostrap file name.
+func (conf *Config) GetBootstrapQueryFiles() ([]*util.File, error) {
+	queryFiles := make([]*util.File, 0)
+
+	if len(conf.Bootstrap.Query) <= 0 {
+		return queryFiles, nil
+	}
+
+	queryFile := util.NewFileWithPath(conf.Bootstrap.Query)
+	if !queryFile.IsDir() {
+		return append(queryFiles, util.NewFileWithPath(queryFile.Path)), nil
+	}
+
+	queryFiles, err := queryFile.ListFilesWithExtention(action.ActionFileExtention)
+	if err != nil {
+		return nil, err
+	}
+
+	return queryFiles, nil
+}
+
+// ToFile stores the current configuration to a file.
 func (conf *Config) ToFile(filename string) error {
 	outfile, err := os.Create(filename)
 	if err != nil {

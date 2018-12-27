@@ -11,6 +11,7 @@ import "C"
 import (
 	"fmt"
 	"runtime"
+	"sync"
 	"unsafe"
 )
 
@@ -31,6 +32,7 @@ func newStoreWithCObject(cObject unsafe.Pointer) *Store {
 	storeImp := &cgoStore{
 		cStore:        cObject,
 		listener:      nil,
+		Mutex:         new(sync.Mutex),
 		vacuumCounter: 0,
 	}
 	runtime.SetFinalizer(storeImp, cObjectStoreFinalizer)

@@ -23,8 +23,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/cybergarage/foreman-go/foreman"
 	"github.com/cybergarage/foreman-go/foreman/errors"
-	"github.com/cybergarage/foreman-go/foreman/test"
 )
 
 const (
@@ -41,7 +41,7 @@ func errorMessage(e *errors.Error) {
 
 func main() {
 
-	s := test.NewQueryScenario()
+	s := foreman.NewQueryScenario()
 
 	if len(os.Args) < 2 {
 		usage()

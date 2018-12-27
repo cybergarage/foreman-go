@@ -31,7 +31,7 @@ func (server *Server) ExecuteConfigQuery(q fql.Query) (interface{}, *errors.Erro
 	configMap[rpc.ConfigCarbonPortKey] = server.GetCarbonPort()
 
 	configMap[rpc.ConfigLogLevelKey] = server.Log.Level
-	configMap[rpc.ConfigBoostrapKey] = server.Server.Boostrap
+	configMap[rpc.ConfigBootstrapKey] = server.Server.Bootstrap
 	configMap[rpc.ConfigMetricsStore] = server.metricMgr.String()
 
 	configContainer := map[string]interface{}{}

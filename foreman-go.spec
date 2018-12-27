@@ -36,6 +36,7 @@ export CGO_CFLAGS="-static-libgcc"
 export go_linker_flags='-linkmode=external "-extldflags=-static-libstdc++ -static-libgcc"'
 GOBIN=%{buildroot}/usr/sbin make install
 mkdir -p %{buildroot}/etc/foreman
+mkdir -p %{buildroot}/etc/foreman/bootstrap
 cp debian/foremand.conf %{buildroot}/etc/foreman/foremand.conf
 mkdir -p %{buildroot}/%{_unitdir}
 cp debian/foremand.service %{buildroot}/%{_unitdir}/foremand.service
@@ -49,6 +50,7 @@ mkdir -p %{buildroot}/var/log/foreman
 /etc/foreman
 %{_unitdir}/foremand.service
 %dir /var/log/foreman
+%dir /etc/foreman/bootstrap
 
 %post
 %systemd_post foremand.service

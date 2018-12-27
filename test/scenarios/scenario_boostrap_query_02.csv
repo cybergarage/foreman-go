@@ -1,0 +1,11 @@
+# QoS queries
+
+EXPORT FROM ROUTE WHERE name == "qos";200;/action/routes/qos
+EXPORT FROM ACTION WHERE name == "qos_unsatisfied";200;/action/methods/qos_unsatisfied
+EXPORT FROM QOS WHERE name == m0_10;200;/qos/m0_10
+EXPORT FROM REGISTER WHERE name == m0;200;/register/m0/value;10.0
+
+# Action queries
+
+EXPORT FROM ACTION WHERE name == "test_echo";200;/action/methods/test_echo
+EXECUTE test_echo (message) VALUES ("hello");200;/message;hello
