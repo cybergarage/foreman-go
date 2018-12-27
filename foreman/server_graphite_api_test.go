@@ -2,11 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// FIXME : Disable TestGraphiteAPI*() for Linux because of these tests timeout On CentOS
+// +build !linux
+
 package foreman
 
 import (
 	"fmt"
 	"math/rand"
+	"os"
 	"testing"
 	"time"
 
@@ -14,7 +18,7 @@ import (
 )
 
 const (
-	testGrahiteHost                  = "localhost"
+	testGraphiteHost                 = "localhost"
 	testGrahiteMetricsNameFormat     = "localhost.metrics%d"
 	testGrahiteMetricsCount          = 10
 	testGrahiteMetricsIntervalSecond = (60 * 5)
@@ -162,10 +166,9 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 	}
 }
 
-/*
 func TestGraphiteAPIsWithLocalhost(t *testing.T) {
 	serverConf := NewDefaultConfig()
-	serverConf.Server.Host = testGrahiteHost
+	serverConf.Server.Host = testGraphiteHost
 
 	testConf := newtestGraphiteAPIsConfig()
 
@@ -188,7 +191,7 @@ func TestGraphiteAPIsWithHostName(t *testing.T) {
 }
 
 func TestGraphiteAPIsWithDefaultConfigFile(t *testing.T) {
-	serverConf, err := NewConfigWithFile(configTestFilename)
+	serverConf, err := newDefaultTestServerConfig()
 	if err != nil {
 		t.Error(err)
 		return
@@ -201,7 +204,7 @@ func TestGraphiteAPIsWithDefaultConfigFile(t *testing.T) {
 
 func TestGraphiteAPIsForRepeatedInsert(t *testing.T) {
 	serverConf := NewDefaultConfig()
-	serverConf.Server.Host = testGrahiteHost
+	serverConf.Server.Host = testGraphiteHost
 
 	testConf := newtestGraphiteAPIsConfig()
 	testConf.insertRepeadCount = 2
@@ -211,7 +214,7 @@ func TestGraphiteAPIsForRepeatedInsert(t *testing.T) {
 
 func TestGraphiteAPIsWithTimestampJitter(t *testing.T) {
 	serverConf := NewDefaultConfig()
-	serverConf.Server.Host = testGrahiteHost
+	serverConf.Server.Host = testGraphiteHost
 
 	testConf := newtestGraphiteAPIsConfig()
 	testConf.timestampJitter = true
@@ -221,7 +224,7 @@ func TestGraphiteAPIsWithTimestampJitter(t *testing.T) {
 
 func TestGraphiteAPIsWithRepeatedAndTimestampJitter(t *testing.T) {
 	serverConf := NewDefaultConfig()
-	serverConf.Server.Host = testGrahiteHost
+	serverConf.Server.Host = testGraphiteHost
 
 	testConf := newtestGraphiteAPIsConfig()
 	testConf.timestampJitter = true
@@ -229,4 +232,3 @@ func TestGraphiteAPIsWithRepeatedAndTimestampJitter(t *testing.T) {
 
 	testGraphiteAPIsWithConfig(t, serverConf, testConf)
 }
-*/

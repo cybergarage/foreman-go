@@ -18,7 +18,7 @@ default_metrics_store,"sqlite"
 default_metrics_interval,300
 default_metrics_period,3600
 default_cluster,"foreman"
-default_boostrap_mode,0
+default_bootstrap_mode,0
 default_finder,"echonet"
 
 ########################################
@@ -65,6 +65,8 @@ finder_echonet,"echonet"
 ########################################
 # Action 
 ########################################
+
+action_file_extention,"fql"
 
 action_encoding_base64,"base64"
 

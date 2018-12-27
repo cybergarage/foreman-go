@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package test
+package foreman
 
 import (
 	"fmt"
 	"strconv"
 
-	"github.com/cybergarage/foreman-go/foreman"
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/rpc/json"
+	"github.com/cybergarage/foreman-go/foreman/test"
 )
 
 const (
@@ -24,17 +24,17 @@ const (
 
 // QueryScenario represents a scenario test.
 type QueryScenario struct {
-	*Scenario
-	server *foreman.Server
-	client *foreman.Client
+	*test.Scenario
+	server *Server
+	client *Client
 }
 
-// NewQueryScenario returns create a query scenario.
-func NewQueryScenario() *QueryScenario {
+// NewQueryScenarioWithServer returns create a query scenario with the specified server.
+func NewQueryScenarioWithServer(server *Server) *QueryScenario {
 	s := &QueryScenario{
-		Scenario: NewScenario(),
-		server:   nil,
-		client:   foreman.NewClient(),
+		Scenario: test.NewScenario(),
+		server:   server,
+		client:   NewClient(),
 	}
 
 	s.SetExecutor(s)
@@ -43,10 +43,13 @@ func NewQueryScenario() *QueryScenario {
 	return s
 }
 
+// NewQueryScenario returns create a query scenario.
+func NewQueryScenario() *QueryScenario {
+	return NewQueryScenarioWithServer(NewServer())
+}
+
 // Setup initializes the scenario.
 func (s *QueryScenario) Setup() error {
-	s.server = foreman.NewServer()
-
 	err := s.server.Start()
 	if err != nil {
 		return err
@@ -58,8 +61,8 @@ func (s *QueryScenario) Setup() error {
 }
 
 // Execute runs the specified event.
-func (s *QueryScenario) Execute(e *Event) (*Response, *errors.Error) {
-	q := NewQueryEvent()
+func (s *QueryScenario) Execute(e *test.Event) (*test.Response, *errors.Error) {
+	q := test.NewQueryEvent()
 	err := q.ParseEvent(e)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
@@ -70,7 +73,7 @@ func (s *QueryScenario) Execute(e *Event) (*Response, *errors.Error) {
 		return nil, errors.NewErrorWithError(err)
 	}
 
-	res := NewQueryResponse()
+	res := test.NewQueryResponse()
 	res.Query = q.Query
 	res.StatusCode = resCode
 	res.Content = resObj
@@ -84,12 +87,12 @@ func (s *QueryScenario) Execute(e *Event) (*Response, *errors.Error) {
 }
 
 // EventExecuted are received the execution result.
-func (s *QueryScenario) EventExecuted(*Event, *Response, *errors.Error) {
+func (s *QueryScenario) EventExecuted(*test.Event, *test.Response, *errors.Error) {
 
 }
 
 // verifyResponse verifies the JSON response with the verify data.
-func (s *QueryScenario) verifyResponse(res *QueryResponse, expectRes *QueryExpectation) error {
+func (s *QueryScenario) verifyResponse(res *test.QueryResponse, expectRes *test.QueryExpectation) error {
 	resCode := res.GetStatusCode()
 	if resCode != expectRes.StatusCode {
 		return fmt.Errorf(errorQueryInvalidStatusCode, resCode, expectRes.StatusCode, res.Query)
@@ -173,8 +176,6 @@ func (s *QueryScenario) Cleanup() error {
 	if err != nil {
 		return err
 	}
-
-	s.server = nil
 
 	return nil
 }

@@ -29,7 +29,7 @@ func (server *Server) Restart() error {
 
 	if 0 < len(server.queryFile) {
 		logging.Info("Reloading query...")
-		err := server.clearBoostrapConfig()
+		err := server.clearBootstrapConfig()
 		if err != nil {
 			logging.Error(err.Error())
 			return err

@@ -2,23 +2,25 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package test
+package foreman
 
 import (
+	"path/filepath"
 	"testing"
 	"time"
+
+	"github.com/cybergarage/foreman-go/foreman/test"
 )
 
 const (
-	testScenarioDirectory = "../../test/scenarios/"
+	testScenarioDirectory = "../test/scenarios/"
 )
 
-func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, testConf *Config, scenarioOpt *ScenarioOption) {
-
-	s := NewQueryScenario()
+func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, testConf *test.Config, scenarioOpt *test.ScenarioOption) {
 
 	for _, file := range scenarioFiles {
-		filePath := testScenarioDirectory + file
+		s := NewQueryScenario()
+		filePath := filepath.Join(testScenarioDirectory, file)
 		err := s.ExecuteFileWithOption(filePath, scenarioOpt)
 		if err != nil {
 			lastEvent := s.GetLastEvent()
@@ -48,8 +50,8 @@ func TestQueryBasicScenarios(t *testing.T) {
 		"scenario_register_01.csv",
 	}
 
-	conf := NewDefaultConfig()
-	opt := NewDefaultScenarioOption()
+	conf := test.NewDefaultConfig()
+	opt := test.NewDefaultScenarioOption()
 
 	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
 }
@@ -60,9 +62,9 @@ func TestQueryBasicScenariosWithSleep(t *testing.T) {
 		"scenario_metrics_02.csv",
 	}
 
-	conf := NewDefaultConfig()
+	conf := test.NewDefaultConfig()
 
-	opt := NewDefaultScenarioOption()
+	opt := test.NewDefaultScenarioOption()
 	opt.SetStepDuration(time.Second)
 
 	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
@@ -71,12 +73,15 @@ func TestQueryBasicScenariosWithSleep(t *testing.T) {
 func TestQueryExtraScenarios(t *testing.T) {
 	scenarioFiles := []string{
 		"scenario_action_02.csv",
+		// FIXME : foreman.get_getregister might be wrong
+		//"scenario_action_03.csv",
+		"scenario_action_04.csv",
 	}
 
-	conf := NewDefaultConfig()
+	conf := test.NewDefaultConfig()
 	conf.EnableSkipError = true
 
-	opt := NewDefaultScenarioOption()
+	opt := test.NewDefaultScenarioOption()
 
 	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
 }

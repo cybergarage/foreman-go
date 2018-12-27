@@ -5,6 +5,7 @@
 package action
 
 const (
+	ActionFileExtention    = "fql"
 	ActionEncodingBase64   = "base64"
 	ActionLanguagePython   = "python"
 	ActionLanguageLua      = "lua"
