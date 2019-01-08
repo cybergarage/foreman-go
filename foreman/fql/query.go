@@ -10,6 +10,7 @@ const (
 	QueryTypeUnknown QueryType = iota
 	QueryTypeInsert
 	QueryTypeSelect
+	QueryTypeUpdate
 	QueryTypeDelete
 	QueryTypeAnalyze
 	QueryTypeExecute

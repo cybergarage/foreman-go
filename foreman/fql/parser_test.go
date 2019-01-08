@@ -18,6 +18,7 @@ const (
 	testFQLInsertCaseFilename  = "parser_test_insert_case.csv"
 	testFQLSetCaseFilename     = "parser_test_set_case.csv"
 	testFQLSelectCaseFilename  = "parser_test_select_case.csv"
+	testFQLUpdateCaseFilename  = "parser_test_update_case.csv"
 	testFQLExportCaseFilename  = "parser_test_export_case.csv"
 	testFQLDeleteCaseFilename  = "parser_test_delete_case.csv"
 	testFQLExecuteCaseFilename = "parser_test_execute_case.csv"
@@ -91,6 +92,7 @@ func TestFQLCases(t *testing.T) {
 		testFQLSetCaseFilename:     &insertQueryTestListener{},
 		testFQLSelectCaseFilename:  &selectQueryTestListener{},
 		testFQLExportCaseFilename:  &selectQueryTestListener{},
+		testFQLUpdateCaseFilename:  &updateQueryTestListener{},
 		testFQLDeleteCaseFilename:  &deleteQueryTestListener{},
 		testFQLExecuteCaseFilename: &executeQueryTestListener{},
 		testFQLAnalyzeCaseFilename: &analyzeQueryTestListener{},
@@ -169,6 +171,54 @@ func (l *selectQueryTestListener) testCase(t *testing.T, q Query, corrects []str
 			return fmt.Errorf(errorInvalidOperatorType, opeType)
 
 		}
+	}
+
+	return nil
+}
+
+// Update
+
+type updateQueryTestListener struct{}
+
+func (l *updateQueryTestListener) testCase(t *testing.T, q Query, corrects []string) error {
+	// Target
+
+	target, _ := q.GetTarget()
+	if target.String() != corrects[0] {
+		return fmt.Errorf(errorInvalidTarget, target.String(), corrects[0])
+	}
+
+	// Columns
+
+	columnsCnt, err := strconv.Atoi(corrects[1])
+	if err != nil {
+		return err
+	}
+	columns, _ := q.GetColumns()
+	if len(columns) != columnsCnt {
+		return fmt.Errorf(errorInvalidColumnCount, len(columns), columnsCnt)
+	}
+
+	// Columns
+
+	valueCnt, err := strconv.Atoi(corrects[1])
+	if err != nil {
+		return err
+	}
+	values, _ := q.GetValues()
+	if len(values) != valueCnt {
+		return fmt.Errorf(errorInvalidValueCount, len(values), valueCnt)
+	}
+
+	// Conditions
+
+	condCnt, err := strconv.Atoi(corrects[2])
+	if err != nil {
+		return err
+	}
+	conds, _ := q.GetConditions()
+	if len(conds) != condCnt {
+		return fmt.Errorf(errorInvalidConditionCount, len(conds), condCnt)
 	}
 
 	return nil
