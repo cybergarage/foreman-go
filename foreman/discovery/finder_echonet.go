@@ -21,7 +21,9 @@ const (
 )
 
 const (
-	errorEchonetFinderNoResponse = "Echonet node (%s:%d) is not responding"
+	errorEchonetFinderNoResponse     = "Echonet node (%s:%d) is not responding"
+	msgEchonetFinderFoundEchonetNode = "Echonet node (%s:%d) is found"
+	msgEchonetFinderFoundCadiateNode = "Candidate finder node (%s:%d) is found"
 )
 
 // EchonetFinder represents a base finder.
@@ -94,6 +96,8 @@ func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *uecho_echonet.R
 		return
 	}
 
+	logging.Info(msgEchonetFinderFoundEchonetNode, candidateNode.GetAddress(), candidateNode.GetPort())
+
 	reqMsg := foreman_echonet.NewRequestAllPropertiesMessage()
 	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
 	if err != nil {
@@ -107,6 +111,8 @@ func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *uecho_echonet.R
 		logging.Error("%s", err.Error())
 		return
 	}
+
+	logging.Info(msgEchonetFinderFoundCadiateNode, candidateNode.GetAddress(), candidateNode.GetPort())
 
 	if finder.IsLocalNode(candidateNode) {
 		return
