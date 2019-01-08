@@ -112,7 +112,7 @@ func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *uecho_echonet.R
 		return
 	}
 
-	logging.Info(msgEchonetFinderFoundCadiateNode, candidateNode.GetAddress(), candidateNode.GetPort())
+	logging.Info(msgEchonetFinderFoundCadiateNode, candidateNode.GetAddress(), candidateNode.GetRPCPort())
 
 	if finder.IsLocalNode(candidateNode) {
 		return
