@@ -20,6 +20,10 @@ const (
 	echonetFinderSearchSleepSecond = 1
 )
 
+const (
+	errorEchonetFinderNoResponse = "Echonet node (%s:%d) is not responding"
+)
+
 // EchonetFinder represents a base finder.
 type EchonetFinder struct {
 	*baseFinder
@@ -93,6 +97,7 @@ func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *uecho_echonet.R
 	reqMsg := foreman_echonet.NewRequestAllPropertiesMessage()
 	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
 	if err != nil {
+		logging.Error(errorEchonetFinderNoResponse, echonetNode.GetAddress(), echonetNode.GetPort())
 		logging.Error("%s", err.Error())
 		return
 	}
