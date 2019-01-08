@@ -44,6 +44,7 @@ func TestQueryBasicScenarios(t *testing.T) {
 	scenarioFiles := []string{
 		"scenario_action_01.csv",
 		"scenario_config_01.csv",
+		"scenario_finder_01.csv",
 		"scenario_metrics_01.csv",
 		"scenario_metrics_02.csv",
 		"scenario_qos_01.csv",

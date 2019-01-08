@@ -62,12 +62,12 @@ func (server *Server) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 
 	targetExecutors := map[string]fql.QueryExecutor{
 		fql.QueryTargetQos:      server.qosMgr,
-		fql.QueryTargetConfig:   server,
 		fql.QueryTargetMetrics:  server.metricMgr,
 		fql.QueryTargetRegister: server.registerMgr,
 		fql.QueryTargetRegistry: server.registryMgr,
 		fql.QueryTargetAction:   server.actionMgr,
 		fql.QueryTargetRoute:    server.actionMgr,
+		fql.QueryTargetFinder:   server.Controller,
 	}
 
 	executor, ok = targetExecutors[target]

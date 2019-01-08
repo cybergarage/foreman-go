@@ -43,7 +43,7 @@ config_fql_path_key,"fql_path"
 config_fql_query_key,"fql_query"
 config_log_file_key,"log_file"
 config_log_level_key,"log_level"
-config_boostrap_key,"boostrap"
+config_bootstrap_key,"boostrap"
 config_finder_key,"finder"
 config_metrics_store,"metrics_store"
 
@@ -61,6 +61,12 @@ metric_store_ringmap,"ringmap"
 ########################################
 
 finder_echonet,"echonet"
+finder_node_cluster,"cluster"
+finder_node_name,"name"
+finder_node_address,"address"
+finder_node_rpc_port,"rpc_port"
+finder_node_carbon_port,"carbon_port"
+finder_node_render_port,"render_port"
 
 ########################################
 # Action 
@@ -102,6 +108,7 @@ query_target_register,"REGISTER"
 query_target_registry,"REGISTRY"
 query_target_action,"ACTION"
 query_target_route,"ROUTE"
+query_target_finder,"FINDER"
 
 query_target_type_none,0
 query_target_type_shared,1

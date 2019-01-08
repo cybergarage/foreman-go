@@ -17,6 +17,7 @@ const (
 	QueryTargetRegistry       = "REGISTRY"
 	QueryTargetAction         = "ACTION"
 	QueryTargetRoute          = "ROUTE"
+	QueryTargetFinder         = "FINDER"
 	QueryTargetTypeNone       = 0
 	QueryTargetTypeShared     = 1
 	QueryTargetTypeFederated  = 2
