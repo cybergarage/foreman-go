@@ -247,13 +247,15 @@ func (q *baseQuery) String() string {
 		columns, _ := q.GetColumns()
 		values, _ := q.GetValues()
 		if len(columns) == len(values) {
-			queryString += " SET "
-			for n, column := range columns {
-				if 0 < n {
-					queryString += ", "
+			if 0 < len(columns) {
+				queryString += " SET "
+				for n, column := range columns {
+					if 0 < n {
+						queryString += ", "
+					}
+					value := values[n]
+					queryString += fmt.Sprintf("%s = %s", column.String(), value.String())
 				}
-				value := values[n]
-				queryString += fmt.Sprintf("%s = %s", column.String(), value.String())
 			}
 		}
 	}
