@@ -31,6 +31,7 @@ query
 	| setQuery
 	| selectQuery
 	| exportQuery
+	| updateQuery
 	| deleteQuery
 	| analyzeQuery
 	| executeQuery
@@ -66,6 +67,14 @@ selectQuery
 
 exportQuery
 	: EXPORT FROM target (WHERE conditions)?
+	;
+
+/*------------------------------------------------------------------
+ * UPDATE
+ *------------------------------------------------------------------*/
+
+updateQuery
+	: UPDATE target (SET columnsets)? (WHERE conditions)?
 	;
 
 /*------------------------------------------------------------------
@@ -119,6 +128,14 @@ columns
 	: column (',' column)*
 	;
 
+columnset
+	: column '=' value
+	;
+	
+columnsets
+	: columnset (',' columnset)*
+	;
+
 conditions
 	: condition (AND condition)*
 	;
@@ -165,6 +182,10 @@ DELETE
 
 SET
 	: S E T
+	;
+
+UPDATE
+	: U P D A T E
 	;
 
 ANALYZE

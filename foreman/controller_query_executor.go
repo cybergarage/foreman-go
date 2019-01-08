@@ -5,18 +5,19 @@
 package foreman
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
 )
 
-// ExecuteQuery must return the result as a standard array or map.
-func (ctrl *Controller) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
-	if q.GetType() != fql.QueryTypeSelect {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
-	}
+const (
+	errorQueryExecuteFinder = "Finder is not available"
+)
 
+// executeExportQuery returns all found nodes.
+func (ctrl *Controller) executeExportQuery(q fql.Query) (interface{}, *errors.Error) {
 	finderNodes := []map[string]interface{}{}
 
 	if ctrl.HasFinder() {
@@ -41,4 +42,29 @@ func (ctrl *Controller) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 	finderContainer[strings.ToLower(fql.QueryTargetFinder)] = finderNodes
 
 	return finderContainer, nil
+}
+
+// executeUpdateQuery searches all node in the cluster.
+func (ctrl *Controller) executeUpdateQuery(q fql.Query) (interface{}, *errors.Error) {
+	if !ctrl.HasFinder() {
+		return nil, errors.NewErrorWithError(fmt.Errorf(errorQueryExecuteFinder))
+	}
+
+	err := ctrl.Finder.Search()
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+	return nil, nil
+}
+
+// ExecuteQuery must return the result as a standard array or map.
+func (ctrl *Controller) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
+	switch q.GetType() {
+	case fql.QueryTypeSelect:
+		return ctrl.executeExportQuery(q)
+	case fql.QueryTypeUpdate:
+		return ctrl.executeUpdateQuery(q)
+	}
+
+	return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryMethodNotSupported)
 }

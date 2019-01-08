@@ -28,6 +28,9 @@ type FQLListener interface {
 	// EnterExportQuery is called when entering the exportQuery production.
 	EnterExportQuery(c *ExportQueryContext)
 
+	// EnterUpdateQuery is called when entering the updateQuery production.
+	EnterUpdateQuery(c *UpdateQueryContext)
+
 	// EnterDeleteQuery is called when entering the deleteQuery production.
 	EnterDeleteQuery(c *DeleteQueryContext)
 
@@ -51,6 +54,12 @@ type FQLListener interface {
 
 	// EnterColumns is called when entering the columns production.
 	EnterColumns(c *ColumnsContext)
+
+	// EnterColumnset is called when entering the columnset production.
+	EnterColumnset(c *ColumnsetContext)
+
+	// EnterColumnsets is called when entering the columnsets production.
+	EnterColumnsets(c *ColumnsetsContext)
 
 	// EnterConditions is called when entering the conditions production.
 	EnterConditions(c *ConditionsContext)
@@ -88,6 +97,9 @@ type FQLListener interface {
 	// ExitExportQuery is called when exiting the exportQuery production.
 	ExitExportQuery(c *ExportQueryContext)
 
+	// ExitUpdateQuery is called when exiting the updateQuery production.
+	ExitUpdateQuery(c *UpdateQueryContext)
+
 	// ExitDeleteQuery is called when exiting the deleteQuery production.
 	ExitDeleteQuery(c *DeleteQueryContext)
 
@@ -111,6 +123,12 @@ type FQLListener interface {
 
 	// ExitColumns is called when exiting the columns production.
 	ExitColumns(c *ColumnsContext)
+
+	// ExitColumnset is called when exiting the columnset production.
+	ExitColumnset(c *ColumnsetContext)
+
+	// ExitColumnsets is called when exiting the columnsets production.
+	ExitColumnsets(c *ColumnsetsContext)
 
 	// ExitConditions is called when exiting the conditions production.
 	ExitConditions(c *ConditionsContext)

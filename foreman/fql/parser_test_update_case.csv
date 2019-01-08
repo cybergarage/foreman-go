@@ -1,0 +1,5 @@
+# query; target; column_count; condition_count
+UPDATE QoS;QoS;0;0
+UPDATE QoS SET a=1;QoS;1;0
+UPDATE QoS SET a=1, b=2;QoS;2;0
+UPDATE QoS SET a=1, b=2 WHERE c == 1;QoS;2;1

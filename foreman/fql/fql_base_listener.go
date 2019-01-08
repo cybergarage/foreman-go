@@ -62,6 +62,12 @@ func (s *BaseFQLListener) EnterExportQuery(ctx *ExportQueryContext) {}
 // ExitExportQuery is called when production exportQuery is exited.
 func (s *BaseFQLListener) ExitExportQuery(ctx *ExportQueryContext) {}
 
+// EnterUpdateQuery is called when production updateQuery is entered.
+func (s *BaseFQLListener) EnterUpdateQuery(ctx *UpdateQueryContext) {}
+
+// ExitUpdateQuery is called when production updateQuery is exited.
+func (s *BaseFQLListener) ExitUpdateQuery(ctx *UpdateQueryContext) {}
+
 // EnterDeleteQuery is called when production deleteQuery is entered.
 func (s *BaseFQLListener) EnterDeleteQuery(ctx *DeleteQueryContext) {}
 
@@ -109,6 +115,18 @@ func (s *BaseFQLListener) EnterColumns(ctx *ColumnsContext) {}
 
 // ExitColumns is called when production columns is exited.
 func (s *BaseFQLListener) ExitColumns(ctx *ColumnsContext) {}
+
+// EnterColumnset is called when production columnset is entered.
+func (s *BaseFQLListener) EnterColumnset(ctx *ColumnsetContext) {}
+
+// ExitColumnset is called when production columnset is exited.
+func (s *BaseFQLListener) ExitColumnset(ctx *ColumnsetContext) {}
+
+// EnterColumnsets is called when production columnsets is entered.
+func (s *BaseFQLListener) EnterColumnsets(ctx *ColumnsetsContext) {}
+
+// ExitColumnsets is called when production columnsets is exited.
+func (s *BaseFQLListener) ExitColumnsets(ctx *ColumnsetsContext) {}
 
 // EnterConditions is called when production conditions is entered.
 func (s *BaseFQLListener) EnterConditions(ctx *ConditionsContext) {}

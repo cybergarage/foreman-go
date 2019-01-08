@@ -7,6 +7,7 @@ package fql
 const (
 	QueryInsertString         = "INSERT"
 	QuerySelectString         = "SELECT"
+	QueryUpdateString         = "UPDATE"
 	QueryDeleteString         = "DELETE"
 	QueryAnalyzeString        = "ANALYZE"
 	QueryExecuteString        = "EXECUTE"
