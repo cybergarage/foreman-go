@@ -73,10 +73,9 @@ func TestQueryBasicScenariosWithSleep(t *testing.T) {
 
 func TestQueryExtraScenarios(t *testing.T) {
 	scenarioFiles := []string{
-		"scenario_action_02.csv",
-		// FIXME : foreman.get_getregister might be wrong
-		//"scenario_action_03.csv",
-		"scenario_action_04.csv",
+		//"scenario_action_py_01.csv",
+		"scenario_action_py_02.csv",
+		//"scenario_action_py_03.csv",
 	}
 
 	conf := test.NewDefaultConfig()
