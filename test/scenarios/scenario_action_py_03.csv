@@ -4,7 +4,7 @@ EXPORT FROM ACTION;200;/action/methods/test_execquery
 EXPORT FROM ACTION WHERE name == "test_execquery";200;/action/methods/test_execquery
 EXECUTE test_execquery (q) VALUES ("EXPORT FROM CONFIG");200;
 
-# register commands
+# post query
 SET ("test_postquery","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfcG9zdHF1ZXJ5KHBhcmFtcyxyZXN1bHRzKToKICBqc29uUmVzID0gZm9yZW1hbi5wb3N0X3F1ZXJ5KCJsb2NhbGhvc3QiLCA4MTg4LCBwYXJhbXNbInEiXSkKICBpZiBqc29uUmVzIGlzIE5vbmU6CiAgICByZXR1cm4gRmFsc2UKICBmb3Iga2V5LCB2YWx1ZSBpbiBqc29uUmVzLml0ZXJpdGVtcygpOgogICAgcmVzdWx0c1trZXldID0gdmFsdWUKICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;200;
 EXPORT FROM ACTION;200;/action/methods/test_postquery
 EXPORT FROM ACTION WHERE name == "test_postquery";200;/action/methods/test_postquery

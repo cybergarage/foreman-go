@@ -7,3 +7,7 @@ EXPORT FROM ACTION;200;/action/methods/test_getregister
 EXPORT FROM ACTION WHERE name == "test_getregister";200;/action/methods/test_getregister
 EXECUTE test_setregister (test_reg) VALUES ("hello");200;
 EXECUTE test_getregister (test_reg) VALUES ("");200;/test_reg;hello
+EXECUTE test_setregister (test_reg) VALUES (1.0);200;
+EXECUTE test_getregister (test_reg) VALUES ("");200;/test_reg;1.0
+EXECUTE test_setregister (test_reg) VALUES (2.0);200;
+EXECUTE test_getregister (test_reg) VALUES ("");200;/test_reg;2.0
