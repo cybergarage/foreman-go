@@ -37,10 +37,10 @@ func (server *Server) ExecuteConfigQuery(q fql.Query) (interface{}, *errors.Erro
 	configMap[rpc.ConfigLogFileKey] = server.Log.File
 
 	configMap[rpc.ConfigMetricsStoreKey] = server.metricMgr.String()
-	configMap[rpc.ConfigFinderKey] = server.Server.Finder
+	configMap[rpc.ConfigFinderKey] = server.Controller.Finder.String()
 
 	configMap[rpc.ConfigBootstrapKey] = server.Server.Bootstrap
-	configMap[rpc.ConfigBoostrapQueryKey] = server.Controller.Finder.String()
+	configMap[rpc.ConfigBoostrapQueryKey] = server.Bootstrap.Query
 
 	configContainer := map[string]interface{}{}
 	configContainer[strings.ToLower(fql.QueryTargetConfig)] = configMap
