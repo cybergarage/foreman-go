@@ -26,13 +26,21 @@ func (server *Server) ExecuteConfigQuery(q fql.Query) (interface{}, *errors.Erro
 	configMap[ConfigProductKey] = ProductName
 	configMap[ConfigVersionKey] = Version
 
-	configMap[rpc.ConfigHostKey] = server.GetName()
+	configMap[rpc.ConfigClusterKey] = server.GetCluster()
+	configMap[rpc.ConfigNameKey] = server.GetName()
+	configMap[rpc.ConfigAddressKey] = server.GetAddress()
 	configMap[rpc.ConfigHttpPortKey] = server.GetRPCPort()
 	configMap[rpc.ConfigCarbonPortKey] = server.GetCarbonPort()
+	configMap[rpc.ConfigRenderPortKey] = server.GetRenderPort()
 
 	configMap[rpc.ConfigLogLevelKey] = server.Log.Level
+	configMap[rpc.ConfigLogFileKey] = server.Log.File
+
+	configMap[rpc.ConfigMetricsStoreKey] = server.metricMgr.String()
+	configMap[rpc.ConfigFinderKey] = server.Server.Finder
+
 	configMap[rpc.ConfigBootstrapKey] = server.Server.Bootstrap
-	configMap[rpc.ConfigMetricsStore] = server.metricMgr.String()
+	configMap[rpc.ConfigBoostrapQueryKey] = server.Bootstrap.Query
 
 	configContainer := map[string]interface{}{}
 	configContainer[strings.ToLower(fql.QueryTargetConfig)] = configMap
