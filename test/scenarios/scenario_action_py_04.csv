@@ -1,0 +1,11 @@
+# register commands
+SET ("test_setregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3Rfc2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKGtleSwgc3RyKHZhbHVlKSkKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXECUTE test_setregister (test_reg_01) VALUES (1.0);200;
+EXPORT FROM REGISTER WHERE name == test_reg_01;200;/register/test_reg_01/ver;1
+EXPORT FROM REGISTER WHERE name == test_reg_01;200;/register/test_reg_01/value;1.0
+EXECUTE test_setregister (test_reg_01) VALUES (2.0);200;
+EXPORT FROM REGISTER WHERE name == test_reg_01;200;/register/test_reg_01/ver;2
+EXPORT FROM REGISTER WHERE name == test_reg_01;200;/register/test_reg_01/value;2.0
+EXECUTE test_setregister (test_reg_01) VALUES (3.0);200;
+EXPORT FROM REGISTER WHERE name == test_reg_01;200;/register/test_reg_01/ver;3
+EXPORT FROM REGISTER WHERE name == test_reg_01;200;/register/test_reg_01/value;3.0
