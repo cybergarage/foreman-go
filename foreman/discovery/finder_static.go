@@ -4,6 +4,8 @@
 
 package discovery
 
+import "fmt"
+
 // StaticFinder represents a simple static finder.
 type StaticFinder struct {
 	*baseFinder
@@ -40,4 +42,9 @@ func (finder *StaticFinder) Stop() error {
 // IsRunning returns true when the finder is running, otherwise false.
 func (finder *StaticFinder) IsRunning() bool {
 	return true
+}
+
+// String returns the description
+func (finder *StaticFinder) String() string {
+	return fmt.Sprintf("%s", FinderStatic)
 }

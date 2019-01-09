@@ -5,6 +5,7 @@
 package discovery
 
 import (
+	"fmt"
 	"reflect"
 	"time"
 
@@ -82,6 +83,11 @@ func (finder *EchonetFinder) Stop() error {
 // IsRunning returns true when the finder is running, otherwise false.
 func (finder *EchonetFinder) IsRunning() bool {
 	return finder.EchonetController.IsRunning()
+}
+
+// String returns the description
+func (finder *EchonetFinder) String() string {
+	return fmt.Sprintf("%s:%s", FinderEchonet, uecho_echonet.Version)
 }
 
 func (finder *EchonetFinder) ControllerMessageReceived(msg *uecho_protocol.Message) {

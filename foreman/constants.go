@@ -38,6 +38,8 @@ const (
 	ConfigFinderKey                   = "finder"
 	ConfigMetricsStoreKey             = "metrics_store"
 	FinderEchonet                     = "echonet"
+	FinderShared                      = "shared"
+	FinderStatic                      = "static"
 	FinderNodeCluster                 = "cluster"
 	FinderNodeName                    = "name"
 	FinderNodeAddress                 = "address"
