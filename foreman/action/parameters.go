@@ -5,7 +5,7 @@
 package action
 
 // Parameters represents a parameter map.
-type Parameters map[string]Parameter
+type Parameters map[string]*Parameter
 
 // NewParameters returns a new parameter map.
 func NewParameters() Parameters {
@@ -14,7 +14,7 @@ func NewParameters() Parameters {
 }
 
 // AddParameter adds a new parameter.
-func (params Parameters) AddParameter(param Parameter) error {
+func (params Parameters) AddParameter(param *Parameter) error {
 	params[param.GetName()] = param
 	return nil
 }
@@ -26,12 +26,12 @@ func (params Parameters) Equals(others Parameters) bool {
 	}
 
 	for name, param := range params {
-		oparam, ok := others[name]
+		otherParam, ok := others[name]
 		if !ok {
 			return false
 		}
 
-		if !param.Equals(oparam) {
+		if !param.Equals(otherParam) {
 			return false
 		}
 	}
