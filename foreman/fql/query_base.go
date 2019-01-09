@@ -167,6 +167,7 @@ func (q *baseQuery) String() string {
 	queryTypeStrings := map[QueryType]string{
 		QueryTypeInsert:  QueryInsertString,
 		QueryTypeSelect:  QuerySelectString,
+		QueryTypeUpdate:  QueryUpdateString,
 		QueryTypeDelete:  QueryDeleteString,
 		QueryTypeAnalyze: QueryAnalyzeString,
 		QueryTypeExecute: QueryExecuteString,
@@ -176,9 +177,10 @@ func (q *baseQuery) String() string {
 		queryString += fmt.Sprintf("%s", queryTypeString)
 	}
 
-	// Columns (Select)
+	// Columns (Only Select)
 
-	if queryType == QueryTypeSelect {
+	switch queryType {
+	case QueryTypeSelect:
 		if q.IsAllColumn() {
 			queryString += fmt.Sprintf(" %s", QueryColumnAll)
 		} else {
@@ -205,12 +207,15 @@ func (q *baseQuery) String() string {
 			queryString += fmt.Sprintf(" INTO %s", target)
 		case QueryTypeSelect, QueryTypeDelete:
 			queryString += fmt.Sprintf(" FROM %s", target)
+		case QueryTypeUpdate:
+			queryString += fmt.Sprintf(" %s", target)
 		}
 	}
 
-	// Columns (Insert)
+	// Columns and Values (Only Insert and Update)
 
-	if queryType == QueryTypeInsert {
+	switch queryType {
+	case QueryTypeInsert:
 		columns, ok := q.GetColumns()
 		if ok {
 			queryString += "("
@@ -222,11 +227,7 @@ func (q *baseQuery) String() string {
 			}
 			queryString += ")"
 		}
-	}
 
-	// Values (Insert)
-
-	if queryType == QueryTypeInsert {
 		values, ok := q.GetValues()
 		if ok {
 			queryString += " VALUES ("
@@ -241,6 +242,21 @@ func (q *baseQuery) String() string {
 				queryString += valueString
 			}
 			queryString += ")"
+		}
+	case QueryTypeUpdate:
+		columns, _ := q.GetColumns()
+		values, _ := q.GetValues()
+		if len(columns) == len(values) {
+			if 0 < len(columns) {
+				queryString += " SET "
+				for n, column := range columns {
+					if 0 < n {
+						queryString += ", "
+					}
+					value := values[n]
+					queryString += fmt.Sprintf("%s = %s", column.String(), value.String())
+				}
+			}
 		}
 	}
 
