@@ -31,6 +31,38 @@ func (server *Server) RuleSatisfied(rule kb.Rule) {
 // RuleUnsatisfied is a listener for kb.Rule
 func (server *Server) RuleUnsatisfied(rule kb.Rule) {
 	logging.Info("Unsatisfied : %s", rule.String())
+
 	e := action.NewEventWithSource(newQosRuleSourceWithRule(rule))
+
+	// Set only unsatisfied variables to the event parameter
+
+	for _, clause := range rule.GetClauses() {
+		for _, formula := range clause.GetFormulas() {
+			isSatisfied, err := formula.IsSatisfied()
+			if isSatisfied || (err != nil) {
+				continue
+			}
+
+			ver := formula.GetVariable()
+			val, err := ver.GetValue()
+			if err != nil {
+				logging.Warn(err.Error())
+				continue
+			}
+
+			param, err := action.NewParameterFromInterface(ver.GetName(), val)
+			if err != nil {
+				logging.Warn(err.Error())
+				continue
+			}
+
+			err = e.AddParameter(param)
+			if err != nil {
+				logging.Warn(err.Error())
+				continue
+			}
+		}
+	}
+
 	server.actionMgr.PostEvent(e)
 }
