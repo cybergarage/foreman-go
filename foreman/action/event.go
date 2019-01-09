@@ -45,5 +45,5 @@ func (e *Event) GetParameters() Parameters {
 
 // AddParameter adds a new parameter.
 func (e *Event) AddParameter(param *Parameter) error {
-	return e.AddParameter(param)
+	return e.params.AddParameter(param)
 }

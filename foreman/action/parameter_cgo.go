@@ -15,7 +15,7 @@ import (
 )
 
 // NewParameterWithCObject returns a new parameter of the specified C++ object.
-func NewParameterWithCObject(cObject unsafe.Pointer) Parameter {
+func NewParameterWithCObject(cObject unsafe.Pointer) *Parameter {
 	name := C.GoString(C.foreman_action_parameter_getname(cObject))
 
 	if C.foreman_action_parameter_isinteger(cObject) {
@@ -35,7 +35,7 @@ func NewParameterWithCObject(cObject unsafe.Pointer) Parameter {
 }
 
 // CObject returns a parameter object for foreman-cc.
-func (param *BaseParameter) CObject() (unsafe.Pointer, error) {
+func (param *Parameter) CObject() (unsafe.Pointer, error) {
 	var cparam unsafe.Pointer
 
 	switch param.Type {

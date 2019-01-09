@@ -46,11 +46,7 @@ func (params Parameters) CObject() (unsafe.Pointer, error) {
 	}
 
 	for _, param := range params {
-		baseParam, ok := param.(*BaseParameter)
-		if !ok {
-			return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
-		}
-		cparam, err := baseParam.CObject()
+		cparam, err := param.CObject()
 		if err != nil {
 			return nil, err
 		}
