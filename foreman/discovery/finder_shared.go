@@ -4,6 +4,8 @@
 
 package discovery
 
+import "fmt"
+
 // SharedFinder represents a simple finder.
 type SharedFinder struct {
 	*baseFinder
@@ -36,4 +38,9 @@ func (finder *SharedFinder) Stop() error {
 // IsRunning returns true when the finder is running, otherwise false.
 func (finder *SharedFinder) IsRunning() bool {
 	return true
+}
+
+// String returns the description
+func (finder *SharedFinder) String() string {
+	return fmt.Sprintf("%s", FinderShared)
 }

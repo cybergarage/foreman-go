@@ -40,7 +40,7 @@ func (server *Server) ExecuteConfigQuery(q fql.Query) (interface{}, *errors.Erro
 	configMap[rpc.ConfigFinderKey] = server.Server.Finder
 
 	configMap[rpc.ConfigBootstrapKey] = server.Server.Bootstrap
-	configMap[rpc.ConfigBoostrapQueryKey] = server.Bootstrap.Query
+	configMap[rpc.ConfigBoostrapQueryKey] = server.Controller.Finder.String()
 
 	configContainer := map[string]interface{}{}
 	configContainer[strings.ToLower(fql.QueryTargetConfig)] = configMap

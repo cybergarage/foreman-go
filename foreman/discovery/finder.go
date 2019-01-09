@@ -40,4 +40,6 @@ type Finder interface {
 	Stop() error
 	// IsRunning returns true when the finder is running, otherwise false.
 	IsRunning() bool
+	// String returns the description
+	String() string
 }
