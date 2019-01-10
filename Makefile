@@ -113,12 +113,13 @@ format:
 	gofmt -w src/${GITHUB} ${PACKAGE_NAME} ${DAEMON_NAME} ${TESTING_NAME}
 
 const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
-	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go  && popd
-	pushd ${SOURCE_DIR}/fql && ./constants.go.gen > constants.go  && popd
-	pushd ${SOURCE_DIR}/action && ./constants.go.gen > constants.go  && popd
-	pushd ${SOURCE_DIR}/rpc && ./constants.go.gen > constants.go  && popd
-	pushd ${SOURCE_DIR}/rpc/json && ./constants.go.gen > constants.go  && popd
+	pushd ${SOURCE_DIR} && ./constants.go.gen > constants.go && popd
+	pushd ${SOURCE_DIR}/fql && ./constants.go.gen > constants.go && popd
+	pushd ${SOURCE_DIR}/action && ./constants.go.gen > constants.go && popd
+	pushd ${SOURCE_DIR}/rpc && ./constants.go.gen > constants.go && popd
+	pushd ${SOURCE_DIR}/rpc/json && ./constants.go.gen > constants.go && popd
 	pushd ${SOURCE_DIR}/errors && ./errors.go.gen > errors.go  && popd
+	pushd ${SOURCE_DIR}/discovery && ./constants.go.gen > constants.go && popd
 	
 antlr:
 	- pushd ${SOURCE_DIR}/fql && ${ANTLR} -package fql -Dlanguage=Go FQL.g4 && popd
