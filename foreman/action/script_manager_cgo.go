@@ -12,8 +12,13 @@ import (
 	"unsafe"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/register"
 	"github.com/cybergarage/foreman-go/foreman/registry"
+)
+
+const (
+	cgoScriptManagerExecMessageFormat = "EXECUTE %s %s"
 )
 
 // cgoScriptManager represents an action manager using foreman-cc.
@@ -124,13 +129,13 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	cparams, err := params.CObject()
+	cParams, err := params.CObject()
 	if err != nil {
 		return nil, err
 	}
 
 	results := NewParameters()
-	cresults, err := results.CObject()
+	cResults, err := results.CObject()
 	if err != nil {
 		return nil, err
 	}
@@ -138,12 +143,15 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_action_manager_execmethod(mgr.cManager, C.CString(name), cparams, cresults, cerr) {
+	if !C.foreman_action_manager_execmethod(mgr.cManager, C.CString(name), cParams, cResults, cerr) {
+		logging.Error(cgoScriptManagerExecMessageFormat, name, params.String())
 		err = errors.NewWithCObject(cerr).Error()
 		return nil, err
 	}
 
-	err = results.SetCObject(cresults)
+	logging.Info(cgoScriptManagerExecMessageFormat, name, params.String())
+
+	err = results.SetCObject(cResults)
 	if err != nil {
 		return nil, err
 	}
