@@ -7,6 +7,11 @@ package action
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/fql"
+	"github.com/cybergarage/foreman-go/foreman/logging"
+)
+
+const (
+	managerPostEventRouteMessageFormat = "EXECUTE ROUTE (%s) FROM %s TO %s"
 )
 
 // Manager represents an action manager.
@@ -49,7 +54,8 @@ func (mgr *Manager) findRouteDestination(name string) RouteDestination {
 
 // PostEvent execute an posted event.
 func (mgr *Manager) PostEvent(e *Event) error {
-	routes, ok := mgr.GetRoutes(e.GetSource().GetName())
+	srcName := e.GetSource().GetName()
+	routes, ok := mgr.GetRoutes(srcName)
 	if !ok {
 		return nil
 	}
@@ -60,7 +66,14 @@ func (mgr *Manager) PostEvent(e *Event) error {
 		if dest == nil {
 			continue
 		}
-		dest.ProcessEvent(e)
+
+		logging.Info(managerPostEventRouteMessageFormat, route.GetName(), srcName, dest.GetName())
+
+		_, err := dest.ProcessEvent(e)
+		if err != nil {
+			logging.Error(err.Error())
+			continue
+		}
 	}
 
 	return nil

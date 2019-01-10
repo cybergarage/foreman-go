@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	parameterStringFormat = "%s (%d) : %s"
+	parameterStringFormat = "%s (%s) = %s"
 )
 
 // ParameterType defines parameter types
@@ -23,6 +23,23 @@ const (
 	ParameterBoolType
 	ParameterStringType
 )
+
+// parameterTypeToString returns a string description of the specified parameter type
+func parameterTypeToString(paramType ParameterType) string {
+	paramTypeStrings := map[ParameterType]string{
+		ParameterIntegerType: "int",
+		ParameterRealType:    "real",
+		ParameterBoolType:    "bool",
+		ParameterStringType:  "string",
+	}
+
+	paramTypeString, ok := paramTypeStrings[paramType]
+	if !ok {
+		return "?"
+	}
+
+	return paramTypeString
+}
 
 // Parameter represents a parameter for action method.
 type Parameter struct {
@@ -257,21 +274,21 @@ func (param *Parameter) String() string {
 	case ParameterIntegerType:
 		value, _ := param.GetInteger()
 		strValue := fmt.Sprintf("%d", value)
-		return fmt.Sprintf(parameterStringFormat, param.Name, param.Type, strValue)
+		return fmt.Sprintf(parameterStringFormat, param.Name, parameterTypeToString(param.Type), strValue)
 	case ParameterRealType:
 		value, _ := param.GetReal()
 		strValue := fmt.Sprintf("%f", value)
-		return fmt.Sprintf(parameterStringFormat, param.Name, param.Type, strValue)
+		return fmt.Sprintf(parameterStringFormat, param.Name, parameterTypeToString(param.Type), strValue)
 	case ParameterBoolType:
 		value, _ := param.GetBool()
 		strValue := "true"
 		if value {
 			strValue = "false"
 		}
-		return fmt.Sprintf(parameterStringFormat, param.Name, param.Type, strValue)
+		return fmt.Sprintf(parameterStringFormat, param.Name, parameterTypeToString(param.Type), strValue)
 	case ParameterStringType:
 		strValue, _ := param.GetString()
-		return fmt.Sprintf(parameterStringFormat, param.Name, param.Type, strValue)
+		return fmt.Sprintf(parameterStringFormat, param.Name, parameterTypeToString(param.Type), strValue)
 	}
 
 	return ""
