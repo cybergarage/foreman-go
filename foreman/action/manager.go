@@ -6,12 +6,18 @@
 package action
 
 import (
+	"fmt"
+
 	"github.com/cybergarage/foreman-go/foreman/fql"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
 const (
 	managerPostEventRouteMessageFormat = "EXECUTE ROUTE (%s) FROM %s TO %s"
+)
+
+const (
+	errorInvalidRouteNoDestination = "Invalid Route (%s) : destination object is not found"
 )
 
 // Manager represents an action manager.
@@ -52,28 +58,43 @@ func (mgr *Manager) findRouteDestination(name string) RouteDestination {
 	return nil
 }
 
+// executeEventRoute executes only the specified event route.
+func (mgr *Manager) executeEventRoute(e *Event, route *Route) error {
+	dest := mgr.findRouteDestination(route.GetDestination())
+	if dest == nil {
+		err := fmt.Errorf(errorInvalidRouteNoDestination, route.GetName())
+		logging.Error(err.Error())
+		return err
+	}
+
+	src := e.GetSource()
+	logging.Info(managerPostEventRouteMessageFormat, route.GetName(), src.GetName(), dest.GetName())
+
+	results, err := dest.ProcessEvent(e)
+	if err != nil {
+		logging.Error(err.Error())
+		return err
+	}
+
+	// Executes the child routes recursively when the route was executed normally
+
+	destEvent := NewEventWithSource(dest)
+	destEvent.AddResultSet(results)
+	mgr.PostEvent(destEvent)
+
+	return nil
+}
+
 // PostEvent execute an posted event.
 func (mgr *Manager) PostEvent(e *Event) error {
-	srcName := e.GetSource().GetName()
-	routes, ok := mgr.GetRoutes(srcName)
+	src := e.GetSource()
+	routes, ok := mgr.GetRoutes(src.GetName())
 	if !ok {
 		return nil
 	}
 
-	// TODO : Update to execute parallel.
 	for _, route := range routes {
-		dest := mgr.findRouteDestination(route.GetDestination())
-		if dest == nil {
-			continue
-		}
-
-		logging.Info(managerPostEventRouteMessageFormat, route.GetName(), srcName, dest.GetName())
-
-		_, err := dest.ProcessEvent(e)
-		if err != nil {
-			logging.Error(err.Error())
-			continue
-		}
+		go mgr.executeEventRoute(e, route)
 	}
 
 	return nil

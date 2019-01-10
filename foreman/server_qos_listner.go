@@ -15,22 +15,9 @@ const (
 	serverQosUnsatisfiedMessageFormat = "QoS Unsatisfied %s : %s"
 )
 
-type qosRuleSource struct {
-	//action.RouteSource Disabled to conflict Rule::GetName()
-	kb.Rule
-}
-
-// newQosRuleSourceWithRule create a source object with the specified rule
-func newQosRuleSourceWithRule(rule kb.Rule) action.RouteSource {
-	src := &qosRuleSource{
-		Rule: rule,
-	}
-	return src
-}
-
 // newActionEventWithUnsatisfiedQoSRule create an action event with the specified unsatisfied rule
 func newActionEventWithUnsatisfiedQoSRule(rule kb.Rule) (*action.Event, error) {
-	e := action.NewEventWithSource(newQosRuleSourceWithRule(rule))
+	e := action.NewEventWithSource(rule)
 
 	// Set only unsatisfied variables to the event parameter
 
