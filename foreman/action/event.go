@@ -47,3 +47,14 @@ func (e *Event) GetParameters() Parameters {
 func (e *Event) AddParameter(param *Parameter) error {
 	return e.params.AddParameter(param)
 }
+
+// AddParameters adds the all specified parameters.
+func (e *Event) AddParameters(params Parameters) error {
+	for _, param := range params {
+		err := e.AddParameter(param)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
