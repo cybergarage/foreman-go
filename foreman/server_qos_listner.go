@@ -10,6 +10,11 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/logging"
 )
 
+const (
+	serverQosSatisfiedMessageFormat   = "QoS Satisfied %s"
+	serverQosUnsatisfiedMessageFormat = "QoS Unsatisfied %s : %s"
+)
+
 type qosRuleSource struct {
 	//action.RouteSource Disabled to conflict Rule::GetName()
 	kb.Rule
@@ -82,17 +87,17 @@ func (server *Server) postQosUnsatisfiedEvent(rule kb.Rule) {
 		logging.Warn(err.Error())
 	}
 
+	logging.Info(serverQosUnsatisfiedMessageFormat, rule.String(), e.GetParameters().String())
+
 	server.actionMgr.PostEvent(e)
 }
 
 // RuleSatisfied is a listener for kb.Rule
 func (server *Server) RuleSatisfied(rule kb.Rule) {
-	logging.Trace("Satisfied : %s", rule.String())
+	logging.Trace(serverQosSatisfiedMessageFormat, rule.String())
 }
 
 // RuleUnsatisfied is a listener for kb.Rule
 func (server *Server) RuleUnsatisfied(rule kb.Rule) {
-	logging.Info("Unsatisfied : %s", rule.String())
-
 	server.postQosUnsatisfiedEvent(rule)
 }
