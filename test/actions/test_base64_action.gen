@@ -1,2 +1,0 @@
-#!/bin/bash
-ls -1 *.py | xargs -Ifname base64 fname -o fname.base64

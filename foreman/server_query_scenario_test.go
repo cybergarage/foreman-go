@@ -73,9 +73,9 @@ func TestQueryBasicScenariosWithSleep(t *testing.T) {
 
 func TestQueryExtraPythonScenarios(t *testing.T) {
 	scenarioFiles := []string{
-		//"scenario_action_py_01.csv",
-		//"scenario_action_py_02.csv",
-		//"scenario_action_py_03.csv",
+		"scenario_action_py_01.csv",
+		"scenario_action_py_02.csv",
+		"scenario_action_py_03.csv",
 		"scenario_action_py_04.csv",
 	}
 
