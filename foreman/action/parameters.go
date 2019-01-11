@@ -43,16 +43,18 @@ func (params Parameters) Equals(others Parameters) bool {
 
 // String returns a string description of the instance
 func (params Parameters) String() string {
-	paramsStr := ""
+	paramsStr := "{"
 
 	paramIdx := 0
 	for _, param := range params {
 		if 0 < paramIdx {
 			paramsStr += ", "
 		}
-		paramsStr += fmt.Sprintf("{%s}", param.String())
+		paramsStr += fmt.Sprintf("%s", param.String())
 		paramIdx++
 	}
+
+	paramsStr += "}"
 
 	return paramsStr
 }
