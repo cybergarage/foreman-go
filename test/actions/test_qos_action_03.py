@@ -4,4 +4,5 @@ def test_qos_action_03(params,results):
     for key, value in params.iteritems():
         chkKey = 'qos_action_03_%s' % key
         foreman.set_register(chkKey, str(value))
+        results[key] = value
     return True

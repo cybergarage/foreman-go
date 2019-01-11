@@ -18,7 +18,8 @@ import (
 )
 
 const (
-	cgoScriptManagerExecMessageFormat = "EXECUTE %s %s"
+	cgoScriptManagerExecErrorFormat   = "EXECUTE %s(%s) : %s"
+	cgoScriptManagerExecMessageFormat = "EXECUTE %s(%s) -> (%t, %s)"
 )
 
 // cgoScriptManager represents an action manager using foreman-cc.
@@ -143,20 +144,31 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_action_manager_execmethod(mgr.cManager, C.CString(name), cParams, cResults, cerr) {
-		logging.Error(cgoScriptManagerExecMessageFormat, name, params.String())
-		err = errors.NewWithCObject(cerr).Error()
-		return nil, err
-	}
+	var executeErr error
 
-	logging.Info(cgoScriptManagerExecMessageFormat, name, params.String())
+	executedResult := bool(C.foreman_action_manager_execmethod(mgr.cManager, C.CString(name), cParams, cResults, cerr))
+	if !executedResult {
+		if C.foreman_error_isinternalerror(cerr) {
+			executeErr = errors.NewWithCObject(cerr).Error()
+			logging.Error(cgoScriptManagerExecErrorFormat, name, params.String(), executeErr.Error())
+		} else {
+			executeErr = fmt.Errorf(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
+		}
+	}
 
 	err = results.SetCObject(cResults)
 	if err != nil {
-		return nil, err
+		logging.Error(err.Error())
 	}
 
-	return results, nil
+	if executedResult {
+		logging.Info(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
+	} else {
+		// The parent method which calls the ExecMethod() outputs the error message
+		// logging.Warn(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
+	}
+
+	return results, executeErr
 }
 
 // GetMethod retrun a method with the specified name.
