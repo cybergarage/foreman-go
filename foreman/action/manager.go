@@ -76,7 +76,7 @@ func (mgr *Manager) executeEventRoute(e *Event, route *Route) error {
 		return err
 	}
 
-	// Executes the child routes recursively when the route was executed normally
+	// Executes` the child routes recursively when the route was executed normally
 
 	destEvent := NewEventWithSource(dest)
 	destEvent.AddResultSet(results)
