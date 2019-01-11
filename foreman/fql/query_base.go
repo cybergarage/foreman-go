@@ -212,10 +212,10 @@ func (q *baseQuery) String() string {
 		}
 	}
 
-	// Columns and Values (Only Insert and Update)
+	// Columns and Values (Only Insert, Update and Execute)
 
 	switch queryType {
-	case QueryTypeInsert:
+	case QueryTypeInsert, QueryTypeExecute:
 		columns, ok := q.GetColumns()
 		if ok {
 			queryString += "("
