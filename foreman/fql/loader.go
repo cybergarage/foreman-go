@@ -8,6 +8,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
+
+	"github.com/cybergarage/foreman-go/foreman/logging"
+)
+
+const (
+	loaderLoadingFileMessageFormat     = "Loading : %s"
+	loaderLoadingFileLineMessageFormat = "[%d] : %s"
+	loaderLoadingFileLineErrorFormat   = "[%d] : %s (%s)"
 )
 
 // Loader represents a loader to read from the specefied data source.
@@ -22,6 +30,8 @@ func NewLoader() *Loader {
 
 // LoadFromFile loads queries from the specified file.
 func (loader *Loader) LoadFromFile(filename string) (Queries, error) {
+	logging.Trace(loaderLoadingFileMessageFormat, filename)
+
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -38,10 +48,12 @@ func (loader *Loader) LoadFromFile(filename string) (Queries, error) {
 			continue
 		}
 
+		logging.Trace(loaderLoadingFileLineMessageFormat, n, line)
+
 		parser := NewParser()
 		newQueries, err := parser.ParseString(line)
 		if err != nil {
-			return nil, fmt.Errorf("[%d] : %s (%s)", (n + 1), line, err.Error())
+			return nil, fmt.Errorf(loaderLoadingFileLineErrorFormat, (n + 1), line, err.Error())
 		}
 
 		queries = append(queries, newQueries...)
