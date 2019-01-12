@@ -80,3 +80,17 @@ EXPORT FROM REGISTER WHERE name == test_qos_routes_m00;200;/register/test_qos_ro
 EXPORT FROM REGISTER WHERE name == qos_action_01_test_qos_routes_m00;200;/register/qos_action_01_test_qos_routes_m00/value;20.0
 EXPORT FROM REGISTER WHERE name == qos_action_02_test_qos_routes_m00;200;/register/qos_action_02_test_qos_routes_m00/value;20.0
 EXPORT FROM REGISTER WHERE name == qos_action_03_test_qos_routes_m00;400;
+
+################################################################################
+# Execute the root actions directly
+################################################################################
+
+EXECUTE test_qos_action_01 (test_exec_m00) VALUES (100);200;
+
+# Examins the action registers are updated
+
+EXPORT FROM REGISTER WHERE name == qos_action_01_test_exec_m00;200;/register/qos_action_01_test_exec_m00/value;100
+EXPORT FROM REGISTER WHERE name == qos_action_02_test_exec_m00;200;/register/qos_action_02_test_exec_m00/value;100.0
+
+# Examins the action registers are not updated
+EXPORT FROM REGISTER WHERE name == qos_action_03_test_exec_m00;400;

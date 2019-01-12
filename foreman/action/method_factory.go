@@ -4,6 +4,13 @@
 
 package action
 
+// NewMethodWithName returns a new method with the specified name.
+func NewMethodWithName(name string) *Method {
+	m := NewMethod()
+	m.Name = name
+	return m
+}
+
 // NewMethodWithLanguage returns a new method with the specified language.
 func NewMethodWithLanguage(lang string) *Method {
 	m := NewMethod()

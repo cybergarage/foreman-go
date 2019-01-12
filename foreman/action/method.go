@@ -4,6 +4,8 @@
 
 package action
 
+import "fmt"
+
 // EncodingType defines encoding types for the source code
 type EncodingType int
 
@@ -38,4 +40,9 @@ func (m *Method) GetLanguage() string {
 // GetCode returns the code.
 func (m *Method) GetCode() []byte {
 	return m.Code
+}
+
+// String returns a string description
+func (m *Method) String() string {
+	return fmt.Sprintf("%s (%s)", m.Name, m.Language)
 }

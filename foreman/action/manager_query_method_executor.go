@@ -94,6 +94,12 @@ func (mgr *Manager) executeDeleteMethod(q fql.Query) (interface{}, *errors.Error
 	return nil, nil
 }
 
+func (mgr *Manager) postExecuteEvent(methodName string, params Parameters) {
+	e := NewEventWithSource(NewMethodWithName(methodName))
+	e.AddParameters(params)
+	mgr.PostEvent(e)
+}
+
 func (mgr *Manager) executeExecuteMethod(q fql.Query) (interface{}, *errors.Error) {
 	targetObj, ok := q.GetTarget()
 	if !ok {
@@ -120,6 +126,8 @@ func (mgr *Manager) executeExecuteMethod(q fql.Query) (interface{}, *errors.Erro
 	if err != nil {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 	}
+
+	go mgr.postExecuteEvent(methodName, results)
 
 	resultMap := map[string]interface{}{}
 	for name, result := range results {
