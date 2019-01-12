@@ -172,15 +172,16 @@ func (q *baseQuery) String() string {
 		QueryTypeAnalyze: QueryAnalyzeString,
 		QueryTypeExecute: QueryExecuteString,
 	}
+
 	queryTypeString, ok := queryTypeStrings[queryType]
 	if ok {
 		queryString += fmt.Sprintf("%s", queryTypeString)
 	}
 
-	// Columns (Only Select)
+	// Columns (Only Select and Analyze)
 
 	switch queryType {
-	case QueryTypeSelect:
+	case QueryTypeSelect, QueryTypeAnalyze:
 		if q.IsAllColumn() {
 			queryString += fmt.Sprintf(" %s", QueryColumnAll)
 		} else {
@@ -205,11 +206,9 @@ func (q *baseQuery) String() string {
 		switch queryType {
 		case QueryTypeInsert:
 			queryString += fmt.Sprintf(" INTO %s", target)
-		case QueryTypeSelect, QueryTypeDelete:
+		case QueryTypeSelect, QueryTypeDelete, QueryTypeAnalyze:
 			queryString += fmt.Sprintf(" FROM %s", target)
-		case QueryTypeUpdate:
-			queryString += fmt.Sprintf(" %s", target)
-		case QueryTypeExecute:
+		case QueryTypeUpdate, QueryTypeExecute:
 			queryString += fmt.Sprintf(" %s", target)
 		}
 	}
