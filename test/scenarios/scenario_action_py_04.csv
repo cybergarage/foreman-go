@@ -37,13 +37,20 @@ EXPORT FROM ROUTE WHERE name == "test_qos_route_03";200;/action/routes/test_qos_
 
 ################################################################################
 # Inserts a satisfied metric
+# test_qos_routes_m00 : 1.0
 ################################################################################
 
 SET (test_qos_routes_m00, 1.0, 1514764800) INTO METRICS;200
 EXPORT FROM REGISTER WHERE name == test_qos_routes_m00;200;/register/test_qos_routes_m00/value;1.0
 
+# Examins whether the all routes are not executed
+EXPORT FROM REGISTER WHERE name == qos_action_01_test_qos_routes_m00;400;
+EXPORT FROM REGISTER WHERE name == qos_action_02_test_qos_routes_m00;400;
+EXPORT FROM REGISTER WHERE name == qos_action_03_test_qos_routes_m00;400;
+
 ################################################################################
 # Inserts a unsatisfied metric to execute the related route actions
+# test_qos_routes_m00 : 1.0 -> 20.0
 ################################################################################
 
 SET (test_qos_routes_m00, 20.0, 1514764800) INTO METRICS;200
@@ -59,4 +66,17 @@ EXPORT FROM REGISTER WHERE name == qos_action_02_test_qos_routes_m00;200;/regist
 
 # Examines whether 'test_qos_action_03' is not executed by the register
 # Register : qos_action_03_(test_qos_routes_m00)
+EXPORT FROM REGISTER WHERE name == qos_action_03_test_qos_routes_m00;400;
+
+################################################################################
+# Inserts a satisfied metric again
+# test_qos_routes_m00 : 20.0 -> 1.0
+################################################################################
+
+SET (test_qos_routes_m00, 1.0, 1514764800) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == test_qos_routes_m00;200;/register/test_qos_routes_m00/value;1.0
+
+# Examins the action registers are not updated
+EXPORT FROM REGISTER WHERE name == qos_action_01_test_qos_routes_m00;200;/register/qos_action_01_test_qos_routes_m00/value;20.0
+EXPORT FROM REGISTER WHERE name == qos_action_02_test_qos_routes_m00;200;/register/qos_action_02_test_qos_routes_m00/value;20.0
 EXPORT FROM REGISTER WHERE name == qos_action_03_test_qos_routes_m00;400;
