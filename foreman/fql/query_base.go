@@ -209,6 +209,8 @@ func (q *baseQuery) String() string {
 			queryString += fmt.Sprintf(" FROM %s", target)
 		case QueryTypeUpdate:
 			queryString += fmt.Sprintf(" %s", target)
+		case QueryTypeExecute:
+			queryString += fmt.Sprintf(" %s", target)
 		}
 	}
 
@@ -218,7 +220,7 @@ func (q *baseQuery) String() string {
 	case QueryTypeInsert, QueryTypeExecute:
 		columns, ok := q.GetColumns()
 		if ok {
-			queryString += "("
+			queryString += " ("
 			for n, column := range columns {
 				if 0 < n {
 					queryString += ", "
