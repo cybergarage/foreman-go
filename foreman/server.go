@@ -28,6 +28,11 @@ const (
 	serverBindRetryCount = 100
 )
 
+const (
+	serverLoadingQueryFileMessageFormat = "Loading : %s"
+	serverExecutingQueryMessageFormat   = "[%d] %s"
+)
+
 // Server represents a Foreman Server.
 type Server struct {
 	Node
@@ -224,16 +229,19 @@ func (server *Server) GetQueryFile() string {
 
 // LoadQuery executes the queries in the specified file.
 func (server *Server) LoadQuery(filename string) error {
-	logging.Trace("Server loading query file from %s.", filename)
+	logging.Info(serverLoadingQueryFileMessageFormat, filename)
+
 	loader := fql.NewLoader()
 	queries, err := loader.LoadFromFile(filename)
 	if err != nil {
 		return err
 	}
 
-	for _, query := range queries {
+	for n, query := range queries {
+		logging.Info(serverExecutingQueryMessageFormat, n, query.String())
 		_, err := server.ExecuteQuery(query)
 		if err != nil {
+			logging.Error(err.Error().Error())
 			return err.Error()
 		}
 	}
