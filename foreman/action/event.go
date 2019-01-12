@@ -28,6 +28,16 @@ func NewEventWithSource(sourceObj EventObject) *Event {
 	return e
 }
 
+// NewEventWithSourceAndParameters returns a new event object with the specified source object and parameters.
+func NewEventWithSourceAndParameters(sourceObj EventObject, params Parameters) *Event {
+	e := &Event{
+		source:    sourceObj,
+		timestamp: time.Now(),
+		params:    params,
+	}
+	return e
+}
+
 // GetSource returns the source object which creates this event.
 func (e *Event) GetSource() EventObject {
 	return e.source
