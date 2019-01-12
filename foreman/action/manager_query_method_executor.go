@@ -94,10 +94,9 @@ func (mgr *Manager) executeDeleteMethod(q fql.Query) (interface{}, *errors.Error
 	return nil, nil
 }
 
-func (mgr *Manager) postExecuteEvent(methodName string, params Parameters) {
-	e := NewEventWithSource(NewMethodWithName(methodName))
-	e.AddParameters(params)
-	mgr.PostEvent(e)
+func (mgr *Manager) postMethodExecutedResultEvent(methodName string, params Parameters) {
+	eventObj := NewMethodWithName(methodName)
+	mgr.PostEvent(NewEventWithSourceAndParameters(eventObj, params))
 }
 
 func (mgr *Manager) executeExecuteMethod(q fql.Query) (interface{}, *errors.Error) {
@@ -127,7 +126,8 @@ func (mgr *Manager) executeExecuteMethod(q fql.Query) (interface{}, *errors.Erro
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidConditions)
 	}
 
-	go mgr.postExecuteEvent(methodName, results)
+	// Post a new event with the executed results
+	go mgr.postMethodExecutedResultEvent(methodName, results)
 
 	resultMap := map[string]interface{}{}
 	for name, result := range results {
