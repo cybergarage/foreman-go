@@ -86,3 +86,17 @@ func TestQueryExtraPythonScenarios(t *testing.T) {
 
 	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
 }
+
+/*
+func TestQueryDebugScenarios(t *testing.T) {
+
+	scenarioFiles := []string{
+		"scenario_metrics_01.csv",
+	}
+
+	conf := test.NewDefaultConfig()
+	opt := test.NewDefaultScenarioOption()
+
+	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
+}
+*/
