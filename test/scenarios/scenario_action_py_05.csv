@@ -1,0 +1,38 @@
+################################################################################
+# Sets a source route rule for QoS
+# qos_rs999
+################################################################################
+
+SET (qos_rs999, "qos_m0_p999 < 150") INTO QOS;200
+EXPORT FROM QOS WHERE name == qos_rs999;200;/qos/qos_rs999
+
+################################################################################
+# Sets destination actions for QoS 
+# test_qos_analyze_correlation
+# test_qos_export_metrics
+################################################################################
+
+SET ("test_qos_analyze_correlation","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgdGVzdF9xb3NfYW5hbHl6ZV9jb3JyZWxhdGlvbihwYXJhbXMscmVzdWx0cyk6CiAgbm93VHMgPSBpbnQodGltZS5ta3RpbWUobm93LnRpbWV0dXBsZSgpKSkKICBmcm9tVHMgPSBub3dUcyAtICg2MCAqIDYwKQogIHVudGlsVHMgPSBub3dUcwogIGZvciBrZXksIHZhbHVlIGluIHBhcmFtcy5pdGVyaXRlbXMoKToKICAgIHEgPSAnQU5BTFlaRSAlcyBGUk9NIE1FVFJJQ1MgV0hFUkUgdHMgPj0gJWQgQU5EIHRzIDw9ICVkJyAlIChrZXksIGZyb21UcywgdW50aWxUcykKICAgIGpzb25SZXMgPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkocSkKICAgIGlmIGpzb25SZXMgaXMgTm9uZToKICAgICAgcmV0dXJuIEZhbHNlCiAgcmV0dXJuIFRydWUK","base64") INTO ACTION;200
+EXPORT FROM ACTION WHERE name == "test_qos_analyze_correlation";200;/action/methods/test_qos_analyze_correlation
+
+SET ("test_qos_export_metrics","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgdGVzdF9xb3NfZXhwb3J0X21ldHJpY3MocGFyYW1zLHJlc3VsdHMpOgogIG5vd1RzID0gaW50KHRpbWUubWt0aW1lKG5vdy50aW1ldHVwbGUoKSkpCiAgZnJvbVRzID0gbm93VHMgLSAoNCAqIDYwKQogIHVudGlsVHMgPSBub3dUcwogIGZvciBrZXksIHZhbHVlIGluIHBhcmFtcy5pdGVyaXRlbXMoKToKICAgIHEgPSAnRVhQT1JUIEZST00gTUVUUklDUyBXSEVSRSB0cyA+PSAlZCBBTkQgdHMgPD0gJWQnICUgKGZyb21UcywgdW50aWxUcykKICAgIGpzb25SZXMgPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkocSkKICAgIGlmIGpzb25SZXMgaXMgTm9uZToKICAgICAgcmV0dXJuIEZhbHNlCiAgcmV0dXJuIFRydWUK","base64") INTO ACTION;200
+EXPORT FROM ACTION WHERE name == "test_qos_export_metrics";200;/action/methods/test_qos_export_metrics
+
+################################################################################
+# Sets routes for the QoS rule
+# qos_rs999 -> test_qos_analyze_correlation
+# qos_rs999 -> test_qos_export_metrics
+################################################################################
+
+SET (qos_analyze_route, qos_rs999, test_qos_analyze_correlation) INTO ROUTE;200
+EXPORT FROM ROUTE WHERE name == "qos_analyze_route";200;/action/routes/qos_analyze_route
+
+SET (qos_export_route, qos_rs999, test_qos_export_metrics) INTO ROUTE;200
+EXPORT FROM ROUTE WHERE name == "qos_export_route";200;/action/routes/qos_export_route
+
+################################################################################
+# Executes the destination actions directly
+################################################################################
+
+EXECUTE test_qos_analyze_correlation (qos_rs999) VALUES (100);400
+EXECUTE test_qos_export_metrics (qos_rs999) VALUES (100);400
