@@ -1,4 +1,6 @@
+################################################################################
 # Sets a QoS rule (test_qos_routes_rule)
+################################################################################
 
 SET (test_qos_routes_rule, "test_qos_routes_m00 < 10") INTO QOS;200
 EXPORT FROM QOS WHERE name == test_qos_routes_rule;200;/qos/test_qos_routes_rule
