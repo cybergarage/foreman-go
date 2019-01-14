@@ -7,7 +7,6 @@ package metric
 import (
 	"math"
 	"strconv"
-	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
 	"github.com/cybergarage/foreman-go/foreman/fql"
@@ -45,7 +44,7 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 		}
 	}
 
-	ts, tsErr := strconv.ParseInt(values[2].String(), 10, 64)
+	ts, tsErr := fql.AbsouleteTimeStringToTime(values[2].String())
 
 	if len(name) < 0 || valueErr != nil || tsErr != nil {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
@@ -53,7 +52,7 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 
 	m := NewMetricWithName(name)
 	m.Value = value
-	m.Timestamp = time.Unix(ts, 0)
+	m.Timestamp = *ts
 
 	err := mgr.AddMetric(m)
 	if err != nil {
