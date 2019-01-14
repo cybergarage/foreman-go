@@ -80,8 +80,6 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 	}
 
 	conf := test.NewDefaultConfig()
-	//conf.EnableSkipError = true
-
 	opt := test.NewDefaultScenarioOption()
 
 	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)

@@ -36,3 +36,6 @@ EXPORT FROM ROUTE WHERE name == "qos_export_route";200;/action/routes/qos_export
 
 EXECUTE test_qos_analyze_correlation (qos_rs999) VALUES (100);400
 EXECUTE test_qos_export_metrics (qos_rs999) VALUES (100);400
+
+
+SET (qos_m0_p999, 1.0, CURRENT_TIMESTAMP) INTO METRICS;200
