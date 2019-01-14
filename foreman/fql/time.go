@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -22,12 +23,15 @@ const (
 
 	queryRelativeTimeFormat = "-%d%s"
 
-	queryAbsoluteTimeNowRegex  = "now"
-	queryAbsoluteTimeRegexRFC  = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}"
-	queryAbsoluteTimeRegexSQL  = "[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}"
-	queryAbsoluteTimeUnixRegex = "[0-9]*"
-	queryAbsoluteTimeFormatRFC = "2006-01-02 15:04:05" // RFC3339
-	queryAbsoluteTimeFormatSQL = "2006/01/02 15:04:05" // SQL
+	queryAbsoluteTimeNowRegex                 = "now"
+	queryAbsoluteTimeSQLNowRegex              = "now()"
+	queryAbsoluteTimeSQLCurrentTimestampRegex = "current_timestamp"
+	queryAbsoluteTimeRegexRFC                 = "[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}"
+	queryAbsoluteTimeRegexSQL                 = "[0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}"
+	queryAbsoluteTimeUnixRegex                = "[0-9]*"
+	queryAbsoluteTimeFormatRFC                = "2006-01-02 15:04:05" // RFC3339
+	queryAbsoluteTimeFormatSQL                = "2006/01/02 15:04:05" // SQL
+
 )
 
 // TimeStringToTime returns a time of the specfied time string.
@@ -47,6 +51,8 @@ func TimeStringToTime(timeStr string) (*time.Time, error) {
 func IsAbsoluteTimeString(timeStr string) bool {
 	queryAbsTimeRegexs := []string{
 		queryAbsoluteTimeNowRegex,
+		queryAbsoluteTimeSQLNowRegex,
+		queryAbsoluteTimeSQLCurrentTimestampRegex,
 		queryAbsoluteTimeRegexRFC,
 		queryAbsoluteTimeRegexSQL,
 		queryAbsoluteTimeUnixRegex,
@@ -66,13 +72,15 @@ func IsAbsoluteTimeString(timeStr string) bool {
 func AbsouleteTimeStringToTime(timeStr string) (*time.Time, error) {
 	queryRelativeTimeRegexs := []string{
 		queryAbsoluteTimeNowRegex,
+		queryAbsoluteTimeSQLNowRegex,
+		queryAbsoluteTimeSQLCurrentTimestampRegex,
 		queryAbsoluteTimeRegexRFC,
 		queryAbsoluteTimeRegexSQL,
 		queryAbsoluteTimeUnixRegex,
 	}
 
 	for n, regex := range queryRelativeTimeRegexs {
-		matched, _ := regexp.MatchString(regex, timeStr)
+		matched, _ := regexp.MatchString(regex, strings.ToLower(timeStr))
 		if !matched {
 			continue
 		}
@@ -81,19 +89,25 @@ func AbsouleteTimeStringToTime(timeStr string) (*time.Time, error) {
 		case 0: // queryAbsoluteTimeNowRegex
 			now := time.Now()
 			return &now, nil
-		case 1: // queryAbsoluteTimeRegexRFC
+		case 1: // queryAbsoluteTimeSQLNowRegex
+			now := time.Now()
+			return &now, nil
+		case 2: // queryAbsoluteTimeSQLCurrentTimestampRegex
+			now := time.Now()
+			return &now, nil
+		case 3: // queryAbsoluteTimeRegexRFC
 			time, err := time.ParseInLocation(queryAbsoluteTimeFormatRFC, timeStr, time.Local)
 			if err != nil {
 				return nil, err
 			}
 			return &time, nil
-		case 2: // queryAbsoluteTimeRegexSQL
+		case 4: // queryAbsoluteTimeRegexSQL
 			time, err := time.ParseInLocation(queryAbsoluteTimeFormatSQL, timeStr, time.Local)
 			if err != nil {
 				return nil, err
 			}
 			return &time, nil
-		case 3: // queryAbsoluteTimeUnixRegex
+		case 5: // queryAbsoluteTimeUnixRegex
 			unixTime, err := strconv.ParseInt(timeStr, 10, 64)
 			if err != nil {
 				break
