@@ -1,4 +1,13 @@
-# system command
+################################################################################
+# Tries a invalid method whose engine is not supported
+################################################################################
+
+SET ("system_ls","unknown","ls -l","none") INTO ACTION;400;
+
+################################################################################
+# Inserts and executes a system method
+################################################################################
+
 SET ("system_ls","system","ls -l","none") INTO ACTION;200;
 EXPORT FROM ACTION;200;/action/methods/system_ls
 EXPORT FROM ACTION WHERE name == "system_ls";200;/action/methods/system_ls
