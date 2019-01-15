@@ -149,11 +149,11 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 
 	executedResult := bool(C.foreman_action_manager_execmethod(mgr.cManager, C.CString(name), cParams, cResults, cerr))
 	if !executedResult {
+		err := errors.NewWithCObject(cerr)
 		if C.foreman_error_isinternalerror(cerr) {
-			executeErr = errors.NewWithCObject(cerr).Error()
-			logging.Error(cgoScriptManagerExecErrorFormat, name, params.String(), executeErr.Error())
+			executeErr = err.Error()
 		} else {
-			executeErr = fmt.Errorf(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
+			executeErr = fmt.Errorf(cgoScriptManagerExecErrorFormat, name, params.String(), err.Error().Error())
 		}
 	}
 
@@ -162,12 +162,7 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 		logging.Error(err.Error())
 	}
 
-	if executedResult {
-		logging.Info(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
-	} else {
-		// The parent method which calls the ExecMethod() outputs the error message
-		// logging.Warn(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
-	}
+	logging.Info(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
 
 	return results, executeErr
 }
