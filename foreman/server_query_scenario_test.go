@@ -93,7 +93,7 @@ func TestQueryDebugScenarios(t *testing.T) {
 	}
 
 	conf := test.NewDefaultConfig()
-	//conf.EnableSkipError = true
+	conf.EnableSkipError = true
 
 	opt := test.NewDefaultScenarioOption()
 

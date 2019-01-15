@@ -4,6 +4,7 @@ import json
 import foreman
 
 def test_qos_export_metrics(params,results):
+  now = datetime.datetime.now()
   nowTs = int(time.mktime(now.timetuple()))
   fromTs = nowTs - (4 * 60)
   untilTs = nowTs
@@ -12,5 +13,5 @@ def test_qos_export_metrics(params,results):
     results['q'] = q
     jsonRes = foreman.execute_query(q)
     if jsonRes is None:
-      return True
+      return False
   return True
