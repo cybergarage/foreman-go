@@ -48,6 +48,7 @@ func TestQueryBasicScenarios(t *testing.T) {
 		"scenario_metrics_01.csv",
 		"scenario_metrics_02.csv",
 		"scenario_qos_01.csv",
+		"scenario_qos_02.csv",
 		"scenario_register_01.csv",
 	}
 
@@ -92,7 +93,7 @@ func TestQueryDebugScenarios(t *testing.T) {
 	}
 
 	conf := test.NewDefaultConfig()
-	conf.EnableSkipError = true
+	//conf.EnableSkipError = true
 
 	opt := test.NewDefaultScenarioOption()
 
