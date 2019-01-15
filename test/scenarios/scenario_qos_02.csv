@@ -1,0 +1,49 @@
+################################################################################
+# Set a QoS actions
+################################################################################
+
+SET (nextnode_status_qos,"co.fill_rate < 0.8 | co.nextnode_status >= 1.0") INTO QOS;200
+SET (nextnode_down, nextnode_status_qos, remove_nextnode) INTO ROUTE;200
+SET (remove_nextnode, "system", "ls -l", "none") INTO ACTION;200
+
+################################################################################
+# Posts initial metrics
+################################################################################
+
+SET (co.fill_rate, 0.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 1.0, CURRENT_TIMESTAMP) INTO METRICS;200
+
+################################################################################
+# Posts satisfied metrics repeatedly
+################################################################################
+
+SET (co.fill_rate, 0.1, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.fill_rate, 0.2, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.fill_rate, 0.3, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.fill_rate, 0.4, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.fill_rate, 0.5, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.fill_rate, 0.6, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.fill_rate, 0.7, CURRENT_TIMESTAMP) INTO METRICS;200
+
+SET (co.nextnode_status, 1.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 2.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 3.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 4.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 5.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 6.0, CURRENT_TIMESTAMP) INTO METRICS;200
+
+################################################################################
+# Posts unsatisfied metrics to execute the registered route repeatedly
+################################################################################
+
+SET (co.fill_rate, 1.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 0.0, CURRENT_TIMESTAMP) INTO METRICS;200
+
+SET (co.fill_rate, 1.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 0.0, CURRENT_TIMESTAMP) INTO METRICS;200
+
+SET (co.fill_rate, 1.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 0.0, CURRENT_TIMESTAMP) INTO METRICS;200
+
+SET (co.fill_rate, 1.0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (co.nextnode_status, 0.0, CURRENT_TIMESTAMP) INTO METRICS;200
