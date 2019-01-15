@@ -127,7 +127,8 @@ func (mgr *Manager) executeExecuteMethod(q fql.Query) (interface{}, *errors.Erro
 	}
 
 	// Post a new event with the executed results
-	go mgr.postMethodExecutedResultEvent(methodName, results)
+	// FIXME : execute asynchronously using go
+	mgr.postMethodExecutedResultEvent(methodName, results)
 
 	resultMap := map[string]interface{}{}
 	for name, result := range results {

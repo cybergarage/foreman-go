@@ -94,7 +94,8 @@ func (mgr *Manager) PostEvent(e *Event) error {
 	}
 
 	for _, route := range routes {
-		go mgr.executeEventRoute(e, route)
+		// FIXME : execute asynchronously using go
+		mgr.executeEventRoute(e, route)
 	}
 
 	return nil
