@@ -9,7 +9,8 @@ def test_qos_analyze_correlation(params,results):
   untilTs = nowTs
   for key, value in params.iteritems():
     q = 'ANALYZE %s FROM METRICS WHERE ts >= %d AND ts <= %d' % (key, fromTs, untilTs)
+    results['q'] = q
     jsonRes = foreman.execute_query(q)
     if jsonRes is None:
-      return False
+      return True
   return True
