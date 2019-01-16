@@ -44,10 +44,10 @@ func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error)
 		}
 	}
 
-	ts, tsErr := fql.AbsouleteTimeStringToTime(values[2].String())
-
+	tsStr := values[2].String()
+	ts, tsErr := fql.TimeStringToTime(tsStr)
 	if len(name) < 0 || valueErr != nil || tsErr != nil {
-		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
+		return nil, errors.NewErrorWithCodeAndMessage(errors.ErrorCodeQueryInvalidValues, tsStr)
 	}
 
 	m := NewMetricWithName(name)
