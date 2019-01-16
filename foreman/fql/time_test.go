@@ -89,7 +89,7 @@ func TestAbsoluteTimes(t *testing.T) {
 		}
 
 		absTimeSeconds[0] = time.Now().Unix()
-		absTime, err := AbsouleteTimeStringToTime(timeStr)
+		absTime, err := AbsoluteTimeStringToTime(timeStr)
 		if err != nil {
 			t.Error(err)
 			continue
