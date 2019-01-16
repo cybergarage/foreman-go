@@ -59,7 +59,6 @@ func TestQueryBasicScenarios(t *testing.T) {
 }
 
 func TestQueryBasicScenariosWithSleep(t *testing.T) {
-
 	scenarioFiles := []string{
 		"scenario_metrics_02.csv",
 	}
@@ -78,6 +77,7 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 		"scenario_action_py_02.csv",
 		"scenario_action_py_03.csv",
 		"scenario_action_py_04.csv",
+		"scenario_action_py_05.csv",
 	}
 
 	conf := test.NewDefaultConfig()
@@ -87,10 +87,7 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 }
 
 func TestQueryDebugScenarios(t *testing.T) {
-
-	scenarioFiles := []string{
-		"scenario_action_py_05.csv",
-	}
+	scenarioFiles := []string{}
 
 	conf := test.NewDefaultConfig()
 	conf.EnableSkipError = true

@@ -14,4 +14,6 @@ def test_qos_analyze_correlation(params,results):
     jsonRes = foreman.execute_query(q)
     if jsonRes is None:
       return False
+    regKey = 'test_qos_analyze_correlation_%s' % key
+    foreman.set_register(regKey, str(value))
   return True
