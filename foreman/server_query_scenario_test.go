@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/test"
 )
 
@@ -25,7 +26,8 @@ func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, test
 		if err != nil {
 			lastEvent := s.GetLastEvent()
 			if testConf.EnableSkipError {
-				t.Logf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
+				logging.Error(err.Error().Error())
+				t.Skipf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
 			} else {
 				t.Errorf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
 			}
@@ -46,10 +48,10 @@ func TestQueryBasicScenarios(t *testing.T) {
 		"scenario_config_01.csv",
 		"scenario_finder_01.csv",
 		"scenario_metrics_01.csv",
-		"scenario_metrics_02.csv",
 		"scenario_qos_01.csv",
 		"scenario_qos_02.csv",
 		"scenario_register_01.csv",
+		"scenario_register_02.csv",
 	}
 
 	conf := test.NewDefaultConfig()
@@ -59,9 +61,7 @@ func TestQueryBasicScenarios(t *testing.T) {
 }
 
 func TestQueryBasicScenariosWithSleep(t *testing.T) {
-	scenarioFiles := []string{
-		"scenario_metrics_02.csv",
-	}
+	scenarioFiles := []string{}
 
 	conf := test.NewDefaultConfig()
 
