@@ -46,10 +46,9 @@ func TestQueryBasicScenarios(t *testing.T) {
 		"scenario_config_01.csv",
 		"scenario_finder_01.csv",
 		"scenario_metrics_01.csv",
-		"scenario_metrics_02.csv",
 		"scenario_qos_01.csv",
 		"scenario_qos_02.csv",
-		"scenario_register_01.csv",
+		"scenario_register_02.csv",
 	}
 
 	conf := test.NewDefaultConfig()
@@ -87,7 +86,9 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 }
 
 func TestQueryDebugScenarios(t *testing.T) {
-	scenarioFiles := []string{}
+	scenarioFiles := []string{
+		"scenario_register_01.csv",
+	}
 
 	conf := test.NewDefaultConfig()
 	conf.EnableSkipError = true
