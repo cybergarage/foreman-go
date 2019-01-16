@@ -41,7 +41,7 @@ func TimeStringToTime(timeStr string) (*time.Time, error) {
 	}
 
 	if IsAbsoluteTimeString(timeStr) {
-		return AbsouleteTimeStringToTime(timeStr)
+		return AbsoluteTimeStringToTime(timeStr)
 	}
 
 	return nil, fmt.Errorf(errorInvalidTimeFormat, timeStr)
@@ -68,8 +68,8 @@ func IsAbsoluteTimeString(timeStr string) bool {
 	return false
 }
 
-// AbsouleteTimeStringToTime returns a time based on the specified relative time string.
-func AbsouleteTimeStringToTime(timeStr string) (*time.Time, error) {
+// AbsoluteTimeStringToTime returns a time based on the specified relative time string.
+func AbsoluteTimeStringToTime(timeStr string) (*time.Time, error) {
 	queryRelativeTimeRegexs := []string{
 		queryAbsoluteTimeNowRegex,
 		queryAbsoluteTimeSQLNowRegex,
