@@ -54,7 +54,7 @@ func NewErrorWithCode(code int) *Error {
 func NewErrorWithCodeAndMessage(code int, msg string) *Error {
 	err := &Error{
 		Code:          code,
-		Message:       msg,
+		Message:       fmt.Sprintf("%s (%s)", ErrorCodeToString(code), msg),
 		DetailCode:    0,
 		DetailMessage: "",
 	}
@@ -68,13 +68,13 @@ func (err *Error) String() string {
 		errMsg += fmt.Sprintf("[%d] ", err.Code)
 	}
 	if 0 < len(err.Message) {
-		errMsg += fmt.Sprintf("[%s] ", err.Message)
+		errMsg += fmt.Sprintf("%s ", err.Message)
 	}
 	if 0 < err.DetailCode {
 		errMsg += fmt.Sprintf("[%d] ", err.DetailCode)
 	}
 	if 0 < len(err.DetailMessage) {
-		errMsg += fmt.Sprintf("[%s] ", err.DetailMessage)
+		errMsg += fmt.Sprintf("%s ", err.DetailMessage)
 	}
 	return errMsg
 }
