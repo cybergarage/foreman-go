@@ -58,9 +58,7 @@ func TestQueryBasicScenarios(t *testing.T) {
 }
 
 func TestQueryBasicScenariosWithSleep(t *testing.T) {
-	scenarioFiles := []string{
-		"scenario_metrics_02.csv",
-	}
+	scenarioFiles := []string{}
 
 	conf := test.NewDefaultConfig()
 
