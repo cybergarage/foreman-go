@@ -195,13 +195,21 @@ func (q *Query) String() string {
 		until = q.Until.Unix()
 	}
 
-	return fmt.Sprintf("%s FROM %s WHERE %s == %s AND %s >= %d AND %s <= %d",
+	qStr := fmt.Sprintf("%s FROM %s WHERE ",
 		fql.QuerySelectString,
-		fql.QueryTargetMetrics,
-		fql.QueryColumnName,
-		target,
+		fql.QueryTargetMetrics)
+
+	if 0 < len(target) {
+		qStr += fmt.Sprintf("%s == %s AND ",
+			fql.QueryColumnName,
+			target)
+	}
+
+	qStr += fmt.Sprintf("%s >= %d AND %s <=%d",
 		fql.QueryColumnTimestamp,
 		from,
 		fql.QueryColumnTimestamp,
 		until)
+
+	return qStr
 }
