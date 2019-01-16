@@ -1,3 +1,49 @@
-SET (test, "hello") INTO REGISTER;200
-SELECT * FROM REGISTER WHERE name == test;200;/register/test/value;hello
-EXPORT FROM REGISTER WHERE name == test;200;/register/test/value;hello
+
+
+################################################################################
+# Set registers directly and checks whether the version and values are updated
+################################################################################
+
+SET (test_reg, "hello0") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello0
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;1
+
+SET (test_reg, "hello1") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello1
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;2
+
+SET (test_reg, "hello2") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello2
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;3
+
+SET (test_reg, "hello3") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello3
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;4
+
+SET (test_reg, "hello4") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello4
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;5
+
+SET (test_reg, "hello5") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello5
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;6
+
+SET (test_reg, "hello6") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello6
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;7
+
+SET (test_reg, "hello7") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello7
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;8
+
+SET (test_reg, "hello8") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello8
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;9
+
+SET (test_reg, "hello9") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello9
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;10
+
+SET (test_reg, "hello10") INTO REGISTER;200
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/value;hello10
+EXPORT FROM REGISTER WHERE name == test_reg;200;/register/test_reg/ver;11

@@ -1,0 +1,43 @@
+################################################################################
+# Inserts metrics and checks the register whether the version and values are updated
+################################################################################
+
+INSERT INTO metrics VALUES (test_reg_metric, 1, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;1
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;1
+
+INSERT INTO metrics VALUES (test_reg_metric, 0, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;0
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;2
+
+INSERT INTO metrics VALUES (test_reg_metric, 1, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;1
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;3
+
+INSERT INTO metrics VALUES (test_reg_metric, 0, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;0
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;4
+
+INSERT INTO metrics VALUES (test_reg_metric, 1, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;1
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;5
+
+INSERT INTO metrics VALUES (test_reg_metric, 0, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;0
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;6
+
+INSERT INTO metrics VALUES (test_reg_metric, 1, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;1
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;7
+
+INSERT INTO metrics VALUES (test_reg_metric, 0, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;0
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;8
+
+INSERT INTO metrics VALUES (test_reg_metric, 0, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;0
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;9
+
+INSERT INTO metrics VALUES (test_reg_metric, 1, CURRENT_TIMESTAMP);200
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/value;1
+EXPORT FROM REGISTER WHERE name == test_reg_metric;200;/register/test_reg_metric/ver;10
