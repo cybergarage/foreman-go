@@ -195,7 +195,7 @@ func (mgr *cgoScriptManager) GetFirstMethod() *Method {
 	return NewMethodWithCObject(cMethod)
 }
 
-// ExecMethod retrun a first method in the manager.
+// GetNextMethod retrun a first method in the manager.
 func (mgr *cgoScriptManager) GetNextMethod(method *Method) *Method {
 	if mgr.cManager == nil {
 		return nil
