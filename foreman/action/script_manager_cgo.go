@@ -18,7 +18,7 @@ import (
 )
 
 const (
-	cgoScriptManagerExecErrorFormat   = "EXECUTE %s(%s) : %s"
+	cgoScriptManagerExecErrorFormat   = "EXECUTE %s(%s) -> (%t, %s) : %s"
 	cgoScriptManagerExecMessageFormat = "EXECUTE %s(%s) -> (%t, %s)"
 )
 
@@ -153,7 +153,7 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 		if C.foreman_error_isinternalerror(cerr) {
 			executeErr = err.Error()
 		} else {
-			executeErr = fmt.Errorf(cgoScriptManagerExecErrorFormat, name, params.String(), err.Error().Error())
+			executeErr = fmt.Errorf(cgoScriptManagerExecErrorFormat, name, params.String(), executedResult, results.String(), err.Error().Error())
 		}
 	}
 
@@ -162,7 +162,11 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 		logging.Error(err.Error())
 	}
 
-	logging.Info(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
+	if executeErr == nil {
+		logging.Info(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
+	} else {
+		logging.Error(executeErr.Error())
+	}
 
 	return results, executeErr
 }
