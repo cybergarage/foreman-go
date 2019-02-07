@@ -18,8 +18,9 @@ import (
 )
 
 const (
-	cgoScriptManagerExecErrorFormat   = "EXECUTE %s(%s) : %s"
-	cgoScriptManagerExecMessageFormat = "EXECUTE %s(%s) -> (%t, %s)"
+	cgoScriptManagerExecFaitalErrorFormat = "EXECUTE %s(%s) : %s"
+	cgoScriptManagerExecErrorFormat       = "EXECUTE %s(%s) -> (%t, %s) : %s"
+	cgoScriptManagerExecMessageFormat     = "EXECUTE %s(%s) -> (%t, %s)"
 )
 
 // cgoScriptManager represents an action manager using foreman-cc.
@@ -151,9 +152,9 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 	if !executedResult {
 		err := errors.NewWithCObject(cerr)
 		if C.foreman_error_isinternalerror(cerr) {
-			executeErr = err.Error()
+			executeErr = fmt.Errorf(cgoScriptManagerExecFaitalErrorFormat, name, params.String(), err.Error().Error())
 		} else {
-			executeErr = fmt.Errorf(cgoScriptManagerExecErrorFormat, name, params.String(), err.Error().Error())
+			executeErr = fmt.Errorf(cgoScriptManagerExecErrorFormat, name, params.String(), executedResult, results.String(), err.Error().Error())
 		}
 	}
 
@@ -162,7 +163,9 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 		logging.Error(err.Error())
 	}
 
-	logging.Info(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
+	if executeErr == nil {
+		logging.Info(cgoScriptManagerExecMessageFormat, name, params.String(), executedResult, results.String())
+	}
 
 	return results, executeErr
 }
@@ -195,7 +198,7 @@ func (mgr *cgoScriptManager) GetFirstMethod() *Method {
 	return NewMethodWithCObject(cMethod)
 }
 
-// ExecMethod retrun a first method in the manager.
+// GetNextMethod retrun a first method in the manager.
 func (mgr *cgoScriptManager) GetNextMethod(method *Method) *Method {
 	if mgr.cManager == nil {
 		return nil
