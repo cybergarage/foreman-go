@@ -46,7 +46,7 @@ const (
 
 func becomeVerbose(verbose bool) {
 	if verbose {
-		logging.SetLogLevel(logging.LevelTrace)
+		logging.SetLogLevel(logging.LoggerLevelTrace)
 		logging.Trace("Enabled verbose output.")
 	}
 }
@@ -77,7 +77,7 @@ func main() {
 
 	// logging Level
 
-	logging.SetLogLevel(conf.GetLogLevel())
+	logging.SetLogLevelString(conf.Log.Level)
 	logging.SetLogFile(conf.Log.File)
 	if *verbose {
 		logging.SetVerbose(*verbose)

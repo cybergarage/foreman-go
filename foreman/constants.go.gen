@@ -1,2 +1,2 @@
 #!/bin/bash
-../common/constants.go.gen foreman ../common/constants.csv '^(?!(query|metric|action|route|graphite))'
+../common/constants.go.gen foreman ../common/constants.csv '^(?!(query|metric|action|route|graphite|logger))'
