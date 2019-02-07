@@ -15,7 +15,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cybergarage/foreman-go/foreman/logging"
 	go_graphite "github.com/cybergarage/go-graphite/net/graphite"
 )
 
@@ -272,8 +271,6 @@ func TestGraphiteFeedAPIWithDefaultFeedData(t *testing.T) {
 }
 
 func TestMultipleGraphiteFeedAPIWithDefaultFeedData(t *testing.T) {
-	logging.SetVerbose(true)
-
 	serverConf, err := newDefaultTestServerConfig()
 	if err != nil {
 		t.Error(err)

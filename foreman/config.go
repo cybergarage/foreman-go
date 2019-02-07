@@ -90,11 +90,6 @@ func NewConfigWithFile(filename string) (*Config, error) {
 	return conf, nil
 }
 
-// GetLogLevel returns the log level type.
-func (conf *Config) GetLogLevel() logging.LogLevel {
-	return logging.LogLevelFromString(conf.Log.Level)
-}
-
 // SetMetricsStorePeriod sets a metrics period duration.
 func (conf *Config) SetMetricsStorePeriod(d time.Duration) error {
 	conf.Metrics.Period = int(d / time.Second)
