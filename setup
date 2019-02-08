@@ -17,6 +17,8 @@ if command -v pkg-config; then
 	export CGO_LDFLAGS="$CGO_LDFLAGS `pkg-config lua --silence-errors --libs`"
 fi
 
+export CGO_CXXFLAGS="$CGO_CFLAGS -std=c++11"
+
 ########################################
 # Get dependency projects
 ########################################
