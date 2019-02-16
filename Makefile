@@ -19,7 +19,9 @@ GITHUB_ROOT=github.com/cybergarage
 
 PACKAGE_NAME=foreman
 DAEMON_NAME=foremand
+
 TESTING_NAME=foremantest
+TESTING_PROFILE_FILENAME=${TESTING_NAME}.prof
 
 TESTING_PROFILE_FILENAME=foreman.test.prof
 
