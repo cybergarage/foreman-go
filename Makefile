@@ -21,6 +21,8 @@ PACKAGE_NAME=foreman
 DAEMON_NAME=foremand
 TESTING_NAME=foremantest
 
+TESTING_PROFILE_FILENAME=foreman.test.prof
+
 GITHUB=${GITHUB_ROOT}/foreman-go
 
 GO_GRAPHITE_GITHUB=${GITHUB_ROOT}/go-graphite
@@ -133,6 +135,11 @@ build: antlr vet
 
 test: antlr vet
 	go test -v -cover -timeout 300s ${PACKAGES}
+
+profile: 
+	go test -v -cover -timeout 300s -memprofilerate 1 -memprofile ${TESTING_PROFILE_FILENAME} ${PACKAGE_ID}
+	go tool pprof ${TESTING_PROFILE_FILENAME}
+	rm ${TESTING_PROFILE_FILENAME}
 
 install: antlr vet
 	go install -v ${BINARIES}
