@@ -29,8 +29,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"net"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"github.com/cybergarage/foreman-go/foreman"
@@ -75,12 +80,20 @@ func main() {
 
 	server.SetConfigFile(*configFile)
 
-	// logging Level
+	// Logging Level
 
 	logging.SetLogLevelString(conf.Log.Level)
 	logging.SetLogFile(conf.Log.File)
 	if *verbose {
 		logging.SetVerbose(*verbose)
+	}
+
+	// Profile server
+
+	if 0 < conf.Profile.Port {
+		go func() {
+			log.Println(http.ListenAndServe(net.JoinHostPort("localhost", strconv.Itoa(conf.Profile.Port)), nil))
+		}()
 	}
 
 	// Load initial queries

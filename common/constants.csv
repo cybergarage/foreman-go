@@ -171,3 +171,9 @@ logger_level_string_info,"INFO"
 logger_level_string_warn,"WARN"
 logger_level_string_error,"ERROR"
 logger_level_string_fatal,"FATAL"
+
+########################################
+# Profile
+########################################
+
+default_profile_port,6060

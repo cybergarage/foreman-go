@@ -52,4 +52,5 @@ const (
 	RpcErrorDetail                    = "detail"
 	RpcErrorDetailCode                = "code"
 	RpcErrorDetailMessage             = "message"
+	DefaultProfilePort                = 6060
 )

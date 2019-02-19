@@ -45,6 +45,10 @@ type BootstrapConfig struct {
 	Query string
 }
 
+type ProfileConfig struct {
+	Port int
+}
+
 // Config represents a configuration.
 type Config struct {
 	Log       LogConfig
@@ -52,6 +56,7 @@ type Config struct {
 	FQL       FQLConfig
 	Metrics   MetricsConfig
 	Bootstrap BootstrapConfig
+	Profile   ProfileConfig
 }
 
 // NewDefaultConfig return a default configuration.
@@ -76,6 +81,8 @@ func NewDefaultConfig() *Config {
 	conf.Metrics.Interval = DefaultMetricsInterval
 
 	conf.Bootstrap.Query = ""
+
+	conf.Profile.Port = DefaultProfilePort
 
 	return &conf
 }
