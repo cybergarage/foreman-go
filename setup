@@ -8,9 +8,14 @@ export GOPATH="$PWD"
 export CGO_LDFLAGS="-lforeman++ -lstdc++ -lalglib -lsqlite3 -luuid -lcurl -lm"
 #export CGO_LDFLAGS="$CGO_LDFLAGS -lfolly -lgflags -lglog -ljemalloc"
 
-if command -v python-config; then
-	export CGO_CFLAGS="$CGO_CFLAGS `python-config --includes`"
-	export CGO_LDFLAGS="$CGO_LDFLAGS `python-config --libs`"
+if command -v python3-config; then
+	export CGO_CFLAGS="$CGO_CFLAGS `python3-config --includes`"
+	export CGO_LDFLAGS="$CGO_LDFLAGS `python3-config --libs`"
+else
+	if command -v python-config; then
+		export CGO_CFLAGS="$CGO_CFLAGS `python-config --includes`"
+		export CGO_LDFLAGS="$CGO_LDFLAGS `python-config --libs`"
+	fi
 fi
 
 if command -v pkg-config; then
