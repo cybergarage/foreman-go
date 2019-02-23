@@ -61,12 +61,20 @@ BINARIES=${BINARY_DAEMON} ${BINARY_TESTING}
 CGO_LDFLAGS += -lforeman++ -lstdc++ -lalglib -lsqlite3 -luuid -lcurl -lm
 #CGO_LDFLAGS += -lfolly -lgflags -lglog
 
-HAVE_PYTHON_CONFIG := $(shell command -v python-config 2> /dev/null)
+HAVE_PYTHON3_CONFIG := $(shell command -v python3-config 2> /dev/null)
 all:
-ifdef HAVE_PYTHON_CONFIG
-    CGO_CFLAGS += $(shell python-config --includes)
-    CGO_LDFLAGS += $(shell python-config --libs)
+ifdef HAVE_PYTHON3_CONFIG
+    CGO_CFLAGS += $(shell python3-config --includes)
+    CGO_LDFLAGS += $(shell python3-config --libs)
+else
+    HAVE_PYTHON_CONFIG := $(shell command -v python-config 2> /dev/null)
+    all:
+    ifdef HAVE_PYTHON_CONFIG
+        CGO_CFLAGS += $(shell python-config --includes)
+        CGO_LDFLAGS += $(shell python-config --libs)
+    endif
 endif
+
 
 HAVE_PKG_CONFIG := $(shell command -v pkg-config 2> /dev/null)
 all:
