@@ -60,6 +60,7 @@ BINARIES=${BINARY_DAEMON} ${BINARY_TESTING}
 
 CGO_LDFLAGS += -lforeman++ -lstdc++ -lalglib -lsqlite3 -luuid -lcurl -lm
 #CGO_LDFLAGS += -lfolly -lgflags -lglog
+GCFLAGS="-N -l"
 
 HAVE_PYTHON3_CONFIG := $(shell command -v python3-config 2> /dev/null)
 all:
@@ -141,7 +142,7 @@ vet: format
 	go vet ${PACKAGES}
 
 build: antlr vet
-	go build -v ${PACKAGES}
+	go build -v -gcflags=${GCFLAGS} ${PACKAGES}
 
 test: antlr vet
 	go test -v -cover -timeout 300s ${PACKAGES}
@@ -152,7 +153,7 @@ profile:
 	rm ${TESTING_PROFILE_FILENAME}
 
 install: antlr vet
-	go install -v ${BINARIES}
+	go install -v -gcflags=${GCFLAGS} ${BINARIES}
 
 clean:
 	-rm ${PREFIX}/bin/*
