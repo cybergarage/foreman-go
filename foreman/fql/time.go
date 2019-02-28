@@ -47,19 +47,27 @@ func TimeStringToTime(timeStr string) (*time.Time, error) {
 	return nil, fmt.Errorf(errorInvalidTimeFormat, timeStr)
 }
 
+var queryAbsoluteTimeRegexes []*regexp.Regexp
+
+// getAbsoluteTimeRegexes returns a Regexp slice of the absolute time formats.
+func getAbsoluteTimeRegexes() []*regexp.Regexp {
+	if queryAbsoluteTimeRegexes == nil {
+		queryAbsoluteTimeRegexes = []*regexp.Regexp{
+			regexp.MustCompile(queryAbsoluteTimeNowRegex),
+			regexp.MustCompile(queryAbsoluteTimeSQLNowRegex),
+			regexp.MustCompile(queryAbsoluteTimeSQLCurrentTimestampRegex),
+			regexp.MustCompile(queryAbsoluteTimeRegexRFC),
+			regexp.MustCompile(queryAbsoluteTimeRegexSQL),
+			regexp.MustCompile(queryAbsoluteTimeUnixRegex),
+		}
+	}
+	return queryAbsoluteTimeRegexes
+}
+
 // IsAbsoluteTimeString returns the specified string whether it is based on the absolute time formats.
 func IsAbsoluteTimeString(timeStr string) bool {
-	queryAbsTimeRegexs := []string{
-		queryAbsoluteTimeNowRegex,
-		queryAbsoluteTimeSQLNowRegex,
-		queryAbsoluteTimeSQLCurrentTimestampRegex,
-		queryAbsoluteTimeRegexRFC,
-		queryAbsoluteTimeRegexSQL,
-		queryAbsoluteTimeUnixRegex,
-	}
-
-	for _, regex := range queryAbsTimeRegexs {
-		matched, _ := regexp.MatchString(regex, timeStr)
+	for _, regex := range getAbsoluteTimeRegexes() {
+		matched := regex.MatchString(timeStr)
 		if matched {
 			return true
 		}
@@ -70,17 +78,8 @@ func IsAbsoluteTimeString(timeStr string) bool {
 
 // AbsoluteTimeStringToTime returns a time based on the specified relative time string.
 func AbsoluteTimeStringToTime(timeStr string) (*time.Time, error) {
-	queryRelativeTimeRegexs := []string{
-		queryAbsoluteTimeNowRegex,
-		queryAbsoluteTimeSQLNowRegex,
-		queryAbsoluteTimeSQLCurrentTimestampRegex,
-		queryAbsoluteTimeRegexRFC,
-		queryAbsoluteTimeRegexSQL,
-		queryAbsoluteTimeUnixRegex,
-	}
-
-	for n, regex := range queryRelativeTimeRegexs {
-		matched, _ := regexp.MatchString(regex, strings.ToLower(timeStr))
+	for n, regex := range getAbsoluteTimeRegexes() {
+		matched := regex.MatchString(strings.ToLower(timeStr))
 		if !matched {
 			continue
 		}
@@ -122,20 +121,28 @@ func AbsoluteTimeStringToTime(timeStr string) (*time.Time, error) {
 	return nil, fmt.Errorf(errorInvalidTimeFormat, timeStr)
 }
 
+var queryRelativeTimeRegexes []*regexp.Regexp
+
+// getRelativeTimeRegexes returns a Regexp slice of the relative time formats.
+func getRelativeTimeRegexes() []*regexp.Regexp {
+	if queryRelativeTimeRegexes == nil {
+		queryRelativeTimeRegexes = []*regexp.Regexp{
+			regexp.MustCompile(queryRelativeTimeSecondsRegex),
+			regexp.MustCompile(queryRelativeTimeMinutesRegex),
+			regexp.MustCompile(queryRelativeTimeHoursRegex),
+			regexp.MustCompile(queryRelativeTimeDaysRegex),
+			regexp.MustCompile(queryRelativeTimeWeeksRegex),
+			regexp.MustCompile(queryRelativeTimeMonthsRegex),
+			regexp.MustCompile(queryRelativeTimeYearsRegex),
+		}
+	}
+	return queryRelativeTimeRegexes
+}
+
 // IsRelativeTimeString returns the specified string whether it is based on the releative time formats.
 func IsRelativeTimeString(timeStr string) bool {
-	queryRelativeTimeRegexs := []string{
-		queryRelativeTimeSecondsRegex,
-		queryRelativeTimeMinutesRegex,
-		queryRelativeTimeHoursRegex,
-		queryRelativeTimeDaysRegex,
-		queryRelativeTimeWeeksRegex,
-		queryRelativeTimeMonthsRegex,
-		queryRelativeTimeYearsRegex,
-	}
-
-	for _, regex := range queryRelativeTimeRegexs {
-		matched, _ := regexp.MatchString(regex, timeStr)
+	for _, regex := range getRelativeTimeRegexes() {
+		matched := regex.MatchString(timeStr)
 		if matched {
 			return true
 		}
@@ -146,20 +153,10 @@ func IsRelativeTimeString(timeStr string) bool {
 
 // RelativeTimeStringToTime returns a time based on the specified relative time string.
 func RelativeTimeStringToTime(timeStr string) (*time.Time, error) {
-	queryRelativeTimeRegexs := []string{
-		queryRelativeTimeSecondsRegex,
-		queryRelativeTimeMinutesRegex,
-		queryRelativeTimeHoursRegex,
-		queryRelativeTimeDaysRegex,
-		queryRelativeTimeWeeksRegex,
-		queryRelativeTimeMonthsRegex,
-		queryRelativeTimeYearsRegex,
-	}
-
 	now := time.Now()
 
-	for n, regex := range queryRelativeTimeRegexs {
-		matched, _ := regexp.MatchString(regex, timeStr)
+	for n, regex := range getRelativeTimeRegexes() {
+		matched := regex.MatchString(timeStr)
 		if !matched {
 			continue
 		}
