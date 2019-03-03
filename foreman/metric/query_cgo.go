@@ -14,8 +14,8 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-// CQuery returns a Query object for foreman-cc.
-func (q *Query) CQuery() (unsafe.Pointer, error) {
+// CObject returns a Query object for foreman-cc.
+func (q *Query) CObject() (unsafe.Pointer, error) {
 	cq := C.foreman_metric_query_new()
 	if cq == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)

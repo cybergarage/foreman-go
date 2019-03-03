@@ -192,10 +192,11 @@ func (store *cgoStore) Query(q *Query) (ResultSet, error) {
 		q.Interval = duration
 	}
 
-	cq, err := q.CQuery()
+	cq, err := q.CObject()
 	if err != nil {
 		return nil, err
 	}
+	defer C.foreman_metric_query_delete(cq)
 
 	if q.Source == QuerySourceTypeUnknown {
 		return nil, fmt.Errorf(errorStoreInvalidQuery, q.String())
