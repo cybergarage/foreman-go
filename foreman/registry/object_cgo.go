@@ -48,11 +48,25 @@ func (obj *Object) CObject() (unsafe.Pointer, error) {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	C.foreman_registry_object_setid(cobj, C.CString(obj.ID))
-	C.foreman_registry_object_setparentid(cobj, C.CString(obj.ParentID))
-	C.foreman_registry_object_setname(cobj, C.CString(obj.Name))
-	C.foreman_registry_object_setdata(cobj, C.CString(obj.Data))
-	C.foreman_registry_object_setpropertydata(cobj, C.CString(obj.propertyData))
+	cID := C.CString(obj.ID)
+	defer C.free(unsafe.Pointer(cID))
+	C.foreman_registry_object_setid(cobj, cID)
+
+	cparentID := C.CString(obj.ParentID)
+	defer C.free(unsafe.Pointer(cparentID))
+	C.foreman_registry_object_setparentid(cobj, cparentID)
+
+	cname := C.CString(obj.Name)
+	defer C.free(unsafe.Pointer(cname))
+	C.foreman_registry_object_setname(cobj, cname)
+
+	cdata := C.CString(obj.Data)
+	defer C.free(unsafe.Pointer(cdata))
+	C.foreman_registry_object_setdata(cobj, cdata)
+
+	cpropData := C.CString(obj.propertyData)
+	defer C.free(unsafe.Pointer(cpropData))
+	C.foreman_registry_object_setpropertydata(cobj, cpropData)
 
 	return cobj, nil
 }

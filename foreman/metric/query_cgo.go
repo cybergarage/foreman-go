@@ -21,7 +21,10 @@ func (q *Query) CObject() (unsafe.Pointer, error) {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	C.foreman_metric_query_settarget(cq, C.CString(q.Target))
+	ctarget := C.CString(q.Target)
+	defer C.free(unsafe.Pointer(ctarget))
+
+	C.foreman_metric_query_settarget(cq, ctarget)
 	C.foreman_metric_query_setinterval(cq, (C.time_t)(q.Interval.Seconds()))
 	if q.From != nil {
 		C.foreman_metric_query_setfrom(cq, (C.time_t)(q.From.Unix()))

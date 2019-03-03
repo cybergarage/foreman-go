@@ -52,7 +52,9 @@ func (obj *cgoObject) GetCObject() unsafe.Pointer {
 
 // SetName sets a specified name
 func (obj *cgoObject) SetName(name string) error {
-	if !C.foreman_register_object_setkey(obj.cObject, C.CString(name)) {
+	cname := C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	if !C.foreman_register_object_setkey(obj.cObject, cname) {
 		return fmt.Errorf(errorInvalidObject, obj.String())
 	}
 	return nil
@@ -69,7 +71,9 @@ func (obj *cgoObject) GetName() (string, error) {
 
 // SetData sets a specified data
 func (obj *cgoObject) SetData(data string) error {
-	if !C.foreman_register_object_setdata(obj.cObject, C.CString(data)) {
+	cdata := C.CString(data)
+	defer C.free(unsafe.Pointer(cdata))
+	if !C.foreman_register_object_setdata(obj.cObject, cdata) {
 		return fmt.Errorf(errorInvalidObject, obj.String())
 	}
 

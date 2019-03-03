@@ -126,7 +126,9 @@ func (store *CgoStore) GetObject(objID string) (*Object, error) {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_getobject(store.cStore, C.CString(objID), cobj, cerr) {
+	cobjID := C.CString(objID)
+	defer C.free(unsafe.Pointer(cobjID))
+	if !C.foreman_registry_store_getobject(store.cStore, cobjID, cobj, cerr) {
 		return nil, errors.NewWithCObject(cerr).Error()
 	}
 
@@ -142,7 +144,9 @@ func (store *CgoStore) DeleteObject(objID string) error {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_registry_store_deleteobject(store.cStore, C.CString(objID), cerr) {
+	cobjID := C.CString(objID)
+	defer C.free(unsafe.Pointer(cobjID))
+	if !C.foreman_registry_store_deleteobject(store.cStore, cobjID, cerr) {
 		return errors.NewWithCObject(cerr).Error()
 	}
 

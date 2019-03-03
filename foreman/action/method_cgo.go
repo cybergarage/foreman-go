@@ -37,14 +37,21 @@ func NewMethodWithCObject(cObject unsafe.Pointer) *Method {
 
 // CObject returns a method objectfor foreman-cc.
 func (method *Method) CObject() (unsafe.Pointer, error) {
-	cmethod := C.foreman_action_method_new(C.CString(method.Language))
+	clang := C.CString(method.Language)
+	defer C.free(unsafe.Pointer(clang))
+
+	cmethod := C.foreman_action_method_new(clang)
 	if cmethod == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	C.foreman_action_method_setname(cmethod, C.CString(method.Name))
-	C.foreman_action_method_setlanguage(cmethod, C.CString(method.Language))
-	C.foreman_action_method_setstringcode(cmethod, C.CString(string(method.Code)))
+	cname := C.CString(method.Name)
+	defer C.free(unsafe.Pointer(cname))
+	C.foreman_action_method_setname(cmethod, cname)
+
+	ccode := C.CString(string(method.Code))
+	defer C.free(unsafe.Pointer(ccode))
+	C.foreman_action_method_setstringcode(cmethod, ccode)
 
 	return cmethod, nil
 }

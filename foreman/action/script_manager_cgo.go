@@ -64,12 +64,16 @@ func (mgr *cgoScriptManager) SetRegisterStore(store register.Store) error {
 
 // HasEngine checks whether a script engine of the specified programming language is added.
 func (mgr *cgoScriptManager) HasEngine(lang string) bool {
-	return bool(C.foreman_action_manager_hasengine(mgr.cManager, C.CString(lang)))
+	clang := C.CString(lang)
+	defer C.free(unsafe.Pointer(clang))
+	return bool(C.foreman_action_manager_hasengine(mgr.cManager, clang))
 }
 
 // HasMethod checks whether the specified method is added.
 func (mgr *cgoScriptManager) HasMethod(method string) bool {
-	return bool(C.foreman_action_manager_hasmethod(mgr.cManager, C.CString(method)))
+	cmethod := C.CString(method)
+	defer C.free(unsafe.Pointer(cmethod))
+	return bool(C.foreman_action_manager_hasmethod(mgr.cManager, cmethod))
 }
 
 // AddMethod adds a new method to the action manager.
@@ -103,7 +107,9 @@ func (mgr *cgoScriptManager) RemoveMethod(name string) error {
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
-	if !C.foreman_action_manager_removemethod(mgr.cManager, C.CString(name), cerr) {
+	cname := C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	if !C.foreman_action_manager_removemethod(mgr.cManager, cname, cerr) {
 		return errors.NewWithCObject(cerr).Error()
 	}
 
@@ -149,7 +155,9 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 
 	var executeErr error
 
-	executedResult := bool(C.foreman_action_manager_execmethod(mgr.cManager, C.CString(name), cParams, cResults, cerr))
+	cname := C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	executedResult := bool(C.foreman_action_manager_execmethod(mgr.cManager, cname, cParams, cResults, cerr))
 	if !executedResult {
 		err := errors.NewWithCObject(cerr)
 		if C.foreman_error_isinternalerror(cerr) {
@@ -177,7 +185,9 @@ func (mgr *cgoScriptManager) GetMethod(name string) *Method {
 		return nil
 	}
 
-	cMethod := C.foreman_action_manager_getmethod(mgr.cManager, C.CString(name))
+	cname := C.CString(name)
+	defer C.free(unsafe.Pointer(cname))
+	cMethod := C.foreman_action_manager_getmethod(mgr.cManager, cname)
 	if cMethod == nil {
 		return nil
 	}

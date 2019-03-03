@@ -17,7 +17,10 @@ package logging
 
 // #include <foreman/foreman-c.h>
 import "C"
-import "fmt"
+import (
+	"fmt"
+	"unsafe"
+)
 
 // SetLogLevel sets the specified logging level to the all outputters.
 func SetLogLevel(level int) {
@@ -26,7 +29,9 @@ func SetLogLevel(level int) {
 
 // SetLogLevelString sets the specified logging level string to the all outputters.
 func SetLogLevelString(level string) {
-	ret := bool(C.foreman_logger_setlevelstring(C.foreman_logger_getsharedinstance(), C.CString(level)))
+	clevel := C.CString(level)
+	defer C.free(unsafe.Pointer(clevel))
+	ret := bool(C.foreman_logger_setlevelstring(C.foreman_logger_getsharedinstance(), clevel))
 	if ret {
 		return
 	}
@@ -43,7 +48,9 @@ func SetLogFile(file string) {
 	if file == "-" {
 		SetLogToStdout()
 	} else {
-		C.foreman_logger_addfileoutputter(C.foreman_logger_getsharedinstance(), C.CString(file))
+		cfile := C.CString(file)
+		defer C.free(unsafe.Pointer(cfile))
+		C.foreman_logger_addfileoutputter(C.foreman_logger_getsharedinstance(), cfile)
 	}
 }
 
@@ -62,25 +69,35 @@ func SetVerbose(verbose bool) {
 
 // Trace outputs a trace message to the shared logger.
 func Trace(format string, args ...interface{}) int {
-	return int(C.foreman_logger_trace(C.foreman_logger_getsharedinstance(), C.CString(fmt.Sprintf(format, args...))))
+	cmsg := C.CString(fmt.Sprintf(format, args...))
+	defer C.free(unsafe.Pointer(cmsg))
+	return int(C.foreman_logger_trace(C.foreman_logger_getsharedinstance(), cmsg))
 }
 
 // Info outputs an information message to the shared logger.
 func Info(format string, args ...interface{}) int {
-	return int(C.foreman_logger_info(C.foreman_logger_getsharedinstance(), C.CString(fmt.Sprintf(format, args...))))
+	cmsg := C.CString(fmt.Sprintf(format, args...))
+	defer C.free(unsafe.Pointer(cmsg))
+	return int(C.foreman_logger_info(C.foreman_logger_getsharedinstance(), cmsg))
 }
 
 // Warn outputs a warning message to the shared logger.
 func Warn(format string, args ...interface{}) int {
-	return int(C.foreman_logger_warn(C.foreman_logger_getsharedinstance(), C.CString(fmt.Sprintf(format, args...))))
+	cmsg := C.CString(fmt.Sprintf(format, args...))
+	defer C.free(unsafe.Pointer(cmsg))
+	return int(C.foreman_logger_warn(C.foreman_logger_getsharedinstance(), cmsg))
 }
 
 // Error outputs an error message to the shared logger.
 func Error(format string, args ...interface{}) int {
-	return int(C.foreman_logger_error(C.foreman_logger_getsharedinstance(), C.CString(fmt.Sprintf(format, args...))))
+	cmsg := C.CString(fmt.Sprintf(format, args...))
+	defer C.free(unsafe.Pointer(cmsg))
+	return int(C.foreman_logger_error(C.foreman_logger_getsharedinstance(), cmsg))
 }
 
 // Fatal outputs a fatal message to the shared logger.
 func Fatal(format string, args ...interface{}) int {
-	return int(C.foreman_logger_fatal(C.foreman_logger_getsharedinstance(), C.CString(fmt.Sprintf(format, args...))))
+	cmsg := C.CString(fmt.Sprintf(format, args...))
+	defer C.free(unsafe.Pointer(cmsg))
+	return int(C.foreman_logger_fatal(C.foreman_logger_getsharedinstance(), cmsg))
 }
