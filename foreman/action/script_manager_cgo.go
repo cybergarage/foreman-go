@@ -87,7 +87,7 @@ func (mgr *cgoScriptManager) AddMethod(method *Method) error {
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_action_manager_addmethod(mgr.cManager, cmethod, cerr) {
-		defer C.foreman_action_method_delete(cmethod)
+		C.foreman_action_method_delete(cmethod)
 		return errors.NewWithCObject(cerr).Error()
 	}
 
