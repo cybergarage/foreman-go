@@ -153,8 +153,6 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 
 	store.Unlock()
 
-	C.foreman_metric_delete(cm)
-
 	if store.listener != nil {
 		err = store.listener.StoreMetricAdded(m)
 		if err != nil {
