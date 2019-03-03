@@ -82,12 +82,12 @@ func (mgr *cgoScriptManager) AddMethod(method *Method) error {
 	if err != nil {
 		return err
 	}
-	defer C.foreman_action_method_delete(cmethod)
 
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
 	if !C.foreman_action_manager_addmethod(mgr.cManager, cmethod, cerr) {
+		defer C.foreman_action_method_delete(cmethod)
 		return errors.NewWithCObject(cerr).Error()
 	}
 
