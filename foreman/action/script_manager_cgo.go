@@ -136,6 +136,7 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 	if err != nil {
 		return nil, err
 	}
+	defer C.foreman_action_parameters_delete(cParams)
 
 	results := NewParameters()
 	cResults, err := results.CObject()
