@@ -136,10 +136,11 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	cm, err := m.CMetric()
+	cm, err := m.CObject()
 	if err != nil {
 		return err
 	}
+	defer C.foreman_metric_delete(cm)
 
 	var lastErr error
 

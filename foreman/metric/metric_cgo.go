@@ -15,8 +15,8 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/errors"
 )
 
-// CMetric returns a data object for foreman-cc.
-func (m *Metric) CMetric() (unsafe.Pointer, error) {
+// CObject returns a data object for foreman-cc.
+func (m *Metric) CObject() (unsafe.Pointer, error) {
 	cm := C.foreman_metric_new()
 	if cm == nil {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
