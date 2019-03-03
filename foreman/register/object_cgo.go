@@ -9,6 +9,7 @@ import "C"
 
 import (
 	"fmt"
+	"runtime"
 	"time"
 	"unsafe"
 )
@@ -26,7 +27,13 @@ func newObjectWithCObject(cObject unsafe.Pointer) Object {
 		cObject:   cObject,
 		listeners: make([]ObjectListener, 0),
 	}
+	runtime.SetFinalizer(obj, registerCObjectFinalizer)
 	return obj
+}
+
+// registerCObjectFinalizer deletes the C object when the Go object is deprecated
+func registerCObjectFinalizer(obj *cgoObject) {
+	C.foreman_register_object_delete(obj.cObject)
 }
 
 // NewObject returns a new object.
