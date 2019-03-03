@@ -6,6 +6,7 @@ package register
 
 import (
 	"fmt"
+	"runtime"
 	"unsafe"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
@@ -25,7 +26,17 @@ func newStoreWithCObject(cObject unsafe.Pointer) *CgoStore {
 	store := &CgoStore{
 		cStore: cObject,
 	}
+	runtime.SetFinalizer(store, storeObjectFinalizer)
 	return store
+}
+
+// storeObjectFinalizer deletes the C object when the Go object is deprecated
+func storeObjectFinalizer(store *CgoStore) {
+	if store.cStore != nil {
+		if C.foreman_register_store_delete(store.cStore) {
+			store.cStore = nil
+		}
+	}
 }
 
 // NewStore returns a new base object.
