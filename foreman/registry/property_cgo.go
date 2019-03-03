@@ -21,8 +21,13 @@ func (prop *Property) CObject() (unsafe.Pointer, error) {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	C.foreman_registry_property_setname(cprop, C.CString(prop.Name))
-	C.foreman_registry_property_setdata(cprop, C.CString(prop.Data))
+	cname := C.CString(prop.Name)
+	defer C.free(unsafe.Pointer(cname))
+	C.foreman_registry_property_setname(cprop, cname)
+
+	cdata := C.CString(prop.Data)
+	defer C.free(unsafe.Pointer(cdata))
+	C.foreman_registry_property_setdata(cprop, cdata)
 
 	return cprop, nil
 }

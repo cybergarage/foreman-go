@@ -22,7 +22,10 @@ func (m *Metric) CObject() (unsafe.Pointer, error) {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	C.foreman_metric_setname(cm, C.CString(m.Name))
+	cname := C.CString(m.Name)
+	defer C.free(unsafe.Pointer(cname))
+
+	C.foreman_metric_setname(cm, cname)
 	C.foreman_metric_setvalue(cm, C.double(m.Value))
 	C.foreman_metric_settimestamp(cm, (C.time_t)(m.Timestamp.Unix()))
 

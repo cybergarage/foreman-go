@@ -22,7 +22,9 @@ func (q *Query) CObject() (unsafe.Pointer, error) {
 		return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 	}
 
-	C.foreman_registry_query_setparentid(cq, C.CString(q.ParentID))
+	cparentID := C.CString(q.ParentID)
+	defer C.free(unsafe.Pointer(cparentID))
+	C.foreman_registry_query_setparentid(cq, cparentID)
 
 	return cq, nil
 }

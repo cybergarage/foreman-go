@@ -92,7 +92,9 @@ func (store *CgoStore) GetObject(key string) (Object, bool) {
 	cErr := C.foreman_error_new()
 	defer C.foreman_error_delete(cErr)
 
-	if !C.foreman_register_store_getobject(store.cStore, C.CString(key), cObj, cErr) {
+	ckey := C.CString(key)
+	defer C.free(unsafe.Pointer(ckey))
+	if !C.foreman_register_store_getobject(store.cStore, ckey, cObj, cErr) {
 		C.foreman_register_object_delete(cObj)
 		return nil, false
 	}
@@ -105,7 +107,9 @@ func (store *CgoStore) RemoveObject(key string) bool {
 	cErr := C.foreman_error_new()
 	defer C.foreman_error_delete(cErr)
 
-	if !C.foreman_register_store_removeobject(store.cStore, C.CString(key), cErr) {
+	ckey := C.CString(key)
+	defer C.free(unsafe.Pointer(ckey))
+	if !C.foreman_register_store_removeobject(store.cStore, ckey, cErr) {
 		return false
 	}
 

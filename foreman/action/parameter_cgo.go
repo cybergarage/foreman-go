@@ -66,14 +66,19 @@ func (param *Parameter) CObject() (unsafe.Pointer, error) {
 			return nil, fmt.Errorf(errors.ErrorClangObjectNotInitialized)
 		}
 		value, _ := param.GetString()
-		C.foreman_action_parameter_setstring(cparam, C.CString(value))
+		cvalue := C.CString(value)
+		defer C.free(unsafe.Pointer(cvalue))
+		C.foreman_action_parameter_setstring(cparam, cvalue)
 	}
 
 	if cparam == nil {
 		return nil, fmt.Errorf(errorUnknownParameterType, param.Type)
 	}
 
-	C.foreman_action_parameter_setname(cparam, C.CString(param.Name))
+	cname := C.CString(param.Name)
+	defer C.free(unsafe.Pointer(cname))
+
+	C.foreman_action_parameter_setname(cparam, cname)
 
 	return cparam, nil
 }
