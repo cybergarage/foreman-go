@@ -27,13 +27,17 @@ func newObjectWithCObject(cObject unsafe.Pointer) Object {
 		cObject:   cObject,
 		listeners: make([]ObjectListener, 0),
 	}
-	runtime.SetFinalizer(obj, registerCObjectFinalizer)
+	runtime.SetFinalizer(obj, registerObjectFinalizer)
 	return obj
 }
 
-// registerCObjectFinalizer deletes the C object when the Go object is deprecated
-func registerCObjectFinalizer(obj *cgoObject) {
-	C.foreman_register_object_delete(obj.cObject)
+// registerObjectFinalizer deletes the C object when the Go object is deprecated
+func registerObjectFinalizer(obj *cgoObject) {
+	if obj.cObject != nil {
+		if C.foreman_register_object_delete(obj.cObject) {
+			obj.cObject = nil
+		}
+	}
 }
 
 // NewObject returns a new object.
