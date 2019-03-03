@@ -49,6 +49,8 @@ func (method *Method) CObject() (unsafe.Pointer, error) {
 	defer C.free(unsafe.Pointer(cname))
 	C.foreman_action_method_setname(cmethod, cname)
 
+	C.foreman_action_method_setlanguage(cmethod, clang)
+
 	ccode := C.CString(string(method.Code))
 	defer C.free(unsafe.Pointer(ccode))
 	C.foreman_action_method_setstringcode(cmethod, ccode)
