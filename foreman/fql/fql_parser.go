@@ -1,4 +1,4 @@
-// Code generated from FQL.g4 by ANTLR 4.7.1. DO NOT EDIT.
+// Code generated from FQL.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
 package fql // FQL
 import (
@@ -2202,6 +2202,14 @@ func (s *ValuesContext) Value(i int) IValueContext {
 	return t.(IValueContext)
 }
 
+func (s *ValuesContext) AllCOMMA() []antlr.TerminalNode {
+	return s.GetTokens(FQLParserCOMMA)
+}
+
+func (s *ValuesContext) COMMA(i int) antlr.TerminalNode {
+	return s.GetToken(FQLParserCOMMA, i)
+}
+
 func (s *ValuesContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -2422,6 +2430,14 @@ func (s *ColumnsContext) Column(i int) IColumnContext {
 	return t.(IColumnContext)
 }
 
+func (s *ColumnsContext) AllCOMMA() []antlr.TerminalNode {
+	return s.GetTokens(FQLParserCOMMA)
+}
+
+func (s *ColumnsContext) COMMA(i int) antlr.TerminalNode {
+	return s.GetToken(FQLParserCOMMA, i)
+}
+
 func (s *ColumnsContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -2536,6 +2552,10 @@ func (s *ColumnsetContext) Column() IColumnContext {
 	}
 
 	return t.(IColumnContext)
+}
+
+func (s *ColumnsetContext) SINGLE_EQ() antlr.TerminalNode {
+	return s.GetToken(FQLParserSINGLE_EQ, 0)
 }
 
 func (s *ColumnsetContext) Value() IValueContext {
@@ -2664,6 +2684,14 @@ func (s *ColumnsetsContext) Columnset(i int) IColumnsetContext {
 	}
 
 	return t.(IColumnsetContext)
+}
+
+func (s *ColumnsetsContext) AllCOMMA() []antlr.TerminalNode {
+	return s.GetTokens(FQLParserCOMMA)
+}
+
+func (s *ColumnsetsContext) COMMA(i int) antlr.TerminalNode {
+	return s.GetToken(FQLParserCOMMA, i)
 }
 
 func (s *ColumnsetsContext) GetRuleContext() antlr.RuleContext {
