@@ -46,9 +46,22 @@ make test
 
 ### Unit Testing
 
-For the unit test, Foreman conforms the following standard testing of Go language.
+For the unit test, Foreman conforms the following official testing of Go language.
 
 - [The Go Programming Language - Package testing](https://golang.org/pkg/testing/)
+
+### Profiling
+
+To check the memory profile for the unit testing, use the following command which profiles the memory leaks for the 'foreman' package only.
+
+```
+make profile
+```
+
+For the profiling tool, see the following official documentation of Go language.
+
+- [The Go Programming Language - Package pprof](https://golang.org/pkg/net/http/pprof/)
+- [The Go Blog - Profiling Go Programs](https://blog.golang.org/profiling-go-programs)
 
 ### Integration Testing
 
