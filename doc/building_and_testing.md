@@ -52,7 +52,7 @@ For the unit test, Foreman conforms the following official testing of Go languag
 
 ### Profiling
 
-To check the memory profile for the unit testing, use the following command which profiles the memory leaks for the 'foreman' package only.
+To check the memory profile for the unit testing, use the following command which profiles the memory leaks only for the 'foreman' package.
 
 ```
 make profile
