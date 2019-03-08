@@ -11,6 +11,7 @@ product_name,"foreman"
 default_server_host,"localhost"
 default_carbon_port,2003
 default_http_port,8188
+default_connection_timeout,60
 default_rpc_protocol,"http"
 default_log_file,"-"
 default_log_level,"INFO"
@@ -41,6 +42,7 @@ config_name_key,"name"
 config_address_key,"address"
 config_http_port_key,"http_port"
 config_carbon_port_key,"carbon_port"
+config_timeout_key,"timeout"
 config_render_port_key,"render_port"
 config_fql_path_key,"fql_path"
 config_log_file_key,"log_file"

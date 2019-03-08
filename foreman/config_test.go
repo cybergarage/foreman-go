@@ -6,6 +6,7 @@ package foreman
 
 import (
 	"testing"
+	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/metric"
 )
@@ -15,7 +16,23 @@ const (
 )
 
 func TestDefaultConfig(t *testing.T) {
-	NewDefaultConfig()
+	conf := NewDefaultConfig()
+
+	defaultTimeout := time.Duration(DefaultConnectionTimeout) * time.Second
+	if conf.GetServerConnectionTimeout() <= 0 {
+		t.Errorf("%v <= 0", conf.GetServerConnectionTimeout())
+	}
+	if conf.GetServerConnectionTimeout() != defaultTimeout {
+		t.Errorf("%v != %v", conf.GetServerConnectionTimeout(), defaultTimeout)
+	}
+
+	if conf.GetMetricsStorePeriod() <= 0 {
+		t.Errorf("%v <= 0", conf.GetMetricsStorePeriod())
+	}
+
+	if conf.GetMetricsStoreInterval() <= 0 {
+		t.Errorf("%v <= 0", conf.GetMetricsStoreInterval())
+	}
 }
 
 func TestConfigLoadFile(t *testing.T) {

@@ -13,6 +13,7 @@ const (
 	ConfigAddressKey       = "address"
 	ConfigHttpPortKey      = "http_port"
 	ConfigCarbonPortKey    = "carbon_port"
+	ConfigTimeoutKey       = "timeout"
 	ConfigRenderPortKey    = "render_port"
 	ConfigFqlPathKey       = "fql_path"
 	ConfigLogFileKey       = "log_file"

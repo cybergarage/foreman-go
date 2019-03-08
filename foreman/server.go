@@ -8,7 +8,6 @@ package foreman
 import (
 	"os"
 	"runtime"
-	"time"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
 	"github.com/cybergarage/foreman-go/foreman/discovery"
@@ -322,8 +321,9 @@ func (server *Server) applyConfig() error {
 	if err != nil {
 		return err
 	}
-	metricStore.SetRetentionPeriod(time.Duration(server.Metrics.Period) * time.Second)
-	metricStore.SetRetentionInterval(time.Duration(server.Metrics.Interval) * time.Second)
+
+	metricStore.SetRetentionPeriod(server.GetMetricsStorePeriod())
+	metricStore.SetRetentionInterval(server.GetMetricsStoreInterval())
 
 	server.metricMgr = metric.NewManagerWithStore(metricStore)
 	server.metricMgr.SetRegisterStore(server.registerMgr.GetStore())
@@ -331,6 +331,7 @@ func (server *Server) applyConfig() error {
 
 	// Graphite Ports
 
+	server.graphiteMgr.SetConnectionTimeout(server.GetServerConnectionTimeout())
 	server.graphiteMgr.SetCarbonPort(server.Server.CarbonPort)
 	server.graphiteMgr.SetRenderPort(server.Server.HTTPPort)
 
