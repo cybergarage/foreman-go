@@ -4,11 +4,23 @@
 
 package discovery
 
-import "fmt"
+import (
+	"fmt"
+	"io/ioutil"
+
+	"github.com/cybergarage/foreman-go/foreman/node"
+	yaml "gopkg.in/yaml.v2"
+)
 
 // StaticFinder represents a simple static finder.
 type StaticFinder struct {
 	*baseFinder
+}
+
+// NodeList is a format of nodelist.yaml.
+type NodeList struct {
+	clusterName string   `yaml:"cluster_name"`
+	hosts       []string `yaml:"hosts"`
 }
 
 // NewStaticFinderWithNodes returns a new static finder with specified nodes.
@@ -24,8 +36,45 @@ func NewStaticFinderWithNodes(nodes []Node) Finder {
 	return finder
 }
 
-// SearchAll searches all nodes.
+// NewStaticFinder returns a new static finder.
+func NewStaticFinder() Finder {
+	return NewStaticFinderWithNodes(nil)
+}
+
+func (finder *StaticFinder) loadYAML(nodeListYAML string) ([]Node, error) {
+	nodeListFile, err := ioutil.ReadFile(nodeListYAML)
+	if err != nil {
+		return nil, err
+	}
+
+	nodelist := &NodeList{}
+	err = yaml.Unmarshal(nodeListFile, &nodelist)
+	if err != nil {
+		return nil, err
+	}
+
+	nodes := []Node{}
+	for _, host := range nodelist.hosts {
+		node := node.NewBaseNode()
+		node.Cluster = nodelist.clusterName
+		node.Name = host
+		nodes = append(nodes, node)
+	}
+	return nodes, nil
+}
+
+// Search searches all nodes.
 func (finder *StaticFinder) Search() error {
+	nodelist, err := finder.loadYAML("./nodelist.yaml")
+	if err != nil {
+		return err
+	}
+	for _, node := range nodelist {
+		err = finder.addNode(node)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
