@@ -313,6 +313,8 @@ func (server *Server) applyConfig() error {
 	switch server.Server.Finder {
 	case FinderEchonet:
 		server.Controller.SetFinder(discovery.NewEchonetFinderWithLocalNode(server))
+	case FinderStatic:
+		server.Controller.SetFinder(discovery.NewStaticFinder())
 	}
 
 	// Metric Store
