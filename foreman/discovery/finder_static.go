@@ -39,12 +39,12 @@ func NewStaticFinder() Finder {
 	return NewStaticFinderWithNodes(nil)
 }
 
-// NewStaticFinderWithConf returns a new static finder.
-func NewStaticFinderWithConf(conf Config) Finder {
+// NewStaticFinderWithHosts returns a new static finder.
+func NewStaticFinderWithHosts(hosts []string, cluster string) Finder {
 	nodes := []Node{}
-	for _, host := range conf.Finder.Hosts {
+	for _, host := range hosts {
 		node := node.NewBaseNode()
-		node.Cluster = conf.Server.Cluster
+		node.Cluster = cluster
 		node.Name = host
 		nodes = append(nodes, node)
 	}
