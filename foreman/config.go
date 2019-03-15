@@ -31,6 +31,10 @@ type ServerConfig struct {
 	Finder            string
 }
 
+type FinderConfig struct {
+	Hosts []string
+}
+
 type FQLConfig struct {
 	Path  string
 	Query string
@@ -54,6 +58,7 @@ type ProfileConfig struct {
 type Config struct {
 	Log       LogConfig
 	Server    ServerConfig
+	Finder    FinderConfig
 	FQL       FQLConfig
 	Metrics   MetricsConfig
 	Bootstrap BootstrapConfig
@@ -74,6 +79,8 @@ func NewDefaultConfig() *Config {
 	conf.Server.Bootstrap = DefaultBootstrapMode
 	conf.Server.ConnectionTimeout = DefaultConnectionTimeout
 	conf.Server.Finder = DefaultFinder
+
+	conf.Finder.Hosts = []string{}
 
 	conf.FQL.Path = HttpRequestFqlPath
 	conf.FQL.Query = HttpRequestFqlQueryParam
