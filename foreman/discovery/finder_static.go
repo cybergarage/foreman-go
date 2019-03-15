@@ -15,12 +15,6 @@ type StaticFinder struct {
 	*baseFinder
 }
 
-// NodeList is a format of nodelist.yaml.
-type NodeList struct {
-	clusterName string   `yaml:"cluster_name"`
-	hosts       []string `yaml:"hosts"`
-}
-
 // NewStaticFinderWithNodes returns a new static finder with specified nodes.
 func NewStaticFinderWithNodes(nodes []Node) Finder {
 	finder := &StaticFinder{
@@ -34,11 +28,6 @@ func NewStaticFinderWithNodes(nodes []Node) Finder {
 	return finder
 }
 
-// NewStaticFinder returns a new static finder.
-func NewStaticFinder() Finder {
-	return NewStaticFinderWithNodes(nil)
-}
-
 // NewStaticFinderWithHosts returns a new static finder.
 func NewStaticFinderWithHosts(hosts []string, cluster string) Finder {
 	nodes := []Node{}
@@ -49,6 +38,11 @@ func NewStaticFinderWithHosts(hosts []string, cluster string) Finder {
 		nodes = append(nodes, node)
 	}
 	return NewStaticFinderWithNodes(nodes)
+}
+
+// NewStaticFinder returns a new static finder.
+func NewStaticFinder() Finder {
+	return NewStaticFinderWithNodes(nil)
 }
 
 // Search searches all nodes.
