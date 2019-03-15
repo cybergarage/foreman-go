@@ -34,7 +34,6 @@ dependencies=(
 "github.com/BurntSushi/toml"
 "github.com/romana/rlog"
 "github.com/cybergarage/uecho-go/net/echonet"
-"gopkg.in/yaml.v2"
 )
 
 go get -u "${dependencies[@]}"
