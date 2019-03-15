@@ -314,7 +314,7 @@ func (server *Server) applyConfig() error {
 	case FinderEchonet:
 		server.Controller.SetFinder(discovery.NewEchonetFinderWithLocalNode(server))
 	case FinderStatic:
-		server.Controller.SetFinder(discovery.NewStaticFinderWithConf(server.Config))
+		server.Controller.SetFinder(discovery.NewStaticFinderWithHosts(server.Config.Finder.Hosts, server.Config.Server.Cluster))
 	}
 
 	// Metric Store
