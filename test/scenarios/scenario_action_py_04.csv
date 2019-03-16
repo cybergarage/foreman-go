@@ -1,98 +1,16 @@
-################################################################################
-# Sets a QoS rule (test_qos_routes_rule)
-################################################################################
+# exec query
+SET ("test_execquery","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfZXhlY3F1ZXJ5KHBhcmFtcyxyZXN1bHRzKToKICBqc29uUmVzID0gZm9yZW1hbi5leGVjdXRlX3F1ZXJ5KHBhcmFtc1sicSJdKQogIGlmIGpzb25SZXMgaXMgTm9uZToKICAgIHJldHVybiBGYWxzZQogIGZvciBrZXksIHZhbHVlIGluIGpzb25SZXMuaXRlcml0ZW1zKCk6CiAgICByZXN1bHRzW2tleV0gPSB2YWx1ZQogIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/test_execquery
+EXPORT FROM ACTION WHERE name == "test_execquery";200;/action/methods/test_execquery
+EXECUTE test_execquery (q) VALUES ("EXPORT FROM CONFIG");200;
+EXECUTE test_execquery (q) VALUES ("SET (exec_query_reg, 1.0) INTO REGISTER");200;
+EXECUTE test_execquery (q) VALUES ("EXPORT FROM REGISTER WHERE name == exec_query_reg");200;
 
-SET (test_qos_routes_rule, "test_qos_routes_m00 < 10") INTO QOS;200
-EXPORT FROM QOS WHERE name == test_qos_routes_rule;200;/qos/test_qos_routes_rule
-
-################################################################################
-# Sets actions for QoS (test_qos_action_01, test_qos_action_02, test_qos_action_03)
-################################################################################
-
-# The test_qos_action_01 returns a true normally to propagate the related route (test_qos_route_02)
-SET ("test_qos_action_01","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfcW9zX2FjdGlvbl8wMShwYXJhbXMscmVzdWx0cyk6CiAgICBmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CiAgICAgICAgY2hrS2V5ID0gJ3Fvc19hY3Rpb25fMDFfJXMnICUga2V5CiAgICAgICAgZm9yZW1hbi5zZXRfcmVnaXN0ZXIoY2hrS2V5LCBzdHIodmFsdWUpKQogICAgICAgICMgUGFzcyBhbGwgUW9TIHBhcmFtZXRlcnMgdG8gdGVzdF9xb3NfYWN0aW9uXzAyCiAgICAgICAgcmVzdWx0c1trZXldID0gdmFsdWUKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
-EXPORT FROM ACTION WHERE name == "test_qos_action_01";200;/action/methods/test_qos_action_01
-EXECUTE test_qos_action_01;200;
-
-# The test_qos_action_02 returns a false not to propagate the related route (test_qos_route_03)
-SET ("test_qos_action_02","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfcW9zX2FjdGlvbl8wMihwYXJhbXMscmVzdWx0cyk6CiAgICBmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CiAgICAgICAgY2hrS2V5ID0gJ3Fvc19hY3Rpb25fMDJfJXMnICUga2V5CiAgICAgICAgZm9yZW1hbi5zZXRfcmVnaXN0ZXIoY2hrS2V5LCBzdHIodmFsdWUpKQogICAgICAgIHJlc3VsdHNba2V5XSA9IHZhbHVlCiAgICAjIFJldHVybnMgYSBmYWxzZSBub3QgdG8gcnVuIHRoZSByZWxhdGVkIHJvdXRlcwogICAgcmV0dXJuIEZhbHNl","base64") INTO ACTION;200;
-EXPORT FROM ACTION WHERE name == "test_qos_action_02";200;/action/methods/test_qos_action_02
-EXECUTE test_qos_action_02;400;
-
-# The test_qos_action_03 is registered, but it is not executed because the source action (test_qos_action_02) in the related route (test_qos_route_03) returns a false
-SET ("test_qos_action_03","python","aW1wb3J0IGZvcmVtYW4KIyBUaGUgYWN0aW9uICh0ZXN0X3Fvc19hY3Rpb25fMDMpIGlzIG5vdCBleGVjdXRlZCBiZWNhdXNlIHRoZSBkZXN0aW5hdGlvbiBhY3Rpb24gKHRlc3RfcW9zX2FjdGlvbl8wMikgcmV0dXJucyBhIGZhbHNlCmRlZiB0ZXN0X3Fvc19hY3Rpb25fMDMocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgICAgIGNoa0tleSA9ICdxb3NfYWN0aW9uXzAzXyVzJyAlIGtleQogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKGNoa0tleSwgc3RyKHZhbHVlKSkKICAgICAgICByZXN1bHRzW2tleV0gPSB2YWx1ZQogICAgcmV0dXJuIFRydWU=","base64") INTO ACTION;200;
-EXPORT FROM ACTION WHERE name == "test_qos_action_03";200;/action/methods/test_qos_action_03
-EXECUTE test_qos_action_03;200;
-
-################################################################################
-# Sets routes for the QoS rule and actions
-# test_qos_routes_rule -> test_qos_action_02
-# test_qos_action_01 -> test_qos_action_02
-################################################################################
-
-SET (test_qos_route_01, test_qos_routes_rule, test_qos_action_01) INTO ROUTE;200
-SET (test_qos_route_02, test_qos_action_01, test_qos_action_02) INTO ROUTE;200
-SET (test_qos_route_03, test_qos_action_02, test_qos_action_03) INTO ROUTE;200
-EXPORT FROM ROUTE WHERE name == "test_qos_route_01";200;/action/routes/test_qos_route_01
-EXPORT FROM ROUTE WHERE name == "test_qos_route_02";200;/action/routes/test_qos_route_02
-EXPORT FROM ROUTE WHERE name == "test_qos_route_03";200;/action/routes/test_qos_route_03
-
-################################################################################
-# Inserts a satisfied metric
-# test_qos_routes_m00 : 1.0
-################################################################################
-
-SET (test_qos_routes_m00, 1.0, 1514764800) INTO METRICS;200
-EXPORT FROM REGISTER WHERE name == test_qos_routes_m00;200;/register/test_qos_routes_m00/value;1.0
-
-# Examins whether the all routes are not executed
-EXPORT FROM REGISTER WHERE name == qos_action_01_test_qos_routes_m00;400;
-EXPORT FROM REGISTER WHERE name == qos_action_02_test_qos_routes_m00;400;
-EXPORT FROM REGISTER WHERE name == qos_action_03_test_qos_routes_m00;400;
-
-################################################################################
-# Inserts a unsatisfied metric to execute the related route actions
-# test_qos_routes_m00 : 1.0 -> 20.0
-################################################################################
-
-SET (test_qos_routes_m00, 20.0, 1514764800) INTO METRICS;200
-EXPORT FROM REGISTER WHERE name == test_qos_routes_m00;200;/register/test_qos_routes_m00/value;20.0
-
-# Examines the execution result of 'test_qos_action_01' from the register
-# Register : qos_action_01_(test_qos_routes_m00)
-EXPORT FROM REGISTER WHERE name == qos_action_01_test_qos_routes_m00;200;/register/qos_action_01_test_qos_routes_m00/value;20.0
-
-# Examines the execution result of 'test_qos_action_02' from the register
-# Register : qos_action_02_(test_qos_routes_m00)
-EXPORT FROM REGISTER WHERE name == qos_action_02_test_qos_routes_m00;200;/register/qos_action_02_test_qos_routes_m00/value;20.0
-
-# Examines whether 'test_qos_action_03' is not executed by the register
-# Register : qos_action_03_(test_qos_routes_m00)
-EXPORT FROM REGISTER WHERE name == qos_action_03_test_qos_routes_m00;400;
-
-################################################################################
-# Inserts a satisfied metric again
-# test_qos_routes_m00 : 20.0 -> 1.0
-################################################################################
-
-SET (test_qos_routes_m00, 1.0, 1514764800) INTO METRICS;200
-EXPORT FROM REGISTER WHERE name == test_qos_routes_m00;200;/register/test_qos_routes_m00/value;1.0
-
-# Examins the action registers are not updated
-EXPORT FROM REGISTER WHERE name == qos_action_01_test_qos_routes_m00;200;/register/qos_action_01_test_qos_routes_m00/value;20.0
-EXPORT FROM REGISTER WHERE name == qos_action_02_test_qos_routes_m00;200;/register/qos_action_02_test_qos_routes_m00/value;20.0
-EXPORT FROM REGISTER WHERE name == qos_action_03_test_qos_routes_m00;400;
-
-################################################################################
-# Execute the root actions directly
-################################################################################
-
-EXECUTE test_qos_action_01 (test_exec_m00) VALUES (100);200;
-
-# Examins the action registers are updated
-
-EXPORT FROM REGISTER WHERE name == qos_action_01_test_exec_m00;200;/register/qos_action_01_test_exec_m00/value;100
-EXPORT FROM REGISTER WHERE name == qos_action_02_test_exec_m00;200;/register/qos_action_02_test_exec_m00/value;100.0
-
-# Examins the action registers are not updated
-EXPORT FROM REGISTER WHERE name == qos_action_03_test_exec_m00;400;
+# post query
+SET ("test_postquery","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfcG9zdHF1ZXJ5KHBhcmFtcyxyZXN1bHRzKToKICBqc29uUmVzID0gZm9yZW1hbi5wb3N0X3F1ZXJ5KCJsb2NhbGhvc3QiLCA4MTg4LCBwYXJhbXNbInEiXSkKICBpZiBqc29uUmVzIGlzIE5vbmU6CiAgICByZXR1cm4gRmFsc2UKICBmb3Iga2V5LCB2YWx1ZSBpbiBqc29uUmVzLml0ZXJpdGVtcygpOgogICAgcmVzdWx0c1trZXldID0gdmFsdWUKICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/test_postquery
+EXPORT FROM ACTION WHERE name == "test_postquery";200;/action/methods/test_postquery
+EXECUTE test_postquery (q) VALUES ("EXPORT FROM CONFIG");200;
+EXECUTE test_postquery (q) VALUES ("EXPORT FROM CONFIG");200;
+EXECUTE test_postquery (q) VALUES ("SET (post_query_reg, 1.0) INTO REGISTER");200;
+EXECUTE test_postquery (q) VALUES ("EXPORT FROM REGISTER WHERE name == post_query_reg");200;

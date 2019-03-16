@@ -1,16 +1,13 @@
-# exec query
-SET ("test_execquery","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfZXhlY3F1ZXJ5KHBhcmFtcyxyZXN1bHRzKToKICBqc29uUmVzID0gZm9yZW1hbi5leGVjdXRlX3F1ZXJ5KHBhcmFtc1sicSJdKQogIGlmIGpzb25SZXMgaXMgTm9uZToKICAgIHJldHVybiBGYWxzZQogIGZvciBrZXksIHZhbHVlIGluIGpzb25SZXMuaXRlcml0ZW1zKCk6CiAgICByZXN1bHRzW2tleV0gPSB2YWx1ZQogIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
-EXPORT FROM ACTION;200;/action/methods/test_execquery
-EXPORT FROM ACTION WHERE name == "test_execquery";200;/action/methods/test_execquery
-EXECUTE test_execquery (q) VALUES ("EXPORT FROM CONFIG");200;
-EXECUTE test_execquery (q) VALUES ("SET (exec_query_reg, 1.0) INTO REGISTER");200;
-EXECUTE test_execquery (q) VALUES ("EXPORT FROM REGISTER WHERE name == exec_query_reg");200;
-
-# post query
-SET ("test_postquery","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfcG9zdHF1ZXJ5KHBhcmFtcyxyZXN1bHRzKToKICBqc29uUmVzID0gZm9yZW1hbi5wb3N0X3F1ZXJ5KCJsb2NhbGhvc3QiLCA4MTg4LCBwYXJhbXNbInEiXSkKICBpZiBqc29uUmVzIGlzIE5vbmU6CiAgICByZXR1cm4gRmFsc2UKICBmb3Iga2V5LCB2YWx1ZSBpbiBqc29uUmVzLml0ZXJpdGVtcygpOgogICAgcmVzdWx0c1trZXldID0gdmFsdWUKICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;200;
-EXPORT FROM ACTION;200;/action/methods/test_postquery
-EXPORT FROM ACTION WHERE name == "test_postquery";200;/action/methods/test_postquery
-EXECUTE test_postquery (q) VALUES ("EXPORT FROM CONFIG");200;
-EXECUTE test_postquery (q) VALUES ("EXPORT FROM CONFIG");200;
-EXECUTE test_postquery (q) VALUES ("SET (post_query_reg, 1.0) INTO REGISTER");200;
-EXECUTE test_postquery (q) VALUES ("EXPORT FROM REGISTER WHERE name == post_query_reg");200;
+# register commands
+SET ("test_setregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3Rfc2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKGtleSwgc3RyKHZhbHVlKSkKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/test_setregister
+EXPORT FROM ACTION WHERE name == "test_setregister";200;/action/methods/test_setregister
+SET ("test_getregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfZ2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIHJlZ19rZXksIHZhbHVlIGluIHBhcmFtcy5pdGVyaXRlbXMoKToKICAgICAgICByZWdfdmFsdWUgPSBmb3JlbWFuLmdldF9yZWdpc3RlcihyZWdfa2V5KQogICAgICAgIHJlc3VsdHNbcmVnX2tleV0gPSByZWdfdmFsdWUKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/test_getregister
+EXPORT FROM ACTION WHERE name == "test_getregister";200;/action/methods/test_getregister
+EXECUTE test_setregister (test_reg) VALUES ("hello");200;
+EXECUTE test_getregister (test_reg) VALUES ("");200;/test_reg;hello
+EXECUTE test_setregister (test_reg) VALUES (1.0);200;
+EXECUTE test_getregister (test_reg) VALUES ("");200;/test_reg;1.0
+EXECUTE test_setregister (test_reg) VALUES (2.0);200;
+EXECUTE test_getregister (test_reg) VALUES ("");200;/test_reg;2.0
