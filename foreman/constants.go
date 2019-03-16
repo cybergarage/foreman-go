@@ -9,6 +9,7 @@ const (
 	DefaultServerHost                 = "localhost"
 	DefaultCarbonPort                 = 2003
 	DefaultHttpPort                   = 8188
+	DefaultConnectionTimeout          = 60
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"
@@ -29,6 +30,7 @@ const (
 	ConfigAddressKey                  = "address"
 	ConfigHttpPortKey                 = "http_port"
 	ConfigCarbonPortKey               = "carbon_port"
+	ConfigTimeoutKey                  = "timeout"
 	ConfigRenderPortKey               = "render_port"
 	ConfigFqlPathKey                  = "fql_path"
 	ConfigLogFileKey                  = "log_file"
