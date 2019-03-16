@@ -78,6 +78,7 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 		"scenario_action_py_03.csv",
 		"scenario_action_py_04.csv",
 		"scenario_action_py_05.csv",
+		"scenario_action_py_06.csv",
 	}
 
 	conf := test.NewDefaultConfig()

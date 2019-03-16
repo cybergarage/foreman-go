@@ -1,20 +1,31 @@
 ################################################################################
-# Tries a invalid method whose code is invalid
+# Tries to add invalid action which is not be abile to compile
 ################################################################################
 
-# Invalid base64 code
-SET ("test_echo","python","ZGVmIHRlc3RfZWNobyhwYXJhbXMscmVzdWx0cyk6Cglmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CgkJcmVzdWx0c1trZXldID0gdmFsdWUKCXJldH","base64") INTO ACTION;400;
+#import foreman
+#
+#def hello(params,results):
+#  ??????
+#  return True
 
-# Invalid source code
-SET ("test_echo","python","ZGVmIGRlZiBkZWYgZGVmCmRlZiB0ZXN0X2VjaG8ocGFyYW1zLHJlc3VsdHMpOgoJZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZXJpdGVtcygpOgoJCXJlc3VsdHNba2V5XSA9IHZhbHVlCglyZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;400;
+SET ("hello","python","aW1wb3J0IGZvcmVtYW4KCmRlZiBoZWxsbyhwYXJhbXMscmVzdWx0cyk6CiAgPz8/Pz8/CiAgcmV0dXJuIFRydWUK","base64") INTO ACTION;400;
 
 ################################################################################
-# Inserts and executes a echo method method
+# Tries to add error actions whose names are invald
 ################################################################################
 
-SET ("test_echo","python","ZGVmIHRlc3RfZWNobyhwYXJhbXMscmVzdWx0cyk6Cglmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CgkJcmVzdWx0c1trZXldID0gdmFsdWUKCXJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
-EXPORT FROM ACTION;200;/action/methods/test_echo
-EXPORT FROM ACTION WHERE name == "test_echo";200;/action/methods/test_echo
-EXECUTE test_echo;200;
-EXECUTE test_echo (message) VALUES ("hello");200;/message;hello
-DELETE FROM ACTION WHERE name == "test_echo";200;
+# name : qos_analyze_correlation_1h, method : qos_analyze_correlation (X)
+SET ("qos_analyze_correlation_1h","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgcW9zX2FuYWx5emVfY29ycmVsYXRpb24ocGFyYW1zLHJlc3VsdHMpOgogIGRhdGFfZGlyID0gJy9ob21lL3Nrb25uby9Eb2N1bWVudHMvamFpc3QtcmVzZWFyY2gvcmVzZWFyY2gvZm9yZW1hbl9tbC9kYXRhJwogIG5vdyA9IGRhdGV0aW1lLmRhdGV0aW1lLm5vdygpCiAgbm93VHMgPSBpbnQodGltZS5ta3RpbWUobm93LnRpbWV0dXBsZSgpKSkKICBmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlbXMoKToKICAgIHEgPSAnQU5BTFlaRSAlcyBGUk9NIE1FVFJJQ1MgV0hFUkUgdHMgPj0gLTFoIEFORCB0cyA8PSBDVVJSRU5UX1RJTUVTVEFNUCcgJSAoa2V5KQogICAganNvblJlcyA9IGZvcmVtYW4uZXhlY3V0ZV9xdWVyeShxKQogICAgaWYganNvblJlcyBpcyBOb25lOgogICAgICByZXR1cm4gRmFsc2UKICAgIHBhdGggPSAnJXMvcW9zXyVzX2FuYWx5emVfMWhfJWQuanNvbicgJSAoZGF0YV9kaXIsIGtleSwgbm93VHMpCiAgICB0cnk6CiAgICAgIHdpdGggb3BlbihwYXRoLCAndycpIGFzIGY6CiAgICAgICAganNvbi5kdW1wKGpzb25SZXMsIGYpCiAgICBleGNlcHQ6CiAgICAgIHJldHVybiBGYWxzZQogIHJldHVybiBUcnVlCg==","base64") INTO ACTION;400;
+
+# name : qos_export_metrics_1h, method : qos_export_metrics (X)
+SET ("qos_export_metrics_1h","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgcW9zX2V4cG9ydF9tZXRyaWNzKHBhcmFtcyxyZXN1bHRzKToKICBkYXRhX2RpciA9ICcvaG9tZS9za29ubm8vRG9jdW1lbnRzL2phaXN0LXJlc2VhcmNoL3Jlc2VhcmNoL2ZvcmVtYW5fbWwvZGF0YScKICBub3cgPSBkYXRldGltZS5kYXRldGltZS5ub3coKQogIG5vd1RzID0gaW50KHRpbWUubWt0aW1lKG5vdy50aW1ldHVwbGUoKSkpCiAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgcSA9ICdFWFBPUlQgRlJPTSBNRVRSSUNTIFdIRVJFIHRzID49IC0xaCBBTkQgdHMgPD0gQ1VSUkVOVF9USU1FU1RBTVAnCiAgICBqc29uUmVzID0gZm9yZW1hbi5leGVjdXRlX3F1ZXJ5KHEpCiAgICBpZiBqc29uUmVzIGlzIE5vbmU6CiAgICAgIHJldHVybiBGYWxzZQogICAgcGF0aCA9ICclcy9xb3NfJXNfZXhwb3J0XzFoXyVkLmpzb24nICUgKGRhdGFfZGlyLCBrZXksIG5vd1RzKQogICAgdHJ5OgogICAgICB3aXRoIG9wZW4ocGF0aCwgJ3cnKSBhcyBmOgogICAgICAgIGpzb24uZHVtcChqc29uUmVzLCBmKQogICAgZXhjZXB0OgogICAgICByZXR1cm4gRmFsc2UKICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;400;
+
+################################################################################
+# Tries to add error Python actions
+################################################################################
+
+# name : qos_analyze_correlation_1h, method : qos_analyze_correlation_1h
+SET ("qos_analyze_correlation_1h","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgcW9zX2FuYWx5emVfY29ycmVsYXRpb25fMWgocGFyYW1zLHJlc3VsdHMpOgogIGRhdGFfZGlyID0gJy9ob21lL3Nrb25uby9Eb2N1bWVudHMvamFpc3QtcmVzZWFyY2gvcmVzZWFyY2gvZm9yZW1hbl9tbC9kYXRhJwogIG5vdyA9IGRhdGV0aW1lLmRhdGV0aW1lLm5vdygpCiAgbm93VHMgPSBpbnQodGltZS5ta3RpbWUobm93LnRpbWV0dXBsZSgpKSkKICBmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlbXMoKToKICAgIHEgPSAnQU5BTFlaRSAlcyBGUk9NIE1FVFJJQ1MgV0hFUkUgdHMgPj0gLTFoIEFORCB0cyA8PSBDVVJSRU5UX1RJTUVTVEFNUCcgJSAoa2V5KQogICAganNvblJlcyA9IGZvcmVtYW4uZXhlY3V0ZV9xdWVyeShxKQogICAgaWYganNvblJlcyBpcyBOb25lOgogICAgICByZXR1cm4gRmFsc2UKICAgIHBhdGggPSAnJXMvcW9zXyVzX2FuYWx5emVfMWhfJWQuanNvbicgJSAoZGF0YV9kaXIsIGtleSwgbm93VHMpCiAgICB0cnk6CiAgICAgIHdpdGggb3BlbihwYXRoLCAndycpIGFzIGY6CiAgICAgICAganNvbi5kdW1wKGpzb25SZXMsIGYpCiAgICBleGNlcHQ6CiAgICAgIHJldHVybiBGYWxzZQogIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+
+# name : qos_export_metrics_1h, method : qos_export_metrics_1h
+SET ("qos_export_metrics_1h","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgcW9zX2V4cG9ydF9tZXRyaWNzXzFoKHBhcmFtcyxyZXN1bHRzKToKICBkYXRhX2RpciA9ICcvaG9tZS9za29ubm8vRG9jdW1lbnRzL2phaXN0LXJlc2VhcmNoL3Jlc2VhcmNoL2ZvcmVtYW5fbWwvZGF0YScKICBub3cgPSBkYXRldGltZS5kYXRldGltZS5ub3coKQogIG5vd1RzID0gaW50KHRpbWUubWt0aW1lKG5vdy50aW1ldHVwbGUoKSkpCiAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZW1zKCk6CiAgICBxID0gJ0VYUE9SVCBGUk9NIE1FVFJJQ1MgV0hFUkUgdHMgPj0gLTFoIEFORCB0cyA8PSBDVVJSRU5UX1RJTUVTVEFNUCcKICAgIGpzb25SZXMgPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkocSkKICAgIGlmIGpzb25SZXMgaXMgTm9uZToKICAgICAgcmV0dXJuIEZhbHNlCiAgICBwYXRoID0gJyVzL3Fvc18lc19leHBvcnRfMWhfJWQuanNvbicgJSAoZGF0YV9kaXIsIGtleSwgbm93VHMpCiAgICB0cnk6CiAgICAgIHdpdGggb3BlbihwYXRoLCAndycpIGFzIGY6CiAgICAgICAganNvbi5kdW1wKGpzb25SZXMsIGYpCiAgICBleGNlcHQ6CiAgICAgIHJldHVybiBGYWxzZQogIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
