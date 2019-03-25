@@ -8,6 +8,7 @@ const (
 	FinderEchonet        = "echonet"
 	FinderShared         = "shared"
 	FinderStatic         = "static"
+	FinderStaticToml     = "static_toml"
 	FinderNodeCluster    = "cluster"
 	FinderNodeName       = "name"
 	FinderNodeAddress    = "address"

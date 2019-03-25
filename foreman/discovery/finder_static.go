@@ -4,11 +4,7 @@
 
 package discovery
 
-import (
-	"fmt"
-
-	"github.com/cybergarage/foreman-go/foreman/node"
-)
+import "fmt"
 
 // StaticFinder represents a simple static finder.
 type StaticFinder struct {
@@ -28,24 +24,7 @@ func NewStaticFinderWithNodes(nodes []Node) Finder {
 	return finder
 }
 
-// NewStaticFinderWithHosts returns a new static finder.
-func NewStaticFinderWithHosts(hosts []string, cluster string) Finder {
-	nodes := []Node{}
-	for _, host := range hosts {
-		node := node.NewBaseNode()
-		node.Cluster = cluster
-		node.Name = host
-		nodes = append(nodes, node)
-	}
-	return NewStaticFinderWithNodes(nodes)
-}
-
-// NewStaticFinder returns a new static finder.
-func NewStaticFinder() Finder {
-	return NewStaticFinderWithNodes(nil)
-}
-
-// Search searches all nodes.
+// SearchAll searches all nodes.
 func (finder *StaticFinder) Search() error {
 	return nil
 }
