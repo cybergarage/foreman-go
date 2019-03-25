@@ -46,6 +46,6 @@ func NewStaticTOMLFinder() Finder {
 }
 
 // String returns the description
-func (finder *StaticFinder) String() string {
+func (finder *StaticTOMLFinder) String() string {
 	return fmt.Sprintf("%s", FinderStaticToml)
 }
