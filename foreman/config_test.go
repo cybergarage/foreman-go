@@ -5,6 +5,7 @@
 package foreman
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -12,7 +13,8 @@ import (
 )
 
 const (
-	configTestFilename = "config_test.conf"
+	configTestFilename       = "config_test.conf"
+	finderConfigTestFilename = "finder_config_test.conf"
 )
 
 func TestDefaultConfig(t *testing.T) {
@@ -33,6 +35,10 @@ func TestDefaultConfig(t *testing.T) {
 	if conf.GetMetricsStoreInterval() <= 0 {
 		t.Errorf("%v <= 0", conf.GetMetricsStoreInterval())
 	}
+
+	if len(conf.Finder.Hosts) != 0 {
+		t.Errorf("%v != 0", len(conf.Finder.Hosts))
+	}
 }
 
 func TestConfigLoadFile(t *testing.T) {
@@ -44,6 +50,24 @@ func TestConfigLoadFile(t *testing.T) {
 	_, err = metric.NewStoreWithName(conf.Metrics.Store)
 	if err != nil {
 		t.Error(err)
+	}
+}
+
+func TestFinderConfigLoadFile(t *testing.T) {
+	conf, err := NewConfigWithFile(finderConfigTestFilename)
+	if err != nil {
+		t.Error(err)
+	}
+
+	if len(conf.Finder.Hosts) != 3 {
+		t.Errorf("%v != 0", len(conf.Finder.Hosts))
+	}
+
+	for i := 0; i < 3; i++ {
+		expectedHost := fmt.Sprintf("org.cybergarage.foreman00%d", i+1)
+		if conf.Finder.Hosts[i] != expectedHost {
+			t.Errorf("%v != %v", conf.Finder.Hosts[i], expectedHost)
+		}
 	}
 }
 
