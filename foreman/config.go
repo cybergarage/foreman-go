@@ -32,8 +32,6 @@ type ServerConfig struct {
 	Finder            string
 }
 
-type FinderConfig = discovery.Config
-
 type FQLConfig struct {
 	Path  string
 	Query string
@@ -57,7 +55,7 @@ type ProfileConfig struct {
 type Config struct {
 	Log       LogConfig
 	Server    ServerConfig
-	Finder    FinderConfig
+	Finder    discovery.FinderConfig
 	FQL       FQLConfig
 	Metrics   MetricsConfig
 	Bootstrap BootstrapConfig
