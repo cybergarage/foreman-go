@@ -7,3 +7,7 @@ package discovery
 type FinderConfig struct {
 	Hosts []string
 }
+
+type Config struct {
+	Finder FinderConfig
+}
