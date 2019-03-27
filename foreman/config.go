@@ -12,6 +12,7 @@ import (
 	"github.com/BurntSushi/toml"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/discovery"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/util"
 )
@@ -31,9 +32,7 @@ type ServerConfig struct {
 	Finder            string
 }
 
-type FinderConfig struct {
-	Hosts []string
-}
+type FinderConfig = discovery.Config
 
 type FQLConfig struct {
 	Path  string

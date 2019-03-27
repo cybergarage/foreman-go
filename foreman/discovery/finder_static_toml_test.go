@@ -8,29 +8,31 @@ import (
 	"testing"
 )
 
+const (
+	finderConfigTestFilename = "finder_config_test.conf"
+)
+
 func TestStaticTOMLFinder(t *testing.T) {
-	nodes := setupTestFinderNodes()
-	cluster := "test cluster"
+	finder, err := NewStaticFinderWithTOML(finderConfigTestFilename)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
-	for _, finder := range [2]Finder{
-		NewStaticTOMLFinderWithNodes(nodes),
-		NewStaticTOMLFinderWithHosts(testFinderNodeNames, cluster),
-	} {
-		err := finder.Start()
-		if err != nil {
-			t.Error(err)
-			return
-		}
+	err = finder.Start()
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
-		err = finderTest(finder)
-		if err != nil {
-			t.Error(err)
-		}
+	err = finderTest(finder)
+	if err != nil {
+		t.Error(err)
+	}
 
-		err = finder.Stop()
-		if err != nil {
-			t.Error(err)
-		}
+	err = finder.Stop()
+	if err != nil {
+		t.Error(err)
 	}
 
 }
