@@ -7,7 +7,9 @@ package discovery
 import (
 	"fmt"
 
+	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/node"
+	"github.com/BurntSushi/toml"
 )
 
 // StaticFinder represents a simple static finder.
@@ -15,34 +17,30 @@ type StaticTOMLFinder struct {
 	*StaticFinder
 }
 
-// NewStaticTOMLFinderWithNodes returns a new static finder with specified nodes.
-func NewStaticTOMLFinderWithNodes(nodes []Node) Finder {
-	finder := &StaticFinder{
-		baseFinder: newBaseFinder(),
-	}
-
-	for _, node := range nodes {
-		finder.addNode(node)
-	}
-
-	return finder
-}
-
-// NewStaticTOMLFinderWithHosts returns a new static finder.
-func NewStaticTOMLFinderWithHosts(hosts []string, cluster string) Finder {
+// NewStaticFinderWithConfig returns a new static finder with specified nodes.
+func NewStaticFinderWithConfig(config Config) Finder {
 	nodes := []Node{}
-	for _, host := range hosts {
+	for _, host := range config.Finder.Hosts {
 		node := node.NewBaseNode()
-		node.Cluster = cluster
+		node.Cluster = config.Finder.Server.Cluster
 		node.Name = host
 		nodes = append(nodes, node)
 	}
-	return NewStaticTOMLFinderWithNodes(nodes)
+	return NewStaticFinderWithNodes(nodes)
 }
 
-// NewStaticTOMLFinder returns a new static finder.
-func NewStaticTOMLFinder() Finder {
-	return NewStaticTOMLFinderWithNodes(nil)
+// NewStaticFinderWithTOML returns a new static finder with specified nodes.
+func NewStaticFinderWithTOML(filename string) (Finder, error) {
+	conf := Config{}
+	if filename != "" {
+		logging.Trace("TOML Config file path: %s", filename)
+		_, err := toml.DecodeFile(filename, conf)
+		if err != nil {
+			return nil, err
+		}
+		logging.Trace("Got config: %s", filename)
+	}
+	return NewStaticFinderWithConfig(conf), nil
 }
 
 // String returns the description
