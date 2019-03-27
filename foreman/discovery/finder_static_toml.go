@@ -7,6 +7,7 @@ package discovery
 import (
 	"fmt"
 
+	"github.com/cybergarage/foreman-go/foreman"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/node"
 	"github.com/BurntSushi/toml"
@@ -18,11 +19,11 @@ type StaticTOMLFinder struct {
 }
 
 // NewStaticFinderWithConfig returns a new static finder with specified nodes.
-func NewStaticFinderWithConfig(config Config) Finder {
+func NewStaticFinderWithConfig(config foreman.Config) Finder {
 	nodes := []Node{}
 	for _, host := range config.Finder.Hosts {
 		node := node.NewBaseNode()
-		node.Cluster = config.Finder.Server.Cluster
+		node.Cluster = config.Server.Cluster
 		node.Name = host
 		nodes = append(nodes, node)
 	}
@@ -31,7 +32,7 @@ func NewStaticFinderWithConfig(config Config) Finder {
 
 // NewStaticFinderWithTOML returns a new static finder with specified nodes.
 func NewStaticFinderWithTOML(filename string) (Finder, error) {
-	conf := Config{}
+	conf := foreman.Config{}
 	if filename != "" {
 		logging.Trace("TOML Config file path: %s", filename)
 		_, err := toml.DecodeFile(filename, conf)
