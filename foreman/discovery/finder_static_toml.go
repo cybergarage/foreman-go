@@ -18,9 +18,9 @@ type StaticTOMLFinder struct {
 }
 
 // NewStaticFinderWithConfig returns a new static finder with specified nodes.
-func NewStaticFinderWithConfig(config Config) Finder {
+func NewStaticFinderWithConfig(config FinderConfig) Finder {
 	nodes := []Node{}
-	for _, host := range config.Finder.Hosts {
+	for _, host := range config.Hosts {
 		node := node.NewBaseNode()
 		node.Name = host
 		nodes = append(nodes, node)
@@ -39,7 +39,7 @@ func NewStaticFinderWithTOML(filename string) (Finder, error) {
 		}
 		logging.Trace("Got config: %s", filename)
 	}
-	return NewStaticFinderWithConfig(conf), nil
+	return NewStaticFinderWithConfig(conf.Finder), nil
 }
 
 // String returns the description
