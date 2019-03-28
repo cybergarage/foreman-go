@@ -12,6 +12,7 @@ import (
 	"github.com/BurntSushi/toml"
 
 	"github.com/cybergarage/foreman-go/foreman/action"
+	"github.com/cybergarage/foreman-go/foreman/discovery"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/util"
 )
@@ -54,6 +55,7 @@ type ProfileConfig struct {
 type Config struct {
 	Log       LogConfig
 	Server    ServerConfig
+	Finder    discovery.FinderConfig
 	FQL       FQLConfig
 	Metrics   MetricsConfig
 	Bootstrap BootstrapConfig
@@ -74,6 +76,8 @@ func NewDefaultConfig() *Config {
 	conf.Server.Bootstrap = DefaultBootstrapMode
 	conf.Server.ConnectionTimeout = DefaultConnectionTimeout
 	conf.Server.Finder = DefaultFinder
+
+	conf.Finder.Hosts = []string{}
 
 	conf.FQL.Path = HttpRequestFqlPath
 	conf.FQL.Query = HttpRequestFqlQueryParam
