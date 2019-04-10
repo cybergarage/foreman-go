@@ -4,8 +4,8 @@
 
 package kb
 
-// Objective represents an objective interface in formulas.
-type Objective interface {
+// Operand represents an objective interface in formulas.
+type Operand interface {
 	GetValue() interface{}
 	String() string
 }

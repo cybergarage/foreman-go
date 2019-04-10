@@ -13,7 +13,7 @@ import (
 type BaseFormula struct {
 	Variable  Variable
 	Operator  Operator
-	Objective Objective
+	Objective Operand
 }
 
 // NewFormula returns a new base formula.
@@ -35,7 +35,7 @@ func (formula *BaseFormula) GetOperator() Operator {
 }
 
 // GetObjective returns an objective of the object
-func (formula *BaseFormula) GetObjective() Objective {
+func (formula *BaseFormula) GetObjective() Operand {
 	return formula.Objective
 }
 

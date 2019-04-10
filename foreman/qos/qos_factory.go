@@ -45,7 +45,7 @@ func (qos *QoS) CreateVariable(obj interface{}) (kb.Variable, error) {
 }
 
 // CreateObjective is an interface method kb.Factory
-func (qos *QoS) CreateObjective(obj interface{}) (kb.Objective, error) {
+func (qos *QoS) CreateObjective(obj interface{}) (kb.Operand, error) {
 	objValue, ok := obj.(float64)
 	if !ok {
 		objStr, ok := obj.(string)

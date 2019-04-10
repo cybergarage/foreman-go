@@ -12,11 +12,11 @@ import (
 
 // Threshold represents an objective instance for Knowledge base.
 type Threshold struct {
-	kb.Objective
+	kb.Operand
 	Value float64
 }
 
-// NewThresholdWithValue returns a new threshold instance.
+// NewThreshold returns a new threshold instance.
 func NewThreshold() *Threshold {
 	return NewThresholdWithValue(0.0)
 }
