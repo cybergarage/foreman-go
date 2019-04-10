@@ -17,5 +17,5 @@ type Factory interface {
 	// CreateOperator must return an operater instance.
 	CreateOperator(obj interface{}) (Operator, error)
 	// CreateObjective must return an objective instance.
-	CreateObjective(obj interface{}) (Objective, error)
+	CreateObjective(obj interface{}) (Operand, error)
 }

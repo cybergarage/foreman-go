@@ -8,7 +8,7 @@ package kb
 type Formula interface {
 	GetVariable() Variable
 	GetOperator() Operator
-	GetObjective() Objective
+	GetObjective() Operand
 	ParseString(Factory, string) error
 	IsSatisfied() (bool, error)
 	String() string
