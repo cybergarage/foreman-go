@@ -11,9 +11,9 @@ import (
 
 // BaseFormula represents a base formula.
 type BaseFormula struct {
-	Variable  Variable
-	Operator  Operator
-	Objective Operand
+	Variable     Variable
+	Operator     Operator
+	RightOperand Operand
 }
 
 // NewFormula returns a new base formula.
@@ -34,14 +34,14 @@ func (formula *BaseFormula) GetOperator() Operator {
 	return formula.Operator
 }
 
-// GetObjective returns an objective of the object
-func (formula *BaseFormula) GetObjective() Operand {
-	return formula.Objective
+// GetRightOperand returns a right operand object
+func (formula *BaseFormula) GetRightOperand() Operand {
+	return formula.RightOperand
 }
 
 // IsSatisfied checks whether the formula is valid
 func (formula *BaseFormula) IsSatisfied() (bool, error) {
-	return formula.Operator.IsSatisfied(formula.Variable, formula.Objective)
+	return formula.Operator.IsSatisfied(formula.Variable, formula.RightOperand)
 }
 
 // ParseString parses a specified formula string.
@@ -74,12 +74,12 @@ func (formula *BaseFormula) ParseString(factory Factory, formulaString string) e
 	if err != nil {
 		return err
 	}
-	formula.Objective = objective
+	formula.RightOperand = objective
 
 	return nil
 }
 
 // String returns a string description of the instance
 func (formula *BaseFormula) String() string {
-	return fmt.Sprintf("%s%s %s %s%s", StartBracket, formula.Variable.GetName(), formula.Operator.String(), formula.Objective.String(), EndBracket)
+	return fmt.Sprintf("%s%s %s %s%s", StartBracket, formula.Variable.GetName(), formula.Operator.String(), formula.RightOperand.String(), EndBracket)
 }
