@@ -70,11 +70,15 @@ func (err *Error) String() string {
 	if 0 < len(err.Message) {
 		errMsg += fmt.Sprintf("%s ", err.Message)
 	}
-	if 0 < err.DetailCode {
-		errMsg += fmt.Sprintf("[%d] ", err.DetailCode)
-	}
-	if 0 < len(err.DetailMessage) {
-		errMsg += fmt.Sprintf("%s ", err.DetailMessage)
+	if (0 < err.DetailCode) || (0 < len(err.DetailMessage)) {
+		errMsg += "("
+		if 0 < err.DetailCode {
+			errMsg += fmt.Sprintf("[%d] ", err.DetailCode)
+		}
+		if 0 < len(err.DetailMessage) {
+			errMsg += fmt.Sprintf("%s", err.DetailMessage)
+		}
+		errMsg += ")"
 	}
 	return errMsg
 }
