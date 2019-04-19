@@ -5,15 +5,12 @@
 package qos
 
 import (
-	"fmt"
-
 	"github.com/cybergarage/foreman-go/foreman/kb"
 )
 
 // Threshold represents an objective instance for Knowledge base.
 type Threshold struct {
-	kb.Operand
-	Value float64
+	*kb.Literal
 }
 
 // NewThreshold returns a new threshold instance.
@@ -24,22 +21,7 @@ func NewThreshold() *Threshold {
 // NewThresholdWithValue returns a new threshold instance with the specified value.
 func NewThresholdWithValue(value float64) *Threshold {
 	th := &Threshold{
-		Value: value,
+		Literal: kb.NewLiteralWithValue(value),
 	}
 	return th
-}
-
-// GetValue returns the stored value.
-func (th *Threshold) GetValue() (interface{}, error) {
-	return th.Value, nil
-}
-
-// Expression returns a string for the formula expression.
-func (th *Threshold) Expression() string {
-	return fmt.Sprintf("%f", th.Value)
-}
-
-// String returns a string description of the instance
-func (th *Threshold) String() string {
-	return fmt.Sprintf("%f", th.Value)
 }
