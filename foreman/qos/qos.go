@@ -40,7 +40,7 @@ func (qos *QoS) FindRelatedRules(q *Query) ([]*Rule, error) {
 		for _, clause := range rule.GetClauses() {
 			for _, formula := range clause.GetFormulas() {
 				for _, operand := range formula.GetOperands() {
-					v, ok := operand.(*kb.Variable)
+					v, ok := operand.(kb.Variable)
 					if !ok {
 						continue
 					}
@@ -70,7 +70,7 @@ func (qos *QoS) FindRelatedFormulas(q *Query) ([]*Formula, error) {
 		for _, clause := range rule.GetClauses() {
 			for _, formula := range clause.GetFormulas() {
 				for _, operand := range formula.GetOperands() {
-					v, ok := operand.(*kb.Variable)
+					v, ok := operand.(kb.Variable)
 					if !ok {
 						continue
 					}

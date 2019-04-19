@@ -16,7 +16,7 @@ type KnowledgeBaseListener interface {
 //KnowledgeBase includes all knowledge rules.
 type KnowledgeBase struct {
 	Rules        map[string]Rule
-	Variables    map[string]*Variable
+	Variables    map[string]Variable
 	relatedRules map[string][]Rule // relatedRules stores rules which are related the variable name
 	listeners    []KnowledgeBaseListener
 }
@@ -36,7 +36,7 @@ func NewKnowledgeBase() *KnowledgeBase {
 // Clear removes all rules and variables..
 func (kb *KnowledgeBase) Clear() error {
 	kb.Rules = make(map[string]Rule)
-	kb.Variables = make(map[string]*Variable)
+	kb.Variables = make(map[string]Variable)
 	kb.relatedRules = make(map[string][]Rule)
 	return nil
 }
@@ -89,7 +89,7 @@ func (kb *KnowledgeBase) UpdateVariableValue(name string, value interface{}) boo
 }
 
 // GetVariable returns a variable of the specified name.
-func (kb *KnowledgeBase) GetVariable(name string) (*Variable, bool) {
+func (kb *KnowledgeBase) GetVariable(name string) (Variable, bool) {
 	v, ok := kb.Variables[name]
 	return v, ok
 }
@@ -140,7 +140,7 @@ func (kb *KnowledgeBase) SetRule(rule Rule) error {
 	for _, clause := range rule.GetClauses() {
 		for _, formula := range clause.GetFormulas() {
 			for _, operand := range formula.GetOperands() {
-				variable, ok := operand.(*Variable)
+				variable, ok := operand.(Variable)
 				if !ok {
 					continue
 				}

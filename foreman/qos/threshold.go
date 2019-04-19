@@ -10,7 +10,7 @@ import (
 
 // Threshold represents an objective instance for Knowledge base.
 type Threshold struct {
-	*kb.Literal
+	*kb.BaseLiteral
 }
 
 // NewThreshold returns a new threshold instance.
@@ -21,7 +21,7 @@ func NewThreshold() *Threshold {
 // NewThresholdWithValue returns a new threshold instance with the specified value.
 func NewThresholdWithValue(value float64) *Threshold {
 	th := &Threshold{
-		Literal: kb.NewLiteralWithValue(value),
+		BaseLiteral: kb.NewLiteralWithValue(value),
 	}
 	return th
 }

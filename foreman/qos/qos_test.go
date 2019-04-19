@@ -14,10 +14,77 @@ const (
 	errorInvalidFormulaOperator = "Invalid formula : %s"
 )
 
-func testQoSFactory(t *testing.T, factory kb.Factory) {
-	factory.CreateVariable("var")
-	factory.CreateOperator(">")
-	factory.CreateObjective("th")
+func TestQoSLiteralOperands(t *testing.T) {
+	qos := NewQoS()
+
+	operands := []string{
+		"1",
+		"+1",
+		"-1",
+		"1.0",
+		"+1.0",
+		"-1.0",
+	}
+
+	for _, operand := range operands {
+		op, err := qos.CreateOperand(operand)
+		if err != nil {
+			t.Error(err)
+			break
+		}
+		_, ok := op.(*Threshold)
+		if !ok {
+			t.Errorf(operand)
+			break
+		}
+	}
+}
+
+func TestQoSMetricOperands(t *testing.T) {
+	qos := NewQoS()
+
+	operands := []string{
+		"m",
+		"host.m",
+		"org.cybergarage.host.m",
+		"m01",
+		"host01.m01",
+		"org.cybergarage.host01.m01",
+	}
+
+	for _, operand := range operands {
+		op, err := qos.CreateOperand(operand)
+		if err != nil {
+			t.Error(err)
+			break
+		}
+		_, ok := op.(*Metric)
+		if !ok {
+			t.Errorf(operand)
+			break
+		}
+	}
+}
+
+func TestQoSOperators(t *testing.T) {
+	qos := NewQoS()
+
+	operators := []string{
+		"==",
+		"!=",
+		">",
+		">=",
+		"<",
+		"<=",
+	}
+
+	for _, operator := range operators {
+		_, err := qos.CreateOperator(operator)
+		if err != nil {
+			t.Error(err)
+			break
+		}
+	}
 }
 
 func testQoSGoodFormula(t *testing.T, qos *QoS, formula kb.Formula) {
@@ -42,7 +109,9 @@ func testQoSBadFormula(t *testing.T, qos *QoS, formula kb.Formula) {
 	}
 }
 
-func testQoSOperators(t *testing.T, qos *QoS) {
+func TestQoSFormulas(t *testing.T) {
+	qos := NewQoS()
+
 	formulaStrings := []string{
 		"x == 10.0",
 		"x != 1.0",
@@ -124,10 +193,4 @@ func testQoSOperators(t *testing.T, qos *QoS) {
 	for _, formula := range badFormulas {
 		testQoSBadFormula(t, qos, formula)
 	}
-}
-
-func TestNewQoS(t *testing.T) {
-	qos := NewQoS()
-	testQoSFactory(t, qos)
-	testQoSOperators(t, qos)
 }
