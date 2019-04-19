@@ -13,13 +13,13 @@ import (
 
 // Metric represents an metric instance for Knowledge base.
 type Metric struct {
-	*kb.Variable
+	*kb.BaseVariable
 }
 
 // NewMetricWithName returns a new metric instance with the specified name.
 func NewMetricWithName(name string) *Metric {
 	m := &Metric{
-		Variable: kb.NewVariableWithName(name),
+		BaseVariable: kb.NewVariableWithName(name),
 	}
 	return m
 }
@@ -50,7 +50,7 @@ func (m *Metric) SetValue(obj interface{}) error {
 		}
 		m.Value = value
 	default:
-		return fmt.Errorf(errorInvalidVariable, obj)
+		return fmt.Errorf(errorInvalidOperand, obj)
 	}
 	return nil
 }

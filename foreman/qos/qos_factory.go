@@ -6,10 +6,29 @@ package qos
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 
 	"github.com/cybergarage/foreman-go/foreman/kb"
 )
+
+const (
+	qosOperandThresholdRegex = "^[+-]?[0-9]+([\\.][0-9]+)?"
+	qosOperandMetricRegex    = "^[A-Za-z][0-9A-Za-z_\\.]*"
+)
+
+var qosOperandRegexes []*regexp.Regexp
+
+// getQoSOperandRegexes returns a slice of the QoS operand Regexp formats.
+func getQoSOperandRegexes() []*regexp.Regexp {
+	if qosOperandRegexes == nil {
+		qosOperandRegexes = []*regexp.Regexp{
+			regexp.MustCompile(qosOperandThresholdRegex),
+			regexp.MustCompile(qosOperandMetricRegex),
+		}
+	}
+	return qosOperandRegexes
+}
 
 // CreateRule is an interface method of kb.Factory
 func (qos *QoS) CreateRule(obj interface{}) (kb.Rule, error) {
@@ -26,11 +45,34 @@ func (qos *QoS) CreateFormula(obj interface{}) (kb.Formula, error) {
 	return NewFormula(), nil
 }
 
-// CreateVariable is an interface method of kb.Factory
-func (qos *QoS) CreateVariable(obj interface{}) (kb.Operand, error) {
+// CreateOperand is an interface method of kb.Factory
+func (qos *QoS) CreateOperand(obj interface{}) (kb.Operand, error) {
+	switch obj.(type) {
+	case string:
+		s, _ := obj.(string)
+		for n, qosRegexp := range getQoSOperandRegexes() {
+			if !qosRegexp.MatchString(s) {
+				continue
+			}
+			switch n {
+			case 0: // qosOperandThresholdRegex
+				return qos.createThreshold(obj)
+			case 1: // qosOperandMetricRegex
+				return qos.createMetric(obj)
+			}
+		}
+	case float64:
+		return qos.createThreshold(obj)
+	}
+
+	return nil, fmt.Errorf(errorInvalidOperand, obj)
+}
+
+// createMetric is an interface method of kb.Factory
+func (qos *QoS) createMetric(obj interface{}) (kb.Operand, error) {
 	varStr, ok := obj.(string)
 	if !ok {
-		return nil, fmt.Errorf(errorInvalidVariable, obj)
+		return nil, fmt.Errorf(errorInvalidOperand, obj)
 	}
 
 	v, ok := qos.Variables[varStr]
@@ -39,24 +81,24 @@ func (qos *QoS) CreateVariable(obj interface{}) (kb.Operand, error) {
 	}
 
 	m := NewMetricWithName(varStr)
-	qos.Variables[varStr] = m.Variable
+	qos.Variables[varStr] = m
 
 	return m, nil
 }
 
-// CreateObjective is an interface method kb.Factory
-func (qos *QoS) CreateObjective(obj interface{}) (kb.Operand, error) {
+// createThreshold is an interface method kb.Factory
+func (qos *QoS) createThreshold(obj interface{}) (kb.Operand, error) {
 	objValue, ok := obj.(float64)
 	if !ok {
 		objStr, ok := obj.(string)
 		if !ok {
-			return nil, fmt.Errorf(errorInvalidObjective, obj)
+			return nil, fmt.Errorf(errorInvalidOperand, obj)
 		}
 
 		var err error
 		objValue, err = strconv.ParseFloat(objStr, 64)
 		if err != nil {
-			return nil, fmt.Errorf(errorInvalidObjective, obj)
+			return nil, fmt.Errorf(errorInvalidOperand, obj)
 		}
 	}
 

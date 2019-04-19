@@ -49,7 +49,7 @@ func (operator *Operator) SetTypeString(typeString string) error {
 func (operator *Operator) IsSatisfied(v kb.Operand, obj kb.Operand) (bool, error) {
 	m, ok := v.(*Metric)
 	if !ok {
-		return false, fmt.Errorf(errorInvalidVariable, v)
+		return false, fmt.Errorf(errorInvalidOperand, v)
 	}
 	mObj, err := m.GetValue()
 	if err != nil {
@@ -57,12 +57,12 @@ func (operator *Operator) IsSatisfied(v kb.Operand, obj kb.Operand) (bool, error
 	}
 	mValue, ok := mObj.(float64)
 	if !ok {
-		return false, fmt.Errorf(errorInvalidVariable, v)
+		return false, fmt.Errorf(errorInvalidOperand, v)
 	}
 
 	th, ok := obj.(*Threshold)
 	if !ok {
-		return false, fmt.Errorf(errorInvalidObjective, obj)
+		return false, fmt.Errorf(errorInvalidOperand, obj)
 	}
 	thObj, err := th.GetValue()
 	if err != nil {
@@ -70,7 +70,7 @@ func (operator *Operator) IsSatisfied(v kb.Operand, obj kb.Operand) (bool, error
 	}
 	thValue, ok := thObj.(float64)
 	if !ok {
-		return false, fmt.Errorf(errorInvalidVariable, v)
+		return false, fmt.Errorf(errorInvalidOperand, v)
 	}
 
 	switch operator.Type {

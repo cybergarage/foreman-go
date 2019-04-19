@@ -5,9 +5,8 @@
 package qos
 
 const (
-	errorInvalidVariable     = "Invalid variable (%v)"
+	errorInvalidOperand      = "Invalid operand (%v)"
 	errorInvalidOperator     = "Invalid operator (%v)"
-	errorInvalidObjective    = "Invalid objective (%v)"
 	errorNullFormulaVariable = "Null formula (%s) variable "
-	errorNullMetricEntity    = "Null metric (%s) entit "
+	errorNullMetricEntity    = "Null metric (%s)"
 )

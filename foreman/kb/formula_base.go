@@ -59,29 +59,26 @@ func (formula *BaseFormula) ParseString(factory Factory, formulaString string) e
 		return fmt.Errorf(errorInvalidFormulaString, formulaString)
 	}
 
-	// Variable
-	variableString := formulaStrings[0]
-	variable, err := factory.CreateVariable(variableString)
+	// Left Operand
+	operand, err := factory.CreateOperand(formulaStrings[0])
 	if err != nil {
 		return err
 	}
-	formula.LeftOperand = variable
+	formula.LeftOperand = operand
 
 	// Operator
-	operatorString := formulaStrings[1]
-	operator, err := factory.CreateOperator(operatorString)
+	operator, err := factory.CreateOperator(formulaStrings[1])
 	if err != nil {
 		return err
 	}
 	formula.Operator = operator
 
-	// Objective
-	objectiveString := formulaStrings[2]
-	objective, err := factory.CreateObjective(objectiveString)
+	// Right Operand
+	operand, err = factory.CreateOperand(formulaStrings[2])
 	if err != nil {
 		return err
 	}
-	formula.RightOperand = objective
+	formula.RightOperand = operand
 
 	return nil
 }
