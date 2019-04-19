@@ -16,7 +16,7 @@ type KnowledgeBaseListener interface {
 //KnowledgeBase includes all knowledge rules.
 type KnowledgeBase struct {
 	Rules        map[string]Rule
-	Variables    map[string]Variable
+	Variables    map[string]*Variable
 	relatedRules map[string][]Rule // relatedRules stores rules which are related the variable name
 	listeners    []KnowledgeBaseListener
 }
@@ -36,7 +36,7 @@ func NewKnowledgeBase() *KnowledgeBase {
 // Clear removes all rules and variables..
 func (kb *KnowledgeBase) Clear() error {
 	kb.Rules = make(map[string]Rule)
-	kb.Variables = make(map[string]Variable)
+	kb.Variables = make(map[string]*Variable)
 	kb.relatedRules = make(map[string][]Rule)
 	return nil
 }
@@ -89,7 +89,7 @@ func (kb *KnowledgeBase) UpdateVariableValue(name string, value interface{}) boo
 }
 
 // GetVariable returns a variable of the specified name.
-func (kb *KnowledgeBase) GetVariable(name string) (Variable, bool) {
+func (kb *KnowledgeBase) GetVariable(name string) (*Variable, bool) {
 	v, ok := kb.Variables[name]
 	return v, ok
 }
@@ -139,27 +139,29 @@ func (kb *KnowledgeBase) SetRule(rule Rule) error {
 	// Add all variables in the rule
 	for _, clause := range rule.GetClauses() {
 		for _, formula := range clause.GetFormulas() {
-			lop := formula.GetLeftOperand()
-			variable, ok := lop.(Variable)
-			if !ok {
-				continue
-			}
-			variableName := variable.GetName()
+			for _, operand := range formula.GetOperands() {
+				variable, ok := operand.(*Variable)
+				if !ok {
+					continue
+				}
+				variableName := variable.GetName()
 
-			mapVariable, ok := kb.GetVariable(variableName)
-			if !ok {
-				kb.Variables[variableName] = variable
-				continue
-			}
+				mapVariable, ok := kb.GetVariable(variableName)
+				if !ok {
+					kb.Variables[variableName] = variable
+					continue
+				}
 
-			err := kb.addRelatedRules(variableName, rule)
-			if err != nil {
-				return err
-			}
+				err := kb.addRelatedRules(variableName, rule)
+				if err != nil {
+					return err
+				}
 
-			// Check whether these are a same instance
-			if variable != mapVariable {
-				return fmt.Errorf(errorInvalidRuleVariable, variableName, variable, mapVariable)
+				// Check whether these are a same instance
+				if variable != mapVariable {
+					return fmt.Errorf(errorInvalidRuleVariable, variableName, variable, mapVariable)
+				}
+
 			}
 		}
 	}

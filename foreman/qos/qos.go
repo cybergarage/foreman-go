@@ -39,19 +39,21 @@ func (qos *QoS) FindRelatedRules(q *Query) ([]*Rule, error) {
 	for _, rule := range qos.Rules {
 		for _, clause := range rule.GetClauses() {
 			for _, formula := range clause.GetFormulas() {
-				lop := formula.GetLeftOperand()
-				v, ok := lop.(kb.Variable)
-				if !ok {
-					continue
+				for _, operand := range formula.GetOperands() {
+					v, ok := operand.(*kb.Variable)
+					if !ok {
+						continue
+					}
+					if v.GetName() != name {
+						continue
+					}
+					qosRule, ok := rule.(*Rule)
+					if !ok {
+						continue
+					}
+					qosRules = append(qosRules, qosRule)
+
 				}
-				if v.GetName() != name {
-					continue
-				}
-				qosRule, ok := rule.(*Rule)
-				if !ok {
-					continue
-				}
-				qosRules = append(qosRules, qosRule)
 			}
 		}
 	}
@@ -67,19 +69,20 @@ func (qos *QoS) FindRelatedFormulas(q *Query) ([]*Formula, error) {
 	for _, rule := range qos.Rules {
 		for _, clause := range rule.GetClauses() {
 			for _, formula := range clause.GetFormulas() {
-				lop := formula.GetLeftOperand()
-				v, ok := lop.(kb.Variable)
-				if !ok {
-					continue
+				for _, operand := range formula.GetOperands() {
+					v, ok := operand.(*kb.Variable)
+					if !ok {
+						continue
+					}
+					if v.GetName() != name {
+						continue
+					}
+					qosFormula, ok := formula.(*Formula)
+					if !ok {
+						continue
+					}
+					qoSFormulas = append(qoSFormulas, qosFormula)
 				}
-				if v.GetName() != name {
-					continue
-				}
-				qosFormula, ok := formula.(*Formula)
-				if !ok {
-					continue
-				}
-				qoSFormulas = append(qoSFormulas, qosFormula)
 			}
 		}
 	}
