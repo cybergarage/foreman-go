@@ -139,7 +139,11 @@ func (kb *KnowledgeBase) SetRule(rule Rule) error {
 	// Add all variables in the rule
 	for _, clause := range rule.GetClauses() {
 		for _, formula := range clause.GetFormulas() {
-			variable := formula.GetVariable()
+			lop := formula.GetLeftOperand()
+			variable, ok := lop.(Variable)
+			if !ok {
+				continue
+			}
 			variableName := variable.GetName()
 
 			mapVariable, ok := kb.GetVariable(variableName)

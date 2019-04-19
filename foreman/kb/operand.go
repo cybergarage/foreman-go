@@ -6,6 +6,8 @@ package kb
 
 // Operand represents an objective interface in formulas.
 type Operand interface {
-	GetValue() interface{}
-	String() string
+	// GetValue returns the operand value.
+	GetValue() (interface{}, error)
+	// Expression returns a string for the formula expression.
+	Expression() string
 }

@@ -67,3 +67,8 @@ func (m *Metric) SetValue(obj interface{}) error {
 func (m *Metric) GetValue() (interface{}, error) {
 	return m.Value, nil
 }
+
+// Expression returns a expression string in the formula
+func (m *Metric) Expression() string {
+	return m.Name
+}

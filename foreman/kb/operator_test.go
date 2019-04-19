@@ -10,11 +10,11 @@ import (
 type TestOperator struct {
 }
 
-func (v *TestOperator) IsSatisfied(value1 interface{}, value2 interface{}) (bool, error) {
+func (v *TestOperator) IsSatisfied(value1 Operand, value2 Operand) (bool, error) {
 	return true, nil
 }
 
-func (v *TestOperator) String() string {
+func (v *TestOperator) Expression() string {
 	return ""
 }
 

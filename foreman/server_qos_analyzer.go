@@ -52,8 +52,14 @@ func (server *Server) analyzeRootCaluse(name string) error {
 }
 
 func (server *Server) analyzeFormula(formula kb.Formula) error {
-	name := formula.GetVariable().GetName()
-	server.analyzeRootCaluse(name)
+	for _, operand := range formula.GetOperands() {
+		obj, ok := operand.(kb.Object)
+		if !ok {
+			continue
+		}
+		name := obj.GetName()
+		server.analyzeRootCaluse(name)
+	}
 	return nil
 }
 

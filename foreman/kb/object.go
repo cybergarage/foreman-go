@@ -4,10 +4,9 @@
 
 package kb
 
-// Variable represents an variable interface in formulas.
-type Variable interface {
+// Object represents an operand object which has a name.
+type Object interface {
+	Operand
+	// GetName returns a operand name.
 	GetName() string
-	SetValue(interface{}) error
-	GetValue() (interface{}, error)
-	Expression() string
 }

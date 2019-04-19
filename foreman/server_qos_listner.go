@@ -42,23 +42,26 @@ func newActionEventWithUnsatisfiedQoSRule(rule kb.Rule) (*action.Event, error) {
 				continue
 			}
 
-			ver := formula.GetVariable()
-			val, err := ver.GetValue()
-			if err != nil {
-				lastErr = err
-				continue
-			}
-
-			param, err := action.NewParameterFromInterface(ver.GetName(), val)
-			if err != nil {
-				lastErr = err
-				continue
-			}
-
-			err = e.AddParameter(param)
-			if err != nil {
-				lastErr = err
-				continue
+			for _, operand := range formula.GetOperands() {
+				obj, ok := operand.(kb.Object)
+				if !ok {
+					continue
+				}
+				val, err := obj.GetValue()
+				if err != nil {
+					lastErr = err
+					continue
+				}
+				param, err := action.NewParameterFromInterface(obj.GetName(), val)
+				if err != nil {
+					lastErr = err
+					continue
+				}
+				err = e.AddParameter(param)
+				if err != nil {
+					lastErr = err
+					continue
+				}
 			}
 		}
 	}
