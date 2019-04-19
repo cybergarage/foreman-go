@@ -13,7 +13,7 @@ type Factory interface {
 	// CreateFormula must return a formula instance.
 	CreateFormula(obj interface{}) (Formula, error)
 	// CreateVariable must create a singleton variable, add it into KnowledgeBase.Variables, and return it.
-	CreateVariable(obj interface{}) (Variable, error)
+	CreateVariable(obj interface{}) (Operand, error)
 	// CreateOperator must return an operater instance.
 	CreateOperator(obj interface{}) (Operator, error)
 	// CreateObjective must return an objective instance.

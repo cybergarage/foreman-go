@@ -27,7 +27,7 @@ func (qos *QoS) CreateFormula(obj interface{}) (kb.Formula, error) {
 }
 
 // CreateVariable is an interface method of kb.Factory
-func (qos *QoS) CreateVariable(obj interface{}) (kb.Variable, error) {
+func (qos *QoS) CreateVariable(obj interface{}) (kb.Operand, error) {
 	varStr, ok := obj.(string)
 	if !ok {
 		return nil, fmt.Errorf(errorInvalidVariable, obj)
@@ -39,7 +39,7 @@ func (qos *QoS) CreateVariable(obj interface{}) (kb.Variable, error) {
 	}
 
 	m := NewMetricWithName(varStr)
-	qos.Variables[varStr] = m
+	qos.Variables[varStr] = m.Variable
 
 	return m, nil
 }

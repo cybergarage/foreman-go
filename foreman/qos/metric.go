@@ -13,23 +13,15 @@ import (
 
 // Metric represents an metric instance for Knowledge base.
 type Metric struct {
-	kb.Variable
-	Name  string
-	Value float64
+	*kb.Variable
 }
 
 // NewMetricWithName returns a new metric instance with the specified name.
 func NewMetricWithName(name string) *Metric {
 	m := &Metric{
-		Name:  name,
-		Value: 0.0,
+		Variable: kb.NewVariableWithName(name),
 	}
 	return m
-}
-
-// GetName is an interface method of kb.Variable
-func (m *Metric) GetName() string {
-	return m.Name
 }
 
 // SetValue is an interface method of kb.Variable
@@ -61,14 +53,4 @@ func (m *Metric) SetValue(obj interface{}) error {
 		return fmt.Errorf(errorInvalidVariable, obj)
 	}
 	return nil
-}
-
-// GetValue is an interface method of kb.Variable
-func (m *Metric) GetValue() (interface{}, error) {
-	return m.Value, nil
-}
-
-// Expression returns a expression string in the formula
-func (m *Metric) Expression() string {
-	return m.Name
 }
