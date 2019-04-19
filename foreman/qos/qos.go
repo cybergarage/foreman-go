@@ -39,7 +39,11 @@ func (qos *QoS) FindRelatedRules(q *Query) ([]*Rule, error) {
 	for _, rule := range qos.Rules {
 		for _, clause := range rule.GetClauses() {
 			for _, formula := range clause.GetFormulas() {
-				v := formula.GetVariable()
+				lop := formula.GetLeftOperand()
+				v, ok := lop.(kb.Variable)
+				if !ok {
+					continue
+				}
 				if v.GetName() != name {
 					continue
 				}
@@ -63,7 +67,11 @@ func (qos *QoS) FindRelatedFormulas(q *Query) ([]*Formula, error) {
 	for _, rule := range qos.Rules {
 		for _, clause := range rule.GetClauses() {
 			for _, formula := range clause.GetFormulas() {
-				v := formula.GetVariable()
+				lop := formula.GetLeftOperand()
+				v, ok := lop.(kb.Variable)
+				if !ok {
+					continue
+				}
 				if v.GetName() != name {
 					continue
 				}

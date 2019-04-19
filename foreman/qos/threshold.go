@@ -30,8 +30,13 @@ func NewThresholdWithValue(value float64) *Threshold {
 }
 
 // GetValue returns the stored value.
-func (th *Threshold) GetValue() interface{} {
-	return th.Value
+func (th *Threshold) GetValue() (interface{}, error) {
+	return th.Value, nil
+}
+
+// Expression returns a string for the formula expression.
+func (th *Threshold) Expression() string {
+	return fmt.Sprintf("%f", th.Value)
 }
 
 // String returns a string description of the instance

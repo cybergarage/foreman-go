@@ -7,7 +7,7 @@ package kb
 // Operator represents an operator interface in formulas.
 type Operator interface {
 	// IsSatisfied checks whether ('leftValue' op 'rightValue') is valid
-	IsSatisfied(variable interface{}, objective interface{}) (bool, error)
-	// String returns a string description of the instance
-	String() string
+	IsSatisfied(leftOpe Operand, rightOpe Operand) (bool, error)
+	// Expression returns a expression string in the formula
+	Expression() string
 }

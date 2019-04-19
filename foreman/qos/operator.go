@@ -46,7 +46,7 @@ func (operator *Operator) SetTypeString(typeString string) error {
 }
 
 // IsSatisfied is an interface method of kb.Operator
-func (operator *Operator) IsSatisfied(v interface{}, obj interface{}) (bool, error) {
+func (operator *Operator) IsSatisfied(v kb.Operand, obj kb.Operand) (bool, error) {
 	m, ok := v.(*Metric)
 	if !ok {
 		return false, fmt.Errorf(errorInvalidVariable, v)
@@ -64,7 +64,10 @@ func (operator *Operator) IsSatisfied(v interface{}, obj interface{}) (bool, err
 	if !ok {
 		return false, fmt.Errorf(errorInvalidObjective, obj)
 	}
-	thObj := th.GetValue()
+	thObj, err := th.GetValue()
+	if err != nil {
+		return false, err
+	}
 	thValue, ok := thObj.(float64)
 	if !ok {
 		return false, fmt.Errorf(errorInvalidVariable, v)
@@ -106,8 +109,8 @@ func (operator *Operator) IsSatisfied(v interface{}, obj interface{}) (bool, err
 	return false, fmt.Errorf(errorInvalidOperator, operator)
 }
 
-// String returns a string description of the instance
-func (operator *Operator) String() string {
+// Expression returns a expression string in the formula
+func (operator *Operator) Expression() string {
 	for operatorString, operatorType := range qosOperatorTypes {
 		if operator.Type == operatorType {
 			return operatorString
