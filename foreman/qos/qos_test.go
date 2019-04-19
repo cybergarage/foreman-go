@@ -113,12 +113,18 @@ func TestQoSFormulas(t *testing.T) {
 	qos := NewQoS()
 
 	formulaStrings := []string{
-		"x == 10.0",
-		"x != 1.0",
-		"x > 5.0",
-		"x >= 10.0",
-		"x < 20.0",
-		"x <= 10.0",
+		"x == 10.0", // 0
+		"x != 1.0",  // 1
+		"x > 5.0",   // 2
+		"x >= 10.0", // 3
+		"x < 20.0",  // 4
+		"x <= 10.0", // 5
+		"x == y",    // 6
+		"x != y",    // 7
+		"x >= y",    // 8
+		"x > y",     // 9
+		"x <= y",    // 10
+		"x < y",     // 11
 	}
 
 	formulas := make([]kb.Formula, len(formulaStrings))
@@ -132,55 +138,73 @@ func TestQoSFormulas(t *testing.T) {
 
 	// Get a singleton instance
 
-	xm, _ := qos.GetVariable("x")
+	mx, _ := qos.GetVariable("x")
+	my, _ := qos.GetVariable("y")
 
-	// All formulas are good when x == 10.0
+	// x == 10.0, y == 10.0
 
-	err := xm.SetValue(10.0)
-	if err != nil {
-		t.Error(err)
-		return
-	}
+	mx.SetValue(10.0)
+	my.SetValue(10.0)
 
-	for _, formula := range formulas {
-		testQoSGoodFormula(t, qos, formula)
-	}
-
-	// x == 1
-
-	xm.SetValue(1.0)
-	if err != nil {
-		t.Error(err)
-		return
-	}
 	goodFormulas := []kb.Formula{
+		formulas[0],
+		formulas[1],
+		formulas[2],
 		formulas[4],
 		formulas[5],
+		formulas[6],
+		formulas[8],
+		formulas[10],
 	}
 	for _, formula := range goodFormulas {
 		testQoSGoodFormula(t, qos, formula)
 	}
 	badFormulas := []kb.Formula{
-		formulas[0],
-		formulas[1],
-		formulas[2],
-		formulas[3],
+		formulas[7],
+		formulas[9],
+		formulas[11],
 	}
 	for _, formula := range badFormulas {
 		testQoSBadFormula(t, qos, formula)
 	}
 
-	// x == 100.0
+	// x == 1.0, y == 10.0
 
-	err = xm.SetValue(100.0)
-	if err != nil {
-		t.Error(err)
-		return
+	mx.SetValue(1.0)
+
+	goodFormulas = []kb.Formula{
+		formulas[4],
+		formulas[5],
+		formulas[7],
+		formulas[10],
+		formulas[11],
 	}
+	for _, formula := range goodFormulas {
+		testQoSGoodFormula(t, qos, formula)
+	}
+	badFormulas = []kb.Formula{
+		formulas[0],
+		formulas[1],
+		formulas[2],
+		formulas[3],
+		formulas[8],
+		formulas[9],
+	}
+	for _, formula := range badFormulas {
+		testQoSBadFormula(t, qos, formula)
+	}
+
+	// x == 100.0, y == 10.0
+
+	mx.SetValue(100.0)
+
 	goodFormulas = []kb.Formula{
 		formulas[1],
 		formulas[2],
 		formulas[3],
+		formulas[7],
+		formulas[8],
+		formulas[9],
 	}
 	for _, formula := range goodFormulas {
 		testQoSGoodFormula(t, qos, formula)
@@ -189,6 +213,36 @@ func TestQoSFormulas(t *testing.T) {
 		formulas[0],
 		formulas[4],
 		formulas[5],
+		formulas[6],
+		formulas[10],
+		formulas[11],
+	}
+	for _, formula := range badFormulas {
+		testQoSBadFormula(t, qos, formula)
+	}
+
+	// x == 100.0, y == 1000.0
+
+	my.SetValue(1000.0)
+
+	goodFormulas = []kb.Formula{
+		formulas[1],
+		formulas[2],
+		formulas[3],
+		formulas[7],
+		formulas[10],
+		formulas[11],
+	}
+	for _, formula := range goodFormulas {
+		testQoSGoodFormula(t, qos, formula)
+	}
+	badFormulas = []kb.Formula{
+		formulas[0],
+		formulas[4],
+		formulas[5],
+		formulas[6],
+		formulas[8],
+		formulas[9],
 	}
 	for _, formula := range badFormulas {
 		testQoSBadFormula(t, qos, formula)

@@ -46,61 +46,53 @@ func (operator *Operator) SetTypeString(typeString string) error {
 }
 
 // IsSatisfied is an interface method of kb.Operator
-func (operator *Operator) IsSatisfied(v kb.Operand, obj kb.Operand) (bool, error) {
-	m, ok := v.(*Metric)
-	if !ok {
-		return false, fmt.Errorf(errorInvalidOperand, v)
-	}
-	mObj, err := m.GetValue()
+func (operator *Operator) IsSatisfied(leftOp kb.Operand, rightOp kb.Operand) (bool, error) {
+	leftObj, err := leftOp.GetValue()
 	if err != nil {
 		return false, err
 	}
-	mValue, ok := mObj.(float64)
+	leftVal, ok := leftObj.(float64)
 	if !ok {
-		return false, fmt.Errorf(errorInvalidOperand, v)
+		return false, fmt.Errorf(errorInvalidOperand, leftOp)
 	}
 
-	th, ok := obj.(*Threshold)
-	if !ok {
-		return false, fmt.Errorf(errorInvalidOperand, obj)
-	}
-	thObj, err := th.GetValue()
+	rightObj, err := rightOp.GetValue()
 	if err != nil {
 		return false, err
 	}
-	thValue, ok := thObj.(float64)
+	rightVal, ok := rightObj.(float64)
 	if !ok {
-		return false, fmt.Errorf(errorInvalidOperand, v)
+		return false, fmt.Errorf(errorInvalidOperand, rightOp)
 	}
 
 	switch operator.Type {
 	case qosOperatorTypeLT:
-		if mValue < thValue {
+		if leftVal < rightVal {
 			return true, nil
 		}
 		return false, nil
 	case qosOperatorTypeLE:
-		if mValue <= thValue {
+		if leftVal <= rightVal {
 			return true, nil
 		}
 		return false, nil
 	case qosOperatorTypeGT:
-		if mValue > thValue {
+		if leftVal > rightVal {
 			return true, nil
 		}
 		return false, nil
 	case qosOperatorTypeGE:
-		if mValue >= thValue {
+		if leftVal >= rightVal {
 			return true, nil
 		}
 		return false, nil
 	case qosOperatorTypeEQ:
-		if mValue == thValue {
+		if leftVal == rightVal {
 			return true, nil
 		}
 		return false, nil
 	case qosOperatorTypeNotEQ:
-		if mValue != thValue {
+		if leftVal != rightVal {
 			return true, nil
 		}
 		return false, nil
