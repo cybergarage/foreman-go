@@ -1,5 +1,5 @@
 ################################################################################
-# Check QoS result (No data)
+# Check whether QoS result is not found
 ################################################################################
 
 EXPORT FROM REGISTER WHERE name == qos;400;
@@ -55,10 +55,13 @@ EXPORT FROM REGISTER WHERE name == m0;200;/register/m0/value;10.0
 ################################################################################
 
 DELETE FROM REGISTER WHERE name == m0;200
-EXPORT FROM REGISTER WHERE name == m0;400;
+EXPORT FROM REGISTER WHERE name == m0;400
 
 DELETE FROM ROUTE WHERE name == qos;200
-EXPORT FROM ROUTE WHERE name == qos;400;
+EXPORT FROM ROUTE WHERE name == qos;400
 
 DELETE FROM QOS WHERE name == m0_10;200
 EXPORT FROM QOS WHERE name == m0_10;400
+
+DELETE FROM REGISTER WHERE name == qos;200
+EXPORT FROM REGISTER WHERE name == qos;400
