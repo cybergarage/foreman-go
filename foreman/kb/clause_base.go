@@ -33,13 +33,22 @@ func (clause *BaseClause) GetFormulas() []Formula {
 
 // IsSatisfied returns whether the all formulas in the clause are satisfied.
 func (clause *BaseClause) IsSatisfied() (bool, error) {
+	var lastErr error
 	for _, formula := range clause.Formulas {
 		ok, err := formula.IsSatisfied()
-		if !ok || err != nil {
-			return false, err
+
+		// Unknown error is considered to be satisfied
+		// ex. the operand variable is not found
+		if err != nil {
+			lastErr = err
+			continue
+		}
+
+		if !ok {
+			return false, lastErr
 		}
 	}
-	return true, nil
+	return true, lastErr
 }
 
 // String returns a string description of the instance
