@@ -1,0 +1,315 @@
+################################################################################
+# Check whether QoS result is not found
+################################################################################
+
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+################################################################################
+# Set unsatisfied action
+################################################################################
+
+SET ("qos_unsatisfied","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZChwYXJhbXMscmVzdWx0cyk6CiAgICBmb3JlbWFuLnNldF9yZWdpc3RlcigncW9zJywgJ2ZhbHNlJykKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied
+EXPORT FROM ACTION WHERE name == "qos_unsatisfied";200;/action/methods/qos_unsatisfied
+
+################################################################################
+# Post initial metrics
+################################################################################
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m03, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m04, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+
+################################################################################
+# Set QoS rules and routes (CNF : Clause=1, Formula=1)
+################################################################################
+
+SET (m01, "m01 < 10") INTO QOS;200
+
+SET (m01, m01, qos_unsatisfied) INTO ROUTE;200
+
+# {0}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# {10}
+
+SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+
+# Cleanup
+
+DELETE FROM QOS WHERE name == m01;200
+DELETE FROM ROUTE WHERE name == m01;200
+
+################################################################################
+# Set QoS rules and routes (CNF : Clause=1, Formula=2)
+################################################################################
+
+SET (m01a02, "m01 < 10 & m02 < 20") INTO QOS;200
+SET (m01a02, m01a02, qos_unsatisfied) INTO ROUTE;200
+
+# SAT : {0, 0}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {0, 0} -> {10, 0}
+
+SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 0} -> {10, 20}
+
+SET (m02, 20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 20} -> {0, 20}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {0, 20} -> {0, 0}
+
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# Cleanup
+
+DELETE FROM QOS WHERE name == m01a02;200;
+DELETE FROM ROUTE WHERE name == m01a02;200;
+
+################################################################################
+# Set QoS rules and routes (CNF : Clause=2, Formula=1)
+################################################################################
+
+SET (m01o02, "m01 < 10 | m02 < 20") INTO QOS;200
+SET (m01o02, m01o02, qos_unsatisfied) INTO ROUTE;200
+
+# SAT : {0, 0}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {0, 0} -> {10, 0}
+
+SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 0} -> {10, 20}
+
+SET (m02, 20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {10, 20} -> {0, 20}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {0, 20} -> {0, 0}
+
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# Cleanup
+
+DELETE FROM QOS WHERE name == m01o02;200;
+DELETE FROM ROUTE WHERE name == m01o02;200;
+
+################################################################################
+# Set QoS rules and routes (CNF : Clause=1, Formula=3)
+################################################################################
+
+SET (m01a02a03, "m01 < 10 & m02 < 20 & m03 < 30") INTO QOS;200
+SET (m01a02a03, m01a02a03, qos_unsatisfied) INTO ROUTE;200
+
+# SAT : {0, 0, 0}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m03, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {0, 0, 0} -> {10, 0, 0}
+
+SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 0, 0} -> {10, 20, 0}
+
+SET (m02, 20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 20, 0} -> {10, 20, 30}
+
+SET (m03, 30, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 20, 30} -> {10, 20, 0}
+
+SET (m03, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 20, 0} -> {10, 0, 0}
+
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {10, 0, 0} -> {0, 0, 0}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# Cleanup
+
+DELETE FROM QOS WHERE name == m01a02a03;200;
+DELETE FROM ROUTE WHERE name == m01a02a03;200;
+
+################################################################################
+# Set QoS rules and routes (CNF : Clause=3, Formula=1)
+################################################################################
+
+SET (m01o02o03, "m01 < 10 | m02 < 20 | m03 < 30") INTO QOS;200
+SET (m01o02o03, m01o02o03, qos_unsatisfied) INTO ROUTE;200
+
+# SAT : {0, 0, 0}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m03, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {0, 0, 0} -> {10, 0, 0}
+
+SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {10, 0, 0} -> {10, 20, 0}
+
+SET (m02, 20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 20, 0} -> {10, 20, 30}
+
+SET (m03, 30, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {10, 20, 30} -> {10, 20, 0}
+
+SET (m03, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {10, 20, 0} -> {10, 0, 0}
+
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {10, 0, 0} -> {0, 0, 0}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# Cleanup
+
+DELETE FROM QOS WHERE name == m01o02o03;200;
+DELETE FROM ROUTE WHERE name == m01o02o03;200;
+
+################################################################################
+# Set QoS rules and routes (CNF : Clause=2, Formula=2)
+################################################################################
+
+SET (m01a02o03a04, "((m01 < 10) & (m02 < 20)) | ((m03 < 30 & m04 < 40))") INTO QOS;200
+SET (m01a02o03a04, m01a02o03a04, qos_unsatisfied) INTO ROUTE;200
+
+# SAT : {0, 0, 0, 0}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m03, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m04, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {0, 0, 0, 0} -> {10, 0, 0, 0}
+
+SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {10, 0, 0, 0} -> {10, 20, 0, 0}
+
+SET (m02, 20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 20, 0, 0} -> {10, 20, 30, 0}
+
+SET (m03, 30, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 20, 30, 0} -> {10, 20, 30, 40}
+
+SET (m04, 40, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# UNSAT : {10, 20, 30, 40} -> {0, 20, 30, 40}
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {0, 20, 30, 40} -> {0, 0, 30, 40}
+
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {0, 0, 30, 40} -> {0, 0, 0, 40}
+
+SET (m03, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# SAT : {0, 0, 0, 40} -> {0, 0, 0, 0}
+
+SET (m04, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# Cleanup
+
+DELETE FROM QOS WHERE name == m01a02o03a04;200;
+DELETE FROM ROUTE WHERE name == m01a02o03a04;200;
+
+################################################################################
+# Cleanup
+################################################################################
+
+DELETE FROM REGISTER WHERE name == m01;200;
+DELETE FROM REGISTER WHERE name == m02;200;
+DELETE FROM REGISTER WHERE name == m03;200;
+DELETE FROM REGISTER WHERE name == m04;200;
