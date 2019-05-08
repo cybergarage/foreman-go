@@ -89,7 +89,9 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 }
 
 func TestQueryDebugScenarios(t *testing.T) {
-	scenarioFiles := []string{}
+	scenarioFiles := []string{
+		"scenario_qos_04.csv",
+	}
 
 	conf := test.NewDefaultConfig()
 	//conf.EnableSkipError = true
