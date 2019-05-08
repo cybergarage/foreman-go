@@ -121,7 +121,7 @@ func (s *QueryScenario) verifyResponse(res *test.QueryResponse, expectRes *test.
 	case string:
 		resValue, _ := pathObj.(string)
 		// Parse as a float at first such as '1E+00'
-		resFloatValue, err := strconv.ParseFloat(expectRes.JSONPathValue, 64)
+		resFloatValue, err := strconv.ParseFloat(resValue, 64)
 		if err == nil {
 			expectValue, err := strconv.ParseFloat(expectRes.JSONPathValue, 64)
 			if (err == nil) && (resFloatValue == float64(expectValue)) {
