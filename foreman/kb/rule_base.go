@@ -54,13 +54,22 @@ func (rule *BaseRule) GetClauses() []Clause {
 
 // IsSatisfied returns whether a clause in the rule is satisfied.
 func (rule *BaseRule) IsSatisfied() (bool, error) {
+	var lastErr error
 	for _, clause := range rule.Clauses {
-		ok, _ := clause.IsSatisfied()
+		ok, err := clause.IsSatisfied()
+
+		// Unknown error is considered to be satisfied
+		// ex. the operand variable is not found
+		if err != nil {
+			lastErr = err
+			continue
+		}
+
 		if ok {
-			return true, nil
+			return true, lastErr
 		}
 	}
-	return false, nil
+	return false, lastErr
 }
 
 // ParseString parses a specified rule string.
