@@ -2,7 +2,7 @@
 # Set unsatisfied action
 ################################################################################
 
-SET ("qos_unsatisfied_export_metric","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZF9leHBvcnRfbWV0cmljKHBhcmFtcyxyZXN1bHRzKToKICAgIGZvciBrZXksIF8gaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgICAgIHJlc19qc29uID0gZm9yZW1hbi5leGVjdXRlX3F1ZXJ5KCdTRUxFQ1QgKiBGUk9NIE1FVFJJQ1MgV0hFUkUgbmFtZSA9PSAlcycgJSBrZXkpCiAgICAgICAgbWV0cmljc192YWwgPSByZXNfanNvblswXVsnZGF0YXBvaW50cyddWy0xXQogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKCclc19tZXRyaWMnICUga2V5LCBzdHIobWV0cmljc192YWwpKQogICAgcmV0dXJuIFRydWUK","base64") INTO ACTION;200;
+SET ("qos_unsatisfied_export_metric","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZF9leHBvcnRfbWV0cmljKHBhcmFtcyxyZXN1bHRzKToKICAgIGZvciBrZXksIF8gaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgICAgIHJlc19qc29uID0gZm9yZW1hbi5leGVjdXRlX3F1ZXJ5KCdTRUxFQ1QgKiBGUk9NIE1FVFJJQ1MgV0hFUkUgbmFtZSA9PSAlcycgJSBrZXkpCiAgICAgICAgbWV0cmljc192YWwgPSByZXNfanNvblswXVsnZGF0YXBvaW50cyddWy0xXVswXQogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKCclc19tZXRyaWMnICUga2V5LCBzdHIobWV0cmljc192YWwpKQogICAgcmV0dXJuIFRydWUK","base64") INTO ACTION;200;
 EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied_export_metric
 
 SET ("qos_unsatisfied_export_register","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZF9leHBvcnRfcmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIGtleSwgXyBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CiAgICAgICAgcmVzX2pzb24gPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkoJ0VYUE9SVCBGUk9NIFJFR0lTVEVSIFdIRVJFIG5hbWUgPT0gJXMnICUga2V5KQogICAgICAgIHJlZ2lzdGVyX3ZhbCA9IHJlc19qc29uWyJyZWdpc3RlciJdW2tleV1bInZhbHVlIl0KICAgICAgICBmb3JlbWFuLnNldF9yZWdpc3RlcignJXNfcmVnaXN0ZXInICUga2V5LCBzdHIocmVnaXN0ZXJfdmFsKSkKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
@@ -12,7 +12,19 @@ EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied_export_register
 # Post initial metrics
 ################################################################################
 
-SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m01, 100, -30min) INTO METRICS;200
+SET (m01, 100, -25min) INTO METRICS;200
+SET (m01, 100, -20min) INTO METRICS;200
+SET (m01, 100, -15min) INTO METRICS;200
+SET (m01, 100, -10min) INTO METRICS;200
+SET (m01, 100, -5min) INTO METRICS;200
+
+SET (m02, 200, -30min) INTO METRICS;200
+SET (m02, 200, -25min) INTO METRICS;200
+SET (m02, 200, -20min) INTO METRICS;200
+SET (m02, 200, -15min) INTO METRICS;200
+SET (m02, 200, -10min) INTO METRICS;200
+SET (m02, 200, -5min) INTO METRICS;200
 
 ################################################################################
 # Set QoS rules and routes
@@ -26,16 +38,17 @@ SET (m01_register, m01, qos_unsatisfied_export_register) INTO ROUTE;200
 # Post unsatisfied metric
 ################################################################################
 
-SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m01, 110, CURRENT_TIMESTAMP) INTO METRICS;200
 
-EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value;10
-EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;10
+EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;110
+EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;110
 
 ################################################################################
 # Cleanup
 ################################################################################
 
 DELETE FROM REGISTER WHERE name == m01;200
+DELETE FROM REGISTER WHERE name == m02;200
 
 DELETE FROM QOS WHERE name == m01;200
 DELETE FROM ROUTE WHERE name == m01_metric;200
