@@ -5,7 +5,11 @@
 // Package metric provides query interfaces for metric store.
 package metric
 
-import "time"
+import (
+	"time"
+
+	"github.com/cybergarage/foreman-go/foreman/register"
+)
 
 // StoreListener represents a listener for metric store.
 type StoreListener interface {
@@ -28,6 +32,12 @@ type Storing interface {
 
 	AddMetric(m *Metric) error
 	Query(q *Query) (ResultSet, error)
+
+	AddMetricWithoutNotification(m *Metric) error
+	NotifyMetric(m *Metric) error
+
+	SetRegisterStore(regStore register.Store) error
+	SetRegisterListener(listener RegisterListener)
 
 	Vacuum() error
 

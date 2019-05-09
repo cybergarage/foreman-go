@@ -14,6 +14,7 @@ import (
 	"unsafe"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
+	"github.com/cybergarage/foreman-go/foreman/register"
 )
 
 const (
@@ -25,9 +26,16 @@ const (
 type cgoStore struct {
 	cStore   unsafe.Pointer
 	listener StoreListener
+	*Register
 	*sync.Mutex
 	// FIXME : Support auto vacuum
 	vacuumCounter uint
+}
+
+// SetRegisterStore sets a register store.
+func (store *cgoStore) SetRegisterStore(regStore register.Store) error {
+	store.Register = NewRegisterWithStore(regStore)
+	return nil
 }
 
 // SetRetentionInterval sets the specified retention duration.
@@ -129,8 +137,8 @@ func (store *cgoStore) SetStoreListener(listener StoreListener) error {
 	return nil
 }
 
-// AddMetric adds a new metric.
-func (store *cgoStore) AddMetric(m *Metric) error {
+// AddMetricWithoutNotification adds a new metric without notification.
+func (store *cgoStore) AddMetricWithoutNotification(m *Metric) error {
 
 	if store.cStore == nil {
 		return fmt.Errorf(errors.ErrorClangObjectNotInitialized)
@@ -153,11 +161,10 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 
 	store.Unlock()
 
-	if store.listener != nil {
-		err = store.listener.StoreMetricAdded(m)
-		if err != nil {
-			lastErr = err
-		}
+	// Update register
+
+	if store.Register != nil {
+		store.Register.UpdateMetricWithoutNotification(m)
 	}
 
 	// FIXME : Support auto vacuum
@@ -176,6 +183,31 @@ func (store *cgoStore) AddMetric(m *Metric) error {
 	}
 
 	return lastErr
+}
+
+// NotifyMetric notifies a new metric to the listeners.
+func (store *cgoStore) NotifyMetric(m *Metric) error {
+	// Notify to register
+
+	if store.Register != nil {
+		store.Register.NotifyMetric(m)
+	}
+
+	// Notify to listener
+
+	if store.listener == nil {
+		return nil
+	}
+	return store.listener.StoreMetricAdded(m)
+}
+
+// AddMetric adds a new metric.
+func (store *cgoStore) AddMetric(m *Metric) error {
+	err := store.AddMetricWithoutNotification(m)
+	if err != nil {
+		return err
+	}
+	return store.NotifyMetric(m)
 }
 
 // Query gets the specified metrics.
