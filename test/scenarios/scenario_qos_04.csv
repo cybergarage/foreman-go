@@ -2,11 +2,8 @@
 # Set unsatisfied action
 ################################################################################
 
-SET ("qos_unsatisfied_export_metric","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZF9leHBvcnRfbWV0cmljKHBhcmFtcyxyZXN1bHRzKToKICAgIGZvciBrZXksIF8gaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgICAgIHJlc19qc29uID0gZm9yZW1hbi5leGVjdXRlX3F1ZXJ5KCdTRUxFQ1QgKiBGUk9NIE1FVFJJQ1MgV0hFUkUgbmFtZSA9PSAlcycgJSBrZXkpCiAgICAgICAgbWV0cmljc192YWwgPSByZXNfanNvblswXVsnZGF0YXBvaW50cyddWy0xXVswXQogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKCclc19tZXRyaWMnICUga2V5LCBzdHIobWV0cmljc192YWwpKQogICAgcmV0dXJuIFRydWUK","base64") INTO ACTION;200;
-EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied_export_metric
-
-SET ("qos_unsatisfied_export_register","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZF9leHBvcnRfcmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIGtleSwgXyBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CiAgICAgICAgcmVzX2pzb24gPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkoJ0VYUE9SVCBGUk9NIFJFR0lTVEVSIFdIRVJFIG5hbWUgPT0gJXMnICUga2V5KQogICAgICAgIHJlZ2lzdGVyX3ZhbCA9IHJlc19qc29uWyJyZWdpc3RlciJdW2tleV1bInZhbHVlIl0KICAgICAgICBmb3JlbWFuLnNldF9yZWdpc3RlcignJXNfcmVnaXN0ZXInICUga2V5LCBzdHIocmVnaXN0ZXJfdmFsKSkKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
-EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied_export_register
+SET ("qos_unsatisfied_export","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZF9leHBvcnQocGFyYW1zLHJlc3VsdHMpOgogICAgbmFtZXMgPSBbIm0wMSIsICJtMDIiXQogICAgZm9yIG5hbWUgaW4gbmFtZXM6CiAgICAgICAgIyBFeHBvcnQgZnJvbSBtZXRyaWNzIHN0b3JlIHRvIHJlZ2lzdHJ5CiAgICAgICAgcmVzX2pzb24gPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkoJ1NFTEVDVCAqIEZST00gTUVUUklDUyBXSEVSRSBuYW1lID09ICVzJyAlIG5hbWUpCiAgICAgICAgbWV0cmljc192YWwgPSByZXNfanNvblswXVsnZGF0YXBvaW50cyddWy0xXVswXQogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKCclc19tZXRyaWMnICUgbmFtZSwgc3RyKG1ldHJpY3NfdmFsKSkKICAgICAgICAjIEV4cG9ydCBmcm9tIHJlZ2lzdHJ5IHN0b3JlIHRvIHJlZ2lzdHJ5CiAgICAgICAgcmVzX2pzb24gPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkoJ0VYUE9SVCBGUk9NIFJFR0lTVEVSIFdIRVJFIG5hbWUgPT0gJXMnICUgbmFtZSkKICAgICAgICByZWdpc3Rlcl92YWwgPSByZXNfanNvblsicmVnaXN0ZXIiXVtuYW1lXVsidmFsdWUiXQogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKCclc19yZWdpc3RlcicgJSBuYW1lLCBzdHIocmVnaXN0ZXJfdmFsKSkKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied_export
 
 ################################################################################
 # Post initial metrics
@@ -31,17 +28,29 @@ SET (m02, 200, -5min) INTO METRICS;200
 ################################################################################
 
 SET (m01, "m01 < 10") INTO QOS;200
-SET (m01_metric, m01, qos_unsatisfied_export_metric) INTO ROUTE;200
-SET (m01_register, m01, qos_unsatisfied_export_register) INTO ROUTE;200
+SET (m01_metric, m01, qos_unsatisfied_export) INTO ROUTE;200
 
 ################################################################################
 # Post unsatisfied metric
 ################################################################################
 
-SET (m01, 110, CURRENT_TIMESTAMP) INTO METRICS,SET (m02, 210, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m01, 110, CURRENT_TIMESTAMP) INTO METRICS;200
 
 EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;110
 EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;110
+EXPORT FROM REGISTER WHERE name == m02_metric;200;/register/m02_metric/value/;200
+EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value;200
+
+################################################################################
+# Post unsatisfied metric (Simulate Graphite feed by 2 insert queries)
+################################################################################
+
+SET (m01, 120, CURRENT_TIMESTAMP) INTO METRICS,SET (m02, 220, CURRENT_TIMESTAMP) INTO METRICS;200
+
+EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;120
+EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;120
+EXPORT FROM REGISTER WHERE name == m02_metric;200;/register/m02_metric/value/;220
+EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value;220
 
 ################################################################################
 # Cleanup
@@ -54,5 +63,4 @@ DELETE FROM QOS WHERE name == m01;200
 DELETE FROM ROUTE WHERE name == m01_metric;200
 DELETE FROM ROUTE WHERE name == m01_register;200
 
-DELETE FROM ACTION WHERE name == qos_unsatisfied_export_metric;200
-DELETE FROM ACTION WHERE name == qos_unsatisfied_export_register;200
+DELETE FROM ACTION WHERE name == qos_unsatisfied_export;200
