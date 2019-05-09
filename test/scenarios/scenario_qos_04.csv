@@ -42,15 +42,15 @@ EXPORT FROM REGISTER WHERE name == m02_metric;200;/register/m02_metric/value/;20
 EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value;200
 
 ################################################################################
-# Post unsatisfied metric
+# Post unsatisfied metric (Simulate Graphite query)
 ################################################################################
 
-SET (m01, 120, CURRENT_TIMESTAMP) INTO METRICS,SET (m02, 220, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m01, 120, CURRENT_TIMESTAMP, m02, 220, CURRENT_TIMESTAMP) INTO METRICS;200
 
 EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;120
 EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;120
-EXPORT FROM REGISTER WHERE name == m02_metric;200;/register/m02_metric/value/;210
-EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value;210
+EXPORT FROM REGISTER WHERE name == m02_metric;200;/register/m02_metric/value/;220
+EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value;220
 
 ################################################################################
 # Cleanup

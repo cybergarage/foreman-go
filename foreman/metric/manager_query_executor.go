@@ -29,34 +29,51 @@ func (mgr *Manager) ExecuteQuery(q fql.Query) (interface{}, *errors.Error) {
 
 func (mgr *Manager) executeInsertQuery(q fql.Query) (interface{}, *errors.Error) {
 	values, ok := q.GetValues()
-	if !ok || len(values) < 3 {
+	valueCnt := len(values)
+	if !ok || ((valueCnt % 3) != 0) {
 		return nil, errors.NewErrorWithCode(errors.ErrorCodeQueryInvalidValues)
 	}
 
-	name := values[0].String()
+	mCnt := valueCnt / 3
+	ms := make([]*Metric, mCnt)
+	for n := 0; n < mCnt; n++ {
+		baseIdx := n * 3
+		name := values[baseIdx+0].String()
 
-	strValue := values[1].String()
-	value, valueErr := strconv.ParseFloat(strValue, 64)
-	if valueErr != nil {
-		if (strValue == "None") || (strValue == "NULL") || (strValue == "nil") {
-			value = math.NaN()
-			valueErr = nil
+		strValue := values[baseIdx+1].String()
+		value, valueErr := strconv.ParseFloat(strValue, 64)
+		if valueErr != nil {
+			if (strValue == "None") || (strValue == "NULL") || (strValue == "nil") {
+				value = math.NaN()
+				valueErr = nil
+			}
+		}
+
+		tsStr := values[baseIdx+2].String()
+		ts, tsErr := fql.TimeStringToTime(tsStr)
+		if len(name) < 0 || valueErr != nil || tsErr != nil {
+			return nil, errors.NewErrorWithCodeAndMessage(errors.ErrorCodeQueryInvalidValues, tsStr)
+		}
+
+		m := NewMetricWithName(name)
+		m.Value = value
+		m.Timestamp = *ts
+
+		ms[n] = m
+	}
+
+	for _, m := range ms {
+		err := mgr.AddMetricWithoutNotification(m)
+		if err != nil {
+			return nil, errors.NewErrorWithError(err)
 		}
 	}
 
-	tsStr := values[2].String()
-	ts, tsErr := fql.TimeStringToTime(tsStr)
-	if len(name) < 0 || valueErr != nil || tsErr != nil {
-		return nil, errors.NewErrorWithCodeAndMessage(errors.ErrorCodeQueryInvalidValues, tsStr)
-	}
-
-	m := NewMetricWithName(name)
-	m.Value = value
-	m.Timestamp = *ts
-
-	err := mgr.AddMetric(m)
-	if err != nil {
-		return nil, errors.NewErrorWithError(err)
+	for _, m := range ms {
+		err := mgr.NotifyMetric(m)
+		if err != nil {
+			return nil, errors.NewErrorWithError(err)
+		}
 	}
 
 	return nil, nil

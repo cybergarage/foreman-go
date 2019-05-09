@@ -31,10 +31,10 @@ type Storing interface {
 	Clear() error
 
 	AddMetric(m *Metric) error
-	Query(q *Query) (ResultSet, error)
-
 	AddMetricWithoutNotification(m *Metric) error
 	NotifyMetric(m *Metric) error
+
+	Query(q *Query) (ResultSet, error)
 
 	SetRegisterStore(regStore register.Store) error
 	SetRegisterListener(listener RegisterListener)
