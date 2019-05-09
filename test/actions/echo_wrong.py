@@ -1,5 +1,5 @@
 def def def def
-def test_echo(params,results):
+def echo(params,results):
 	for key, value in params.iteritems():
 		results[key] = value
 	return True

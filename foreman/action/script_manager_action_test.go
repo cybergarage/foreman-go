@@ -29,7 +29,7 @@ func newTestScriptEngine() *ScriptManager {
 }
 
 const (
-	testEchoMethod = "test_echo"
+	testEchoMethod = "echo"
 )
 
 func executeTestEchoMethod(mgr *ScriptManager) (Parameters, error) {
@@ -54,8 +54,8 @@ func executeTestEchoMethod(mgr *ScriptManager) (Parameters, error) {
 }
 
 const (
-	testSetRegisterMethod = "test_setregister"
-	testGetRegisterMethod = "test_getregister"
+	testSetRegisterMethod = "setregister"
+	testGetRegisterMethod = "getregister"
 )
 
 func executeTestRegisterMethods(mgr *ScriptManager) (Parameters, error) {
