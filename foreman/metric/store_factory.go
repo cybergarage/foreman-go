@@ -31,6 +31,7 @@ func newStoreWithInterface(storeImpl Storing) *Store {
 func newStoreWithCObject(cObject unsafe.Pointer) *Store {
 	storeImp := &cgoStore{
 		cStore:        cObject,
+		Register:      nil,
 		listener:      nil,
 		Mutex:         new(sync.Mutex),
 		vacuumCounter: 0,
