@@ -49,8 +49,8 @@ func (rs *Register) GetMetric(key string) (*RegisterMetric, bool) {
 	return rm, ok
 }
 
-// UpdateMetric updates the specified metric.
-func (rs *Register) UpdateMetric(m *Metric) error {
+// UpdateMetricWithoutNotification updates the specified metric without notification.
+func (rs *Register) UpdateMetricWithoutNotification(m *Metric) error {
 	key := m.GetName()
 
 	obj, _ := rs.GetObject(key)
@@ -62,10 +62,6 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 		err := rs.SetObject(rm)
 		if err != nil {
 			return err
-		}
-
-		if rs.Listener != nil {
-			rs.Listener.RegisterMetricAdded(rm)
 		}
 
 		return nil
@@ -85,11 +81,32 @@ func (rs *Register) UpdateMetric(m *Metric) error {
 		return err
 	}
 
-	// Call listener
+	return nil
+}
+
+// NotifyMetric notifies the metric to the listener.
+func (rs *Register) NotifyMetric(m *Metric) error {
+	key := m.GetName()
+	obj, _ := rs.GetObject(key)
+
+	if obj == nil {
+		return nil
+	}
+
+	rm := NewRegisterMetricWithObject(obj)
 
 	if rs.Listener != nil {
 		rs.Listener.RegisterMetricUpdated(rm)
 	}
 
 	return nil
+}
+
+// UpdateMetric updates the specified metric with notification.
+func (rs *Register) UpdateMetric(m *Metric) error {
+	err := rs.UpdateMetricWithoutNotification(m)
+	if err != nil {
+		return err
+	}
+	return rs.NotifyMetric(m)
 }
