@@ -20,6 +20,15 @@ const (
 	graphiteRenderQuery = "RENDER"
 )
 
+// newMetricFromGraphiteMetric returns a metric from the specified metrics datapoint of Graphite
+func newMetricFromGraphiteMetric(gm *go_graphite.Metrics, dp *go_graphite.DataPoint) *metric.Metric {
+	fm := metric.NewMetric()
+	fm.Name = gm.Name
+	fm.Timestamp = dp.Timestamp
+	fm.Value = dp.Value
+	return fm
+}
+
 // InsertMetricsRequestReceived is a listener for Graphite Carbon
 func (server *Server) InsertMetricsRequestReceived(gm *go_graphite.Metrics, err error) {
 	// Ignore error requests
