@@ -10,10 +10,10 @@ import (
 
 const (
 	boostrapQueryTestFile         = "../test/data/query/boostrap/boostrap_query_01_qos.fql"
-	boostrapQueryTestFileScenario = "../test/scenarios/scenario_boostrap_query_01.csv"
+	boostrapQueryTestFileScenario = "../test/scenarios/scenario_boostrap_query_01.test"
 
 	boostrapQueryTestDir         = "../test/data/query/boostrap"
-	boostrapQueryTestDirScenario = "../test/scenarios/scenario_boostrap_query_02.csv"
+	boostrapQueryTestDirScenario = "../test/scenarios/scenario_boostrap_query_02.test"
 )
 
 func TestSeverBootstrapQueryFile(t *testing.T) {
