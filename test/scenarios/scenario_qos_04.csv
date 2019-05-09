@@ -9,19 +9,19 @@ EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied_export
 # Post initial metrics
 ################################################################################
 
-SET (m01, 100, -30min) INTO METRICS;200
-SET (m01, 100, -25min) INTO METRICS;200
-SET (m01, 100, -20min) INTO METRICS;200
-SET (m01, 100, -15min) INTO METRICS;200
-SET (m01, 100, -10min) INTO METRICS;200
-SET (m01, 100, -5min) INTO METRICS;200
+SET (m01, 0, -30min) INTO METRICS;200
+SET (m01, 0, -25min) INTO METRICS;200
+SET (m01, 0, -20min) INTO METRICS;200
+SET (m01, 0, -15min) INTO METRICS;200
+SET (m01, 0, -10min) INTO METRICS;200
+SET (m01, 0, -5min) INTO METRICS;200
 
-SET (m02, 200, -30min) INTO METRICS;200
-SET (m02, 200, -25min) INTO METRICS;200
-SET (m02, 200, -20min) INTO METRICS;200
-SET (m02, 200, -15min) INTO METRICS;200
-SET (m02, 200, -10min) INTO METRICS;200
-SET (m02, 200, -5min) INTO METRICS;200
+SET (m02, 0, -30min) INTO METRICS;200
+SET (m02, 0, -25min) INTO METRICS;200
+SET (m02, 0, -20min) INTO METRICS;200
+SET (m02, 0, -15min) INTO METRICS;200
+SET (m02, 0, -10min) INTO METRICS;200
+SET (m02, 0, -5min) INTO METRICS;200
 
 ################################################################################
 # Set QoS rules and routes
