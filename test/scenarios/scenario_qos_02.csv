@@ -22,7 +22,7 @@ SET (m03, 0, CURRENT_TIMESTAMP) INTO METRICS;200
 SET (m04, 0, CURRENT_TIMESTAMP) INTO METRICS;200
 
 ################################################################################
-# Set QoS rules and routes (CNF : Clause=1, Formula=1)
+# Set QoS rules and routes (DNF : Clause=1, Formula=1)
 ################################################################################
 
 SET (m01, "m01 < 10") INTO QOS;200
@@ -46,7 +46,7 @@ DELETE FROM QOS WHERE name == m01;200
 DELETE FROM ROUTE WHERE name == m01;200
 
 ################################################################################
-# Set QoS rules and routes (CNF : Clause=1, Formula=2)
+# Set QoS rules and routes (DNF : Clause=1, Formula=2)
 ################################################################################
 
 SET (m01a02, "m01 < 10 & m02 < 20") INTO QOS;200
@@ -90,7 +90,7 @@ DELETE FROM QOS WHERE name == m01a02;200;
 DELETE FROM ROUTE WHERE name == m01a02;200;
 
 ################################################################################
-# Set QoS rules and routes (CNF : Clause=2, Formula=1)
+# Set QoS rules and routes (DNF : Clause=2, Formula=1)
 ################################################################################
 
 SET (m01o02, "m01 < 10 | m02 < 20") INTO QOS;200
@@ -130,7 +130,7 @@ DELETE FROM QOS WHERE name == m01o02;200;
 DELETE FROM ROUTE WHERE name == m01o02;200;
 
 ################################################################################
-# Set QoS rules and routes (CNF : Clause=1, Formula=3)
+# Set QoS rules and routes (DNF : Clause=1, Formula=3)
 ################################################################################
 
 SET (m01a02a03, "m01 < 10 & m02 < 20 & m03 < 30") INTO QOS;200
@@ -189,7 +189,7 @@ DELETE FROM QOS WHERE name == m01a02a03;200;
 DELETE FROM ROUTE WHERE name == m01a02a03;200;
 
 ################################################################################
-# Set QoS rules and routes (CNF : Clause=3, Formula=1)
+# Set QoS rules and routes (DNF : Clause=3, Formula=1)
 ################################################################################
 
 SET (m01o02o03, "m01 < 10 | m02 < 20 | m03 < 30") INTO QOS;200
@@ -240,7 +240,7 @@ DELETE FROM QOS WHERE name == m01o02o03;200;
 DELETE FROM ROUTE WHERE name == m01o02o03;200;
 
 ################################################################################
-# Set QoS rules and routes (CNF : Clause=2, Formula=2)
+# Set QoS rules and routes (DNF : Clause=2, Formula=2)
 ################################################################################
 
 SET (m01a02o03a04, "((m01 < 10) & (m02 < 20)) | ((m03 < 30 & m04 < 40))") INTO QOS;200
