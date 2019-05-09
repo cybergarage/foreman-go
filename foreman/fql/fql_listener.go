@@ -16,6 +16,9 @@ type FQLListener interface {
 	// EnterQuery is called when entering the query production.
 	EnterQuery(c *QueryContext)
 
+	// EnterQuerySep is called when entering the querySep production.
+	EnterQuerySep(c *QuerySepContext)
+
 	// EnterInsertQuery is called when entering the insertQuery production.
 	EnterInsertQuery(c *InsertQueryContext)
 
@@ -84,6 +87,9 @@ type FQLListener interface {
 
 	// ExitQuery is called when exiting the query production.
 	ExitQuery(c *QueryContext)
+
+	// ExitQuerySep is called when exiting the querySep production.
+	ExitQuerySep(c *QuerySepContext)
 
 	// ExitInsertQuery is called when exiting the insertQuery production.
 	ExitInsertQuery(c *InsertQueryContext)

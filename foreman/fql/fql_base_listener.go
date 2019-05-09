@@ -38,6 +38,12 @@ func (s *BaseFQLListener) EnterQuery(ctx *QueryContext) {}
 // ExitQuery is called when production query is exited.
 func (s *BaseFQLListener) ExitQuery(ctx *QueryContext) {}
 
+// EnterQuerySep is called when production querySep is entered.
+func (s *BaseFQLListener) EnterQuerySep(ctx *QuerySepContext) {}
+
+// ExitQuerySep is called when production querySep is exited.
+func (s *BaseFQLListener) ExitQuerySep(ctx *QuerySepContext) {}
+
 // EnterInsertQuery is called when production insertQuery is entered.
 func (s *BaseFQLListener) EnterInsertQuery(ctx *InsertQueryContext) {}
 
