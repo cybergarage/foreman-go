@@ -44,16 +44,16 @@ func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, test
 func TestQueryBasicScenarios(t *testing.T) {
 
 	scenarioFiles := []string{
-		"scenario_action_01.csv",
-		"scenario_config_01.csv",
-		"scenario_finder_01.csv",
-		"scenario_metrics_01.csv",
-		"scenario_qos_01.csv",
-		"scenario_qos_02.csv",
-		"scenario_qos_03.csv",
-		"scenario_qos_04.csv",
-		"scenario_register_01.csv",
-		"scenario_register_02.csv",
+		"scenario_action_01.test",
+		"scenario_config_01.test",
+		"scenario_finder_01.test",
+		"scenario_metrics_01.test",
+		"scenario_qos_01.test",
+		"scenario_qos_02.test",
+		"scenario_qos_03.test",
+		"scenario_qos_04.test",
+		"scenario_register_01.test",
+		"scenario_register_02.test",
 	}
 
 	conf := test.NewDefaultConfig()
@@ -75,12 +75,12 @@ func TestQueryBasicScenariosWithSleep(t *testing.T) {
 
 func TestQueryPythonActionScenarios(t *testing.T) {
 	scenarioFiles := []string{
-		"scenario_action_py_01.csv",
-		"scenario_action_py_02.csv",
-		"scenario_action_py_03.csv",
-		"scenario_action_py_04.csv",
-		"scenario_action_py_05.csv",
-		"scenario_action_py_06.csv",
+		"scenario_action_py_01.test",
+		"scenario_action_py_02.test",
+		"scenario_action_py_03.test",
+		"scenario_action_py_04.test",
+		"scenario_action_py_05.test",
+		"scenario_action_py_06.test",
 	}
 
 	conf := test.NewDefaultConfig()

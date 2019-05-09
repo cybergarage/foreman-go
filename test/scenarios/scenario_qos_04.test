@@ -38,8 +38,8 @@ SET (m01, 110, CURRENT_TIMESTAMP) INTO METRICS,SET (m02, 210, CURRENT_TIMESTAMP)
 
 EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;110
 EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;110
-EXPORT FROM REGISTER WHERE name == m02_metric;200;/register/m02_metric/value/;200
-EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value;200
+EXPORT FROM REGISTER WHERE name == m02_metric;200;/register/m02_metric/value/;0
+EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value;0
 
 ################################################################################
 # Post unsatisfied metric (Simulate Graphite query)
