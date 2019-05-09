@@ -23,7 +23,7 @@ fql
  *------------------------------------------------------------------*/
 
 queryList
-	: query (SEMICOLON query)*
+	: query (querySep query)*
 	;	
 
 query
@@ -35,6 +35,11 @@ query
 	| deleteQuery
 	| analyzeQuery
 	| executeQuery
+	;
+
+querySep
+	: SEMICOLON
+	| COMMA
 	;
 
 /*------------------------------------------------------------------
