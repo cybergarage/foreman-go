@@ -30,33 +30,35 @@ func newMetricFromGraphiteMetric(gm *go_graphite.Metrics, dp *go_graphite.DataPo
 }
 
 // InsertMetricsRequestReceived is a listener for Graphite Carbon
-func (server *Server) InsertMetricsRequestReceived(gm *go_graphite.Metrics, err error) {
+func (server *Server) InsertMetricsRequestReceived(gms []*go_graphite.Metrics, err error) {
 	// Ignore error requests
 	if err != nil {
 		logging.Error("%s %s", graphitePrefix, err.Error())
 		return
 	}
 
-	fms := make([]*metric.Metric, len(gm.DataPoints))
-	for n, dp := range gm.DataPoints {
-		fm := metric.NewMetric()
-		fm.Name = gm.Name
-		fm.Timestamp = dp.Timestamp
-		fm.Value = dp.Value
-		fms[n] = fm
-	}
-
-	for _, fm := range fms {
-		err = server.metricMgr.AddMetricWithoutNotification(fm)
-		if err != nil {
-			logging.Error("%s %s %s %s %f (%s)", graphitePrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value, err.Error())
+	ms := make([]*metric.Metric, 0)
+	for _, gm := range gms {
+		for _, dp := range gm.DataPoints {
+			m := metric.NewMetric()
+			m.Name = gm.Name
+			m.Timestamp = dp.Timestamp
+			m.Value = dp.Value
+			ms = append(ms, m)
 		}
 	}
 
-	for _, fm := range fms {
-		err = server.metricMgr.NotifyMetric(fm)
+	for _, m := range ms {
+		err = server.metricMgr.AddMetricWithoutNotification(m)
 		if err != nil {
-			logging.Error("%s %s %s %s %f (%s)", graphitePrefix, graphiteInsertQuery, fm.Name, fm.Timestamp.String(), fm.Value, err.Error())
+			logging.Error("%s %s %s %s %f (%s)", graphitePrefix, graphiteInsertQuery, m.Name, m.Timestamp.String(), m.Value, err.Error())
+		}
+	}
+
+	for _, m := range ms {
+		err = server.metricMgr.NotifyMetric(m)
+		if err != nil {
+			logging.Error("%s %s %s %s %f (%s)", graphitePrefix, graphiteInsertQuery, m.Name, m.Timestamp.String(), m.Value, err.Error())
 		}
 	}
 }
