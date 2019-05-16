@@ -8,7 +8,7 @@ def test_qos_export_metrics(params,results):
   nowTs = int(time.mktime(now.timetuple()))
   fromTs = nowTs - (60 * 60)
   untilTs = nowTs
-  for key, value in params.iteritems():
+  for key, value in params.items():
     q = 'SELECT * FROM METRICS WHERE ts >= %d AND ts <= %d' % (fromTs, untilTs)
     jsonRes = foreman.execute_query(q)
     if jsonRes is None:
