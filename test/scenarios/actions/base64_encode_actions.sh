@@ -1,1 +1,1 @@
-actions/base64_encode_actions.sh
+../../actions/base64_encode_actions.sh
