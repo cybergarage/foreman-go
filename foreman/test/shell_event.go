@@ -10,6 +10,7 @@ import "C"
 import (
 	"errors"
 	"fmt"
+	"os/exec"
 	"strings"
 )
 
@@ -48,10 +49,19 @@ const (
 // Execute executes the specified event.
 func (q *ShellEvent) Execute() error {
 	cmd := q.Command
-	cmd = "\"" + q.Command + "\""
+	//cmd = "\"" + q.Command + "\""
+
+	/* cgo
 	ret := C.system(C.CString(cmd))
 	if ret != 0 {
 		return fmt.Errorf(errorExecCmd, cmd, ret)
 	}
+	*/
+
+	err := exec.Command("sh", "-c", cmd).Run()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
