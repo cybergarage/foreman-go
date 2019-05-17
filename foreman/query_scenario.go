@@ -6,6 +6,7 @@ package foreman
 
 import (
 	"fmt"
+	"os/exec"
 	"strconv"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
@@ -60,8 +61,8 @@ func (s *QueryScenario) Setup() error {
 	return nil
 }
 
-// Execute runs the specified event.
-func (s *QueryScenario) Execute(e *test.Event) (*test.Response, *errors.Error) {
+// executeQuery runs the specified query event.
+func (s *QueryScenario) executeQuery(e *test.Event) (*test.Response, *errors.Error) {
 	q := test.NewQueryEvent()
 	err := q.ParseEvent(e)
 	if err != nil {
@@ -84,6 +85,34 @@ func (s *QueryScenario) Execute(e *test.Event) (*test.Response, *errors.Error) {
 	}
 
 	return res.Response, nil
+}
+
+// executeCommand runs the specified shell event.
+func (s *QueryScenario) executeCommand(e *test.Event) (*test.Response, *errors.Error) {
+	q := test.NewShellEvent()
+	err := q.ParseEvent(e)
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	err = exec.Command("sh", "-c", q.Command).Run()
+	if err != nil {
+		return nil, errors.NewErrorWithError(err)
+	}
+
+	res := test.NewQueryResponse()
+	res.Query = q.Command
+	res.StatusCode = 0
+
+	return res.Response, nil
+}
+
+// Execute runs the specified event.
+func (s *QueryScenario) Execute(e *test.Event) (*test.Response, *errors.Error) {
+	if e.IsType("SHELL") {
+		return s.executeCommand(e)
+	}
+	return s.executeQuery(e)
 }
 
 // EventExecuted are received the execution result.
