@@ -1,0 +1,44 @@
+################################################################################
+# Set actions
+################################################################################
+
+SET ("qos_unsatisfied_export_m0102","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZF9leHBvcnRfbTAxMDIocGFyYW1zLHJlc3VsdHMpOgogICAgbmFtZXMgPSBbIm0wMSIsICJtMDIiXQogICAgZm9yIG5hbWUgaW4gbmFtZXM6CiAgICAgICAgIyBFeHBvcnQgZnJvbSBtZXRyaWNzIHN0b3JlIHRvIHJlZ2lzdHJ5CiAgICAgICAgcXVlcnkgPSAnU0VMRUNUICogRlJPTSBNRVRSSUNTIFdIRVJFIG5hbWUgPT0gJXMnICUgbmFtZQogICAgICAgICNwcmludChxdWVyeSkKICAgICAgICByZXNfanNvbiA9IGZvcmVtYW4uZXhlY3V0ZV9xdWVyeShxdWVyeSkKICAgICAgICBtZXRyaWNzX3ZhbCA9IHJlc19qc29uWzBdWydkYXRhcG9pbnRzJ11bLTFdWzBdCiAgICAgICAgZm9yZW1hbi5zZXRfcmVnaXN0ZXIoJyVzX21ldHJpYycgJSBuYW1lLCBzdHIobWV0cmljc192YWwpKQogICAgICAgICMgRXhwb3J0IGZyb20gcmVnaXN0cnkgc3RvcmUgdG8gcmVnaXN0cnkKICAgICAgICBxdWVyeSA9ICdFWFBPUlQgRlJPTSBSRUdJU1RFUiBXSEVSRSBuYW1lID09ICVzJyAlIG5hbWUKICAgICAgICAjcHJpbnQocXVlcnkpCiAgICAgICAgcmVzX2pzb24gPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkocXVlcnkpCiAgICAgICAgcmVnaXN0ZXJfdmFsID0gcmVzX2pzb25bInJlZ2lzdGVyIl1bbmFtZV1bInZhbHVlIl0KICAgICAgICBmb3JlbWFuLnNldF9yZWdpc3RlcignJXNfcmVnaXN0ZXInICUgbmFtZSwgc3RyKHJlZ2lzdGVyX3ZhbCkpCiAgICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied_export_m0102
+
+SET ("graphite_carbon_insert_metrics","python","aW1wb3J0IG9zCmltcG9ydCB0ZW1wZmlsZQppbXBvcnQgZGF0ZXRpbWUKCmRlZiBncmFwaGl0ZV9jYXJib25faW5zZXJ0X21ldHJpY3MocGFyYW1zLHJlc3VsdHMpOgoJcGxhaW5SZXEgPSAiIgoKCSMjIGVjaG8gaXMgbm90IHdvcmtpbmcgPwoJI2ZvciBrZXksIHZhbHVlIGluIHBhcmFtcy5pdGVtcygpOgoJIwlpZiAwIDwgbGVuKHBsYWluUmVxKToKCSMJCXBsYWluUmVxICs9ICJcXG4iCgkjCXBsYWluUmVxICs9ICIlcyAlcyBgZGF0ZSArJSVzYCIgJSAoa2V5LCBzdHIodmFsdWUpKQoJIwoJI2NtZCA9ICJlY2hvIC1lIFwiJXNcIiB8IG5jIC1jIGxvY2FsaG9zdCAyMDAzIiAlIChwbGFpblJlcSkKCglub3cgPSBkYXRldGltZS5kYXRldGltZS5ub3coKS5zdHJmdGltZSgnJXMnKQoJZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZW1zKCk6CgkJaWYgMCA8IGxlbihwbGFpblJlcSk6CgkJCXBsYWluUmVxICs9ICJcbiIKCQlwbGFpblJlcSArPSAiJXMgJXMgJXMiICUgKGtleSwgc3RyKHZhbHVlKSwgbm93KQoJd2l0aCB0ZW1wZmlsZS5OYW1lZFRlbXBvcmFyeUZpbGUoZGVsZXRlPUZhbHNlLCBtb2RlPSd3JykgYXMgZjoKCQlmLndyaXRlKHBsYWluUmVxKQoJCXBsYWluUmVxRmlsZW5hbWUgPSBmLm5hbWUKCWNtZCA9ICJtb3JlICVzIHwgbmMgLWMgbG9jYWxob3N0IDIwMDMiICUgKHBsYWluUmVxRmlsZW5hbWUpCgoJI3ByaW50KGNtZCkKCglpZiBvcy5zeXN0ZW0oY21kKSAhPSAwOgoJCW9zLnJlbW92ZShwbGFpblJlcUZpbGVuYW1lKQoJCXJldHVybiBGYWxzZQoKCW9zLnJlbW92ZShwbGFpblJlcUZpbGVuYW1lKQoKCXJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/graphite_carbon_insert_metrics
+
+SET ("graphite_carbon_insert_m0102","system","echo 'm01 -5 now\nm02 2 now' | nc -c localhost 2003","none") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/graphite_carbon_insert_m0102
+
+################################################################################
+# Set QoS rules and routes
+################################################################################
+
+SET (m01, "m01 >= 5") INTO QOS;200
+SET (m01, m01, qos_unsatisfied_export_m0102) INTO ROUTE;200
+
+################################################################################
+# Insert unsatisfied metrics by Graphite Carbon interface
+################################################################################
+
+EXECUTE graphite_carbon_insert_metrics (m01, m02) VALUES (-5, 2);200
+#EXECUTE graphite_carbon_insert_m0102;200
+
+EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;-5
+EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;-5
+EXPORT FROM REGISTER WHERE name == m02_metric;200;/register/m02_metric/value/;2
+EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value;2
+
+################################################################################
+# Cleanup
+################################################################################
+
+DELETE FROM REGISTER WHERE name == m01;200
+DELETE FROM REGISTER WHERE name == m02;200
+
+DELETE FROM QOS WHERE name == m01;200
+DELETE FROM ROUTE WHERE name == m01;200
+
+DELETE FROM ACTION WHERE name == qos_unsatisfied_export_m0102;200
+DELETE FROM ACTION WHERE name == graphite_carbon_insert_metrics;200

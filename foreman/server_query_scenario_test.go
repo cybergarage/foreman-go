@@ -91,7 +91,7 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 
 func TestQueryDebugScenarios(t *testing.T) {
 	scenarioFiles := []string{
-		"scenario_qos_04.test",
+		//"scenario_qos_05.test",
 	}
 
 	conf := test.NewDefaultConfig()
