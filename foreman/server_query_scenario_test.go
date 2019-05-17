@@ -89,13 +89,23 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
 }
 
-func TestQueryDebugScenarios(t *testing.T) {
+func TestPlatformDependentScenarios(t *testing.T) {
 	scenarioFiles := []string{
-		"scenario_qos_05.test",
+		"scenario_qos_05.test", // FIXME on CentOS
 	}
 
 	conf := test.NewDefaultConfig()
-	//conf.EnableSkipError = true
+	conf.EnableSkipError = true
+
+	opt := test.NewDefaultScenarioOption()
+
+	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
+}
+
+func TestQueryDebugScenarios(t *testing.T) {
+	scenarioFiles := []string{}
+
+	conf := test.NewDefaultConfig()
 
 	opt := test.NewDefaultScenarioOption()
 

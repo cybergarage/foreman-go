@@ -16,6 +16,7 @@ SET (m01, m01, qos_unsatisfied_export_m0102) INTO ROUTE;200
 # Insert unsatisfied metrics by Graphite Carbon interface
 ################################################################################
 
+# FIXME : O:MacOS, X:CentOS
 SHELL echo 'm01 -5 now\nm02 2 now' | nc -c localhost 2003
 
 EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;-5
