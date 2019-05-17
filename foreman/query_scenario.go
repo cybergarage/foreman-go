@@ -6,7 +6,6 @@ package foreman
 
 import (
 	"fmt"
-	"os/exec"
 	"strconv"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
@@ -95,7 +94,7 @@ func (s *QueryScenario) executeCommand(e *test.Event) (*test.Response, *errors.E
 		return nil, errors.NewErrorWithError(err)
 	}
 
-	err = exec.Command("sh", "-c", q.Command).Run()
+	err = q.Execute()
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}

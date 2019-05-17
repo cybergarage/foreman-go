@@ -4,6 +4,9 @@
 
 package test
 
+// #include <stdlib.h>
+import "C"
+
 import (
 	"errors"
 	"fmt"
@@ -35,5 +38,20 @@ func (q *ShellEvent) ParseEvent(e *Event) error {
 
 	q.Command = params[1]
 
+	return nil
+}
+
+const (
+	errorExecCmd = "%s (%d)"
+)
+
+// Execute executes the specified event.
+func (q *ShellEvent) Execute() error {
+	cmd := q.Command
+	cmd = "\"" + q.Command + "\""
+	ret := C.system(C.CString(cmd))
+	if ret != 0 {
+		return fmt.Errorf(errorExecCmd, cmd, ret)
+	}
 	return nil
 }
