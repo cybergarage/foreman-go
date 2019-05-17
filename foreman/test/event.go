@@ -4,6 +4,8 @@
 
 package test
 
+import "strings"
+
 // Event represents a scenario event.
 type Event struct {
 	No   int
@@ -27,4 +29,9 @@ func (e *Event) GetNo() int {
 // GetData returns the scenario data.
 func (e *Event) GetData() string {
 	return e.Data
+}
+
+// IsType returns true when the event databegins with the specified prefix, otherwise false.
+func (e *Event) IsType(prefix string) bool {
+	return strings.HasPrefix(e.Data, prefix)
 }
