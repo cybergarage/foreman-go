@@ -66,17 +66,17 @@ CGO_LDFLAGS = -lforeman++ -lstdc++ -lalglib -lsqlite3 -luuid -lcurl -lm
 
 GCFLAGS="-N -l"
 
-HAVE_PYTHON3_CONFIG := $(shell command -v python3-config 2> /dev/null)
+HAVE_PYTHON_CONFIG := $(shell command -v python-config 2> /dev/null)
 all:
-ifdef HAVE_PYTHON3_CONFIG
-    CGO_CFLAGS += $(shell python3-config --includes)
-    CGO_LDFLAGS += $(shell python3-config --ldflags)
+ifdef HAVE_PYTHON_CONFIG
+    CGO_CFLAGS += $(shell python-config --includes)
+    CGO_LDFLAGS += $(shell python-config --ldflags)
 else
-    HAVE_PYTHON_CONFIG := $(shell command -v python-config 2> /dev/null)
+    HAVE_PYTHON3_CONFIG := $(shell command -v python3-config 2> /dev/null)
     all:
-    ifdef HAVE_PYTHON_CONFIG
-        CGO_CFLAGS += $(shell python-config --includes)
-        CGO_LDFLAGS += $(shell python-config --ldflags)
+    ifdef HAVE_PYTHON3_CONFIG
+        CGO_CFLAGS += $(shell python3-config --includes)
+        CGO_LDFLAGS += $(shell python3-config --ldflags)
     endif
 endif
 

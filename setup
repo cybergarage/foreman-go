@@ -11,13 +11,13 @@ export CGO_LDFLAGS="-lforeman++ -lstdc++ -lalglib -lsqlite3 -luuid -lcurl -lm"
 # NOTE : Enable for folly
 # export CGO_LDFLAGS="$CGO_LDFLAGS -lfolly -lgflags -lglog -ljemalloc"
 
-if command -v python3-config; then
-	export CGO_CFLAGS="$CGO_CFLAGS `python3-config --includes`"
-	export CGO_LDFLAGS="$CGO_LDFLAGS `python3-config --ldflags`"
+if command -v python-config; then
+	export CGO_CFLAGS="$CGO_CFLAGS `python-config --includes`"
+	export CGO_LDFLAGS="$CGO_LDFLAGS `python-config --ldflags`"
 else
-	if command -v python-config; then
-		export CGO_CFLAGS="$CGO_CFLAGS `python-config --includes`"
-		export CGO_LDFLAGS="$CGO_LDFLAGS `python-config --ldflags`"
+	if command -v python3-config; then
+		export CGO_CFLAGS="$CGO_CFLAGS `python3-config --includes`"
+		export CGO_LDFLAGS="$CGO_LDFLAGS `python3-config --ldflags`"
 	fi
 fi
 
