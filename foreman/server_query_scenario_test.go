@@ -91,7 +91,7 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 
 func TestPlatformDependentScenarios(t *testing.T) {
 	scenarioFiles := []string{
-		"scenario_qos_05.test", // FIXME on CentOS
+		"scenario_ex_qos_01.test", // FIXME on CentOS
 	}
 
 	conf := test.NewDefaultConfig()
