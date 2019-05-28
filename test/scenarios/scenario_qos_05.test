@@ -1,0 +1,67 @@
+################################################################################
+# Check whether QoS result is not found
+################################################################################
+
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+################################################################################
+# Set unsatisfied action
+################################################################################
+
+SET ("qos_unsatisfied","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZChwYXJhbXMscmVzdWx0cyk6CiAgICBmb3JlbWFuLnNldF9yZWdpc3RlcigncW9zJywgJ2ZhbHNlJykKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied
+EXPORT FROM ACTION WHERE name == "qos_unsatisfied";200;/action/methods/qos_unsatisfied
+
+################################################################################
+# Post initial metrics
+################################################################################
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+
+################################################################################
+# Set QoS rules and routes 
+################################################################################
+
+SET (m01m02, "m01 <= m02") INTO QOS;200
+SET (m01m02, m01m02, qos_unsatisfied) INTO ROUTE;200
+
+# m01(0) <= m02(0) : SAT
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# m01(0) <= m02(10) : SAT
+
+SET (m02, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# m01(20) <= m02(10) : UNSAT
+
+SET (m01, 20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+
+# m01(10) <= m02(10) : SAT
+
+SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# m01(10) <= m02(0) : UNSAT
+
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+
+# Cleanup
+
+DELETE FROM QOS WHERE name == m01m02;200;
+DELETE FROM ROUTE WHERE name == m01m02;200;
+
+################################################################################
+# Cleanup
+################################################################################
+
+DELETE FROM REGISTER WHERE name == m01;200;
+DELETE FROM REGISTER WHERE name == m02;200;
