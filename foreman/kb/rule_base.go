@@ -6,7 +6,6 @@ package kb
 
 import (
 	"bytes"
-	"strings"
 )
 
 // BaseRule represents a rule.
@@ -73,6 +72,7 @@ func (rule *BaseRule) IsSatisfied() (bool, error) {
 }
 
 // ParseString parses a specified rule string.
+/*
 func (rule *BaseRule) ParseString(factory Factory, ruleString string) error {
 	clausesString := strings.Split(ruleString, ClauseSeparator)
 
@@ -110,6 +110,29 @@ func (rule *BaseRule) ParseString(factory Factory, ruleString string) error {
 			return err
 		}
 	}
+
+	return nil
+}
+*/
+
+// ParseString parses a specified rule string.
+func (rule *BaseRule) ParseString(factory Factory, ruleString string) error {
+
+	/*
+		input := antlr.NewInputStream(ruleString)
+		lexer := NewknowledgebaseLexer(input)
+		stream := antlr.NewCommonTokenStream(lexer, 0)
+		p := NewknowledgebaseParser(stream)
+		//el := newANTLRParserErrorListener()
+		//p.AddErrorListener(el)
+		p.BuildParseTrees = true
+		tree := p.Fql()
+		pl := newANTLRParserListener()
+		antlr.ParseTreeWalkerDefault.Walk(pl, tree)
+		if !el.IsSuccess() {
+			return nil, fmt.Errorf("%s (%s)", queryString, el.GetError().Error())
+		}
+	*/
 
 	return nil
 }
