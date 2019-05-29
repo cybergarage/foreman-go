@@ -5,6 +5,7 @@
 package kb
 
 const (
+	errorParserEmptyRule      = "Rule is empty"
 	errorInvalidFormulaString = "Invalid formula string (%s)"
 	errorInvalidRuleVariable  = "Invalid variable (%s:%v). Another variable (%v) is already added"
 )
