@@ -95,7 +95,6 @@ CONST_GENS = $(shell find $(SOURCE_DIR) -type f -name '*.go.gen')
 CONST_GOS = $(basename $(CONST_GENS))
 
 GO_FILES = $(shell find $(SOURCE_DIR) -type f -name '*.go')
-ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/fql/fql_, base_listener lexer listener parser))
 
 HAVE_ANTLR4 := $(shell which antlr4)
 all:
@@ -105,7 +104,7 @@ else
     ANTLR=antlr
 endif
 
-.PHONY: version antlr clean
+.PHONY: version clean
 
 all: test
 
@@ -119,10 +118,15 @@ version: ${VERSION_GO}
 $(CONST_GOS):  $(CONST_GENS) $(CONST_CSVS)
 	cd $(dir $@) && ./$(notdir $@).gen > $(notdir $@)
 
-$(ANTLR_FILES): $(SOURCE_DIR)/fql/FQL.g4
-	- cd ${SOURCE_DIR}/fql && ${ANTLR} -package fql -Dlanguage=Go FQL.g4
+FQL_ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/fql/fql_, base_listener lexer listener parser)) $(SOURCE_DIR)/fql/FQL.g4
+
+QOS_ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/kb/knowledgebase_, base_listener lexer listener parser)) $(SOURCE_DIR)/kb/knowledgebase.g4
+
+$(ANTLR_FILES): $(FQL_ANTLR_FILES) $(QOS_ANTLR_FILES)
 
 antlr: $(ANTLR_FILES)
+	- pushd ${SOURCE_DIR}/fql && ${ANTLR} -package fql -Dlanguage=Go FQL.g4 && popd
+	- pushd ${SOURCE_DIR}/kb && ${ANTLR} -package kb -Dlanguage=Go knowledgebase.g4 && popd
 
 const: $(CONST_GOS) antlr
 
@@ -139,9 +143,6 @@ const: $(shell find ${SOURCE_DIR} -type f -name '*.csv')
 	pushd ${SOURCE_DIR}/discovery && ./constants.go.gen > constants.go && popd
 	pushd ${SOURCE_DIR}/logging && ./constants.go.gen > constants.go && popd
 	
-antlr:
-	- pushd ${SOURCE_DIR}/fql && ${ANTLR} -package fql -Dlanguage=Go FQL.g4 && popd
-
 vet: format
 	go vet ${PACKAGES}
 
