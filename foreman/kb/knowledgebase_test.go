@@ -8,6 +8,6 @@ import (
 	"testing"
 )
 
-func TestNewKnowledgeBase(t *testing.T) {
-	NewKnowledgeBase()
+func TestNewKnowledge(t *testing.T) {
+	NewKnowledge()
 }
