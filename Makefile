@@ -120,13 +120,13 @@ $(CONST_GOS):  $(CONST_GENS) $(CONST_CSVS)
 
 FQL_ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/fql/fql_, base_listener lexer listener parser)) $(SOURCE_DIR)/fql/FQL.g4
 
-QOS_ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/kb/knowledgebase_, base_listener lexer listener parser)) $(SOURCE_DIR)/kb/knowledgebase.g4
+QOS_ANTLR_FILES = $(addsuffix .go, $(addprefix $(SOURCE_DIR)/kb/knowledge_, base_listener lexer listener parser)) $(SOURCE_DIR)/kb/Knowledge.g4
 
 $(ANTLR_FILES): $(FQL_ANTLR_FILES) $(QOS_ANTLR_FILES)
 
 antlr: $(ANTLR_FILES)
 	- pushd ${SOURCE_DIR}/fql && ${ANTLR} -package fql -Dlanguage=Go FQL.g4 && popd
-	- pushd ${SOURCE_DIR}/kb && ${ANTLR} -package kb -Dlanguage=Go knowledgebase.g4 && popd
+	- pushd ${SOURCE_DIR}/kb && ${ANTLR} -package kb -Dlanguage=Go Knowledge.g4 && popd
 
 const: $(CONST_GOS) antlr
 
