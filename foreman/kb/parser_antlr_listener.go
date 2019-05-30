@@ -10,7 +10,7 @@ import (
 )
 
 type antlrParserListener struct {
-	*BaseknowledgebaseListener
+	*BaseKnowledgeListener
 	*util.Stack
 	Factory
 	Rule
@@ -18,10 +18,10 @@ type antlrParserListener struct {
 
 func newANTLRParserListener(rule Rule, factory Factory) *antlrParserListener {
 	l := &antlrParserListener{
-		BaseknowledgebaseListener: &BaseknowledgebaseListener{},
-		Stack:                     util.NewStack(),
-		Factory:                   factory,
-		Rule:                      rule,
+		BaseKnowledgeListener: &BaseKnowledgeListener{},
+		Stack:                 util.NewStack(),
+		Factory:               factory,
+		Rule:                  rule,
 	}
 	return l
 }

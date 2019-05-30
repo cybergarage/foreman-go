@@ -1,6 +1,6 @@
-// Code generated from knowledgebase.g4 by ANTLR 4.7.2. DO NOT EDIT.
+// Code generated from Knowledge.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
-package kb // knowledgebase
+package kb // Knowledge
 import (
 	"fmt"
 	"reflect"
@@ -67,12 +67,12 @@ func init() {
 	}
 }
 
-type knowledgebaseParser struct {
+type KnowledgeParser struct {
 	*antlr.BaseParser
 }
 
-func NewknowledgebaseParser(input antlr.TokenStream) *knowledgebaseParser {
-	this := new(knowledgebaseParser)
+func NewKnowledgeParser(input antlr.TokenStream) *KnowledgeParser {
+	this := new(KnowledgeParser)
 
 	this.BaseParser = antlr.NewBaseParser(input)
 
@@ -80,45 +80,45 @@ func NewknowledgebaseParser(input antlr.TokenStream) *knowledgebaseParser {
 	this.RuleNames = ruleNames
 	this.LiteralNames = literalNames
 	this.SymbolicNames = symbolicNames
-	this.GrammarFileName = "knowledgebase.g4"
+	this.GrammarFileName = "Knowledge.g4"
 
 	return this
 }
 
-// knowledgebaseParser tokens.
+// KnowledgeParser tokens.
 const (
-	knowledgebaseParserEOF        = antlr.TokenEOF
-	knowledgebaseParserASTERISK   = 1
-	knowledgebaseParserBS         = 2
-	knowledgebaseParserBE         = 3
-	knowledgebaseParserDEQ        = 4
-	knowledgebaseParserNEQ        = 5
-	knowledgebaseParserLT         = 6
-	knowledgebaseParserLE         = 7
-	knowledgebaseParserGT         = 8
-	knowledgebaseParserGE         = 9
-	knowledgebaseParserAND        = 10
-	knowledgebaseParserOR         = 11
-	knowledgebaseParserCOMMA      = 12
-	knowledgebaseParserSEMICOLON  = 13
-	knowledgebaseParserWS         = 14
-	knowledgebaseParserIDENTIFIER = 15
-	knowledgebaseParserSTRING     = 16
-	knowledgebaseParserNUMBER     = 17
-	knowledgebaseParserREAL       = 18
+	KnowledgeParserEOF        = antlr.TokenEOF
+	KnowledgeParserASTERISK   = 1
+	KnowledgeParserBS         = 2
+	KnowledgeParserBE         = 3
+	KnowledgeParserDEQ        = 4
+	KnowledgeParserNEQ        = 5
+	KnowledgeParserLT         = 6
+	KnowledgeParserLE         = 7
+	KnowledgeParserGT         = 8
+	KnowledgeParserGE         = 9
+	KnowledgeParserAND        = 10
+	KnowledgeParserOR         = 11
+	KnowledgeParserCOMMA      = 12
+	KnowledgeParserSEMICOLON  = 13
+	KnowledgeParserWS         = 14
+	KnowledgeParserIDENTIFIER = 15
+	KnowledgeParserSTRING     = 16
+	KnowledgeParserNUMBER     = 17
+	KnowledgeParserREAL       = 18
 )
 
-// knowledgebaseParser rules.
+// KnowledgeParser rules.
 const (
-	knowledgebaseParserRULE_knowledge    = 0
-	knowledgebaseParserRULE_clauses      = 1
-	knowledgebaseParserRULE_clause       = 2
-	knowledgebaseParserRULE_formulas     = 3
-	knowledgebaseParserRULE_formula      = 4
-	knowledgebaseParserRULE_leftOperand  = 5
-	knowledgebaseParserRULE_rightOperand = 6
-	knowledgebaseParserRULE_operand      = 7
-	knowledgebaseParserRULE_operator     = 8
+	KnowledgeParserRULE_knowledge    = 0
+	KnowledgeParserRULE_clauses      = 1
+	KnowledgeParserRULE_clause       = 2
+	KnowledgeParserRULE_formulas     = 3
+	KnowledgeParserRULE_formula      = 4
+	KnowledgeParserRULE_leftOperand  = 5
+	KnowledgeParserRULE_rightOperand = 6
+	KnowledgeParserRULE_operand      = 7
+	KnowledgeParserRULE_operator     = 8
 )
 
 // IKnowledgeContext is an interface to support dynamic dispatch.
@@ -140,7 +140,7 @@ type KnowledgeContext struct {
 func NewEmptyKnowledgeContext() *KnowledgeContext {
 	var p = new(KnowledgeContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_knowledge
+	p.RuleIndex = KnowledgeParserRULE_knowledge
 	return p
 }
 
@@ -152,7 +152,7 @@ func NewKnowledgeContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_knowledge
+	p.RuleIndex = KnowledgeParserRULE_knowledge
 
 	return p
 }
@@ -170,11 +170,11 @@ func (s *KnowledgeContext) Clauses() IClausesContext {
 }
 
 func (s *KnowledgeContext) BS() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserBS, 0)
+	return s.GetToken(KnowledgeParserBS, 0)
 }
 
 func (s *KnowledgeContext) BE() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserBE, 0)
+	return s.GetToken(KnowledgeParserBE, 0)
 }
 
 func (s *KnowledgeContext) GetRuleContext() antlr.RuleContext {
@@ -186,20 +186,20 @@ func (s *KnowledgeContext) ToStringTree(ruleNames []string, recog antlr.Recogniz
 }
 
 func (s *KnowledgeContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterKnowledge(s)
 	}
 }
 
 func (s *KnowledgeContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitKnowledge(s)
 	}
 }
 
-func (p *knowledgebaseParser) Knowledge() (localctx IKnowledgeContext) {
+func (p *KnowledgeParser) Knowledge() (localctx IKnowledgeContext) {
 	localctx = NewKnowledgeContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 0, knowledgebaseParserRULE_knowledge)
+	p.EnterRule(localctx, 0, KnowledgeParserRULE_knowledge)
 	var _la int
 
 	defer func() {
@@ -225,7 +225,7 @@ func (p *knowledgebaseParser) Knowledge() (localctx IKnowledgeContext) {
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 0, p.GetParserRuleContext()) == 1 {
 		{
 			p.SetState(18)
-			p.Match(knowledgebaseParserBS)
+			p.Match(KnowledgeParserBS)
 		}
 
 	}
@@ -237,10 +237,10 @@ func (p *knowledgebaseParser) Knowledge() (localctx IKnowledgeContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	if _la == knowledgebaseParserBE {
+	if _la == KnowledgeParserBE {
 		{
 			p.SetState(22)
-			p.Match(knowledgebaseParserBE)
+			p.Match(KnowledgeParserBE)
 		}
 
 	}
@@ -267,7 +267,7 @@ type ClausesContext struct {
 func NewEmptyClausesContext() *ClausesContext {
 	var p = new(ClausesContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_clauses
+	p.RuleIndex = KnowledgeParserRULE_clauses
 	return p
 }
 
@@ -279,7 +279,7 @@ func NewClausesContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_clauses
+	p.RuleIndex = KnowledgeParserRULE_clauses
 
 	return p
 }
@@ -310,11 +310,11 @@ func (s *ClausesContext) Clause(i int) IClauseContext {
 }
 
 func (s *ClausesContext) AllOR() []antlr.TerminalNode {
-	return s.GetTokens(knowledgebaseParserOR)
+	return s.GetTokens(KnowledgeParserOR)
 }
 
 func (s *ClausesContext) OR(i int) antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserOR, i)
+	return s.GetToken(KnowledgeParserOR, i)
 }
 
 func (s *ClausesContext) GetRuleContext() antlr.RuleContext {
@@ -326,20 +326,20 @@ func (s *ClausesContext) ToStringTree(ruleNames []string, recog antlr.Recognizer
 }
 
 func (s *ClausesContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterClauses(s)
 	}
 }
 
 func (s *ClausesContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitClauses(s)
 	}
 }
 
-func (p *knowledgebaseParser) Clauses() (localctx IClausesContext) {
+func (p *KnowledgeParser) Clauses() (localctx IClausesContext) {
 	localctx = NewClausesContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 2, knowledgebaseParserRULE_clauses)
+	p.EnterRule(localctx, 2, KnowledgeParserRULE_clauses)
 	var _la int
 
 	defer func() {
@@ -367,10 +367,10 @@ func (p *knowledgebaseParser) Clauses() (localctx IClausesContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == knowledgebaseParserOR {
+	for _la == KnowledgeParserOR {
 		{
 			p.SetState(26)
-			p.Match(knowledgebaseParserOR)
+			p.Match(KnowledgeParserOR)
 		}
 		{
 			p.SetState(27)
@@ -404,7 +404,7 @@ type ClauseContext struct {
 func NewEmptyClauseContext() *ClauseContext {
 	var p = new(ClauseContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_clause
+	p.RuleIndex = KnowledgeParserRULE_clause
 	return p
 }
 
@@ -416,7 +416,7 @@ func NewClauseContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_clause
+	p.RuleIndex = KnowledgeParserRULE_clause
 
 	return p
 }
@@ -434,11 +434,11 @@ func (s *ClauseContext) Formulas() IFormulasContext {
 }
 
 func (s *ClauseContext) BS() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserBS, 0)
+	return s.GetToken(KnowledgeParserBS, 0)
 }
 
 func (s *ClauseContext) BE() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserBE, 0)
+	return s.GetToken(KnowledgeParserBE, 0)
 }
 
 func (s *ClauseContext) GetRuleContext() antlr.RuleContext {
@@ -450,20 +450,20 @@ func (s *ClauseContext) ToStringTree(ruleNames []string, recog antlr.Recognizer)
 }
 
 func (s *ClauseContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterClause(s)
 	}
 }
 
 func (s *ClauseContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitClause(s)
 	}
 }
 
-func (p *knowledgebaseParser) Clause() (localctx IClauseContext) {
+func (p *KnowledgeParser) Clause() (localctx IClauseContext) {
 	localctx = NewClauseContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 4, knowledgebaseParserRULE_clause)
+	p.EnterRule(localctx, 4, KnowledgeParserRULE_clause)
 
 	defer func() {
 		p.ExitRule()
@@ -488,7 +488,7 @@ func (p *knowledgebaseParser) Clause() (localctx IClauseContext) {
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) == 1 {
 		{
 			p.SetState(33)
-			p.Match(knowledgebaseParserBS)
+			p.Match(KnowledgeParserBS)
 		}
 
 	}
@@ -502,7 +502,7 @@ func (p *knowledgebaseParser) Clause() (localctx IClauseContext) {
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext()) == 1 {
 		{
 			p.SetState(37)
-			p.Match(knowledgebaseParserBE)
+			p.Match(KnowledgeParserBE)
 		}
 
 	}
@@ -529,7 +529,7 @@ type FormulasContext struct {
 func NewEmptyFormulasContext() *FormulasContext {
 	var p = new(FormulasContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_formulas
+	p.RuleIndex = KnowledgeParserRULE_formulas
 	return p
 }
 
@@ -541,7 +541,7 @@ func NewFormulasContext(parser antlr.Parser, parent antlr.ParserRuleContext, inv
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_formulas
+	p.RuleIndex = KnowledgeParserRULE_formulas
 
 	return p
 }
@@ -572,11 +572,11 @@ func (s *FormulasContext) Formula(i int) IFormulaContext {
 }
 
 func (s *FormulasContext) AllAND() []antlr.TerminalNode {
-	return s.GetTokens(knowledgebaseParserAND)
+	return s.GetTokens(KnowledgeParserAND)
 }
 
 func (s *FormulasContext) AND(i int) antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserAND, i)
+	return s.GetToken(KnowledgeParserAND, i)
 }
 
 func (s *FormulasContext) GetRuleContext() antlr.RuleContext {
@@ -588,20 +588,20 @@ func (s *FormulasContext) ToStringTree(ruleNames []string, recog antlr.Recognize
 }
 
 func (s *FormulasContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterFormulas(s)
 	}
 }
 
 func (s *FormulasContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitFormulas(s)
 	}
 }
 
-func (p *knowledgebaseParser) Formulas() (localctx IFormulasContext) {
+func (p *KnowledgeParser) Formulas() (localctx IFormulasContext) {
 	localctx = NewFormulasContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, knowledgebaseParserRULE_formulas)
+	p.EnterRule(localctx, 6, KnowledgeParserRULE_formulas)
 	var _la int
 
 	defer func() {
@@ -629,10 +629,10 @@ func (p *knowledgebaseParser) Formulas() (localctx IFormulasContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == knowledgebaseParserAND {
+	for _la == KnowledgeParserAND {
 		{
 			p.SetState(41)
-			p.Match(knowledgebaseParserAND)
+			p.Match(KnowledgeParserAND)
 		}
 		{
 			p.SetState(42)
@@ -666,7 +666,7 @@ type FormulaContext struct {
 func NewEmptyFormulaContext() *FormulaContext {
 	var p = new(FormulaContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_formula
+	p.RuleIndex = KnowledgeParserRULE_formula
 	return p
 }
 
@@ -678,7 +678,7 @@ func NewFormulaContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_formula
+	p.RuleIndex = KnowledgeParserRULE_formula
 
 	return p
 }
@@ -716,11 +716,11 @@ func (s *FormulaContext) RightOperand() IRightOperandContext {
 }
 
 func (s *FormulaContext) BS() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserBS, 0)
+	return s.GetToken(KnowledgeParserBS, 0)
 }
 
 func (s *FormulaContext) BE() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserBE, 0)
+	return s.GetToken(KnowledgeParserBE, 0)
 }
 
 func (s *FormulaContext) GetRuleContext() antlr.RuleContext {
@@ -732,20 +732,20 @@ func (s *FormulaContext) ToStringTree(ruleNames []string, recog antlr.Recognizer
 }
 
 func (s *FormulaContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterFormula(s)
 	}
 }
 
 func (s *FormulaContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitFormula(s)
 	}
 }
 
-func (p *knowledgebaseParser) Formula() (localctx IFormulaContext) {
+func (p *KnowledgeParser) Formula() (localctx IFormulaContext) {
 	localctx = NewFormulaContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, knowledgebaseParserRULE_formula)
+	p.EnterRule(localctx, 8, KnowledgeParserRULE_formula)
 	var _la int
 
 	defer func() {
@@ -769,10 +769,10 @@ func (p *knowledgebaseParser) Formula() (localctx IFormulaContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	if _la == knowledgebaseParserBS {
+	if _la == KnowledgeParserBS {
 		{
 			p.SetState(48)
-			p.Match(knowledgebaseParserBS)
+			p.Match(KnowledgeParserBS)
 		}
 
 	}
@@ -794,7 +794,7 @@ func (p *knowledgebaseParser) Formula() (localctx IFormulaContext) {
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext()) == 1 {
 		{
 			p.SetState(54)
-			p.Match(knowledgebaseParserBE)
+			p.Match(KnowledgeParserBE)
 		}
 
 	}
@@ -821,7 +821,7 @@ type LeftOperandContext struct {
 func NewEmptyLeftOperandContext() *LeftOperandContext {
 	var p = new(LeftOperandContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_leftOperand
+	p.RuleIndex = KnowledgeParserRULE_leftOperand
 	return p
 }
 
@@ -833,7 +833,7 @@ func NewLeftOperandContext(parser antlr.Parser, parent antlr.ParserRuleContext, 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_leftOperand
+	p.RuleIndex = KnowledgeParserRULE_leftOperand
 
 	return p
 }
@@ -859,20 +859,20 @@ func (s *LeftOperandContext) ToStringTree(ruleNames []string, recog antlr.Recogn
 }
 
 func (s *LeftOperandContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterLeftOperand(s)
 	}
 }
 
 func (s *LeftOperandContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitLeftOperand(s)
 	}
 }
 
-func (p *knowledgebaseParser) LeftOperand() (localctx ILeftOperandContext) {
+func (p *KnowledgeParser) LeftOperand() (localctx ILeftOperandContext) {
 	localctx = NewLeftOperandContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, knowledgebaseParserRULE_leftOperand)
+	p.EnterRule(localctx, 10, KnowledgeParserRULE_leftOperand)
 
 	defer func() {
 		p.ExitRule()
@@ -918,7 +918,7 @@ type RightOperandContext struct {
 func NewEmptyRightOperandContext() *RightOperandContext {
 	var p = new(RightOperandContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_rightOperand
+	p.RuleIndex = KnowledgeParserRULE_rightOperand
 	return p
 }
 
@@ -930,7 +930,7 @@ func NewRightOperandContext(parser antlr.Parser, parent antlr.ParserRuleContext,
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_rightOperand
+	p.RuleIndex = KnowledgeParserRULE_rightOperand
 
 	return p
 }
@@ -956,20 +956,20 @@ func (s *RightOperandContext) ToStringTree(ruleNames []string, recog antlr.Recog
 }
 
 func (s *RightOperandContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterRightOperand(s)
 	}
 }
 
 func (s *RightOperandContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitRightOperand(s)
 	}
 }
 
-func (p *knowledgebaseParser) RightOperand() (localctx IRightOperandContext) {
+func (p *KnowledgeParser) RightOperand() (localctx IRightOperandContext) {
 	localctx = NewRightOperandContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 12, knowledgebaseParserRULE_rightOperand)
+	p.EnterRule(localctx, 12, KnowledgeParserRULE_rightOperand)
 
 	defer func() {
 		p.ExitRule()
@@ -1015,7 +1015,7 @@ type OperandContext struct {
 func NewEmptyOperandContext() *OperandContext {
 	var p = new(OperandContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_operand
+	p.RuleIndex = KnowledgeParserRULE_operand
 	return p
 }
 
@@ -1027,7 +1027,7 @@ func NewOperandContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_operand
+	p.RuleIndex = KnowledgeParserRULE_operand
 
 	return p
 }
@@ -1035,15 +1035,15 @@ func NewOperandContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 func (s *OperandContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *OperandContext) NUMBER() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserNUMBER, 0)
+	return s.GetToken(KnowledgeParserNUMBER, 0)
 }
 
 func (s *OperandContext) REAL() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserREAL, 0)
+	return s.GetToken(KnowledgeParserREAL, 0)
 }
 
 func (s *OperandContext) IDENTIFIER() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserIDENTIFIER, 0)
+	return s.GetToken(KnowledgeParserIDENTIFIER, 0)
 }
 
 func (s *OperandContext) GetRuleContext() antlr.RuleContext {
@@ -1055,20 +1055,20 @@ func (s *OperandContext) ToStringTree(ruleNames []string, recog antlr.Recognizer
 }
 
 func (s *OperandContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterOperand(s)
 	}
 }
 
 func (s *OperandContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitOperand(s)
 	}
 }
 
-func (p *knowledgebaseParser) Operand() (localctx IOperandContext) {
+func (p *KnowledgeParser) Operand() (localctx IOperandContext) {
 	localctx = NewOperandContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, knowledgebaseParserRULE_operand)
+	p.EnterRule(localctx, 14, KnowledgeParserRULE_operand)
 	var _la int
 
 	defer func() {
@@ -1092,7 +1092,7 @@ func (p *knowledgebaseParser) Operand() (localctx IOperandContext) {
 		p.SetState(61)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<knowledgebaseParserIDENTIFIER)|(1<<knowledgebaseParserNUMBER)|(1<<knowledgebaseParserREAL))) != 0) {
+		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<KnowledgeParserIDENTIFIER)|(1<<KnowledgeParserNUMBER)|(1<<KnowledgeParserREAL))) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -1122,7 +1122,7 @@ type OperatorContext struct {
 func NewEmptyOperatorContext() *OperatorContext {
 	var p = new(OperatorContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = knowledgebaseParserRULE_operator
+	p.RuleIndex = KnowledgeParserRULE_operator
 	return p
 }
 
@@ -1134,7 +1134,7 @@ func NewOperatorContext(parser antlr.Parser, parent antlr.ParserRuleContext, inv
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = knowledgebaseParserRULE_operator
+	p.RuleIndex = KnowledgeParserRULE_operator
 
 	return p
 }
@@ -1142,27 +1142,27 @@ func NewOperatorContext(parser antlr.Parser, parent antlr.ParserRuleContext, inv
 func (s *OperatorContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *OperatorContext) DEQ() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserDEQ, 0)
+	return s.GetToken(KnowledgeParserDEQ, 0)
 }
 
 func (s *OperatorContext) NEQ() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserNEQ, 0)
+	return s.GetToken(KnowledgeParserNEQ, 0)
 }
 
 func (s *OperatorContext) LT() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserLT, 0)
+	return s.GetToken(KnowledgeParserLT, 0)
 }
 
 func (s *OperatorContext) LE() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserLE, 0)
+	return s.GetToken(KnowledgeParserLE, 0)
 }
 
 func (s *OperatorContext) GT() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserGT, 0)
+	return s.GetToken(KnowledgeParserGT, 0)
 }
 
 func (s *OperatorContext) GE() antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserGE, 0)
+	return s.GetToken(KnowledgeParserGE, 0)
 }
 
 func (s *OperatorContext) GetRuleContext() antlr.RuleContext {
@@ -1174,20 +1174,20 @@ func (s *OperatorContext) ToStringTree(ruleNames []string, recog antlr.Recognize
 }
 
 func (s *OperatorContext) EnterRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.EnterOperator(s)
 	}
 }
 
 func (s *OperatorContext) ExitRule(listener antlr.ParseTreeListener) {
-	if listenerT, ok := listener.(knowledgebaseListener); ok {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
 		listenerT.ExitOperator(s)
 	}
 }
 
-func (p *knowledgebaseParser) Operator() (localctx IOperatorContext) {
+func (p *KnowledgeParser) Operator() (localctx IOperatorContext) {
 	localctx = NewOperatorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, knowledgebaseParserRULE_operator)
+	p.EnterRule(localctx, 16, KnowledgeParserRULE_operator)
 	var _la int
 
 	defer func() {
@@ -1211,7 +1211,7 @@ func (p *knowledgebaseParser) Operator() (localctx IOperatorContext) {
 		p.SetState(63)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<knowledgebaseParserDEQ)|(1<<knowledgebaseParserNEQ)|(1<<knowledgebaseParserLT)|(1<<knowledgebaseParserLE)|(1<<knowledgebaseParserGT)|(1<<knowledgebaseParserGE))) != 0) {
+		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<KnowledgeParserDEQ)|(1<<KnowledgeParserNEQ)|(1<<KnowledgeParserLT)|(1<<KnowledgeParserLE)|(1<<KnowledgeParserGT)|(1<<KnowledgeParserGE))) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)

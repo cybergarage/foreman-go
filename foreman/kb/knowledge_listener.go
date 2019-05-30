@@ -1,10 +1,10 @@
-// Code generated from knowledgebase.g4 by ANTLR 4.7.2. DO NOT EDIT.
+// Code generated from Knowledge.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
-package kb // knowledgebase
+package kb // Knowledge
 import "github.com/antlr/antlr4/runtime/Go/antlr"
 
-// knowledgebaseListener is a complete listener for a parse tree produced by knowledgebaseParser.
-type knowledgebaseListener interface {
+// KnowledgeListener is a complete listener for a parse tree produced by KnowledgeParser.
+type KnowledgeListener interface {
 	antlr.ParseTreeListener
 
 	// EnterKnowledge is called when entering the knowledge production.
