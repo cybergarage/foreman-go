@@ -10,7 +10,6 @@ type Formula interface {
 	GetOperator() Operator
 	GetRightOperand() Operand
 	GetOperands() []Operand
-	ParseString(Factory, string) error
 	IsSatisfied() (bool, error)
 	String() string
 }

@@ -7,8 +7,8 @@ import "github.com/antlr/antlr4/runtime/Go/antlr"
 type knowledgebaseListener interface {
 	antlr.ParseTreeListener
 
-	// EnterKnowledgebase is called when entering the knowledgebase production.
-	EnterKnowledgebase(c *KnowledgebaseContext)
+	// EnterKnowledge is called when entering the knowledge production.
+	EnterKnowledge(c *KnowledgeContext)
 
 	// EnterClauses is called when entering the clauses production.
 	EnterClauses(c *ClausesContext)
@@ -22,14 +22,20 @@ type knowledgebaseListener interface {
 	// EnterFormula is called when entering the formula production.
 	EnterFormula(c *FormulaContext)
 
+	// EnterLeftOperand is called when entering the leftOperand production.
+	EnterLeftOperand(c *LeftOperandContext)
+
+	// EnterRightOperand is called when entering the rightOperand production.
+	EnterRightOperand(c *RightOperandContext)
+
 	// EnterOperand is called when entering the operand production.
 	EnterOperand(c *OperandContext)
 
 	// EnterOperator is called when entering the operator production.
 	EnterOperator(c *OperatorContext)
 
-	// ExitKnowledgebase is called when exiting the knowledgebase production.
-	ExitKnowledgebase(c *KnowledgebaseContext)
+	// ExitKnowledge is called when exiting the knowledge production.
+	ExitKnowledge(c *KnowledgeContext)
 
 	// ExitClauses is called when exiting the clauses production.
 	ExitClauses(c *ClausesContext)
@@ -42,6 +48,12 @@ type knowledgebaseListener interface {
 
 	// ExitFormula is called when exiting the formula production.
 	ExitFormula(c *FormulaContext)
+
+	// ExitLeftOperand is called when exiting the leftOperand production.
+	ExitLeftOperand(c *LeftOperandContext)
+
+	// ExitRightOperand is called when exiting the rightOperand production.
+	ExitRightOperand(c *RightOperandContext)
 
 	// ExitOperand is called when exiting the operand production.
 	ExitOperand(c *OperandContext)

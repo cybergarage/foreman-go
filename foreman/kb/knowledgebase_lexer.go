@@ -143,12 +143,12 @@ var lexerLiteralNames = []string{
 }
 
 var lexerSymbolicNames = []string{
-	"", "ASTERISK", "SB", "CB", "DEQ", "NEQ", "LT", "LE", "GT", "GE", "AND",
+	"", "ASTERISK", "BS", "BE", "DEQ", "NEQ", "LT", "LE", "GT", "GE", "AND",
 	"OR", "COMMA", "SEMICOLON", "WS", "IDENTIFIER", "STRING", "NUMBER", "REAL",
 }
 
 var lexerRuleNames = []string{
-	"ASTERISK", "SB", "CB", "DEQ", "NEQ", "LT", "LE", "GT", "GE", "AND", "OR",
+	"ASTERISK", "BS", "BE", "DEQ", "NEQ", "LT", "LE", "GT", "GE", "AND", "OR",
 	"COMMA", "SEMICOLON", "WS", "IDENTIFIER", "STRING", "NUMBER", "REAL", "EXPONENT",
 	"HEX_DIGIT", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
 	"M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
@@ -190,8 +190,8 @@ func NewknowledgebaseLexer(input antlr.CharStream) *knowledgebaseLexer {
 // knowledgebaseLexer tokens.
 const (
 	knowledgebaseLexerASTERISK   = 1
-	knowledgebaseLexerSB         = 2
-	knowledgebaseLexerCB         = 3
+	knowledgebaseLexerBS         = 2
+	knowledgebaseLexerBE         = 3
 	knowledgebaseLexerDEQ        = 4
 	knowledgebaseLexerNEQ        = 5
 	knowledgebaseLexerLT         = 6

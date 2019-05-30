@@ -233,19 +233,6 @@ func (kb *KnowledgeBase) ParseRuleString(factory Factory, ruleString string) (Ru
 	return rule, nil
 }
 
-// ParseFormulaString parses a specified formula string.
-func (kb *KnowledgeBase) ParseFormulaString(factory Factory, formulaString string) (Formula, error) {
-	formula, err := factory.CreateFormula(formulaString)
-	if err != nil {
-		return nil, err
-	}
-	err = formula.ParseString(factory, formulaString)
-	if err != nil {
-		return nil, err
-	}
-	return formula, nil
-}
-
 // HasListener checks whether the specified listener is already added
 func (kb *KnowledgeBase) HasListener(listener KnowledgeBaseListener) bool {
 	for _, l := range kb.listeners {

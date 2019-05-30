@@ -129,11 +129,11 @@ func TestQoSFormulas(t *testing.T) {
 
 	formulas := make([]kb.Formula, len(formulaStrings))
 	for n, formulaString := range formulaStrings {
-		formula, err := qos.parseFormulaString(formulaString)
+		rule, err := qos.ParseString(formulaString)
 		if err != nil {
 			t.Error(err)
 		}
-		formulas[n] = formula
+		formulas[n] = rule.GetClauses()[0].GetFormulas()[0]
 	}
 
 	// Get a singleton instance
