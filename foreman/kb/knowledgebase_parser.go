@@ -28,12 +28,12 @@ var parserATN = []uint16{
 	3, 2, 2, 2, 14, 61, 3, 2, 2, 2, 16, 63, 3, 2, 2, 2, 18, 65, 3, 2, 2, 2,
 	20, 22, 7, 4, 2, 2, 21, 20, 3, 2, 2, 2, 21, 22, 3, 2, 2, 2, 22, 23, 3,
 	2, 2, 2, 23, 25, 5, 4, 3, 2, 24, 26, 7, 5, 2, 2, 25, 24, 3, 2, 2, 2, 25,
-	26, 3, 2, 2, 2, 26, 3, 3, 2, 2, 2, 27, 32, 5, 6, 4, 2, 28, 29, 7, 12, 2,
+	26, 3, 2, 2, 2, 26, 3, 3, 2, 2, 2, 27, 32, 5, 6, 4, 2, 28, 29, 7, 13, 2,
 	2, 29, 31, 5, 6, 4, 2, 30, 28, 3, 2, 2, 2, 31, 34, 3, 2, 2, 2, 32, 30,
 	3, 2, 2, 2, 32, 33, 3, 2, 2, 2, 33, 5, 3, 2, 2, 2, 34, 32, 3, 2, 2, 2,
 	35, 37, 7, 4, 2, 2, 36, 35, 3, 2, 2, 2, 36, 37, 3, 2, 2, 2, 37, 38, 3,
 	2, 2, 2, 38, 40, 5, 8, 5, 2, 39, 41, 7, 5, 2, 2, 40, 39, 3, 2, 2, 2, 40,
-	41, 3, 2, 2, 2, 41, 7, 3, 2, 2, 2, 42, 47, 5, 10, 6, 2, 43, 44, 7, 13,
+	41, 3, 2, 2, 2, 41, 7, 3, 2, 2, 2, 42, 47, 5, 10, 6, 2, 43, 44, 7, 12,
 	2, 2, 44, 46, 5, 10, 6, 2, 45, 43, 3, 2, 2, 2, 46, 49, 3, 2, 2, 2, 47,
 	45, 3, 2, 2, 2, 47, 48, 3, 2, 2, 2, 48, 9, 3, 2, 2, 2, 49, 47, 3, 2, 2,
 	2, 50, 52, 7, 4, 2, 2, 51, 50, 3, 2, 2, 2, 51, 52, 3, 2, 2, 2, 52, 53,
@@ -309,12 +309,12 @@ func (s *ClausesContext) Clause(i int) IClauseContext {
 	return t.(IClauseContext)
 }
 
-func (s *ClausesContext) AllAND() []antlr.TerminalNode {
-	return s.GetTokens(knowledgebaseParserAND)
+func (s *ClausesContext) AllOR() []antlr.TerminalNode {
+	return s.GetTokens(knowledgebaseParserOR)
 }
 
-func (s *ClausesContext) AND(i int) antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserAND, i)
+func (s *ClausesContext) OR(i int) antlr.TerminalNode {
+	return s.GetToken(knowledgebaseParserOR, i)
 }
 
 func (s *ClausesContext) GetRuleContext() antlr.RuleContext {
@@ -367,10 +367,10 @@ func (p *knowledgebaseParser) Clauses() (localctx IClausesContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == knowledgebaseParserAND {
+	for _la == knowledgebaseParserOR {
 		{
 			p.SetState(26)
-			p.Match(knowledgebaseParserAND)
+			p.Match(knowledgebaseParserOR)
 		}
 		{
 			p.SetState(27)
@@ -571,12 +571,12 @@ func (s *FormulasContext) Formula(i int) IFormulaContext {
 	return t.(IFormulaContext)
 }
 
-func (s *FormulasContext) AllOR() []antlr.TerminalNode {
-	return s.GetTokens(knowledgebaseParserOR)
+func (s *FormulasContext) AllAND() []antlr.TerminalNode {
+	return s.GetTokens(knowledgebaseParserAND)
 }
 
-func (s *FormulasContext) OR(i int) antlr.TerminalNode {
-	return s.GetToken(knowledgebaseParserOR, i)
+func (s *FormulasContext) AND(i int) antlr.TerminalNode {
+	return s.GetToken(knowledgebaseParserAND, i)
 }
 
 func (s *FormulasContext) GetRuleContext() antlr.RuleContext {
@@ -629,10 +629,10 @@ func (p *knowledgebaseParser) Formulas() (localctx IFormulasContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for _la == knowledgebaseParserOR {
+	for _la == knowledgebaseParserAND {
 		{
 			p.SetState(41)
-			p.Match(knowledgebaseParserOR)
+			p.Match(knowledgebaseParserAND)
 		}
 		{
 			p.SetState(42)
