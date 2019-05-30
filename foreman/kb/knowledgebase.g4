@@ -11,7 +11,7 @@
 grammar knowledgebase;
 
 /*------------------------------------------------------------------
- * CNF (Conjunctive normal form) Rule
+ * DNF (Disjunctive normal form) Rule
  *------------------------------------------------------------------*/
 
 knowledge
@@ -19,7 +19,7 @@ knowledge
    ;
 
 clauses
-	: clause (AND clause)*
+	: clause (OR clause)*
 	; 
 
 clause
@@ -27,7 +27,7 @@ clause
 	; 
 
 formulas
-	: formula (OR formula)*
+	: formula (AND formula)*
 	; 
 
 formula
