@@ -30,9 +30,9 @@ func (parser *antlrParser) ParseString(factory Factory, ruleString string) (Rule
 	rule := factory.CreateRule()
 
 	input := antlr.NewInputStream(ruleString)
-	lexer := NewknowledgebaseLexer(input)
+	lexer := NewKnowledgeLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
-	p := NewknowledgebaseParser(stream)
+	p := NewKnowledgeParser(stream)
 	el := newANTLRParserErrorListener()
 	p.AddErrorListener(el)
 	p.BuildParseTrees = true

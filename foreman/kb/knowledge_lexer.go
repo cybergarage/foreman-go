@@ -1,4 +1,4 @@
-// Code generated from knowledgebase.g4 by ANTLR 4.7.2. DO NOT EDIT.
+// Code generated from Knowledge.g4 by ANTLR 4.7.2. DO NOT EDIT.
 
 package kb
 
@@ -154,7 +154,7 @@ var lexerRuleNames = []string{
 	"M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
 }
 
-type knowledgebaseLexer struct {
+type KnowledgeLexer struct {
 	*antlr.BaseLexer
 	channelNames []string
 	modeNames    []string
@@ -169,9 +169,9 @@ func init() {
 	}
 }
 
-func NewknowledgebaseLexer(input antlr.CharStream) *knowledgebaseLexer {
+func NewKnowledgeLexer(input antlr.CharStream) *KnowledgeLexer {
 
-	l := new(knowledgebaseLexer)
+	l := new(KnowledgeLexer)
 
 	l.BaseLexer = antlr.NewBaseLexer(input)
 	l.Interpreter = antlr.NewLexerATNSimulator(l, lexerAtn, lexerDecisionToDFA, antlr.NewPredictionContextCache())
@@ -181,30 +181,30 @@ func NewknowledgebaseLexer(input antlr.CharStream) *knowledgebaseLexer {
 	l.RuleNames = lexerRuleNames
 	l.LiteralNames = lexerLiteralNames
 	l.SymbolicNames = lexerSymbolicNames
-	l.GrammarFileName = "knowledgebase.g4"
+	l.GrammarFileName = "Knowledge.g4"
 	// TODO: l.EOF = antlr.TokenEOF
 
 	return l
 }
 
-// knowledgebaseLexer tokens.
+// KnowledgeLexer tokens.
 const (
-	knowledgebaseLexerASTERISK   = 1
-	knowledgebaseLexerBS         = 2
-	knowledgebaseLexerBE         = 3
-	knowledgebaseLexerDEQ        = 4
-	knowledgebaseLexerNEQ        = 5
-	knowledgebaseLexerLT         = 6
-	knowledgebaseLexerLE         = 7
-	knowledgebaseLexerGT         = 8
-	knowledgebaseLexerGE         = 9
-	knowledgebaseLexerAND        = 10
-	knowledgebaseLexerOR         = 11
-	knowledgebaseLexerCOMMA      = 12
-	knowledgebaseLexerSEMICOLON  = 13
-	knowledgebaseLexerWS         = 14
-	knowledgebaseLexerIDENTIFIER = 15
-	knowledgebaseLexerSTRING     = 16
-	knowledgebaseLexerNUMBER     = 17
-	knowledgebaseLexerREAL       = 18
+	KnowledgeLexerASTERISK   = 1
+	KnowledgeLexerBS         = 2
+	KnowledgeLexerBE         = 3
+	KnowledgeLexerDEQ        = 4
+	KnowledgeLexerNEQ        = 5
+	KnowledgeLexerLT         = 6
+	KnowledgeLexerLE         = 7
+	KnowledgeLexerGT         = 8
+	KnowledgeLexerGE         = 9
+	KnowledgeLexerAND        = 10
+	KnowledgeLexerOR         = 11
+	KnowledgeLexerCOMMA      = 12
+	KnowledgeLexerSEMICOLON  = 13
+	KnowledgeLexerWS         = 14
+	KnowledgeLexerIDENTIFIER = 15
+	KnowledgeLexerSTRING     = 16
+	KnowledgeLexerNUMBER     = 17
+	KnowledgeLexerREAL       = 18
 )
