@@ -4,7 +4,11 @@
 
 package fql
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/cybergarage/foreman-go/foreman/util"
+)
 
 const (
 	parserValueTrimStrings = "\""
@@ -13,14 +17,14 @@ const (
 type antlrParserListener struct {
 	*BaseFQLListener
 	Queries
-	*ParserObjectStack
+	*util.Stack
 }
 
 func newANTLRParserListener() *antlrParserListener {
 	l := &antlrParserListener{
-		BaseFQLListener:   &BaseFQLListener{},
-		Queries:           NewQueries(),
-		ParserObjectStack: NewParserObjectStack(),
+		BaseFQLListener: &BaseFQLListener{},
+		Queries:         NewQueries(),
+		Stack:           util.NewStack(),
 	}
 	return l
 }
@@ -32,12 +36,12 @@ func newANTLRParserListener() *antlrParserListener {
 // EnterInsertQuery is called when production InsertQuery is entered.
 func (l *antlrParserListener) EnterInsertQuery(ctx *InsertQueryContext) {
 	q := NewInsertQuery()
-	l.PushObject(q)
+	l.Push(q)
 }
 
 // ExitInsertQuery is called when production InsertQuery is exited.
 func (l *antlrParserListener) ExitInsertQuery(ctx *InsertQueryContext) {
-	q, ok := l.PopObject().(*InsertQuery)
+	q, ok := l.Pop().(*InsertQuery)
 	if !ok {
 		return
 	}
@@ -51,12 +55,12 @@ func (l *antlrParserListener) ExitInsertQuery(ctx *InsertQueryContext) {
 // EnterSetQuery is called when production SetQuery is entered.
 func (l *antlrParserListener) EnterSetQuery(ctx *SetQueryContext) {
 	q := NewSetQuery()
-	l.PushObject(q)
+	l.Push(q)
 }
 
 // ExitSetQuery is called when production SetQuery is exited.
 func (l *antlrParserListener) ExitSetQuery(ctx *SetQueryContext) {
-	q, ok := l.PopObject().(*SetQuery)
+	q, ok := l.Pop().(*SetQuery)
 	if !ok {
 		return
 	}
@@ -70,12 +74,12 @@ func (l *antlrParserListener) ExitSetQuery(ctx *SetQueryContext) {
 // EnterSelectQuery is called when production SelectQuery is entered.
 func (l *antlrParserListener) EnterSelectQuery(ctx *SelectQueryContext) {
 	q := NewSelectQuery()
-	l.PushObject(q)
+	l.Push(q)
 }
 
 // ExitSelectQuery is called when production SelectQuery is exited.
 func (l *antlrParserListener) ExitSelectQuery(ctx *SelectQueryContext) {
-	q, ok := l.PopObject().(*SelectQuery)
+	q, ok := l.Pop().(*SelectQuery)
 	if !ok {
 		return
 	}
@@ -89,12 +93,12 @@ func (l *antlrParserListener) ExitSelectQuery(ctx *SelectQueryContext) {
 // EnterExportQuery is called when production ExportQuery is entered.
 func (l *antlrParserListener) EnterExportQuery(ctx *ExportQueryContext) {
 	q := NewExportQuery()
-	l.PushObject(q)
+	l.Push(q)
 }
 
 // ExitExportQuery is called when production ExportQuery is exited.
 func (l *antlrParserListener) ExitExportQuery(ctx *ExportQueryContext) {
-	q, ok := l.PopObject().(*ExportQuery)
+	q, ok := l.Pop().(*ExportQuery)
 	if !ok {
 		return
 	}
@@ -108,12 +112,12 @@ func (l *antlrParserListener) ExitExportQuery(ctx *ExportQueryContext) {
 // EnterUpdateQuery is called when production UpdateQuery is entered.
 func (l *antlrParserListener) EnterUpdateQuery(ctx *UpdateQueryContext) {
 	q := NewUpdateQuery()
-	l.PushObject(q)
+	l.Push(q)
 }
 
 // ExitUpdateQuery is called when production UpdateQuery is exited.
 func (l *antlrParserListener) ExitUpdateQuery(ctx *UpdateQueryContext) {
-	q, ok := l.PopObject().(*UpdateQuery)
+	q, ok := l.Pop().(*UpdateQuery)
 	if !ok {
 		return
 	}
@@ -127,12 +131,12 @@ func (l *antlrParserListener) ExitUpdateQuery(ctx *UpdateQueryContext) {
 // EnterDeleteQuery is called when production DeleteQuery is entered.
 func (l *antlrParserListener) EnterDeleteQuery(ctx *DeleteQueryContext) {
 	q := NewDeleteQuery()
-	l.PushObject(q)
+	l.Push(q)
 }
 
 // ExitDeleteQuery is called when production DeleteQuery is exited.
 func (l *antlrParserListener) ExitDeleteQuery(ctx *DeleteQueryContext) {
-	q, ok := l.PopObject().(*DeleteQuery)
+	q, ok := l.Pop().(*DeleteQuery)
 	if !ok {
 		return
 	}
@@ -146,12 +150,12 @@ func (l *antlrParserListener) ExitDeleteQuery(ctx *DeleteQueryContext) {
 // EnterAnalyzeQuery is called when production AnalyzeQuery is entered.
 func (l *antlrParserListener) EnterAnalyzeQuery(ctx *AnalyzeQueryContext) {
 	q := NewAnalyzeQuery()
-	l.PushObject(q)
+	l.Push(q)
 }
 
 // ExitAnalyzeQuery is called when production AnalyzeQuery is exited.
 func (l *antlrParserListener) ExitAnalyzeQuery(ctx *AnalyzeQueryContext) {
-	q, ok := l.PopObject().(*AnalyzeQuery)
+	q, ok := l.Pop().(*AnalyzeQuery)
 	if !ok {
 		return
 	}
@@ -165,12 +169,12 @@ func (l *antlrParserListener) ExitAnalyzeQuery(ctx *AnalyzeQueryContext) {
 // EnterExecuteQuery is called when production ExecuteQuery is entered.
 func (l *antlrParserListener) EnterExecuteQuery(ctx *ExecuteQueryContext) {
 	q := NewExecuteQuery()
-	l.PushObject(q)
+	l.Push(q)
 }
 
 // ExitExecuteQuery is called when production ExecuteQuery is exited.
 func (l *antlrParserListener) ExitExecuteQuery(ctx *ExecuteQueryContext) {
-	q, ok := l.PopObject().(*ExecuteQuery)
+	q, ok := l.Pop().(*ExecuteQuery)
 	if !ok {
 		return
 	}
@@ -183,7 +187,7 @@ func (l *antlrParserListener) ExitExecuteQuery(ctx *ExecuteQueryContext) {
 
 // ExitTarget is called when production target is exited.
 func (l *antlrParserListener) ExitTarget(ctx *TargetContext) {
-	q, ok := l.PeekObject().(Query)
+	q, ok := l.Peek().(Query)
 	if !ok {
 		return
 	}
@@ -196,7 +200,7 @@ func (l *antlrParserListener) ExitTarget(ctx *TargetContext) {
 
 // ExitColumn is called when production column is exited.
 func (l *antlrParserListener) ExitColumn(ctx *ColumnContext) {
-	q, ok := l.PeekObject().(Query)
+	q, ok := l.Peek().(Query)
 	if !ok {
 		return
 	}
@@ -209,7 +213,7 @@ func (l *antlrParserListener) ExitColumn(ctx *ColumnContext) {
 
 // ExitValue is called when production value is exited.
 func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
-	q, ok := l.PeekObject().(Query)
+	q, ok := l.Peek().(Query)
 	if !ok {
 		return
 	}
@@ -223,7 +227,7 @@ func (l *antlrParserListener) ExitValue(ctx *ValueContext) {
 
 // ExitCondition is called when production condition is exited.
 func (l *antlrParserListener) ExitCondition(ctx *ConditionContext) {
-	q, ok := l.PeekObject().(Query)
+	q, ok := l.Peek().(Query)
 	if !ok {
 		return
 	}

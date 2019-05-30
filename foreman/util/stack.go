@@ -2,28 +2,28 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package fql
+package util
 
-// ParserObjectStack is a stack for any parser objects.
-type ParserObjectStack struct {
+// Stack is a stack for any parser objects.
+type Stack struct {
 	objects []interface{}
 }
 
-// NewParserObjectStack creates a new stack.
-func NewParserObjectStack() *ParserObjectStack {
-	s := &ParserObjectStack{
+// NewStack creates a new stack.
+func NewStack() *Stack {
+	s := &Stack{
 		objects: make([]interface{}, 0),
 	}
 	return s
 }
 
-// PushObject adds a parser object to the stack.
-func (s *ParserObjectStack) PushObject(obj interface{}) {
+// Push adds a parser object to the stack.
+func (s *Stack) Push(obj interface{}) {
 	s.objects = append(s.objects, obj)
 }
 
-// PeekObject returns a top parser object
-func (s *ParserObjectStack) PeekObject() interface{} {
+// Peek returns a top parser object
+func (s *Stack) Peek() interface{} {
 	objectCount := len(s.objects)
 	if objectCount <= 0 {
 		return nil
@@ -31,8 +31,8 @@ func (s *ParserObjectStack) PeekObject() interface{} {
 	return s.objects[objectCount-1]
 }
 
-// PopObject removes and returns a top parser object
-func (s *ParserObjectStack) PopObject() interface{} {
+// Pop removes and returns a top parser object
+func (s *Stack) Pop() interface{} {
 	objectCount := len(s.objects)
 	if objectCount <= 0 {
 		return nil
@@ -43,6 +43,6 @@ func (s *ParserObjectStack) PopObject() interface{} {
 }
 
 // Size return a count of the stack objects
-func (s *ParserObjectStack) Size() int {
+func (s *Stack) Size() int {
 	return len(s.objects)
 }
