@@ -27,6 +27,8 @@ func (parser *antlrParser) ParseString(factory Factory, ruleString string) (Rule
 		return nil, fmt.Errorf(errorParserEmptyRule)
 	}
 
+	rule := factory.CreateRule()
+
 	input := antlr.NewInputStream(ruleString)
 	lexer := NewknowledgebaseLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
@@ -34,12 +36,12 @@ func (parser *antlrParser) ParseString(factory Factory, ruleString string) (Rule
 	el := newANTLRParserErrorListener()
 	p.AddErrorListener(el)
 	p.BuildParseTrees = true
-	tree := p.Knowledgebase()
-	pl := newANTLRParserListener()
+	tree := p.Knowledge()
+	pl := newANTLRParserListener(rule, factory)
 	antlr.ParseTreeWalkerDefault.Walk(pl, tree)
 	if !el.IsSuccess() {
 		return nil, fmt.Errorf("%s (%s)", ruleString, el.GetError().Error())
 	}
 
-	return nil, nil
+	return rule, nil
 }

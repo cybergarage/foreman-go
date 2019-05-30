@@ -13,10 +13,15 @@ type Formula struct {
 	*kb.BaseFormula
 }
 
-// NewFormula returns a new base formula.
-func NewFormula() *Formula {
+// NewFormulaWithParams returns a new base formula with the specified parameters.
+func NewFormulaWithParams(lop kb.Operand, op kb.Operator, rop kb.Operand) *Formula {
 	formula := &Formula{
-		BaseFormula: kb.NewFormula(),
+		BaseFormula: kb.NewFormulaWithParams(lop, op, rop),
 	}
 	return formula
+}
+
+// NewFormula returns a new base formula.
+func NewFormula() *Formula {
+	return NewFormulaWithParams(nil, nil, nil)
 }

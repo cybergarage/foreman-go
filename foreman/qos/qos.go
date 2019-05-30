@@ -21,14 +21,9 @@ func NewQoS() *QoS {
 	return qos
 }
 
-// ParseQoSString parses a specified QoS string.
-func (qos *QoS) ParseQoSString(qosString string) (kb.Rule, error) {
+// ParseString parses a specified QoS string.
+func (qos *QoS) ParseString(qosString string) (kb.Rule, error) {
 	return qos.ParseRuleString(qos, qosString)
-}
-
-// parseFormulaString parses a specified QoS formula string.
-func (qos *QoS) parseFormulaString(qosString string) (kb.Formula, error) {
-	return qos.ParseFormulaString(qos, qosString)
 }
 
 // FindRelatedRules returns all rules of the the specified name.

@@ -48,3 +48,8 @@ func (l *antlrParserErrorListener) ReportAttemptingFullContext(recognizer antlr.
 func (l *antlrParserErrorListener) ReportContextSensitivity(recognizer antlr.Parser, dfa *antlr.DFA, startIndex, stopIndex, prediction int, configs antlr.ATNConfigSet) {
 
 }
+
+func (l *antlrParserErrorListener) SetInternalError(err error) {
+	l.done = false
+	l.msg = err.Error()
+}

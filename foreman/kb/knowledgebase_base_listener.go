@@ -20,11 +20,11 @@ func (s *BaseknowledgebaseListener) EnterEveryRule(ctx antlr.ParserRuleContext) 
 // ExitEveryRule is called when any rule is exited.
 func (s *BaseknowledgebaseListener) ExitEveryRule(ctx antlr.ParserRuleContext) {}
 
-// EnterKnowledgebase is called when production knowledgebase is entered.
-func (s *BaseknowledgebaseListener) EnterKnowledgebase(ctx *KnowledgebaseContext) {}
+// EnterKnowledge is called when production knowledge is entered.
+func (s *BaseknowledgebaseListener) EnterKnowledge(ctx *KnowledgeContext) {}
 
-// ExitKnowledgebase is called when production knowledgebase is exited.
-func (s *BaseknowledgebaseListener) ExitKnowledgebase(ctx *KnowledgebaseContext) {}
+// ExitKnowledge is called when production knowledge is exited.
+func (s *BaseknowledgebaseListener) ExitKnowledge(ctx *KnowledgeContext) {}
 
 // EnterClauses is called when production clauses is entered.
 func (s *BaseknowledgebaseListener) EnterClauses(ctx *ClausesContext) {}
@@ -49,6 +49,18 @@ func (s *BaseknowledgebaseListener) EnterFormula(ctx *FormulaContext) {}
 
 // ExitFormula is called when production formula is exited.
 func (s *BaseknowledgebaseListener) ExitFormula(ctx *FormulaContext) {}
+
+// EnterLeftOperand is called when production leftOperand is entered.
+func (s *BaseknowledgebaseListener) EnterLeftOperand(ctx *LeftOperandContext) {}
+
+// ExitLeftOperand is called when production leftOperand is exited.
+func (s *BaseknowledgebaseListener) ExitLeftOperand(ctx *LeftOperandContext) {}
+
+// EnterRightOperand is called when production rightOperand is entered.
+func (s *BaseknowledgebaseListener) EnterRightOperand(ctx *RightOperandContext) {}
+
+// ExitRightOperand is called when production rightOperand is exited.
+func (s *BaseknowledgebaseListener) ExitRightOperand(ctx *RightOperandContext) {}
 
 // EnterOperand is called when production operand is entered.
 func (s *BaseknowledgebaseListener) EnterOperand(ctx *OperandContext) {}

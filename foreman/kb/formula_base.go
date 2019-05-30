@@ -6,7 +6,6 @@ package kb
 
 import (
 	"fmt"
-	"strings"
 )
 
 // BaseFormula represents a base formula.
@@ -16,14 +15,19 @@ type BaseFormula struct {
 	RightOperand Operand
 }
 
-// NewFormula returns a new base formula.
-func NewFormula() *BaseFormula {
+// NewFormulaWithParams returns a new base formula with the specified parameters.
+func NewFormulaWithParams(lop Operand, op Operator, rop Operand) *BaseFormula {
 	formula := &BaseFormula{
-		LeftOperand:  nil,
-		Operator:     nil,
-		RightOperand: nil,
+		LeftOperand:  lop,
+		Operator:     op,
+		RightOperand: rop,
 	}
 	return formula
+}
+
+// NewFormula returns a new base formula.
+func NewFormula() *BaseFormula {
+	return NewFormulaWithParams(nil, nil, nil)
 }
 
 // GetLeftOperand returns a left operand object
@@ -49,38 +53,6 @@ func (formula *BaseFormula) GetOperands() []Operand {
 // IsSatisfied checks whether the formula is valid
 func (formula *BaseFormula) IsSatisfied() (bool, error) {
 	return formula.Operator.IsSatisfied(formula.LeftOperand, formula.RightOperand)
-}
-
-// ParseString parses a specified formula string.
-func (formula *BaseFormula) ParseString(factory Factory, formulaString string) error {
-	formulaStrings := strings.Split(formulaString, SpaceSeparator)
-
-	if len(formulaStrings) != 3 {
-		return fmt.Errorf(errorInvalidFormulaString, formulaString)
-	}
-
-	// Left Operand
-	operand, err := factory.CreateOperand(formulaStrings[0])
-	if err != nil {
-		return err
-	}
-	formula.LeftOperand = operand
-
-	// Operator
-	operator, err := factory.CreateOperator(formulaStrings[1])
-	if err != nil {
-		return err
-	}
-	formula.Operator = operator
-
-	// Right Operand
-	operand, err = factory.CreateOperand(formulaStrings[2])
-	if err != nil {
-		return err
-	}
-	formula.RightOperand = operand
-
-	return nil
 }
 
 // String returns a string description of the instance

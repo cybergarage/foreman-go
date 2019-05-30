@@ -31,18 +31,18 @@ func getQoSOperandRegexes() []*regexp.Regexp {
 }
 
 // CreateRule is an interface method of kb.Factory
-func (qos *QoS) CreateRule(obj interface{}) (kb.Rule, error) {
-	return NewRule(), nil
+func (qos *QoS) CreateRule() kb.Rule {
+	return NewRule()
 }
 
 // CreateClause is an interface method of kb.Factory
-func (qos *QoS) CreateClause(obj interface{}) (kb.Clause, error) {
-	return kb.NewClause(), nil
+func (qos *QoS) CreateClause() kb.Clause {
+	return kb.NewClause()
 }
 
 // CreateFormula is an interface method of kb.Factory
-func (qos *QoS) CreateFormula(obj interface{}) (kb.Formula, error) {
-	return NewFormula(), nil
+func (qos *QoS) CreateFormula(lop kb.Operand, op kb.Operator, rop kb.Operand) kb.Formula {
+	return NewFormulaWithParams(lop, op, rop)
 }
 
 // CreateOperand is an interface method of kb.Factory

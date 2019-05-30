@@ -11,11 +11,11 @@
 grammar knowledgebase;
 
 /*------------------------------------------------------------------
- * Rule
+ * CNF (Conjunctive normal form) Rule
  *------------------------------------------------------------------*/
 
-knowledgebase
-   : (SB)? clauses (CB)?
+knowledge
+   : (BS)? clauses (BE)?
    ;
 
 clauses
@@ -23,7 +23,7 @@ clauses
 	; 
 
 clause
-	: (SB)? formulas (CB)?
+	: (BS)? formulas (BE)?
 	; 
 
 formulas
@@ -31,8 +31,16 @@ formulas
 	; 
 
 formula
-	: (SB)? operand operator operand (CB)?
+	: (BS)? leftOperand operator rightOperand (BE)?
 	; 
+
+leftOperand
+	: operand
+	;
+
+rightOperand
+	: operand
+	;
 
 operand
 	: NUMBER
@@ -61,11 +69,11 @@ ASTERISK
 	: '*'
 	;
 
-SB
+BS
 	: '('
 	;
 
-CB
+BE
 	: ')'
 	;
 

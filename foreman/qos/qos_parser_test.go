@@ -18,7 +18,7 @@ const (
 )
 
 func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, formulas int, clauses int) {
-	rule, err := qos.ParseQoSString(qosString)
+	rule, err := qos.ParseString(qosString)
 	if err != nil {
 		t.Error(err)
 		return
