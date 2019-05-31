@@ -14,7 +14,8 @@ import (
 )
 
 const (
-	testQoSCaseFilename = "qos_good_case.test"
+	testGoodQoSCaseFilename = "qos_good_case.test"
+	testBadQoSCaseFilename  = "qos_bad_case.test"
 )
 
 func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, formulas int, clauses int) {
@@ -33,10 +34,10 @@ func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, formul
 	qos.Clear()
 }
 
-func TestQoSCases(t *testing.T) {
+func TestGoodQoSCases(t *testing.T) {
 	qos := NewQoS()
 
-	kbStrings, err := ioutil.ReadFile(testQoSCaseFilename)
+	kbStrings, err := ioutil.ReadFile(testGoodQoSCaseFilename)
 	if err != nil {
 		t.Error(err)
 		return
@@ -76,5 +77,36 @@ func TestQoSCases(t *testing.T) {
 		}
 
 		testQoSCase(t, qos, qosString, variables, formulas, clauses)
+	}
+}
+
+func TestBadQoSCases(t *testing.T) {
+	qos := NewQoS()
+
+	kbStrings, err := ioutil.ReadFile(testBadQoSCaseFilename)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	r := csv.NewReader(strings.NewReader(string(kbStrings)))
+	r.Comment = rune('#')
+
+	for {
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			t.Error(err)
+			break
+		}
+
+		qosString := record[0]
+
+		rule, err := qos.ParseString(qosString)
+		if err == nil {
+			t.Errorf("Parser Error : %s [%s]", qosString, rule.String())
+		}
 	}
 }
