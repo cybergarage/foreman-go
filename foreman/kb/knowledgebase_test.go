@@ -9,5 +9,5 @@ import (
 )
 
 func TestNewKnowledge(t *testing.T) {
-	NewKnowledge()
+	NewKnowledgeBase()
 }
