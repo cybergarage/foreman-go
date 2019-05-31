@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	testQoSCaseFilename = "qos_parser_test.csv"
+	testQoSCaseFilename = "qos_good_case.test"
 )
 
 func testQoSCase(t *testing.T, qos *QoS, qosString string, variables int, formulas int, clauses int) {
