@@ -14,6 +14,8 @@ type Factory interface {
 	CreateFormula(lope Operand, op Operator, rope Operand) Formula
 	// CreateOperator must return an operater of the specified object.
 	CreateOperator(obj interface{}) (Operator, error)
-	// CreateOperand must return an operand of the specified object.
-	CreateOperand(obj interface{}) (Operand, error)
+	// CreateLiteralOperand must return a literal operand of the specified object.
+	CreateLiteralOperand(obj interface{}) (Literal, error)
+	// CreateVariableOperand must return a variable operand of the specified object.
+	CreateVariableOperand(obj interface{}) (Variable, error)
 }

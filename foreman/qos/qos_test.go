@@ -27,7 +27,7 @@ func TestQoSLiteralOperands(t *testing.T) {
 	}
 
 	for _, operand := range operands {
-		op, err := qos.CreateOperand(operand)
+		op, err := qos.CreateLiteralOperand(operand)
 		if err != nil {
 			t.Error(err)
 			break
@@ -53,7 +53,7 @@ func TestQoSMetricOperands(t *testing.T) {
 	}
 
 	for _, operand := range operands {
-		op, err := qos.CreateOperand(operand)
+		op, err := qos.CreateVariableOperand(operand)
 		if err != nil {
 			t.Error(err)
 			break

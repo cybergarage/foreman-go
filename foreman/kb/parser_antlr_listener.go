@@ -68,8 +68,9 @@ func (l *antlrParserListener) ExitFormula(ctx *FormulaContext) {
 	clause.AddFormula(l.Factory.CreateFormula(lop, op, rop))
 }
 
-func (l *antlrParserListener) EnterOperand(ctx *OperandContext) {
-	op, err := l.Factory.CreateOperand(ctx.GetText())
+// EnterOperator is called when production operator is entered.
+func (l *antlrParserListener) EnterOperator(ctx *OperatorContext) {
+	op, err := l.Factory.CreateOperator(ctx.GetText())
 	if err != nil {
 		l.SetInternalError(ctx.GetParser(), err)
 		return
@@ -77,9 +78,19 @@ func (l *antlrParserListener) EnterOperand(ctx *OperandContext) {
 	l.Push(op)
 }
 
-// EnterOperator is called when production operator is entered.
-func (l *antlrParserListener) EnterOperator(ctx *OperatorContext) {
-	op, err := l.Factory.CreateOperator(ctx.GetText())
+// EnterLiteralOperand is called when production literalOperand is entered.
+func (l *antlrParserListener) EnterLiteralOperand(ctx *LiteralOperandContext) {
+	op, err := l.Factory.CreateLiteralOperand(ctx.GetText())
+	if err != nil {
+		l.SetInternalError(ctx.GetParser(), err)
+		return
+	}
+	l.Push(op)
+}
+
+// EnterVariableOperand is called when production variableOperand is entered.
+func (l *antlrParserListener) EnterVariableOperand(ctx *VariableOperandContext) {
+	op, err := l.Factory.CreateVariableOperand(ctx.GetText())
 	if err != nil {
 		l.SetInternalError(ctx.GetParser(), err)
 		return
