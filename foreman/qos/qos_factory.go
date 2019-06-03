@@ -45,49 +45,8 @@ func (qos *QoS) CreateFormula(lop kb.Operand, op kb.Operator, rop kb.Operand) kb
 	return NewFormulaWithParams(lop, op, rop)
 }
 
-// CreateOperand is an interface method of kb.Factory
-func (qos *QoS) CreateOperand(obj interface{}) (kb.Operand, error) {
-	switch obj.(type) {
-	case string:
-		s, _ := obj.(string)
-		for n, qosRegexp := range getQoSOperandRegexes() {
-			if !qosRegexp.MatchString(s) {
-				continue
-			}
-			switch n {
-			case 0: // qosOperandThresholdRegex
-				return qos.createThreshold(obj)
-			case 1: // qosOperandMetricRegex
-				return qos.createMetric(obj)
-			}
-		}
-	case float64:
-		return qos.createThreshold(obj)
-	}
-
-	return nil, fmt.Errorf(errorInvalidOperand, obj)
-}
-
-// createMetric is an interface method of kb.Factory
-func (qos *QoS) createMetric(obj interface{}) (kb.Operand, error) {
-	varStr, ok := obj.(string)
-	if !ok {
-		return nil, fmt.Errorf(errorInvalidOperand, obj)
-	}
-
-	v, ok := qos.Variables[varStr]
-	if ok {
-		return v, nil
-	}
-
-	m := NewMetricWithName(varStr)
-	qos.Variables[varStr] = m
-
-	return m, nil
-}
-
-// createThreshold is an interface method kb.Factory
-func (qos *QoS) createThreshold(obj interface{}) (kb.Operand, error) {
+// CreateLiteralOperand  is an interface method of kb.Factory
+func (qos *QoS) CreateLiteralOperand(obj interface{}) (kb.Literal, error) {
 	objValue, ok := obj.(float64)
 	if !ok {
 		objStr, ok := obj.(string)
@@ -103,6 +62,24 @@ func (qos *QoS) createThreshold(obj interface{}) (kb.Operand, error) {
 	}
 
 	return NewThresholdWithValue(objValue), nil
+}
+
+// CreateVariableOperand  is an interface method of kb.Factory
+func (qos *QoS) CreateVariableOperand(obj interface{}) (kb.Variable, error) {
+	varStr, ok := obj.(string)
+	if !ok {
+		return nil, fmt.Errorf(errorInvalidOperand, obj)
+	}
+
+	v, ok := qos.Variables[varStr]
+	if ok {
+		return v, nil
+	}
+
+	m := NewMetricWithName(varStr)
+	qos.Variables[varStr] = m
+
+	return m, nil
 }
 
 // CreateOperator is an interface method kb.Factory
