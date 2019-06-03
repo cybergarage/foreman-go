@@ -68,6 +68,18 @@ func (s *BaseKnowledgeListener) EnterOperand(ctx *OperandContext) {}
 // ExitOperand is called when production operand is exited.
 func (s *BaseKnowledgeListener) ExitOperand(ctx *OperandContext) {}
 
+// EnterLiteralOperand is called when production literalOperand is entered.
+func (s *BaseKnowledgeListener) EnterLiteralOperand(ctx *LiteralOperandContext) {}
+
+// ExitLiteralOperand is called when production literalOperand is exited.
+func (s *BaseKnowledgeListener) ExitLiteralOperand(ctx *LiteralOperandContext) {}
+
+// EnterVariableOperand is called when production variableOperand is entered.
+func (s *BaseKnowledgeListener) EnterVariableOperand(ctx *VariableOperandContext) {}
+
+// ExitVariableOperand is called when production variableOperand is exited.
+func (s *BaseKnowledgeListener) ExitVariableOperand(ctx *VariableOperandContext) {}
+
 // EnterOperator is called when production operator is entered.
 func (s *BaseKnowledgeListener) EnterOperator(ctx *OperatorContext) {}
 

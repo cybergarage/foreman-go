@@ -43,9 +43,17 @@ rightOperand
 	;
 
 operand
+	: literalOperand
+	| variableOperand
+	;
+
+literalOperand
 	: NUMBER
 	| REAL
-	| IDENTIFIER
+	;
+
+variableOperand
+	: IDENTIFIER
 	;
 
 operator
@@ -130,7 +138,7 @@ WS  :   ( ' '
 	;
 	
 IDENTIFIER  
-	: [a-zA-Z0-9_\-.*]+
+	: ([A-Za-z]) ([a-zA-Z0-9_\-.*])*
     ;
 
 STRING  
@@ -138,13 +146,13 @@ STRING
     ;
 
 NUMBER 
-	: '0'..'9'+
+	: ([+-])? ('0'..'9')+
 	;
 
 REAL
-	:   ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
-	|   '.' ('0'..'9')+ EXPONENT?
-	|   ('0'..'9')+ EXPONENT
+	:   ([+-])? ('0'..'9')+ '.' ('0'..'9')* EXPONENT?
+	|   ([+-])? '.' ('0'..'9')+ EXPONENT?
+	|   ([+-])? ('0'..'9')+ EXPONENT
 	;
 
 

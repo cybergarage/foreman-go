@@ -31,6 +31,12 @@ type KnowledgeListener interface {
 	// EnterOperand is called when entering the operand production.
 	EnterOperand(c *OperandContext)
 
+	// EnterLiteralOperand is called when entering the literalOperand production.
+	EnterLiteralOperand(c *LiteralOperandContext)
+
+	// EnterVariableOperand is called when entering the variableOperand production.
+	EnterVariableOperand(c *VariableOperandContext)
+
 	// EnterOperator is called when entering the operator production.
 	EnterOperator(c *OperatorContext)
 
@@ -57,6 +63,12 @@ type KnowledgeListener interface {
 
 	// ExitOperand is called when exiting the operand production.
 	ExitOperand(c *OperandContext)
+
+	// ExitLiteralOperand is called when exiting the literalOperand production.
+	ExitLiteralOperand(c *LiteralOperandContext)
+
+	// ExitVariableOperand is called when exiting the variableOperand production.
+	ExitVariableOperand(c *VariableOperandContext)
 
 	// ExitOperator is called when exiting the operator production.
 	ExitOperator(c *OperatorContext)
