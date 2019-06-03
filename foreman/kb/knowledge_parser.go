@@ -15,33 +15,37 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 20, 68, 4,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 20, 78, 4,
 	2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7, 4,
-	8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 3, 2, 5, 2, 22, 10, 2, 3, 2, 3, 2, 5,
-	2, 26, 10, 2, 3, 3, 3, 3, 3, 3, 7, 3, 31, 10, 3, 12, 3, 14, 3, 34, 11,
-	3, 3, 4, 5, 4, 37, 10, 4, 3, 4, 3, 4, 5, 4, 41, 10, 4, 3, 5, 3, 5, 3, 5,
-	7, 5, 46, 10, 5, 12, 5, 14, 5, 49, 11, 5, 3, 6, 5, 6, 52, 10, 6, 3, 6,
-	3, 6, 3, 6, 3, 6, 5, 6, 58, 10, 6, 3, 7, 3, 7, 3, 8, 3, 8, 3, 9, 3, 9,
-	3, 10, 3, 10, 3, 10, 2, 2, 11, 2, 4, 6, 8, 10, 12, 14, 16, 18, 2, 4, 4,
-	2, 17, 17, 19, 20, 3, 2, 6, 11, 2, 66, 2, 21, 3, 2, 2, 2, 4, 27, 3, 2,
-	2, 2, 6, 36, 3, 2, 2, 2, 8, 42, 3, 2, 2, 2, 10, 51, 3, 2, 2, 2, 12, 59,
-	3, 2, 2, 2, 14, 61, 3, 2, 2, 2, 16, 63, 3, 2, 2, 2, 18, 65, 3, 2, 2, 2,
-	20, 22, 7, 4, 2, 2, 21, 20, 3, 2, 2, 2, 21, 22, 3, 2, 2, 2, 22, 23, 3,
-	2, 2, 2, 23, 25, 5, 4, 3, 2, 24, 26, 7, 5, 2, 2, 25, 24, 3, 2, 2, 2, 25,
-	26, 3, 2, 2, 2, 26, 3, 3, 2, 2, 2, 27, 32, 5, 6, 4, 2, 28, 29, 7, 13, 2,
-	2, 29, 31, 5, 6, 4, 2, 30, 28, 3, 2, 2, 2, 31, 34, 3, 2, 2, 2, 32, 30,
-	3, 2, 2, 2, 32, 33, 3, 2, 2, 2, 33, 5, 3, 2, 2, 2, 34, 32, 3, 2, 2, 2,
-	35, 37, 7, 4, 2, 2, 36, 35, 3, 2, 2, 2, 36, 37, 3, 2, 2, 2, 37, 38, 3,
-	2, 2, 2, 38, 40, 5, 8, 5, 2, 39, 41, 7, 5, 2, 2, 40, 39, 3, 2, 2, 2, 40,
-	41, 3, 2, 2, 2, 41, 7, 3, 2, 2, 2, 42, 47, 5, 10, 6, 2, 43, 44, 7, 12,
-	2, 2, 44, 46, 5, 10, 6, 2, 45, 43, 3, 2, 2, 2, 46, 49, 3, 2, 2, 2, 47,
-	45, 3, 2, 2, 2, 47, 48, 3, 2, 2, 2, 48, 9, 3, 2, 2, 2, 49, 47, 3, 2, 2,
-	2, 50, 52, 7, 4, 2, 2, 51, 50, 3, 2, 2, 2, 51, 52, 3, 2, 2, 2, 52, 53,
-	3, 2, 2, 2, 53, 54, 5, 12, 7, 2, 54, 55, 5, 18, 10, 2, 55, 57, 5, 14, 8,
-	2, 56, 58, 7, 5, 2, 2, 57, 56, 3, 2, 2, 2, 57, 58, 3, 2, 2, 2, 58, 11,
-	3, 2, 2, 2, 59, 60, 5, 16, 9, 2, 60, 13, 3, 2, 2, 2, 61, 62, 5, 16, 9,
-	2, 62, 15, 3, 2, 2, 2, 63, 64, 9, 2, 2, 2, 64, 17, 3, 2, 2, 2, 65, 66,
-	9, 3, 2, 2, 66, 19, 3, 2, 2, 2, 10, 21, 25, 32, 36, 40, 47, 51, 57,
+	8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 3, 2, 5,
+	2, 26, 10, 2, 3, 2, 3, 2, 5, 2, 30, 10, 2, 3, 3, 3, 3, 3, 3, 7, 3, 35,
+	10, 3, 12, 3, 14, 3, 38, 11, 3, 3, 4, 5, 4, 41, 10, 4, 3, 4, 3, 4, 5, 4,
+	45, 10, 4, 3, 5, 3, 5, 3, 5, 7, 5, 50, 10, 5, 12, 5, 14, 5, 53, 11, 5,
+	3, 6, 5, 6, 56, 10, 6, 3, 6, 3, 6, 3, 6, 3, 6, 5, 6, 62, 10, 6, 3, 7, 3,
+	7, 3, 8, 3, 8, 3, 9, 3, 9, 5, 9, 70, 10, 9, 3, 10, 3, 10, 3, 11, 3, 11,
+	3, 12, 3, 12, 3, 12, 2, 2, 13, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22,
+	2, 4, 3, 2, 19, 20, 3, 2, 6, 11, 2, 75, 2, 25, 3, 2, 2, 2, 4, 31, 3, 2,
+	2, 2, 6, 40, 3, 2, 2, 2, 8, 46, 3, 2, 2, 2, 10, 55, 3, 2, 2, 2, 12, 63,
+	3, 2, 2, 2, 14, 65, 3, 2, 2, 2, 16, 69, 3, 2, 2, 2, 18, 71, 3, 2, 2, 2,
+	20, 73, 3, 2, 2, 2, 22, 75, 3, 2, 2, 2, 24, 26, 7, 4, 2, 2, 25, 24, 3,
+	2, 2, 2, 25, 26, 3, 2, 2, 2, 26, 27, 3, 2, 2, 2, 27, 29, 5, 4, 3, 2, 28,
+	30, 7, 5, 2, 2, 29, 28, 3, 2, 2, 2, 29, 30, 3, 2, 2, 2, 30, 3, 3, 2, 2,
+	2, 31, 36, 5, 6, 4, 2, 32, 33, 7, 13, 2, 2, 33, 35, 5, 6, 4, 2, 34, 32,
+	3, 2, 2, 2, 35, 38, 3, 2, 2, 2, 36, 34, 3, 2, 2, 2, 36, 37, 3, 2, 2, 2,
+	37, 5, 3, 2, 2, 2, 38, 36, 3, 2, 2, 2, 39, 41, 7, 4, 2, 2, 40, 39, 3, 2,
+	2, 2, 40, 41, 3, 2, 2, 2, 41, 42, 3, 2, 2, 2, 42, 44, 5, 8, 5, 2, 43, 45,
+	7, 5, 2, 2, 44, 43, 3, 2, 2, 2, 44, 45, 3, 2, 2, 2, 45, 7, 3, 2, 2, 2,
+	46, 51, 5, 10, 6, 2, 47, 48, 7, 12, 2, 2, 48, 50, 5, 10, 6, 2, 49, 47,
+	3, 2, 2, 2, 50, 53, 3, 2, 2, 2, 51, 49, 3, 2, 2, 2, 51, 52, 3, 2, 2, 2,
+	52, 9, 3, 2, 2, 2, 53, 51, 3, 2, 2, 2, 54, 56, 7, 4, 2, 2, 55, 54, 3, 2,
+	2, 2, 55, 56, 3, 2, 2, 2, 56, 57, 3, 2, 2, 2, 57, 58, 5, 12, 7, 2, 58,
+	59, 5, 22, 12, 2, 59, 61, 5, 14, 8, 2, 60, 62, 7, 5, 2, 2, 61, 60, 3, 2,
+	2, 2, 61, 62, 3, 2, 2, 2, 62, 11, 3, 2, 2, 2, 63, 64, 5, 16, 9, 2, 64,
+	13, 3, 2, 2, 2, 65, 66, 5, 16, 9, 2, 66, 15, 3, 2, 2, 2, 67, 70, 5, 18,
+	10, 2, 68, 70, 5, 20, 11, 2, 69, 67, 3, 2, 2, 2, 69, 68, 3, 2, 2, 2, 70,
+	17, 3, 2, 2, 2, 71, 72, 9, 2, 2, 2, 72, 19, 3, 2, 2, 2, 73, 74, 7, 17,
+	2, 2, 74, 21, 3, 2, 2, 2, 75, 76, 9, 3, 2, 2, 76, 23, 3, 2, 2, 2, 11, 25,
+	29, 36, 40, 44, 51, 55, 61, 69,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -57,7 +61,7 @@ var symbolicNames = []string{
 
 var ruleNames = []string{
 	"knowledge", "clauses", "clause", "formulas", "formula", "leftOperand",
-	"rightOperand", "operand", "operator",
+	"rightOperand", "operand", "literalOperand", "variableOperand", "operator",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
 
@@ -110,15 +114,17 @@ const (
 
 // KnowledgeParser rules.
 const (
-	KnowledgeParserRULE_knowledge    = 0
-	KnowledgeParserRULE_clauses      = 1
-	KnowledgeParserRULE_clause       = 2
-	KnowledgeParserRULE_formulas     = 3
-	KnowledgeParserRULE_formula      = 4
-	KnowledgeParserRULE_leftOperand  = 5
-	KnowledgeParserRULE_rightOperand = 6
-	KnowledgeParserRULE_operand      = 7
-	KnowledgeParserRULE_operator     = 8
+	KnowledgeParserRULE_knowledge       = 0
+	KnowledgeParserRULE_clauses         = 1
+	KnowledgeParserRULE_clause          = 2
+	KnowledgeParserRULE_formulas        = 3
+	KnowledgeParserRULE_formula         = 4
+	KnowledgeParserRULE_leftOperand     = 5
+	KnowledgeParserRULE_rightOperand    = 6
+	KnowledgeParserRULE_operand         = 7
+	KnowledgeParserRULE_literalOperand  = 8
+	KnowledgeParserRULE_variableOperand = 9
+	KnowledgeParserRULE_operator        = 10
 )
 
 // IKnowledgeContext is an interface to support dynamic dispatch.
@@ -219,27 +225,27 @@ func (p *KnowledgeParser) Knowledge() (localctx IKnowledgeContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(19)
+	p.SetState(23)
 	p.GetErrorHandler().Sync(p)
 
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 0, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(18)
+			p.SetState(22)
 			p.Match(KnowledgeParserBS)
 		}
 
 	}
 	{
-		p.SetState(21)
+		p.SetState(25)
 		p.Clauses()
 	}
-	p.SetState(23)
+	p.SetState(27)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == KnowledgeParserBE {
 		{
-			p.SetState(22)
+			p.SetState(26)
 			p.Match(KnowledgeParserBE)
 		}
 
@@ -360,24 +366,24 @@ func (p *KnowledgeParser) Clauses() (localctx IClausesContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(25)
+		p.SetState(29)
 		p.Clause()
 	}
-	p.SetState(30)
+	p.SetState(34)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == KnowledgeParserOR {
 		{
-			p.SetState(26)
+			p.SetState(30)
 			p.Match(KnowledgeParserOR)
 		}
 		{
-			p.SetState(27)
+			p.SetState(31)
 			p.Clause()
 		}
 
-		p.SetState(32)
+		p.SetState(36)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -482,26 +488,26 @@ func (p *KnowledgeParser) Clause() (localctx IClauseContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(34)
+	p.SetState(38)
 	p.GetErrorHandler().Sync(p)
 
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(33)
+			p.SetState(37)
 			p.Match(KnowledgeParserBS)
 		}
 
 	}
 	{
-		p.SetState(36)
+		p.SetState(40)
 		p.Formulas()
 	}
-	p.SetState(38)
+	p.SetState(42)
 	p.GetErrorHandler().Sync(p)
 
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(37)
+			p.SetState(41)
 			p.Match(KnowledgeParserBE)
 		}
 
@@ -622,24 +628,24 @@ func (p *KnowledgeParser) Formulas() (localctx IFormulasContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(40)
+		p.SetState(44)
 		p.Formula()
 	}
-	p.SetState(45)
+	p.SetState(49)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == KnowledgeParserAND {
 		{
-			p.SetState(41)
+			p.SetState(45)
 			p.Match(KnowledgeParserAND)
 		}
 		{
-			p.SetState(42)
+			p.SetState(46)
 			p.Formula()
 		}
 
-		p.SetState(47)
+		p.SetState(51)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -765,35 +771,35 @@ func (p *KnowledgeParser) Formula() (localctx IFormulaContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(49)
+	p.SetState(53)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == KnowledgeParserBS {
 		{
-			p.SetState(48)
+			p.SetState(52)
 			p.Match(KnowledgeParserBS)
 		}
 
 	}
 	{
-		p.SetState(51)
+		p.SetState(55)
 		p.LeftOperand()
 	}
 	{
-		p.SetState(52)
+		p.SetState(56)
 		p.Operator()
 	}
 	{
-		p.SetState(53)
+		p.SetState(57)
 		p.RightOperand()
 	}
-	p.SetState(55)
+	p.SetState(59)
 	p.GetErrorHandler().Sync(p)
 
 	if p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext()) == 1 {
 		{
-			p.SetState(54)
+			p.SetState(58)
 			p.Match(KnowledgeParserBE)
 		}
 
@@ -892,7 +898,7 @@ func (p *KnowledgeParser) LeftOperand() (localctx ILeftOperandContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(57)
+		p.SetState(61)
 		p.Operand()
 	}
 
@@ -989,7 +995,7 @@ func (p *KnowledgeParser) RightOperand() (localctx IRightOperandContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(59)
+		p.SetState(63)
 		p.Operand()
 	}
 
@@ -1034,16 +1040,24 @@ func NewOperandContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 
 func (s *OperandContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *OperandContext) NUMBER() antlr.TerminalNode {
-	return s.GetToken(KnowledgeParserNUMBER, 0)
+func (s *OperandContext) LiteralOperand() ILiteralOperandContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*ILiteralOperandContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ILiteralOperandContext)
 }
 
-func (s *OperandContext) REAL() antlr.TerminalNode {
-	return s.GetToken(KnowledgeParserREAL, 0)
-}
+func (s *OperandContext) VariableOperand() IVariableOperandContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IVariableOperandContext)(nil)).Elem(), 0)
 
-func (s *OperandContext) IDENTIFIER() antlr.TerminalNode {
-	return s.GetToken(KnowledgeParserIDENTIFIER, 0)
+	if t == nil {
+		return nil
+	}
+
+	return t.(IVariableOperandContext)
 }
 
 func (s *OperandContext) GetRuleContext() antlr.RuleContext {
@@ -1069,6 +1083,117 @@ func (s *OperandContext) ExitRule(listener antlr.ParseTreeListener) {
 func (p *KnowledgeParser) Operand() (localctx IOperandContext) {
 	localctx = NewOperandContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 14, KnowledgeParserRULE_operand)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.SetState(67)
+	p.GetErrorHandler().Sync(p)
+
+	switch p.GetTokenStream().LA(1) {
+	case KnowledgeParserNUMBER, KnowledgeParserREAL:
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(65)
+			p.LiteralOperand()
+		}
+
+	case KnowledgeParserIDENTIFIER:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(66)
+			p.VariableOperand()
+		}
+
+	default:
+		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	}
+
+	return localctx
+}
+
+// ILiteralOperandContext is an interface to support dynamic dispatch.
+type ILiteralOperandContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsLiteralOperandContext differentiates from other interfaces.
+	IsLiteralOperandContext()
+}
+
+type LiteralOperandContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyLiteralOperandContext() *LiteralOperandContext {
+	var p = new(LiteralOperandContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = KnowledgeParserRULE_literalOperand
+	return p
+}
+
+func (*LiteralOperandContext) IsLiteralOperandContext() {}
+
+func NewLiteralOperandContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *LiteralOperandContext {
+	var p = new(LiteralOperandContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = KnowledgeParserRULE_literalOperand
+
+	return p
+}
+
+func (s *LiteralOperandContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *LiteralOperandContext) NUMBER() antlr.TerminalNode {
+	return s.GetToken(KnowledgeParserNUMBER, 0)
+}
+
+func (s *LiteralOperandContext) REAL() antlr.TerminalNode {
+	return s.GetToken(KnowledgeParserREAL, 0)
+}
+
+func (s *LiteralOperandContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *LiteralOperandContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *LiteralOperandContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
+		listenerT.EnterLiteralOperand(s)
+	}
+}
+
+func (s *LiteralOperandContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
+		listenerT.ExitLiteralOperand(s)
+	}
+}
+
+func (p *KnowledgeParser) LiteralOperand() (localctx ILiteralOperandContext) {
+	localctx = NewLiteralOperandContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 16, KnowledgeParserRULE_literalOperand)
 	var _la int
 
 	defer func() {
@@ -1089,15 +1214,106 @@ func (p *KnowledgeParser) Operand() (localctx IOperandContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(61)
+		p.SetState(69)
 		_la = p.GetTokenStream().LA(1)
 
-		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<KnowledgeParserIDENTIFIER)|(1<<KnowledgeParserNUMBER)|(1<<KnowledgeParserREAL))) != 0) {
+		if !(_la == KnowledgeParserNUMBER || _la == KnowledgeParserREAL) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
 			p.Consume()
 		}
+	}
+
+	return localctx
+}
+
+// IVariableOperandContext is an interface to support dynamic dispatch.
+type IVariableOperandContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// IsVariableOperandContext differentiates from other interfaces.
+	IsVariableOperandContext()
+}
+
+type VariableOperandContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+}
+
+func NewEmptyVariableOperandContext() *VariableOperandContext {
+	var p = new(VariableOperandContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = KnowledgeParserRULE_variableOperand
+	return p
+}
+
+func (*VariableOperandContext) IsVariableOperandContext() {}
+
+func NewVariableOperandContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *VariableOperandContext {
+	var p = new(VariableOperandContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = KnowledgeParserRULE_variableOperand
+
+	return p
+}
+
+func (s *VariableOperandContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *VariableOperandContext) IDENTIFIER() antlr.TerminalNode {
+	return s.GetToken(KnowledgeParserIDENTIFIER, 0)
+}
+
+func (s *VariableOperandContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *VariableOperandContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *VariableOperandContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
+		listenerT.EnterVariableOperand(s)
+	}
+}
+
+func (s *VariableOperandContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(KnowledgeListener); ok {
+		listenerT.ExitVariableOperand(s)
+	}
+}
+
+func (p *KnowledgeParser) VariableOperand() (localctx IVariableOperandContext) {
+	localctx = NewVariableOperandContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 18, KnowledgeParserRULE_variableOperand)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(71)
+		p.Match(KnowledgeParserIDENTIFIER)
 	}
 
 	return localctx
@@ -1187,7 +1403,7 @@ func (s *OperatorContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *KnowledgeParser) Operator() (localctx IOperatorContext) {
 	localctx = NewOperatorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, KnowledgeParserRULE_operator)
+	p.EnterRule(localctx, 20, KnowledgeParserRULE_operator)
 	var _la int
 
 	defer func() {
@@ -1208,7 +1424,7 @@ func (p *KnowledgeParser) Operator() (localctx IOperatorContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(63)
+		p.SetState(73)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<KnowledgeParserDEQ)|(1<<KnowledgeParserNEQ)|(1<<KnowledgeParserLT)|(1<<KnowledgeParserLE)|(1<<KnowledgeParserGT)|(1<<KnowledgeParserGE))) != 0) {
