@@ -113,11 +113,12 @@ func (l *antlrParserListener) ExitFunctionOperand(ctx *FunctionOperandContext) {
 	if !ok {
 		return
 	}
-	fn, err := l.Factory.CreateFunctionOperand(baseFn.GetName(), baseFn.GetParameters())
+	fn, err := l.Factory.CreateFunctionOperand(baseFn.GetName())
 	if err != nil {
 		l.SetInternalError(ctx.GetParser(), err)
 		return
 	}
+	fn.SetParameters(baseFn.GetParameters())
 	l.Push(fn)
 }
 

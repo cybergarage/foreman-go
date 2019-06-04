@@ -19,5 +19,5 @@ type Factory interface {
 	// CreateVariableOperand must return a variable operand of the specified object.
 	CreateVariableOperand(name string) (Variable, error)
 	// CreateFunctionOperand must return a function operand of the specified objects.
-	CreateFunctionOperand(name string, params []interface{}) (Function, error)
+	CreateFunctionOperand(name string) (Function, error)
 }
