@@ -6,29 +6,10 @@ package qos
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
 
 	"github.com/cybergarage/foreman-go/foreman/kb"
 )
-
-const (
-	qosOperandThresholdRegex = "^[+-]?[0-9]+([\\.][0-9]+)?"
-	qosOperandMetricRegex    = "^[A-Za-z][0-9A-Za-z_\\.]*"
-)
-
-var qosOperandRegexes []*regexp.Regexp
-
-// getQoSOperandRegexes returns a slice of the QoS operand Regexp formats.
-func getQoSOperandRegexes() []*regexp.Regexp {
-	if qosOperandRegexes == nil {
-		qosOperandRegexes = []*regexp.Regexp{
-			regexp.MustCompile(qosOperandThresholdRegex),
-			regexp.MustCompile(qosOperandMetricRegex),
-		}
-	}
-	return qosOperandRegexes
-}
 
 // CreateRule is an interface method of kb.Factory
 func (qos *QoS) CreateRule() kb.Rule {
@@ -78,7 +59,7 @@ func (qos *QoS) CreateVariableOperand(name string) (kb.Variable, error) {
 }
 
 // CreateFunctionOperand  is an interface method of kb.Factory
-func (qos *QoS) CreateFunctionOperand(name string, params []interface{}) (kb.Function, error) {
+func (qos *QoS) CreateFunctionOperand(name string) (kb.Function, error) {
 	return nil, fmt.Errorf(errorUnknownFunction, name)
 }
 
