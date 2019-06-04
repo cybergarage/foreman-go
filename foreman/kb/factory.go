@@ -17,5 +17,5 @@ type Factory interface {
 	// CreateLiteralOperand must return a literal operand of the specified object.
 	CreateLiteralOperand(obj interface{}) (Literal, error)
 	// CreateVariableOperand must return a variable operand of the specified object.
-	CreateVariableOperand(obj interface{}) (Variable, error)
+	CreateVariableOperand(name string) (Variable, error)
 }
