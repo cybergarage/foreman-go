@@ -9,4 +9,5 @@ const (
 	errorInvalidOperator     = "Invalid operator (%v)"
 	errorNullFormulaVariable = "Null formula (%s) variable "
 	errorNullMetricEntity    = "Null metric (%s)"
+	errorUnknownFunction     = "Unknown function (%s)"
 )

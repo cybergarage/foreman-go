@@ -77,6 +77,11 @@ func (qos *QoS) CreateVariableOperand(name string) (kb.Variable, error) {
 	return m, nil
 }
 
+// CreateFunctionOperand  is an interface method of kb.Factory
+func (qos *QoS) CreateFunctionOperand(name string, params []interface{}) (kb.Function, error) {
+	return nil, fmt.Errorf(errorUnknownFunction, name)
+}
+
 // CreateOperator is an interface method kb.Factory
 func (qos *QoS) CreateOperator(obj interface{}) (kb.Operator, error) {
 	operatorStr, ok := obj.(string)

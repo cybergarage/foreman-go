@@ -60,7 +60,7 @@ func (fn *BaseFunction) GetValue() (interface{}, error) {
 
 // Execute returns the operand value with the specified parameters.
 func (fn *BaseFunction) Execute([]interface{}) (interface{}, error) {
-	return nil, nil
+	return nil, fmt.Errorf(errorUnknownFunction, fn.Name)
 }
 
 // Expression returns a string for the formula expression.
