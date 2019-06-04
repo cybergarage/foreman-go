@@ -4,7 +4,7 @@
 
 package kb
 
-// Variable represents a simple operand object which has a name and value.
+// Variable represents a variable operand object which has a name and value.
 type Variable interface {
 	Object
 	// SetName sets a specified name.
