@@ -65,19 +65,14 @@ func (qos *QoS) CreateLiteralOperand(obj interface{}) (kb.Literal, error) {
 }
 
 // CreateVariableOperand  is an interface method of kb.Factory
-func (qos *QoS) CreateVariableOperand(obj interface{}) (kb.Variable, error) {
-	varStr, ok := obj.(string)
-	if !ok {
-		return nil, fmt.Errorf(errorInvalidOperand, obj)
-	}
-
-	v, ok := qos.Variables[varStr]
+func (qos *QoS) CreateVariableOperand(name string) (kb.Variable, error) {
+	v, ok := qos.Variables[name]
 	if ok {
 		return v, nil
 	}
 
-	m := NewMetricWithName(varStr)
-	qos.Variables[varStr] = m
+	m := NewMetricWithName(name)
+	qos.Variables[name] = m
 
 	return m, nil
 }
