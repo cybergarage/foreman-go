@@ -48,6 +48,11 @@ func (fn *BaseFunction) SetParameters(params []interface{}) {
 	copy(fn.Params, params)
 }
 
+// AddParameter adds a specified parameters.
+func (fn *BaseFunction) AddParameter(param interface{}) {
+	fn.Params = append(fn.Params, param)
+}
+
 // GetParameters returns the parameters.
 func (fn *BaseFunction) GetParameters() []interface{} {
 	return fn.Params

@@ -5,6 +5,9 @@
 package kb
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/cybergarage/foreman-go/foreman/util"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
@@ -96,4 +99,63 @@ func (l *antlrParserListener) EnterVariableOperand(ctx *VariableOperandContext) 
 		return
 	}
 	l.Push(op)
+}
+
+// EnterFunctionOperand is called when production functionOperand is entered.
+func (l *antlrParserListener) EnterFunctionOperand(ctx *FunctionOperandContext) {
+	baseFn := NewFunction()
+	l.Push(baseFn)
+}
+
+// ExitFunctionOperand is called when production functionOperand is exited.
+func (l *antlrParserListener) ExitFunctionOperand(ctx *FunctionOperandContext) {
+	baseFn, ok := l.Pop().(*BaseFunction)
+	if !ok {
+		return
+	}
+	fn, err := l.Factory.CreateFunctionOperand(baseFn.GetName(), baseFn.GetParameters())
+	if err != nil {
+		l.SetInternalError(ctx.GetParser(), err)
+		return
+	}
+	l.Push(fn)
+}
+
+// EnterFunctionName is called when production functionName is entered.
+func (l *antlrParserListener) EnterFunctionName(ctx *FunctionNameContext) {
+	baseFn, ok := l.Peek().(*BaseFunction)
+	if !ok {
+		return
+	}
+	upperName := strings.ToUpper(ctx.GetText())
+	baseFn.SetName(upperName)
+}
+
+// EnterParameter is called when production parameter is entered.
+func (l *antlrParserListener) EnterParameter(ctx *ParameterContext) {
+	baseFn, ok := l.Peek().(*BaseFunction)
+	if !ok {
+		return
+	}
+	param := ctx.GetText()
+
+	numParam, err := strconv.ParseInt(param, 10, 64)
+	if err == nil {
+		baseFn.AddParameter(numParam)
+		return
+	}
+
+	realParam, err := strconv.ParseFloat(param, 64)
+	if err == nil {
+		baseFn.AddParameter(realParam)
+		return
+	}
+
+	boolParam, err := strconv.ParseBool(param)
+	if err == nil {
+		baseFn.AddParameter(boolParam)
+		return
+	}
+
+	baseFn.AddParameter(param)
 }

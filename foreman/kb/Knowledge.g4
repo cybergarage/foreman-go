@@ -45,6 +45,7 @@ rightOperand
 operand
 	: literalOperand
 	| variableOperand
+	| functionOperand
 	;
 
 literalOperand
@@ -54,6 +55,20 @@ literalOperand
 
 variableOperand
 	: IDENTIFIER
+	;
+
+functionOperand
+	: functionName '(' parameter (',' parameter)* ')'
+	;
+
+functionName
+	: IDENTIFIER
+	;
+
+parameter
+	: IDENTIFIER
+	| NUMBER
+	| REAL
 	;
 
 operator

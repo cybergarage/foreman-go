@@ -37,6 +37,15 @@ type KnowledgeListener interface {
 	// EnterVariableOperand is called when entering the variableOperand production.
 	EnterVariableOperand(c *VariableOperandContext)
 
+	// EnterFunctionOperand is called when entering the functionOperand production.
+	EnterFunctionOperand(c *FunctionOperandContext)
+
+	// EnterFunctionName is called when entering the functionName production.
+	EnterFunctionName(c *FunctionNameContext)
+
+	// EnterParameter is called when entering the parameter production.
+	EnterParameter(c *ParameterContext)
+
 	// EnterOperator is called when entering the operator production.
 	EnterOperator(c *OperatorContext)
 
@@ -69,6 +78,15 @@ type KnowledgeListener interface {
 
 	// ExitVariableOperand is called when exiting the variableOperand production.
 	ExitVariableOperand(c *VariableOperandContext)
+
+	// ExitFunctionOperand is called when exiting the functionOperand production.
+	ExitFunctionOperand(c *FunctionOperandContext)
+
+	// ExitFunctionName is called when exiting the functionName production.
+	ExitFunctionName(c *FunctionNameContext)
+
+	// ExitParameter is called when exiting the parameter production.
+	ExitParameter(c *ParameterContext)
 
 	// ExitOperator is called when exiting the operator production.
 	ExitOperator(c *OperatorContext)
