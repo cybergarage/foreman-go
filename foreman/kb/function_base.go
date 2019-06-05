@@ -4,7 +4,10 @@
 
 package kb
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // BaseFunction represents a simple operand object which has a name and value.
 type BaseFunction struct {
@@ -68,7 +71,16 @@ func (fn *BaseFunction) Execute([]interface{}) (interface{}, error) {
 	return nil, fmt.Errorf(errorUnknownFunction, fn.Name)
 }
 
-// Expression returns a string for the formula expression.
+// ExpressionWithParameters returns a string for the expression with the parameters.
+func (fn *BaseFunction) ExpressionWithParameters(params []interface{}) string {
+	paramStrings := make([]string, len(params))
+	for n, param := range params {
+		paramStrings[n] = fmt.Sprintf("%s", param)
+	}
+	return fmt.Sprintf("%s(%s)", fn.Name, strings.Join(paramStrings, ", "))
+}
+
+// Expression returns a string for the expression.
 func (fn *BaseFunction) Expression() string {
-	return fmt.Sprintf("%s", fn.Name)
+	return fn.ExpressionWithParameters(fn.Params)
 }
