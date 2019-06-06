@@ -12,11 +12,6 @@ import (
 	"github.com/cybergarage/foreman-go/foreman/qos/function"
 )
 
-// InitFunctions is called when QoS manager is generated
-func (qos *QoS) InitFunctions() {
-	qos.AddFunction(function.NewAbs())
-}
-
 // CreateRule is an interface method of kb.Factory
 func (qos *QoS) CreateRule() kb.Rule {
 	return NewRule()
@@ -66,11 +61,11 @@ func (qos *QoS) CreateVariableOperand(name string) (kb.Variable, error) {
 
 // CreateFunctionOperand  is an interface method of kb.Factory
 func (qos *QoS) CreateFunctionOperand(name string) (kb.Function, error) {
-	fn, ok := qos.GetFunction(name)
-	if !ok {
-		return nil, fmt.Errorf(errorUnknownFunction, name)
+	switch name {
+	case "ABS":
+		return function.NewAbs(), nil
 	}
-	return fn, nil
+	return nil, fmt.Errorf(errorUnknownFunction, name)
 }
 
 // CreateOperator is an interface method kb.Factory
