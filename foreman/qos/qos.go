@@ -6,22 +6,18 @@ package qos
 
 import (
 	"github.com/cybergarage/foreman-go/foreman/kb"
-	"github.com/cybergarage/foreman-go/foreman/qos/function"
 )
 
 // QoS includes all QoS rules.
 type QoS struct {
 	kb.KnowledgeBase
-	function.FunctionMap
 }
 
 // NewQoS returns a new null object.
 func NewQoS() *QoS {
 	qos := &QoS{
 		KnowledgeBase: *kb.NewKnowledgeBase(),
-		FunctionMap:   function.NewFunctionMap(),
 	}
-	qos.InitFunctions()
 	return qos
 }
 
