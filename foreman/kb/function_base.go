@@ -63,6 +63,21 @@ func (fn *BaseFunction) GetParameters() []interface{} {
 	return fn.Params
 }
 
+// HasParameter returns true when the function has the specified parameter, otherwise false.
+func (fn *BaseFunction) HasParameter(name string) bool {
+	for _, param := range fn.Params {
+		sparam, ok := param.(string)
+		if !ok {
+			continue
+		}
+		if sparam != name {
+			continue
+		}
+		return true
+	}
+	return false
+}
+
 // SetExecutor sets a specified name.
 func (fn *BaseFunction) SetExecutor(executor Function) {
 	fn.Executor = executor
