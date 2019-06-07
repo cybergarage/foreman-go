@@ -134,6 +134,51 @@ func (kb *KnowledgeBase) removeRelatedRules(ruleName string) error {
 	return nil
 }
 
+// isRelatedOperand returns true when the specified operand is related with the specified name, otherwise false.
+func (kb *KnowledgeBase) isRelatedOperand(name string, operand Operand) bool {
+	switch operand.(type) {
+	case Variable:
+		{
+			v, _ := operand.(Variable)
+			if v.GetName() == name {
+				return true
+			}
+		}
+	case Function:
+		{
+			fn, _ := operand.(Function)
+			if fn.HasVariable(name) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+// FindRelatedRules returns all rules of the the specified name.
+func (kb *KnowledgeBase) FindRelatedRules(name string) ([]Rule, error) {
+	rules := make([]Rule, 0)
+
+	for _, rule := range kb.Rules {
+		for _, clause := range rule.GetClauses() {
+			for _, formula := range clause.GetFormulas() {
+				for _, operand := range formula.GetOperands() {
+					if kb.isRelatedOperand(name, operand) {
+						rule, ok := rule.(Rule)
+						if !ok {
+							continue
+						}
+						rules = append(rules, rule)
+						break
+					}
+				}
+			}
+		}
+	}
+	return rules, nil
+}
+
 // SetRule adds a new rules.
 func (kb *KnowledgeBase) SetRule(rule Rule) error {
 	// Add all variables in the rule
