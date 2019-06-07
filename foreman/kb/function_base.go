@@ -78,19 +78,6 @@ func (fn *BaseFunction) HasVariable(name string) bool {
 	return false
 }
 
-// GetVariableNames returns only parameter name in parameter.
-func (fn *BaseFunction) GetVariableNames() []string {
-	names := []string{}
-	for _, param := range fn.Params {
-		name, ok := param.(string)
-		if !ok {
-			continue
-		}
-		names = append(names, name)
-	}
-	return names
-}
-
 // SetExecutor sets a specified name.
 func (fn *BaseFunction) SetExecutor(executor Function) {
 	fn.Executor = executor
