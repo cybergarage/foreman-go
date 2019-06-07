@@ -51,6 +51,19 @@ func (rule *BaseRule) GetClauses() []Clause {
 	return rule.Clauses
 }
 
+// GetVariables returns all variables in the formula.
+func (rule *BaseRule) GetVariables() []Variable {
+	vars := []Variable{}
+	for _, clause := range rule.GetClauses() {
+		clauseVars := clause.GetVariables()
+		if len(clauseVars) <= 0 {
+			continue
+		}
+		vars = append(vars, clauseVars...)
+	}
+	return vars
+}
+
 // IsSatisfied returns whether a clause in the rule is satisfied.
 func (rule *BaseRule) IsSatisfied() (bool, error) {
 	var lastErr error

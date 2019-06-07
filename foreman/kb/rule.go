@@ -16,6 +16,7 @@ type Rule interface {
 	GetName() string
 	AddClause(Clause) error
 	GetClauses() []Clause
+	GetVariables() []Variable
 	IsSatisfied() (bool, error)
 	ParseString(Factory, string) error
 	String() string
