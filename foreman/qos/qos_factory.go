@@ -59,15 +59,6 @@ func (qos *QoS) CreateVariableOperand(name string) (kb.Variable, error) {
 	return m, nil
 }
 
-// CreateFunctionOperand  is an interface method of kb.Factory
-func (qos *QoS) CreateFunctionOperand(name string) (kb.Function, error) {
-	switch name {
-	case "ABS":
-		return function.NewAbs(), nil
-	}
-	return nil, fmt.Errorf(errorUnknownFunction, name)
-}
-
 // CreateOperator is an interface method kb.Factory
 func (qos *QoS) CreateOperator(obj interface{}) (kb.Operator, error) {
 	operatorStr, ok := obj.(string)
@@ -79,4 +70,27 @@ func (qos *QoS) CreateOperator(obj interface{}) (kb.Operator, error) {
 		return nil, err
 	}
 	return ope, nil
+}
+
+// CreateFunctionOperand  is an interface method of kb.Factory
+func (qos *QoS) CreateFunctionOperand(name string) (kb.Function, error) {
+	var fn kb.Function
+
+	switch name {
+	case "ABS":
+		fn = function.NewAbs()
+	}
+
+	if fn == nil {
+		return nil, fmt.Errorf(errorUnknownFunction, name)
+	}
+
+	qosFn, ok := fn.(Function)
+	if ok {
+		qosFn.SetMetricManager(qos.GetMetricManager())
+		qosFn.SetRegisterManager(qos.GetRegisterManager())
+		qosFn.SetRegistryManager(qos.GetRegistryManager())
+	}
+
+	return fn, nil
 }

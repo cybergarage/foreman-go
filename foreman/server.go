@@ -93,6 +93,9 @@ func NewServerWithConfig(conf *Config) (*Server, error) {
 
 	// QoS
 
+	server.qosMgr.SetMetricManager(server.metricMgr)
+	server.qosMgr.SetRegistryManager(server.registryMgr)
+	server.qosMgr.SetRegisterManager(server.registerMgr)
 	server.qosMgr.AddListener(server)
 
 	// Failure Detector
