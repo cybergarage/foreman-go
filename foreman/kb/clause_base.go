@@ -4,7 +4,9 @@
 
 package kb
 
-import "bytes"
+import (
+	"bytes"
+)
 
 // BaseClause represents a clause.
 type BaseClause struct {
@@ -29,6 +31,22 @@ func (clause *BaseClause) AddFormula(formula Formula) error {
 // GetFormulas returns all formula list.
 func (clause *BaseClause) GetFormulas() []Formula {
 	return clause.Formulas
+}
+
+// GetVariables returns all variables in the formula.
+func (clause *BaseClause) GetVariables() []Variable {
+	vars := []Variable{}
+
+	for _, formula := range clause.GetFormulas() {
+		for _, operand := range formula.GetOperands() {
+			v, ok := operand.(Variable)
+			if !ok {
+				continue
+			}
+			vars = append(vars, v)
+		}
+	}
+	return vars
 }
 
 // IsSatisfied returns whether the all formulas in the clause are satisfied.
