@@ -7,6 +7,7 @@ package function
 import (
 	"fmt"
 	"math"
+	"strconv"
 )
 
 // Abs represents a abs function .
@@ -50,6 +51,21 @@ func (fn *Abs) Execute(params []interface{}) (interface{}, error) {
 	case int32:
 		val, _ := params[0].(int32)
 		return math.Abs(float64(val)), nil
+	case string:
+		name, _ := params[0].(string)
+		obj, ok := fn.GetRegisterManager().GetObject(name)
+		if !ok {
+			return nil, fmt.Errorf("Invalid parameter name : (%s)", name)
+		}
+		data, err := obj.GetData()
+		if err != nil {
+			return nil, fmt.Errorf("%s (%s)", name, err.Error())
+		}
+		val, err := strconv.ParseFloat(data, 64)
+		if err != nil {
+			return nil, fmt.Errorf("%s (%s)", name, err.Error())
+		}
+		return val, nil
 	}
 	return nil, fmt.Errorf("Invalid parameter type : %T(%v)", params[0], params[0])
 }
