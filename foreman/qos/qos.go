@@ -71,11 +71,22 @@ func (qos *QoS) FindRelatedRules(q *Query) ([]*Rule, error) {
 		for _, clause := range rule.GetClauses() {
 			for _, formula := range clause.GetFormulas() {
 				for _, operand := range formula.GetOperands() {
-					v, ok := operand.(kb.Variable)
-					if !ok {
-						continue
-					}
-					if v.GetName() != name {
+					switch operand.(type) {
+					case kb.Variable:
+						{
+							v, _ := operand.(kb.Variable)
+							if v.GetName() != name {
+								continue
+							}
+						}
+					case kb.Function:
+						{
+							fn, _ := operand.(kb.Function)
+							if !fn.HasParameter(name) {
+								continue
+							}
+						}
+					default:
 						continue
 					}
 					qosRule, ok := rule.(*Rule)
