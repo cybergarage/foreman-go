@@ -1,0 +1,48 @@
+################################################################################
+# Check whether QoS result is not found
+################################################################################
+
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+################################################################################
+# Set unsatisfied action
+################################################################################
+
+SET ("qos_unsatisfied","python","aW1wb3J0IGZvcmVtYW4KZGVmIHFvc191bnNhdGlzZmllZChwYXJhbXMscmVzdWx0cyk6CiAgICBmb3JlbWFuLnNldF9yZWdpc3RlcigncW9zJywgJ2ZhbHNlJykKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/qos_unsatisfied
+EXPORT FROM ACTION WHERE name == "qos_unsatisfied";200;/action/methods/qos_unsatisfied
+
+################################################################################
+# Post initial metrics
+################################################################################
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+
+################################################################################
+# Set QoS rules and routes 
+################################################################################
+
+SET (m01, "m01 <= ABS(1)") INTO QOS;200
+SET (m01, m01, qos_unsatisfied) INTO ROUTE;200
+
+# m01(0) <= ABS(1) : SAT
+
+SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# m01(10) <= ABS(1) : UNSAT
+
+SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+
+DELETE FROM QOS WHERE name == m01;200;
+DELETE FROM ROUTE WHERE name == m01;200;
+
+################################################################################
+# Cleanup
+################################################################################
+
+DELETE FROM REGISTER WHERE name == m01;200;
+DELETE FROM REGISTER WHERE name == m02;200;

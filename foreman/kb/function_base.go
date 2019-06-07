@@ -11,8 +11,9 @@ import (
 
 // BaseFunction represents a simple operand object which has a name and value.
 type BaseFunction struct {
-	Name   string
-	Params []interface{}
+	Name     string
+	Params   []interface{}
+	Executor Function
 }
 
 // NewFunction returns a new BaseFunction instance.
@@ -28,8 +29,9 @@ func NewFunctionWithName(name string) *BaseFunction {
 // NewFunctionWithNameAndParams returns a new base function instance with the specified name and parameters.
 func NewFunctionWithNameAndParams(name string, params []interface{}) *BaseFunction {
 	fn := &BaseFunction{
-		Name:   name,
-		Params: nil,
+		Name:     name,
+		Params:   nil,
+		Executor: nil,
 	}
 	fn.SetParameters(params)
 	return fn
@@ -61,14 +63,17 @@ func (fn *BaseFunction) GetParameters() []interface{} {
 	return fn.Params
 }
 
-// GetValue returns the stored value.
-func (fn *BaseFunction) GetValue() (interface{}, error) {
-	return fn.Execute(fn.Params)
+// SetExecutor sets a specified name.
+func (fn *BaseFunction) SetExecutor(executor Function) {
+	fn.Executor = executor
 }
 
-// Execute returns the operand value with the specified parameters.
-func (fn *BaseFunction) Execute([]interface{}) (interface{}, error) {
-	return nil, fmt.Errorf(errorUnknownFunction, fn.Name)
+// GetValue returns the stored value.
+func (fn *BaseFunction) GetValue() (interface{}, error) {
+	if fn.Executor == nil {
+		return nil, fmt.Errorf(errorUnknownFunction, fn.Name)
+	}
+	return fn.Executor.Execute(fn.Params)
 }
 
 // ExpressionWithParameters returns a string for the expression with the parameters.

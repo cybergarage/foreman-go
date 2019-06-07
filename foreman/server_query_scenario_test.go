@@ -104,7 +104,9 @@ func TestPlatformDependentScenarios(t *testing.T) {
 }
 
 func TestQueryDebugScenarios(t *testing.T) {
-	scenarioFiles := []string{}
+	scenarioFiles := []string{
+		"scenario_qos_abs.test",
+	}
 
 	conf := test.NewDefaultConfig()
 

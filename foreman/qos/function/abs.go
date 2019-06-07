@@ -7,8 +7,6 @@ package function
 import (
 	"fmt"
 	"math"
-
-	"github.com/cybergarage/foreman-go/foreman/kb"
 )
 
 // Abs represents a abs function .
@@ -17,10 +15,11 @@ type Abs struct {
 }
 
 // NewAbs returns a abs function instance.
-func NewAbs() kb.Function {
+func NewAbs() *Abs {
 	fn := &Abs{
 		Function: NewFunctionWithName("ABS"),
 	}
+	fn.SetExecutor(fn)
 	return fn
 }
 
