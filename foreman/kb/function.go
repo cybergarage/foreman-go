@@ -11,8 +11,10 @@ type Function interface {
 	SetName(name string)
 	// SetParameters sets a specified parameters.
 	SetParameters(params []interface{})
-	// HasParameter returns true when the function has the specified parameter, otherwise false.
-	HasParameter(name string) bool
+	// HasVariable returns true when the function has the specified parameter, otherwise false.
+	HasVariable(name string) bool
+	// GetVariableNames returns only parameter name in parameter.
+	GetVariableNames() []string
 	// Execute returns the operand value with the specified parameters.
 	Execute([]interface{}) (interface{}, error)
 }

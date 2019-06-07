@@ -63,8 +63,8 @@ func (fn *BaseFunction) GetParameters() []interface{} {
 	return fn.Params
 }
 
-// HasParameter returns true when the function has the specified parameter, otherwise false.
-func (fn *BaseFunction) HasParameter(name string) bool {
+// HasVariable returns true when the function has the specified parameter, otherwise false.
+func (fn *BaseFunction) HasVariable(name string) bool {
 	for _, param := range fn.Params {
 		sparam, ok := param.(string)
 		if !ok {
@@ -76,6 +76,19 @@ func (fn *BaseFunction) HasParameter(name string) bool {
 		return true
 	}
 	return false
+}
+
+// GetVariableNames returns only parameter name in parameter.
+func (fn *BaseFunction) GetVariableNames() []string {
+	names := []string{}
+	for _, param := range fn.Params {
+		name, ok := param.(string)
+		if !ok {
+			continue
+		}
+		names = append(names, name)
+	}
+	return names
 }
 
 // SetExecutor sets a specified name.
