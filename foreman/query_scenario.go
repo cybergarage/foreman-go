@@ -108,7 +108,7 @@ func (s *QueryScenario) executeCommand(e *test.Event) (*test.Response, *errors.E
 
 // Execute runs the specified event.
 func (s *QueryScenario) Execute(e *test.Event) (*test.Response, *errors.Error) {
-	if e.IsType("SHELL") {
+	if e.HasDataPrefix("SHELL") {
 		return s.executeCommand(e)
 	}
 	return s.executeQuery(e)
