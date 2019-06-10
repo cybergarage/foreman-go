@@ -31,7 +31,7 @@ func (e *Event) GetData() string {
 	return e.Data
 }
 
-// IsType returns true when the event databegins with the specified prefix, otherwise false.
-func (e *Event) IsType(prefix string) bool {
+// HasDataPrefix returns true when the event databegins with the specified prefix, otherwise false.
+func (e *Event) HasDataPrefix(prefix string) bool {
 	return strings.HasPrefix(e.Data, prefix)
 }
