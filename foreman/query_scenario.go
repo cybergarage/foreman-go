@@ -62,8 +62,7 @@ func (s *QueryScenario) Setup() error {
 
 // executeQuery runs the specified query event.
 func (s *QueryScenario) executeQuery(e *test.Event) (*test.Response, *errors.Error) {
-	q := test.NewQueryEvent()
-	err := q.ParseEvent(e)
+	q, err := test.NewQueryEventWithEvent(e)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}
@@ -88,22 +87,11 @@ func (s *QueryScenario) executeQuery(e *test.Event) (*test.Response, *errors.Err
 
 // executeCommand runs the specified shell event.
 func (s *QueryScenario) executeCommand(e *test.Event) (*test.Response, *errors.Error) {
-	q := test.NewShellEvent()
-	err := q.ParseEvent(e)
+	q, err := test.NewShellEventWithEvent(e)
 	if err != nil {
 		return nil, errors.NewErrorWithError(err)
 	}
-
-	err = q.Execute()
-	if err != nil {
-		return nil, errors.NewErrorWithError(err)
-	}
-
-	res := test.NewQueryResponse()
-	res.Query = q.Command
-	res.StatusCode = 0
-
-	return res.Response, nil
+	return q.Execute()
 }
 
 // Execute runs the specified event.
