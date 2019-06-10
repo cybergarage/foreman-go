@@ -31,6 +31,16 @@ func NewQueryEvent() *QueryEvent {
 	return q
 }
 
+// NewQueryEventWithEvent create an scenario query event
+func NewQueryEventWithEvent(e *Event) (*QueryEvent, error) {
+	q := NewQueryEvent()
+	err := q.ParseEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return q, nil
+}
+
 // ParseEvent parses the specified event.
 func (q *QueryEvent) ParseEvent(e *Event) error {
 	eventData := e.Data

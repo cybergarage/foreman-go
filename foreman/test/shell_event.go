@@ -8,10 +8,15 @@ package test
 import "C"
 
 import (
-	"errors"
 	"fmt"
 	"os/exec"
 	"strings"
+
+	"github.com/cybergarage/foreman-go/foreman/errors"
+)
+
+const (
+	errorExecCmd = "%s (%d)"
 )
 
 // ShellEvent represents a scenario shell event.
@@ -25,11 +30,21 @@ func NewShellEvent() *ShellEvent {
 	return q
 }
 
+// NewShellEventWithEvent create an scenario shell event
+func NewShellEventWithEvent(e *Event) (*ShellEvent, error) {
+	se := NewShellEvent()
+	err := se.ParseEvent(e)
+	if err != nil {
+		return nil, err
+	}
+	return se, nil
+}
+
 // ParseEvent parses the specified event.
 func (q *ShellEvent) ParseEvent(e *Event) error {
 	eventData := e.Data
 	if len(eventData) <= 0 {
-		return errors.New(errorEmptyEvent)
+		return fmt.Errorf(errorEmptyEvent)
 	}
 
 	params := strings.SplitN(eventData, " ", 2)
@@ -42,12 +57,8 @@ func (q *ShellEvent) ParseEvent(e *Event) error {
 	return nil
 }
 
-const (
-	errorExecCmd = "%s (%d)"
-)
-
-// Execute executes the specified event.
-func (q *ShellEvent) Execute() error {
+// Execute executes the scenario
+func (q *ShellEvent) Execute() (*Response, *errors.Error) {
 	cmd := q.Command
 	//cmd = "\"" + q.Command + "\""
 
@@ -59,9 +70,14 @@ func (q *ShellEvent) Execute() error {
 	*/
 
 	err := exec.Command("sh", "-c", cmd).Run()
+
 	if err != nil {
-		return err
+		return nil, errors.NewErrorWithError(err)
 	}
 
-	return nil
+	res := NewQueryResponse()
+	res.Query = q.Command
+	res.StatusCode = 0
+
+	return res.Response, nil
 }
