@@ -103,13 +103,11 @@ func TestPlatformDependentScenarios(t *testing.T) {
 	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
 }
 
-func TestQueryDebugScenarios(t *testing.T) {
-	scenarioFiles := []string{
-		"scenario_qos_04.test",
-		//"scenario_qos_abs.test",
-	}
+func TestQueryDebuggingScenarios(t *testing.T) {
+	scenarioFiles := []string{}
 
 	conf := test.NewDefaultConfig()
+	conf.EnableSkipError = true
 
 	opt := test.NewDefaultScenarioOption()
 

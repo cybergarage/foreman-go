@@ -11,12 +11,17 @@ type Response struct {
 	Content    interface{}
 }
 
-// NewResponse create an scenario query response.
+// NewResponse create a scenario query response.
 func NewResponse() *Response {
+	return NewResponseWithParameters("", 0, nil)
+}
+
+// NewResponseWithParameters create a scenario query response with the specified parameters.
+func NewResponseWithParameters(query string, code int, content interface{}) *Response {
 	res := &Response{
-		Query:      "",
-		StatusCode: 0,
-		Content:    nil,
+		Query:      query,
+		StatusCode: code,
+		Content:    content,
 	}
 	return res
 }

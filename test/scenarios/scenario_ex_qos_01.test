@@ -18,6 +18,7 @@ SET (m01, m01, qos_unsatisfied_export_m0102) INTO ROUTE;200
 
 # FIXME : O:MacOS, X:CentOS
 SHELL echo 'm01 -5 now\nm02 2 now' | nc -c localhost 2003
+SLEEP 1
 
 EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;-5
 EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;-5
