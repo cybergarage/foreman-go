@@ -4,10 +4,6 @@
 
 package kb
 
-import (
-	"fmt"
-)
-
 // KnowledgeBaseListener represents a listener interface.
 type KnowledgeBaseListener interface {
 	RuleListener
@@ -181,35 +177,30 @@ func (kb *KnowledgeBase) FindRelatedRules(name string) ([]Rule, error) {
 
 // SetRule adds a new rules.
 func (kb *KnowledgeBase) SetRule(rule Rule) error {
-	// Add all variables in the rule
-	for _, clause := range rule.GetClauses() {
-		for _, formula := range clause.GetFormulas() {
-			for _, operand := range formula.GetOperands() {
-				variable, ok := operand.(Variable)
-				if !ok {
-					continue
-				}
-				variableName := variable.GetName()
+	ruleVars := rule.GetVariables()
 
-				mapVariable, ok := kb.GetVariable(variableName)
-				if !ok {
-					kb.Variables[variableName] = variable
-					continue
-				}
+	// Add new rule variables into knowledgeBase
 
-				err := kb.addRelatedRules(variableName, rule)
-				if err != nil {
-					return err
-				}
+	for _, ruleVar := range ruleVars {
+		ruleVarName := ruleVar.GetName()
+		_, ok := kb.GetVariable(ruleVarName)
+		if ok {
+			continue
+		}
+		kb.Variables[ruleVarName] = ruleVar
+	}
 
-				// Check whether these are a same instance
-				if variable != mapVariable {
-					return fmt.Errorf(errorInvalidRuleVariable, variableName, variable, mapVariable)
-				}
+	// Add new rule into knowledgeBase variables
 
-			}
+	for _, ruleVar := range ruleVars {
+		ruleVarName := ruleVar.GetName()
+		err := kb.addRelatedRules(ruleVarName, rule)
+		if err != nil {
+			return err
 		}
 	}
+
+	// Add new rule into knowledgeBase
 
 	kb.Rules[rule.GetName()] = rule
 
