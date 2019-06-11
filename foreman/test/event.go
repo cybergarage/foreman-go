@@ -6,6 +6,17 @@ package test
 
 import "strings"
 
+const (
+	shellEventPrefix = "SHELL"
+	sleepEventPrefix = "SLEEP"
+)
+
+const (
+	errorEmptyEvent                 = "Empty event"
+	errorInvalidEventParameterCount = "Invalid event parameter count (%d) : %s"
+	errorInvalidEventCode           = "Invalid event code : %s"
+)
+
 // Event represents a scenario event.
 type Event struct {
 	No   int
@@ -34,4 +45,14 @@ func (e *Event) GetData() string {
 // HasDataPrefix returns true when the event databegins with the specified prefix, otherwise false.
 func (e *Event) HasDataPrefix(prefix string) bool {
 	return strings.HasPrefix(e.Data, prefix)
+}
+
+// IsShellEvent returns true when this event has the prefix, otherwise false.
+func (e *Event) IsShellEvent() bool {
+	return e.HasDataPrefix(shellEventPrefix)
+}
+
+// IsSleepEvent returns true when this event has the prefix, otherwise false.
+func (e *Event) IsSleepEvent() bool {
+	return e.HasDataPrefix(sleepEventPrefix)
 }
