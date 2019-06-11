@@ -55,6 +55,7 @@ SET (m01_metric, m01, qos_unsatisfied_export_m0102) INTO ROUTE;200
 ################################################################################
 
 SET (m01, 110, CURRENT_TIMESTAMP) INTO METRICS,SET (m02, 210, CURRENT_TIMESTAMP) INTO METRICS;200
+SLEEP 1
 
 EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;110
 EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;110
@@ -66,6 +67,7 @@ EXPORT FROM REGISTER WHERE name == m02_register;200;/register/m02_register/value
 ################################################################################
 
 SET (m01, 120, CURRENT_TIMESTAMP, m02, 220, CURRENT_TIMESTAMP) INTO METRICS;200
+SLEEP 1
 
 EXPORT FROM REGISTER WHERE name == m01_metric;200;/register/m01_metric/value/;120
 EXPORT FROM REGISTER WHERE name == m01_register;200;/register/m01_register/value;120
