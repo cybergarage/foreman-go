@@ -19,18 +19,19 @@ const (
 	errorExecCmd = "%s (%d)"
 )
 
-// ShellEvent represents a scenario shell event.
+// ShellEvent represents a shell scenario event.
 type ShellEvent struct {
+	Executor
 	Command string
 }
 
-// NewShellEvent create an scenario shell event
+// NewShellEvent create a shell scenario event
 func NewShellEvent() *ShellEvent {
 	q := &ShellEvent{}
 	return q
 }
 
-// NewShellEventWithEvent create an scenario shell event
+// NewShellEventWithEvent create a shell scenario event with the specified event
 func NewShellEventWithEvent(e *Event) (*ShellEvent, error) {
 	se := NewShellEvent()
 	err := se.ParseEvent(e)
