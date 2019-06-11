@@ -51,6 +51,7 @@ func TestQueryBasicScenarios(t *testing.T) {
 		"scenario_qos_01.test",
 		"scenario_qos_02.test",
 		"scenario_qos_03.test",
+		"scenario_qos_04.test",
 		"scenario_qos_05.test",
 		"scenario_register_01.test",
 		"scenario_register_02.test",
