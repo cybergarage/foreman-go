@@ -39,11 +39,14 @@ func (clause *BaseClause) GetVariables() []Variable {
 
 	for _, formula := range clause.GetFormulas() {
 		for _, operand := range formula.GetOperands() {
-			v, ok := operand.(Variable)
-			if !ok {
-				continue
+			switch operand.(type) {
+			case Variable:
+				v, _ := operand.(Variable)
+				vars = append(vars, v)
+			case Function:
+				fn, _ := operand.(Function)
+				vars = append(vars, fn.GetVariables()...)
 			}
-			vars = append(vars, v)
 		}
 	}
 	return vars

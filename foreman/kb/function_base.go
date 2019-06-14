@@ -30,7 +30,7 @@ func NewFunctionWithName(name string) *BaseFunction {
 func NewFunctionWithNameAndParams(name string, params []interface{}) *BaseFunction {
 	fn := &BaseFunction{
 		Name:     name,
-		Params:   nil,
+		Params:   make([]interface{}, 0),
 		Executor: nil,
 	}
 	fn.SetParameters(params)
@@ -63,17 +63,25 @@ func (fn *BaseFunction) GetParameters() []interface{} {
 	return fn.Params
 }
 
-// HasVariable returns true when the function has the specified parameter, otherwise false.
-func (fn *BaseFunction) HasVariable(name string) bool {
+// GetVariables returns all variables in the function parameters.
+func (fn *BaseFunction) GetVariables() []Variable {
+	varParams := make([]Variable, 0)
 	for _, param := range fn.Params {
-		sparam, ok := param.(string)
+		varParam, ok := param.(Variable)
 		if !ok {
 			continue
 		}
-		if sparam != name {
-			continue
+		varParams = append(varParams, varParam)
+	}
+	return varParams
+}
+
+// HasVariable returns true when the function has the specified parameter, otherwise false.
+func (fn *BaseFunction) HasVariable(name string) bool {
+	for _, varParam := range fn.GetVariables() {
+		if varParam.GetName() == name {
+			return true
 		}
-		return true
 	}
 	return false
 }
