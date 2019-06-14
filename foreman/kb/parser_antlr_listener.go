@@ -158,5 +158,11 @@ func (l *antlrParserListener) EnterParameter(ctx *ParameterContext) {
 		return
 	}
 
-	baseFn.AddParameter(param)
+	varParam, err := l.Factory.CreateVariableOperand(param)
+	if err != nil {
+		l.SetInternalError(ctx.GetParser(), err)
+		return
+	}
+
+	baseFn.AddParameter(varParam)
 }
