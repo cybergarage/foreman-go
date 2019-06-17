@@ -1,16 +1,16 @@
 # exec query
-SET ("test_execquery","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfZXhlY3F1ZXJ5KHBhcmFtcyxyZXN1bHRzKToKICBqc29uUmVzID0gZm9yZW1hbi5leGVjdXRlX3F1ZXJ5KHBhcmFtc1sicSJdKQogIGlmIGpzb25SZXMgaXMgTm9uZToKICAgIHJldHVybiBGYWxzZQogIGZvciBrZXksIHZhbHVlIGluIGpzb25SZXMuaXRlcml0ZW1zKCk6CiAgICByZXN1bHRzW2tleV0gPSB2YWx1ZQogIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
-EXPORT FROM ACTION;200;/action/methods/test_execquery
-EXPORT FROM ACTION WHERE name == "test_execquery";200;/action/methods/test_execquery
-EXECUTE test_execquery (q) VALUES ("EXPORT FROM CONFIG");200;
-EXECUTE test_execquery (q) VALUES ("SET (exec_query_reg, 1.0) INTO REGISTER");200;
-EXECUTE test_execquery (q) VALUES ("EXPORT FROM REGISTER WHERE name == exec_query_reg");200;
+SET ("exec_query","python","aW1wb3J0IGZvcmVtYW4KZGVmIGV4ZWNfcXVlcnkocGFyYW1zLHJlc3VsdHMpOgogIGpzb25SZXMgPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkocGFyYW1zWyJxIl0pCiAgaWYganNvblJlcyBpcyBOb25lOgogICAgcmV0dXJuIEZhbHNlCiAgZm9yIGtleSwgdmFsdWUgaW4ganNvblJlcy5pdGVtcygpOgogICAgcmVzdWx0c1trZXldID0gdmFsdWUKICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/exec_query
+EXPORT FROM ACTION WHERE name == "exec_query";200;/action/methods/exec_query
+EXECUTE exec_query (q) VALUES ("EXPORT FROM CONFIG");200;
+EXECUTE exec_query (q) VALUES ("SET (exec_query_reg, 1.0) INTO REGISTER");200;
+EXECUTE exec_query (q) VALUES ("EXPORT FROM REGISTER WHERE name == exec_query_reg");200;
 
 # post query
-SET ("test_postquery","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfcG9zdHF1ZXJ5KHBhcmFtcyxyZXN1bHRzKToKICBqc29uUmVzID0gZm9yZW1hbi5wb3N0X3F1ZXJ5KCJsb2NhbGhvc3QiLCA4MTg4LCBwYXJhbXNbInEiXSkKICBpZiBqc29uUmVzIGlzIE5vbmU6CiAgICByZXR1cm4gRmFsc2UKICBmb3Iga2V5LCB2YWx1ZSBpbiBqc29uUmVzLml0ZXJpdGVtcygpOgogICAgcmVzdWx0c1trZXldID0gdmFsdWUKICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;200;
-EXPORT FROM ACTION;200;/action/methods/test_postquery
-EXPORT FROM ACTION WHERE name == "test_postquery";200;/action/methods/test_postquery
-EXECUTE test_postquery (q) VALUES ("EXPORT FROM CONFIG");200;
-EXECUTE test_postquery (q) VALUES ("EXPORT FROM CONFIG");200;
-EXECUTE test_postquery (q) VALUES ("SET (post_query_reg, 1.0) INTO REGISTER");200;
-EXECUTE test_postquery (q) VALUES ("EXPORT FROM REGISTER WHERE name == post_query_reg");200;
+SET ("post_query","python","aW1wb3J0IGZvcmVtYW4KZGVmIHBvc3RfcXVlcnkocGFyYW1zLHJlc3VsdHMpOgogIGpzb25SZXMgPSBmb3JlbWFuLnBvc3RfcXVlcnkoImxvY2FsaG9zdCIsIDgxODgsIHBhcmFtc1sicSJdKQogIGlmIGpzb25SZXMgaXMgTm9uZToKICAgIHJldHVybiBGYWxzZQogIGZvciBrZXksIHZhbHVlIGluIGpzb25SZXMuaXRlbXMoKToKICAgIHJlc3VsdHNba2V5XSA9IHZhbHVlCiAgcmV0dXJuIFRydWUK","base64") INTO ACTION;200;
+EXPORT FROM ACTION;200;/action/methods/post_query
+EXPORT FROM ACTION WHERE name == "post_query";200;/action/methods/post_query
+EXECUTE post_query (q) VALUES ("EXPORT FROM CONFIG");200;
+EXECUTE post_query (q) VALUES ("EXPORT FROM CONFIG");200;
+EXECUTE post_query (q) VALUES ("SET (post_query_reg, 1.0) INTO REGISTER");200;
+EXECUTE post_query (q) VALUES ("EXPORT FROM REGISTER WHERE name == post_query_reg");200;

@@ -1,5 +1,5 @@
 import foreman
-def postquery(params,results):
+def post_query(params,results):
   jsonRes = foreman.post_query("localhost", 8188, params["q"])
   if jsonRes is None:
     return False

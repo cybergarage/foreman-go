@@ -1,5 +1,5 @@
 import foreman
-def execquery(params,results):
+def exec_query(params,results):
   jsonRes = foreman.execute_query(params["q"])
   if jsonRes is None:
     return False
