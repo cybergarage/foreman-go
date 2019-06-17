@@ -44,7 +44,7 @@ func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, test
 func TestQueryBasicScenarios(t *testing.T) {
 
 	scenarioFiles := []string{
-		"scenario_action_01.test",
+		"scenario_action_system_ls.test",
 		"scenario_config_01.test",
 		"scenario_finder_01.test",
 		"scenario_metrics_01.test",
