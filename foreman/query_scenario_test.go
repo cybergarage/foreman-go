@@ -77,7 +77,7 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 	scenarioFiles := []string{
 		"scenario_action_py_01.test",
 		"scenario_action_py_02.test",
-		"scenario_action_py_03.test",
+		"scenario_action_py_register.test",
 		"scenario_action_py_04.test",
 		"scenario_action_py_05.test",
 		"scenario_action_py_analyze_metrics.test",
