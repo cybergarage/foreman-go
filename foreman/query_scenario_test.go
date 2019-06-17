@@ -48,7 +48,7 @@ func TestQueryBasicScenarios(t *testing.T) {
 		"scenario_config_export.test",
 		"scenario_finder_export.test",
 		"scenario_metrics_export.test",
-		"scenario_qos_unsatisfied_metric.test",
+		"scenario_qos_unsatisfied_one_metrics.test",
 		"scenario_qos_unsatisfied_two_metrics.test",
 		"scenario_qos_unsatisfied_three_metrics.test",
 		"scenario_register_set.test",
