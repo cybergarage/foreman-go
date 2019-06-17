@@ -92,7 +92,7 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 
 func TestPlatformDependentScenarios(t *testing.T) {
 	scenarioFiles := []string{
-		"scenario_ex_qos_01.test", // FIXME on CentOS
+		"scenario_qos_export_unsatisfied_metrics_graphite.test", // FIXME on CentOS
 	}
 
 	conf := test.NewDefaultConfig()
