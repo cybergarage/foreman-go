@@ -8,26 +8,21 @@ EXPORT FROM QOS WHERE name == qos_rs999;200;/qos/qos_rs999
 
 ################################################################################
 # Sets destination actions for QoS 
-# test_qos_analyze_correlation
-# test_qos_export_metrics
+# qos_export_metrics
 ################################################################################
 
-SET ("test_qos_analyze_correlation","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgdGVzdF9xb3NfYW5hbHl6ZV9jb3JyZWxhdGlvbihwYXJhbXMscmVzdWx0cyk6CiAgbm93ID0gZGF0ZXRpbWUuZGF0ZXRpbWUubm93KCkKICBub3dUcyA9IGludCh0aW1lLm1rdGltZShub3cudGltZXR1cGxlKCkpKQogIGZyb21UcyA9IG5vd1RzIC0gKDYwICogNjApCiAgdW50aWxUcyA9IG5vd1RzCiAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgcSA9ICdBTkFMWVpFICVzIEZST00gTUVUUklDUyBXSEVSRSB0cyA+PSAlZCBBTkQgdHMgPD0gJWQnICUgKGtleSwgZnJvbVRzLCB1bnRpbFRzKQogICAgcmVzdWx0c1sncSddID0gcQogICAganNvblJlcyA9IGZvcmVtYW4uZXhlY3V0ZV9xdWVyeShxKQogICAgaWYganNvblJlcyBpcyBOb25lOgogICAgICByZXR1cm4gRmFsc2UKICAgIHJlZ0tleSA9ICd0ZXN0X3Fvc19hbmFseXplX2NvcnJlbGF0aW9uXyVzJyAlIGtleQogICAgZm9yZW1hbi5zZXRfcmVnaXN0ZXIocmVnS2V5LCBzdHIodmFsdWUpKQogIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200
-EXPORT FROM ACTION WHERE name == "test_qos_analyze_correlation";200;/action/methods/test_qos_analyze_correlation
-
-SET ("test_qos_export_metrics","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgdGVzdF9xb3NfZXhwb3J0X21ldHJpY3MocGFyYW1zLHJlc3VsdHMpOgogIG5vdyA9IGRhdGV0aW1lLmRhdGV0aW1lLm5vdygpCiAgbm93VHMgPSBpbnQodGltZS5ta3RpbWUobm93LnRpbWV0dXBsZSgpKSkKICBmcm9tVHMgPSBub3dUcyAtICg2MCAqIDYwKQogIHVudGlsVHMgPSBub3dUcwogIGZvciBrZXksIHZhbHVlIGluIHBhcmFtcy5pdGVyaXRlbXMoKToKICAgIHEgPSAnU0VMRUNUICogRlJPTSBNRVRSSUNTIFdIRVJFIHRzID49ICVkIEFORCB0cyA8PSAlZCcgJSAoZnJvbVRzLCB1bnRpbFRzKQogICAganNvblJlcyA9IGZvcmVtYW4uZXhlY3V0ZV9xdWVyeShxKQogICAgaWYganNvblJlcyBpcyBOb25lOgogICAgICByZXR1cm4gRmFsc2UKICAgIHJlZ0tleSA9ICd0ZXN0X3Fvc19leHBvcnRfbWV0cmljc18lcycgJSBrZXkKICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKHJlZ0tleSwgc3RyKHZhbHVlKSkKICByZXR1cm4gVHJ1ZQo=","base64") INTO ACTION;200
-EXPORT FROM ACTION WHERE name == "test_qos_export_metrics";200;/action/methods/test_qos_export_metrics
+SET ("qos_export_metrics","python","aW1wb3J0IGRhdGV0aW1lCmltcG9ydCB0aW1lCmltcG9ydCBqc29uCmltcG9ydCBmb3JlbWFuCgpkZWYgcW9zX2V4cG9ydF9tZXRyaWNzKHBhcmFtcyxyZXN1bHRzKToKICBub3cgPSBkYXRldGltZS5kYXRldGltZS5ub3coKQogIG5vd1RzID0gaW50KHRpbWUubWt0aW1lKG5vdy50aW1ldHVwbGUoKSkpCiAgZnJvbVRzID0gbm93VHMgLSAoNjAgKiA2MCkKICB1bnRpbFRzID0gbm93VHMKICBmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CiAgICBxID0gJ1NFTEVDVCAqIEZST00gTUVUUklDUyBXSEVSRSB0cyA+PSAlZCBBTkQgdHMgPD0gJWQnICUgKGZyb21UcywgdW50aWxUcykKICAgIGpzb25SZXMgPSBmb3JlbWFuLmV4ZWN1dGVfcXVlcnkocSkKICAgIGlmIGpzb25SZXMgaXMgTm9uZToKICAgICAgcmV0dXJuIEZhbHNlCiAgICByZWdLZXkgPSAncW9zX2V4cG9ydF9tZXRyaWNzXyVzJyAlIGtleQogICAgZm9yZW1hbi5zZXRfcmVnaXN0ZXIocmVnS2V5LCBzdHIodmFsdWUpKQogIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200
+EXPORT FROM ACTION WHERE name == "qos_export_metrics";200;/action/methods/qos_export_metrics
 
 ################################################################################
 # Sets routes for the QoS rule
-# qos_rs999 -> test_qos_analyze_correlation
-# qos_rs999 -> test_qos_export_metrics
+# qos_rs999 -> qos_export_metrics
 ################################################################################
 
 SET (qos_analyze_route, qos_rs999, test_qos_analyze_correlation) INTO ROUTE;200
 EXPORT FROM ROUTE WHERE name == "qos_analyze_route";200;/action/routes/qos_analyze_route
 
-SET (qos_export_route, qos_rs999, test_qos_export_metrics) INTO ROUTE;200
+SET (qos_export_route, qos_rs999, qos_export_metrics) INTO ROUTE;200
 EXPORT FROM ROUTE WHERE name == "qos_export_route";200;/action/routes/qos_export_route
 
 ################################################################################
@@ -67,5 +62,4 @@ SET (qos_m0_p999, 10, -60min) INTO METRICS;200
 SET (qos_m10, 10, CURRENT_TIMESTAMP) INTO METRICS;200
 
 SET (qos_m0_p999, 200, CURRENT_TIMESTAMP) INTO METRICS;200
-EXPORT FROM REGISTER WHERE name == test_qos_analyze_correlation_qos_m0_p999;200;/register/test_qos_analyze_correlation_qos_m0_p999/value;200.0
-EXPORT FROM REGISTER WHERE name == test_qos_export_metrics_qos_m0_p999;200;/register/test_qos_export_metrics_qos_m0_p999/value;200.0
+EXPORT FROM REGISTER WHERE name == qos_export_metrics_qos_m0_p999;200;/register/qos_export_metrics_qos_m0_p999/value;200.0
