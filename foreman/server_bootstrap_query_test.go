@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	boostrapQueryTestFile         = "../test/data/query/boostrap/boostrap_query_01_qos.fql"
-	boostrapQueryTestFileScenario = "../test/scenarios/scenario_boostrap_query_01.test"
+	boostrapQueryTestFile         = "../test/data/query/boostrap/boostrap_query_qos.fql"
+	boostrapQueryTestFileScenario = "../test/scenarios/scenario_boostrap_query_file.test"
 
 	boostrapQueryTestDir         = "../test/data/query/boostrap"
-	boostrapQueryTestDirScenario = "../test/scenarios/scenario_boostrap_query_02.test"
+	boostrapQueryTestDirScenario = "../test/scenarios/scenario_boostrap_query_dir.test"
 )
 
 func TestSeverBootstrapQueryFile(t *testing.T) {
