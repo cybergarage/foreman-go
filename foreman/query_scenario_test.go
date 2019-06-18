@@ -51,6 +51,7 @@ func TestQueryBasicScenarios(t *testing.T) {
 		"scenario_qos_unsatisfied_one_metrics.test",
 		"scenario_qos_unsatisfied_two_metrics.test",
 		"scenario_qos_unsatisfied_three_metrics.test",
+		"scenario_qos_multi_routing.test",
 		"scenario_register_set.test",
 		"scenario_register_export.test",
 	}
@@ -102,14 +103,25 @@ func TestPlatformDependentScenarios(t *testing.T) {
 	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
 }
 
-func TestQueryDebuggingScenarios(t *testing.T) {
+func TestQueryNoRepeatabilityScenarios(t *testing.T) {
 	scenarioFiles := []string{
 		"scenario_qos_export_unsatisfied_metrics.test",
-		"scenario_qos_function_abs.test",
 	}
 
 	conf := test.NewDefaultConfig()
 	conf.EnableSkipError = true
+
+	opt := test.NewDefaultScenarioOption()
+
+	testQueryScenarioFilesWithConfig(t, scenarioFiles, conf, opt)
+}
+
+func TestQueryDebuggingScenarios(t *testing.T) {
+	scenarioFiles := []string{
+		//"scenario_qos_function_abs.test",
+	}
+
+	conf := test.NewDefaultConfig()
 
 	opt := test.NewDefaultScenarioOption()
 
