@@ -69,8 +69,14 @@ EXPORT FROM REGISTER WHERE name == export_m01;200;/register/export_m01/value/;40
 
 DELETE FROM REGISTER WHERE name == m01;200;
 DELETE FROM REGISTER WHERE name == export_m01;200;
+
 DELETE FROM QOS WHERE name == m01_qos;200
+
+DELETE FROM ACTION WHERE name == post_register;200
+DELETE FROM ACTION WHERE name == export_register;200
+DELETE FROM ACTION WHERE name == stdout_params;200
+
 DELETE FROM ROUTE WHERE name == m01_export;200
 DELETE FROM ROUTE WHERE name == m01_post;200
-DELETE FROM ROUTE WHERE name == m01_post;200
+DELETE FROM ROUTE WHERE name == m01_stdout;200
 
