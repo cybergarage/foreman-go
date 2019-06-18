@@ -48,10 +48,6 @@ func TestQueryBasicScenarios(t *testing.T) {
 		"scenario_config_export.test",
 		"scenario_finder_export.test",
 		"scenario_metrics_export.test",
-		"scenario_qos_unsatisfied_one_metrics.test",
-		"scenario_qos_unsatisfied_two_metrics.test",
-		"scenario_qos_unsatisfied_three_metrics.test",
-		"scenario_qos_multi_routing.test",
 		"scenario_register_set.test",
 		"scenario_register_export.test",
 	}
@@ -82,6 +78,11 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 		"scenario_action_py_query.test",
 		"scenario_action_py_analyze_metrics.test",
 		"scenario_action_py_export_metrics.test",
+		"scenario_qos_unsatisfied_one_metrics.test",
+		"scenario_qos_unsatisfied_two_metrics.test",
+		"scenario_qos_unsatisfied_three_metrics.test",
+		"scenario_qos_multi_routing.test",
+		"scenario_qos_recursive_exec_action.test",
 	}
 
 	conf := test.NewDefaultConfig()
