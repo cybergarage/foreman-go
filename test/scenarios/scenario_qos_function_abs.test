@@ -20,7 +20,7 @@ SET (m01, 0, CURRENT_TIMESTAMP) INTO METRICS;200
 SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
 
 ################################################################################
-# Set QoS rules and routes 
+# VAR <= ABS(LITERAL)
 ################################################################################
 
 #SET (m01, "m01 <= ABS(1)") INTO QOS;200
@@ -41,7 +41,7 @@ SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
 #DELETE FROM ROUTE WHERE name == m01;200;
 
 ################################################################################
-# Set QoS rules and routes 
+# VAR <= ABS(VAR)
 ################################################################################
 
 SET (m01m02, "m01 <= ABS(m02)") INTO QOS;200
@@ -52,9 +52,30 @@ SET (m01m02, m01m02, qos_unsatisfied) INTO ROUTE;200
 SET (m02, 0, CURRENT_TIMESTAMP) INTO METRICS;200
 EXPORT FROM REGISTER WHERE name == qos;400;
 
-# m01(10) <= ABS(m02:0) : UNSAT
+# m01(0) <= ABS(m02:-10) : SAT
 
-SET (m01, 10, CURRENT_TIMESTAMP) INTO METRICS;200
+SET (m02, -10, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# m01(20) <= ABS(m02:-10) : UNSAT
+
+SET (m01, 20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;200;
+DELETE FROM REGISTER WHERE name == qos;200;
+
+# m01(20) <= ABS(m02:20) : SAT
+
+SET (m02, 20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# m01(20) <= ABS(m02:-20) : SAT
+
+SET (m02, -20, CURRENT_TIMESTAMP) INTO METRICS;200
+EXPORT FROM REGISTER WHERE name == qos;400;
+
+# m01(20) <= ABS(m02:-10) : UNSAT
+
+SET (m02, -10, CURRENT_TIMESTAMP) INTO METRICS;200
 EXPORT FROM REGISTER WHERE name == qos;200;
 DELETE FROM REGISTER WHERE name == qos;200;
 
