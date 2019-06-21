@@ -83,6 +83,7 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 		"scenario_qos_unsatisfied_three_metrics.test",
 		"scenario_qos_multi_routing.test",
 		"scenario_qos_recursive_exec_action.test",
+		"scenario_qos_function_abs.test",
 	}
 
 	conf := test.NewDefaultConfig()
@@ -118,9 +119,7 @@ func TestQueryNoRepeatabilityScenarios(t *testing.T) {
 }
 
 func TestQueryDebuggingScenarios(t *testing.T) {
-	scenarioFiles := []string{
-		//"scenario_qos_function_abs.test",
-	}
+	scenarioFiles := []string{}
 
 	conf := test.NewDefaultConfig()
 
