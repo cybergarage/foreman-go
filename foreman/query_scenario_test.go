@@ -82,7 +82,6 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 		"scenario_qos_unsatisfied_two_metrics.test",
 		"scenario_qos_unsatisfied_three_metrics.test",
 		"scenario_qos_multi_routing.test",
-		"scenario_qos_recursive_exec_action.test",
 		"scenario_qos_function_abs.test",
 	}
 
