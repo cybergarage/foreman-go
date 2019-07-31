@@ -33,7 +33,7 @@ func TestSeverExecuteMultipleActions(t *testing.T) {
 	// Set a sleep action
 
 	sleep_action_name := "echo"
-	sleep_action_code := "aW1wb3J0IHRpbWUKZGVmIGVjaG8ocGFyYW1zLHJlc3VsdHMpOgoJZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZW1zKCk6CgkJcHJpbnQoa2V5ICsgIiA9ICIgKyB2YWx1ZSArICIgKHNldCkiKQoJCXJlc3VsdHNba2V5XSA9IHZhbHVlCgkJcHJpbnQoa2V5ICsgIiA9ICIgKyB2YWx1ZSArICIgKHNsZWVwKSIpCgkJdGltZS5zbGVlcCgxKQoJCXByaW50KGtleSArICIgPSAiICsgdmFsdWUgKyAiIChkb25lKSIpCglyZXR1cm4gVHJ1ZQo="
+	sleep_action_code := "aW1wb3J0IHRpbWUKZGVmIGVjaG8ocGFyYW1zLHJlc3VsdHMpOgoJZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZW1zKCk6CgkJI3ByaW50KGtleSArICIgPSAiICsgdmFsdWUgKyAiIChzZXQpIikKCQlyZXN1bHRzW2tleV0gPSB2YWx1ZQoJCSNwcmludChrZXkgKyAiID0gIiArIHZhbHVlICsgIiAoc2xlZXApIikKCQl0aW1lLnNsZWVwKDEpCgkJI3ByaW50KGtleSArICIgPSAiICsgdmFsdWUgKyAiIChkb25lKSIpCglyZXR1cm4gVHJ1ZQo="
 
 	queryString := fmt.Sprintf("SET (\"%s\",\"python\",\"%s\",\"base64\") INTO ACTION", sleep_action_name, sleep_action_code)
 
