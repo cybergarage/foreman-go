@@ -55,7 +55,7 @@ func TestSeverExecuteMultipleActions(t *testing.T) {
 	// Execute a sleep actions parallelly
 
 	queries = fql.NewQueries()
-	queryCnt := 10
+	queryCnt := 20
 	for n := 0; n < queryCnt; n++ {
 		queryString = fmt.Sprintf("EXECUTE %s (message) VALUES (\"hello ([%d/%d])\")", sleep_action_name, (n + 1), queryCnt)
 
