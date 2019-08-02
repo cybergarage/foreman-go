@@ -150,7 +150,7 @@ build: antlr vet
 	go build -v -gcflags=${GCFLAGS} ${PACKAGES}
 
 test: antlr vet
-	go test -v -cover -timeout 300s ${PACKAGES}
+	go test -v -cover -parallel 1 -timeout 300s ${PACKAGES}
 
 profile: 
 	go test -v -cover -timeout 300s -memprofilerate 1 -memprofile ${TESTING_PROFILE_FILENAME} ${PACKAGE_ID}
