@@ -9,6 +9,7 @@ import "C"
 
 import (
 	"runtime"
+	"sync"
 	"unsafe"
 )
 
@@ -22,6 +23,7 @@ func newScriptManagerWithInterface(mgrImpl Scripting) *ScriptManager {
 func newScriptManagerWithCObject(cObject unsafe.Pointer) *ScriptManager {
 	mgrImp := &cgoScriptManager{}
 	mgrImp.cManager = cObject
+	mgrImp.mutex = new(sync.Mutex)
 	runtime.SetFinalizer(mgrImp, scriptManagerFinalizer)
 	return newScriptManagerWithInterface(mgrImp)
 }

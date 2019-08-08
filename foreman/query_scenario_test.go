@@ -92,7 +92,10 @@ func TestQueryPythonActionScenarios(t *testing.T) {
 }
 
 func TestPlatformDependentScenarios(t *testing.T) {
-	scenarioFiles := []string{}
+	scenarioFiles := []string{
+		// FIXME On CentOS
+		"scenario_qos_export_unsatisfied_metrics_graphite.test",
+	}
 
 	conf := test.NewDefaultConfig()
 	conf.EnableSkipError = true
@@ -116,10 +119,7 @@ func TestQueryNoRepeatabilityScenarios(t *testing.T) {
 }
 
 func TestQueryDebuggingScenarios(t *testing.T) {
-	scenarioFiles := []string{
-		// FIXME On CentOS
-		//"scenario_qos_export_unsatisfied_metrics_graphite.test",
-	}
+	scenarioFiles := []string{}
 
 	conf := test.NewDefaultConfig()
 
