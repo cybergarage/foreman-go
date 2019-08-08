@@ -9,6 +9,7 @@ import "C"
 
 import (
 	"fmt"
+	"sync"
 	"unsafe"
 
 	"github.com/cybergarage/foreman-go/foreman/errors"
@@ -26,6 +27,7 @@ const (
 // cgoScriptManager represents an action manager using foreman-cc.
 type cgoScriptManager struct {
 	cManager unsafe.Pointer
+	mutex    *sync.Mutex
 }
 
 // SetRegistryStore sets the registry store to use in the scripts.
@@ -157,7 +159,13 @@ func (mgr *cgoScriptManager) ExecMethod(name string, params Parameters) (Paramet
 
 	cname := C.CString(name)
 	defer C.free(unsafe.Pointer(cname))
+
+	mgr.mutex.Lock()
+
 	executedResult := bool(C.foreman_action_manager_execmethod(mgr.cManager, cname, cParams, cResults, cerr))
+
+	mgr.mutex.Unlock()
+
 	if !executedResult {
 		err := errors.NewWithCObject(cerr)
 		if C.foreman_error_isinternalerror(cerr) {
