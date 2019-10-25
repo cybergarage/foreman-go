@@ -10,6 +10,7 @@ const (
 	DefaultCarbonPort                 = 2003
 	DefaultHttpPort                   = 8188
 	DefaultConnectionTimeout          = 60
+	DefaultConnectionWaitTimeout      = 10
 	DefaultRpcProtocol                = "http"
 	DefaultLogFile                    = "-"
 	DefaultLogLevel                   = "INFO"

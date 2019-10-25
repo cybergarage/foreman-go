@@ -9,6 +9,7 @@ package foreman
 
 import (
 	"io/ioutil"
+	"net"
 	"os"
 	"path/filepath"
 	"sync"
@@ -27,6 +28,7 @@ type testFeedGraphiteConf struct {
 	feedFilenames     []string
 	retentionInterval time.Duration
 	feedDuration      time.Duration
+	keepConnection    bool
 }
 
 func newTestFeedGraphiteDefaultDataConf() *testFeedGraphiteConf {
@@ -40,6 +42,7 @@ func newTestFeedGraphiteNanDataConf() *testFeedGraphiteConf {
 		},
 		retentionInterval: 10 * time.Second,
 		feedDuration:      10 * time.Second / testGraphiteFeedTimeScale,
+		keepConnection:    false,
 	}
 }
 
@@ -54,6 +57,7 @@ func newTestCassandraFeedDataConf() *testFeedGraphiteConf {
 		},
 		retentionInterval: 60 * time.Second,
 		feedDuration:      60 * time.Second / testGraphiteFeedTimeScale,
+		keepConnection:    false,
 	}
 }
 
@@ -87,12 +91,22 @@ func newTestCollectdFeedDataConf() *testFeedGraphiteConf {
 		},
 		retentionInterval: 10 * time.Second,
 		feedDuration:      10 * time.Second / testGraphiteFeedTimeScale,
+		keepConnection:    true,
 	}
 }
 
 func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename string) {
+	feedGraphiteDataToServer(t, server, feedDataFilename)
+	checkFeededGraphiteDataToServer(t, server, feedDataFilename)
+}
 
-	// Feed metrics (Carbon API)
+func testFeedGraphiteDataToServerWithConnection(t *testing.T, server *Server, client *go_graphite.Client, conn net.Conn, feedDataFilename string) {
+	feedGraphiteDataToServerWithConnection(t, server, client, conn, feedDataFilename)
+	checkFeededGraphiteDataToServer(t, server, feedDataFilename)
+}
+
+func feedGraphiteDataToServerWithConnection(t *testing.T, server *Server, client *go_graphite.Client, conn net.Conn, feedDataFilename string) {
+	// Load feed metrics
 
 	feedDataFilePath := filepath.Join(testGraphiteFeedDataDirectory, feedDataFilename)
 
@@ -104,7 +118,43 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 
 	feedData := string(feedBytes)
 
-	feedMetrics, err := go_graphite.NewMetricsWithPlainText(feedData)
+	// Feed metrics (Carbon API)
+
+	err = client.FeedStringWithConnection(conn, feedData)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+}
+
+func feedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename string) {
+	// Setup a client for the target server
+
+	client := go_graphite.NewClient()
+	client.SetHost(server.GetAddress())
+	client.SetCarbonPort(server.GetCarbonPort())
+	client.SetRenderPort(server.GetRenderPort())
+	conn, err := client.Open()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	feedGraphiteDataToServerWithConnection(t, server, client, conn, feedDataFilename)
+
+	err = conn.Close()
+	if err != nil {
+		t.Error(err)
+		return
+	}
+}
+
+func checkFeededGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename string) {
+	// Load feed metrics
+
+	feedDataFilePath := filepath.Join(testGraphiteFeedDataDirectory, feedDataFilename)
+
+	feedBytes, err := ioutil.ReadFile(feedDataFilePath)
 	if err != nil {
 		t.Error(err)
 		return
@@ -117,15 +167,15 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 	client.SetCarbonPort(server.GetCarbonPort())
 	client.SetRenderPort(server.GetRenderPort())
 
-	// Feed metrics (Carbon API)
+	// Find inserted metrics (Metrics API)
 
-	err = client.FeedString(feedData)
+	feedData := string(feedBytes)
+
+	feedMetrics, err := go_graphite.NewMetricsWithPlainText(feedData)
 	if err != nil {
 		t.Error(err)
 		return
 	}
-
-	// Find inserted metrics (Metrics API)
 
 	for _, m := range feedMetrics {
 		q := go_graphite.NewQuery()
@@ -182,6 +232,8 @@ func testFeedGraphiteDataToServer(t *testing.T, server *Server, feedDataFilename
 func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *testFeedGraphiteConf) {
 	//logging.SetVerbose(true)
 
+	keepConnectionTimeout := time.Millisecond * 400
+
 	// Setup a target server
 
 	server, err := NewServerWithConfig(serverConf)
@@ -202,17 +254,57 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *test
 		return
 	}
 
+	server.SetServerConnectionWaitTimeout(keepConnectionTimeout)
 	err = server.Start()
 	if err != nil {
 		t.Error(err)
 		return
 	}
 
+	// Setup a client for the target server
+
+	client := go_graphite.NewClient()
+	client.SetHost(server.GetAddress())
+	client.SetCarbonPort(server.GetCarbonPort())
+	client.SetRenderPort(server.GetRenderPort())
+
 	// Feed metrics (Carbon API)
 
+	var conn net.Conn
+
+	if testConf.keepConnection {
+		conn, err = client.Open()
+		if err != nil {
+			t.Error(err)
+		}
+	}
+
 	for _, feedDataFilename := range testConf.feedFilenames {
+		if !testConf.keepConnection {
+			conn, err = client.Open()
+			if err != nil {
+				t.Error(err)
+			}
+		}
+
 		testFeedGraphiteDataToServer(t, server, feedDataFilename)
 		time.Sleep(testConf.feedDuration)
+
+		if !testConf.keepConnection {
+			err = conn.Close()
+			if err != nil {
+				t.Error(err)
+			}
+		} else {
+			time.Sleep(keepConnectionTimeout * 2)
+		}
+	}
+
+	if testConf.keepConnection {
+		err = conn.Close()
+		if err != nil {
+			t.Error(err)
+		}
 	}
 
 	// Stop the target server
