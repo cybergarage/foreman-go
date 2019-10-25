@@ -129,7 +129,11 @@ func (conf *Config) GetServerConnectionWaitTimeout() time.Duration {
 
 // SetMetricsStorePeriod sets a metrics period duration.
 func (conf *Config) SetMetricsStorePeriod(d time.Duration) error {
-	conf.Metrics.Period = int(d / time.Second)
+	if d != 0 {
+		conf.Metrics.Period = int(d / time.Second)
+	} else {
+		conf.Metrics.Period = 0
+	}
 	return nil
 }
 
