@@ -1,0 +1,12 @@
+github.com/cybergarage/foreman-go v0.0.0-20190815115813-5848e29ea158 h1:O/VHk3sEon0TvRZVnFDtLRjdBk2sIQQsyrZIAICH0tw=
+github.com/cybergarage/foreman-go v0.0.0-20190815115813-5848e29ea158/go.mod h1:L6B/mVbM5Hk8+ZynUjWX2Zsk+mX5tq5dQtTkXiqiGng=
+github.com/cybergarage/foreman-go.git v0.0.0-20190815115813-5848e29ea158 h1:C+pMaQh+bThLdA45jdsWi7TQ6HfSFfm553m/vISQoVI=
+github.com/cybergarage/foreman-go.git v0.0.0-20190815115813-5848e29ea158/go.mod h1:a+G5VBdIBBXhwpwZj/8jMH3VIzfiA+ObUSrEhzgINKM=
+github.com/cybergarage/go-graphite v0.0.0-20191025044416-f9c6e2b12038 h1:JkXD36O23n20bwE/L0zU4QVtT01OmbRKK7OpvI+9Jwg=
+github.com/cybergarage/go-graphite v0.0.0-20191025044416-f9c6e2b12038/go.mod h1:GvBlTKsqnbnQ55tYX4xqqA8r5UgHvS1nObAA02WtaQs=
+github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
+github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
+github.com/antlr/antlr4 v0.0.0-20191011202612-ad2bd05285ca h1:QHbltbNkVcw97h4zA/L8gA4o3dJiFvBZ0gyZHrYXHbs=
+github.com/antlr/antlr4 v0.0.0-20191011202612-ad2bd05285ca/go.mod h1:T7PbCXFs94rrTttyxjbyT5+/1V8T2TYDejxUfHJjw1Y=
+github.com/cybergarage/uecho-go v0.0.0-20191025045151-d1ae98109c76 h1:KmzGc/k4gSUG2ZW/H1UO973CAPPuT/9/WAyb8t1tiU8=
+github.com/cybergarage/uecho-go v0.0.0-20191025045151-d1ae98109c76/go.mod h1:cLbO3QV8Fq13WTlsQp5mpci4Lf6kiNSsKs0ujXON0Lg=
