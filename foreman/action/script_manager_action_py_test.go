@@ -74,7 +74,7 @@ func TestPythonEngine(t *testing.T) {
 	mgr := newTestScriptEngine()
 
 	if !mgr.HasEngine(ActionLanguagePython) {
-		t.Skipf(errorEngineNotFound, ActionLanguagePython)
+		t.Logf(errorEngineNotFound, ActionLanguagePython)
 		return
 	}
 

@@ -41,7 +41,7 @@ func testServerController(t *testing.T, server *Server) {
 	}
 
 	if len(nodes) != (testServerControllerCont - 1) {
-		t.Skipf("%d != %d", len(nodes), (testServerControllerCont - 1))
+		t.Logf("%d != %d", len(nodes), (testServerControllerCont - 1))
 		for n, node := range nodes {
 			t.Logf("[%d] %s:%d", n, node.GetAddress(), node.GetRPCPort())
 		}

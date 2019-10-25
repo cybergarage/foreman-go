@@ -103,7 +103,7 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 	if err == nil {
 		if len(ms) != testGrahiteMetricsCount {
 			// FIXME
-			t.Skipf("%d != %d", len(ms), testGrahiteMetricsCount)
+			t.Logf("%d != %d", len(ms), testGrahiteMetricsCount)
 		}
 	} else {
 		t.Error(err)
@@ -117,7 +117,7 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 	if err == nil {
 		if len(ms) != testGrahiteMetricsCount {
 			// FIXME on Screwdriver
-			t.Skipf("%d != %d", len(ms), testGrahiteMetricsCount)
+			t.Logf("%d != %d", len(ms), testGrahiteMetricsCount)
 		}
 	} else {
 		t.Error(err)
@@ -134,7 +134,7 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 		if err == nil {
 			if len(ms) != testGrahiteMetricsEachDataCount {
 				// FIXME on Screwdriver
-				t.Skipf("%d != %d", len(ms), testGrahiteMetricsEachDataCount)
+				t.Logf("%d != %d", len(ms), testGrahiteMetricsEachDataCount)
 			}
 		} else {
 			t.Error(err)
@@ -152,7 +152,7 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 	if err == nil {
 		if len(ms) != testGrahiteMetricsTotalDataCount {
 			// FIXME on Screwdriver
-			t.Skipf("%d != %d", len(ms), testGrahiteMetricsTotalDataCount)
+			t.Logf("%d != %d", len(ms), testGrahiteMetricsTotalDataCount)
 		}
 	} else {
 		t.Error(err)
