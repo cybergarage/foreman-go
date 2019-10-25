@@ -55,6 +55,7 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 		t.Error(err)
 		return
 	}
+	defer server.Stop()
 
 	// Setup a client for the target server
 
@@ -91,7 +92,6 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 			err := client.FeedMetrics(m)
 			if err != nil {
 				t.Error(err)
-				server.Stop()
 				return
 			}
 		}
@@ -155,13 +155,6 @@ func testGraphiteAPIsWithConfig(t *testing.T, serverConf *Config, testConf *test
 			t.Logf("%d != %d", len(ms), testGrahiteMetricsTotalDataCount)
 		}
 	} else {
-		t.Error(err)
-	}
-
-	// Stop the target server
-
-	err = server.Stop()
-	if err != nil {
 		t.Error(err)
 	}
 }
