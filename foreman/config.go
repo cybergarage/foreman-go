@@ -23,13 +23,14 @@ type LogConfig struct {
 }
 
 type ServerConfig struct {
-	Cluster           string
-	Host              string
-	CarbonPort        int
-	HTTPPort          int
-	ConnectionTimeout int
-	Bootstrap         int
-	Finder            string
+	Cluster               string
+	Host                  string
+	CarbonPort            int
+	HTTPPort              int
+	ConnectionTimeout     int
+	ConnectionWaitTimeout int
+	Bootstrap             int
+	Finder                string
 }
 
 type FQLConfig struct {
@@ -75,6 +76,7 @@ func NewDefaultConfig() *Config {
 	conf.Server.CarbonPort = DefaultCarbonPort
 	conf.Server.Bootstrap = DefaultBootstrapMode
 	conf.Server.ConnectionTimeout = DefaultConnectionTimeout
+	conf.Server.ConnectionWaitTimeout = DefaultConnectionWaitTimeout
 	conf.Server.Finder = DefaultFinder
 
 	conf.Finder.Hosts = []string{}
@@ -112,6 +114,17 @@ func (conf *Config) SetServerConnectionTimeout(d time.Duration) error {
 // GetServerConnectionTimeout returns a timeout for all server connections.
 func (conf *Config) GetServerConnectionTimeout() time.Duration {
 	return time.Second * time.Duration(conf.Server.ConnectionTimeout)
+}
+
+// SetServerConnectionWaitTimeout sets a timeout for all server connections.
+func (conf *Config) SetServerConnectionWaitTimeout(d time.Duration) error {
+	conf.Server.ConnectionWaitTimeout = int(d / time.Second)
+	return nil
+}
+
+// GetServerConnectionWaitTimeout returns a timeout for all server connections.
+func (conf *Config) GetServerConnectionWaitTimeout() time.Duration {
+	return time.Second * time.Duration(conf.Server.ConnectionWaitTimeout)
 }
 
 // SetMetricsStorePeriod sets a metrics period duration.

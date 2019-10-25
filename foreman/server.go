@@ -337,6 +337,7 @@ func (server *Server) applyConfig() error {
 	// Graphite Ports
 
 	server.graphiteMgr.SetConnectionTimeout(server.GetServerConnectionTimeout())
+	server.graphiteMgr.SetConnectionWaitTimeout(server.GetServerConnectionWaitTimeout())
 	server.graphiteMgr.SetCarbonPort(server.Server.CarbonPort)
 	server.graphiteMgr.SetRenderPort(server.Server.HTTPPort)
 
