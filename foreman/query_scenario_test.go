@@ -27,7 +27,7 @@ func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, test
 			lastEvent := s.GetLastEvent()
 			if testConf.EnableSkipError {
 				logging.Error(err.Error().Error())
-				t.Skipf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
+				t.Logf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
 			} else {
 				t.Errorf("%s (%d) : %s", file, lastEvent.GetNo(), err.Error())
 			}
