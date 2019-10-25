@@ -38,8 +38,18 @@ To setup an initial develop environment for `foreman-go` in your comupter, you h
 ```
 git clone https://github.com/cybergarage/foreman-go.git
 cd foreman-go
-source ./setup
 make test
+```
+
+`foreman-go` must link some C language libraries such as `foreman-cc` and Python, and so the `Makefile` sets the linkage environments such as CGO_LDFLAGS and CGO_LDFLAGS internally.
+
+Therefore, you should the linkage environments using 'setenv' to compile without the `Makefile` using other compile environments such as Visual Code as the following.
+
+```
+git clone https://github.com/cybergarage/foreman-go.git
+cd foreman-go
+source ./setenv 
+code .
 ```
 
 ## Testing
