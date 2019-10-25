@@ -6,6 +6,8 @@ github.com/cybergarage/go-graphite v0.0.0-20191025044416-f9c6e2b12038 h1:JkXD36O
 github.com/cybergarage/go-graphite v0.0.0-20191025044416-f9c6e2b12038/go.mod h1:GvBlTKsqnbnQ55tYX4xqqA8r5UgHvS1nObAA02WtaQs=
 github.com/cybergarage/go-graphite v0.0.0-20191025070931-0750fe4deaed h1:Zjd+1RXn6A83B9UHdDu4MEknCspgVxBtlzGcwh/uhMY=
 github.com/cybergarage/go-graphite v0.0.0-20191025070931-0750fe4deaed/go.mod h1:GvBlTKsqnbnQ55tYX4xqqA8r5UgHvS1nObAA02WtaQs=
+github.com/cybergarage/go-graphite v0.0.0-20191025081103-6341df57e078 h1:rdRmGO1dokE/gLclB0LsL2J2dRt+VQKdUq4g2/aaAgU=
+github.com/cybergarage/go-graphite v0.0.0-20191025081103-6341df57e078/go.mod h1:GvBlTKsqnbnQ55tYX4xqqA8r5UgHvS1nObAA02WtaQs=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/antlr/antlr4 v0.0.0-20191011202612-ad2bd05285ca h1:QHbltbNkVcw97h4zA/L8gA4o3dJiFvBZ0gyZHrYXHbs=

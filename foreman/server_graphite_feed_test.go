@@ -188,7 +188,7 @@ func checkFeededGraphiteDataToServer(t *testing.T, server *Server, feedDataFilen
 		if len(ms) != 1 {
 			// FIXME : Don't Skip
 			//fmt.Printf("ERROR %s : %s (%d != %d)\n", feedDataFilename, q.Target, len(ms), 1)
-			t.Logf("%s : %s (%d != %d)", feedDataFilename, q.Target, len(ms), 1)
+			//t.Errorf("%s : %s (%d != %d)", feedDataFilename, q.Target, len(ms), 1)
 		}
 	}
 
@@ -263,6 +263,7 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *test
 		t.Error(err)
 		return
 	}
+	defer server.Stop()
 
 	// Setup a client for the target server
 
@@ -308,13 +309,6 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *test
 		if err != nil {
 			t.Error(err)
 		}
-	}
-
-	// Stop the target server
-
-	err = server.Stop()
-	if err != nil {
-		t.Error(err)
 	}
 }
 
@@ -402,6 +396,7 @@ func TestMultipleGraphiteFeedAPIWithDefaultFeedData(t *testing.T) {
 		t.Error(err)
 		return
 	}
+	defer server.Stop()
 
 	// Feed captured metrics (Carbon API)
 
@@ -427,12 +422,4 @@ func TestMultipleGraphiteFeedAPIWithDefaultFeedData(t *testing.T) {
 	}()
 
 	wg.Wait()
-
-	// Stop the target server
-
-	err = server.Stop()
-	if err != nil {
-		t.Error(err)
-	}
-
 }
