@@ -188,7 +188,7 @@ func checkFeededGraphiteDataToServer(t *testing.T, server *Server, feedDataFilen
 		if len(ms) != 1 {
 			// FIXME : Don't Skip
 			//fmt.Printf("ERROR %s : %s (%d != %d)\n", feedDataFilename, q.Target, len(ms), 1)
-			t.Skipf("%s : %s (%d != %d)", feedDataFilename, q.Target, len(ms), 1)
+			t.Logf("%s : %s (%d != %d)", feedDataFilename, q.Target, len(ms), 1)
 		}
 	}
 
@@ -224,7 +224,7 @@ func checkFeededGraphiteDataToServer(t *testing.T, server *Server, feedDataFilen
 		if len(ms) <= 1 {
 			// FIXME : Don't Skip
 			//fmt.Printf("ERROR %s : %s %s %s (%d <= %d)\n", feedDataFilename, q.Target, q.From, q.Until, len(ms), 1)
-			t.Skipf("%s : %s %s %s (%d <= %d)", feedDataFilename, q.Target, q.Target, q.From, len(ms), 1)
+			t.Logf("%s : %s %s %s (%d <= %d)", feedDataFilename, q.Target, q.Target, q.From, len(ms), 1)
 		}
 	}
 }
@@ -232,7 +232,7 @@ func checkFeededGraphiteDataToServer(t *testing.T, server *Server, feedDataFilen
 func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *testFeedGraphiteConf) {
 	//logging.SetVerbose(true)
 
-	keepConnectionTimeout := time.Millisecond * 400
+	keepConnectionTimeout := time.Millisecond * 500
 
 	// Setup a target server
 
@@ -254,7 +254,10 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *test
 		return
 	}
 
-	server.SetServerConnectionWaitTimeout(keepConnectionTimeout)
+	if testConf.keepConnection {
+		server.SetServerConnectionWaitTimeout(keepConnectionTimeout)
+	}
+
 	err = server.Start()
 	if err != nil {
 		t.Error(err)
@@ -287,7 +290,7 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *test
 			}
 		}
 
-		testFeedGraphiteDataToServer(t, server, feedDataFilename)
+		testFeedGraphiteDataToServerWithConnection(t, server, client, conn, feedDataFilename)
 		time.Sleep(testConf.feedDuration)
 
 		if !testConf.keepConnection {
