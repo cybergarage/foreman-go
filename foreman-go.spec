@@ -18,19 +18,16 @@ The Go component of the Foreman system.
 
 
 %prep
-export GOPATH="$PWD"
 find . -mindepth 1 -delete
 cp -af %{SOURCEURL0}/. .
 rm -rf src/github.com/cybergarage/foreman-go
 mkdir -p src/github.com/cybergarage
 ln -s "$PWD" src/github.com/cybergarage/foreman-go
 go get ./... || true
-./setup || true
 
 %build
 
 %install
-export GOPATH="$PWD"
 export CGO_CXXFLAGS="-static-libstdc++ -static-libgcc"
 export CGO_CFLAGS="-static-libgcc"
 export go_linker_flags='-linkmode=external "-extldflags=-static-libstdc++ -static-libgcc"'
