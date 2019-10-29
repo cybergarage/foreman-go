@@ -284,24 +284,13 @@ func testGraphiteFeedWithConfig(t *testing.T, serverConf *Config, testConf *test
 	}
 
 	for _, feedDataFilename := range testConf.feedFilenames {
-		if !testConf.keepConnection {
-			conn, err = client.Open()
-			if err != nil {
-				t.Error(err)
-			}
-		}
-
-		testFeedGraphiteDataToServerWithConnection(t, server, client, conn, feedDataFilename)
-		time.Sleep(testConf.feedDuration)
-
-		if !testConf.keepConnection {
-			err = conn.Close()
-			if err != nil {
-				t.Error(err)
-			}
-		} else {
+		if testConf.keepConnection {
+			testFeedGraphiteDataToServerWithConnection(t, server, client, conn, feedDataFilename)
 			time.Sleep(keepConnectionTimeout * 2)
+		} else {
+			testFeedGraphiteDataToServer(t, server, feedDataFilename)
 		}
+		time.Sleep(testConf.feedDuration)
 	}
 
 	if testConf.keepConnection {
