@@ -3,7 +3,6 @@ module github.com/cybergarage/foreman-go
 go 1.12
 
 require (
-	github.com/cybergarage/foreman-go v0.0.0-20190815115813-5848e29ea158
 	github.com/cybergarage/go-graphite v0.0.0-20191025081103-6341df57e078
 	github.com/BurntSushi/toml v0.3.1
 	github.com/antlr/antlr4 v0.0.0-20191011202612-ad2bd05285ca
