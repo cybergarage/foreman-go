@@ -1,4 +1,4 @@
-module foreman-go
+module github.com/cybergarage/foreman-go
 
 go 1.12
 
