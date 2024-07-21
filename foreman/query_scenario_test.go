@@ -18,12 +18,16 @@ const (
 )
 
 func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, testConf *test.Config, scenarioOpt *test.ScenarioOption) {
+	t.Helper()
 
 	for _, file := range scenarioFiles {
-		s := NewQueryScenario()
-		filePath := filepath.Join(testScenarioDirectory, file)
-		err := s.ExecuteFileWithOption(filePath, scenarioOpt)
-		if err != nil {
+		t.Run(file, func(t *testing.T) {
+			s := NewQueryScenario()
+			filePath := filepath.Join(testScenarioDirectory, file)
+			err := s.ExecuteFileWithOption(filePath, scenarioOpt)
+			if err == nil {
+				return
+			}
 			lastEvent := s.GetLastEvent()
 			if testConf.EnableSkipError {
 				logging.Error(err.Error().Error())
@@ -36,8 +40,7 @@ func testQueryScenarioFilesWithConfig(t *testing.T, scenarioFiles []string, test
 				t.Logf("%d : %s\n", lastRes.GetStatusCode(), lastRes.GetQuery())
 				t.Logf("%s", lastRes.GetContent())
 			}
-			break
-		}
+		})
 	}
 }
 
