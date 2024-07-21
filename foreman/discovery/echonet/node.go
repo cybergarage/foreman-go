@@ -34,21 +34,16 @@ func NewEchonetNodeWithNode(srcNode node.Node) (*EchonetNode, error) {
 
 	node.SetConfig(NewDefaultConfig())
 	node.SetManufacturerCode(ManufacturerCode)
-
+	node.AddDevice(node.EchonetDevice.Device)
 	node.SetListener(node)
-
-	err := node.AddDevice(node.EchonetDevice.Device)
-	if err != nil {
-		return nil, err
-	}
 
 	return node, nil
 }
 
 // GetAddress returns the interface address
 func (node *EchonetNode) GetAddress() string {
-	addrs, err := node.LocalNode.GetBoundAddresses()
-	if err != nil || len(addrs) <= 0 {
+	addrs := node.LocalNode.Addresses()
+	if len(addrs) <= 0 {
 		return ""
 	}
 	return addrs[0]

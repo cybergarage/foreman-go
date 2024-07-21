@@ -14,7 +14,6 @@ func NewDefaultConfig() *echonet.Config {
 
 	conf.SetTCPEnabled(true)
 	conf.SetAutoPortBindingEnabled(true)
-	conf.SetAutoInterfaceBindingEnabled(true)
 
 	return conf
 }

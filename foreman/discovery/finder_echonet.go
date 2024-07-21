@@ -103,12 +103,12 @@ func (finder *EchonetFinder) ControllerNewNodeFound(echonetNode *uecho_echonet.R
 		return
 	}
 
-	logging.Trace(msgEchonetFinderFoundEchonetNode, echonetNode.GetAddress(), echonetNode.GetPort())
+	logging.Trace(msgEchonetFinderFoundEchonetNode, echonetNode.Address(), echonetNode.Port())
 
 	reqMsg := foreman_echonet.NewRequestAllPropertiesMessage()
 	resMsg, err := finder.PostMessage(echonetNode, reqMsg)
 	if err != nil {
-		logging.Error(errorEchonetFinderNoResponse, echonetNode.GetAddress(), echonetNode.GetPort())
+		logging.Error(errorEchonetFinderNoResponse, echonetNode.Address(), echonetNode.Port())
 		logging.Error("%s", err.Error())
 		return
 	}

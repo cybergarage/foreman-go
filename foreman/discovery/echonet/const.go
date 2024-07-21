@@ -9,5 +9,5 @@ import (
 )
 
 const (
-	ManufacturerCode = uecho_echonet.NodeManufacturerUnknown
+	ManufacturerCode = uecho_echonet.ProfileManufacturerUnknown
 )

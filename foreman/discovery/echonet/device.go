@@ -66,7 +66,8 @@ func NewDevice() *EchonetDevice {
 	dev.SetCode(FinderDeviceCode)
 
 	for _, propCode := range FinderDeviceAllPropertyCodes() {
-		dev.CreateProperty(propCode, uecho_echonet.PropertyAttributeRead)
+		prop := uecho_echonet.NewProperty().SetCode(propCode).SetReadAttribute(uecho_echonet.Required)
+		dev.AddProperty(prop)
 	}
 
 	return &EchonetDevice{Device: dev}

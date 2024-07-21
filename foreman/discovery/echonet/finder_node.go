@@ -9,7 +9,7 @@ import (
 
 	"github.com/cybergarage/foreman-go/foreman/node"
 
-	uecho_protocol "github.com/cybergarage/uecho-go/net/echonet/protocol"
+	uecho_echonet "github.com/cybergarage/uecho-go/net/echonet"
 	uecho_transport "github.com/cybergarage/uecho-go/net/echonet/transport"
 )
 
@@ -26,15 +26,15 @@ type finderNode struct {
 }
 
 // NewFinderNodeWithResponseMesssage returns a new finder node with the specified message.
-func NewFinderNodeWithResponseMesssage(msg *uecho_protocol.Message) (node.Node, error) {
+func NewFinderNodeWithResponseMesssage(msg *uecho_echonet.Message) (node.Node, error) {
 	// Valdate the specified message
 
 	if msg == nil {
 		return nil, fmt.Errorf(errorEchonetFinderInvalidMessage, msg)
 	}
 
-	if msg.GetSourceObjectCode() != FinderDeviceCode {
-		return nil, fmt.Errorf(errorEchonetFinderMessageInvalidObject, msg.GetSourceObjectCode(), FinderDeviceCode)
+	if msg.SEOJ() != FinderDeviceCode {
+		return nil, fmt.Errorf(errorEchonetFinderMessageInvalidObject, msg.SEOJ(), FinderDeviceCode)
 	}
 
 	for _, propCode := range FinderDeviceAllPropertyCodes() {
@@ -49,28 +49,28 @@ func NewFinderNodeWithResponseMesssage(msg *uecho_protocol.Message) (node.Node, 
 		BaseNode: node.NewBaseNode(),
 	}
 
-	for _, prop := range msg.GetProperties() {
-		switch prop.GetCode() {
+	for _, prop := range msg.Properties() {
+		switch prop.Code() {
 		case FinderConditionCode:
-			candidateNode.Condition = node.Condition(prop.GetIntegerData())
+			candidateNode.Condition = node.Condition(prop.IntegerData())
 		case FinderClusterCode:
-			candidateNode.Cluster = prop.GetStringData()
+			candidateNode.Cluster = prop.StringData()
 		case FinderNameCode:
-			candidateNode.Name = prop.GetStringData()
+			candidateNode.Name = prop.StringData()
 		case FinderAddressCode:
-			candidateNode.Address = prop.GetStringData()
+			candidateNode.Address = prop.StringData()
 		case FinderRPCPortCode:
-			candidateNode.RPCPort = int(prop.GetIntegerData())
+			candidateNode.RPCPort = int(prop.IntegerData())
 		case FinderRenderPortCode:
-			candidateNode.RenderPort = int(prop.GetIntegerData())
+			candidateNode.RenderPort = int(prop.IntegerData())
 		case FinderCarbonPortCode:
-			candidateNode.CarbonPort = int(prop.GetIntegerData())
+			candidateNode.CarbonPort = int(prop.IntegerData())
 		case FinderClockCode:
-			candidateNode.Clock = node.Clock(prop.GetIntegerData())
+			candidateNode.Clock = node.Clock(prop.IntegerData())
 		case FinderVersionCode:
-			candidateNode.Version = node.Version(prop.GetIntegerData())
+			candidateNode.Version = node.Version(prop.IntegerData())
 		default:
-			return nil, fmt.Errorf(errorEchonetFinderMessageInvalidProperty, prop.GetCode())
+			return nil, fmt.Errorf(errorEchonetFinderMessageInvalidProperty, prop.Code())
 		}
 	}
 
