@@ -7,9 +7,9 @@ package discovery
 import (
 	"fmt"
 
+	"github.com/BurntSushi/toml"
 	"github.com/cybergarage/foreman-go/foreman/logging"
 	"github.com/cybergarage/foreman-go/foreman/node"
-	"github.com/BurntSushi/toml"
 )
 
 // StaticFinder represents a simple static finder.

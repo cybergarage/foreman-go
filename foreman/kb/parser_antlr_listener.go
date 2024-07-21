@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cybergarage/foreman-go/foreman/util"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
+	"github.com/cybergarage/foreman-go/foreman/util"
 )
 
 type antlrParserListener struct {

@@ -9,7 +9,7 @@ type KnowledgeBaseListener interface {
 	RuleListener
 }
 
-//KnowledgeBase includes all knowledge rules.
+// KnowledgeBase includes all knowledge rules.
 type KnowledgeBase struct {
 	Rules        map[string]Rule
 	Variables    map[string]Variable

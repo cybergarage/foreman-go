@@ -3,6 +3,7 @@
 // license that can be found in the LICENSE file.
 
 // FIXME : Disable TestGraphiteAPI*() for Linux because of these tests timeout On CentOS
+//go:build !linux
 // +build !linux
 
 package foreman
