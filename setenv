@@ -15,7 +15,7 @@ if command -v python-config; then
 else
 	if command -v python3-config; then
 		export CGO_CFLAGS="$CGO_CFLAGS `python3-config --includes`"
-		export CGO_LDFLAGS="$CGO_LDFLAGS `python3-config --ldflags`"
+		export CGO_LDFLAGS="$CGO_LDFLAGS `python3-config --ldflags --embed`"
 	fi
 fi
 

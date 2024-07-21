@@ -74,7 +74,7 @@ else
     all:
     ifdef HAVE_PYTHON3_CONFIG
         CGO_CFLAGS += $(shell python3-config --includes)
-        CGO_LDFLAGS += $(shell python3-config --ldflags)
+        CGO_LDFLAGS += $(shell python3-config --ldflags --embed)
     endif
 endif
 
