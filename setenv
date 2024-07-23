@@ -4,7 +4,7 @@
 ########################################
 
 export CGO_CFLAGS=
-export CGO_LDFLAGS="-lforeman++ -lstdc++ -lalglib -lsqlite3 -lcurl -lm"
+export CGO_LDFLAGS="-lforeman++ -lstdc++ -lalglib -lsqlite3 -lcurl -luuid -lm"
 
 # NOTE : Enable for folly
 # export CGO_LDFLAGS="$CGO_LDFLAGS -lfolly -lgflags -lglog -ljemalloc"
@@ -20,8 +20,8 @@ else
 fi
 
 if [ `which uuid-config` ]; then
-    CFLAGS="$CFLAGS `uuid-config --cflags`"
-    LDFLAGS="$LDFLAGS `uuid-config --libs`"
+    CGO_CFLAGS="$CGO_CFLAGS `uuid-config --cflags`"
+    CGO_LDFLAGS="$CGO_LDFLAGS `uuid-config --ldflags`"
 fi
 
 if [ `which pkg-config` ]; then
