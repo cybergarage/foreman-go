@@ -4,16 +4,16 @@
 ########################################
 
 export CGO_CFLAGS=
-export CGO_LDFLAGS="-lforeman++ -lstdc++ -lalglib -lsqlite3 -luuid -lcurl -lm"
+export CGO_LDFLAGS="-lforeman++ -lstdc++ -lalglib -lsqlite3 -lcurl -lm"
 
 # NOTE : Enable for folly
 # export CGO_LDFLAGS="$CGO_LDFLAGS -lfolly -lgflags -lglog -ljemalloc"
 
-if command -v python3-config; then
+if [ `which python3-config` ]; then
 	export CGO_CFLAGS="$CGO_CFLAGS `python3-config --includes`"
 	export CGO_LDFLAGS="$CGO_LDFLAGS `python3-config --ldflags --embed`"
 else
-	if command -v python-config; then
+	if [ `which python-config` ]; then
 		export CGO_CFLAGS="$CGO_CFLAGS `python-config --includes`"
 		export CGO_LDFLAGS="$CGO_LDFLAGS `python-config --ldflags`"
 	fi
@@ -24,7 +24,7 @@ if [ `which uuid-config` ]; then
     LDFLAGS="$LDFLAGS `uuid-config --libs`"
 fi
 
-if command -v pkg-config; then
+if [ `which pkg-config` ]; then
 	export CGO_CFLAGS="$CGO_CFLAGS `pkg-config lua --silence-errors --cflags`"
 	export CGO_LDFLAGS="$CGO_LDFLAGS `pkg-config lua --silence-errors --libs`"
 fi
