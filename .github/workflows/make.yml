@@ -27,7 +27,7 @@ jobs:
         git clone https://github.com/cybergarage/foreman-cc.git
         pushd foreman-cc
         ./configure_ubuntu
-        make
+        make -j 20
         make -j 20 check
         sudo make install
         popd
