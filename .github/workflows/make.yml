@@ -27,6 +27,7 @@ jobs:
         git clone https://github.com/cybergarage/foreman-cc.git
         pushd foreman-cc
         echo `pwd`
+        more config.h
         CFLAGS="-I`pwd`" ./configure_ubuntu
         make -j 20 check
         sudo make install
