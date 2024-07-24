@@ -12,7 +12,7 @@ SET ("test_echo","python","ZGVmIGRlZiBkZWYgZGVmCmRlZiB0ZXN0X2VjaG8ocGFyYW1zLHJlc
 # Inserts and executes a echo method method
 ################################################################################
 
-SET ("test_echo","python","ZGVmIHRlc3RfZWNobyhwYXJhbXMscmVzdWx0cyk6Cglmb3Iga2V5LCB2YWx1ZSBpbiBwYXJhbXMuaXRlcml0ZW1zKCk6CgkJcmVzdWx0c1trZXldID0gdmFsdWUKCXJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+SET ("test_echo","python","ZGVmIHRlc3RfZWNobyhwYXJhbXMscmVzdWx0cyk6DQoJZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZW1zKCk6DQoJCXJlc3VsdHNba2V5XSA9IHZhbHVlDQoJcmV0dXJuIFRydWU=","base64") INTO ACTION;200;
 EXPORT FROM ACTION;200;/action/methods/test_echo
 EXPORT FROM ACTION WHERE name == "test_echo";200;/action/methods/test_echo
 EXECUTE test_echo;200;

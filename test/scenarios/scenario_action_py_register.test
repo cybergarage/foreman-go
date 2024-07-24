@@ -1,8 +1,8 @@
 # register commands
-SET ("test_setregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3Rfc2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZXJpdGVtcygpOgogICAgICAgIGZvcmVtYW4uc2V0X3JlZ2lzdGVyKGtleSwgc3RyKHZhbHVlKSkKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+SET ("test_setregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3Rfc2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIGtleSwgdmFsdWUgaW4gcGFyYW1zLml0ZW1zKCk6CiAgICAgICAgZm9yZW1hbi5zZXRfcmVnaXN0ZXIoa2V5LCBzdHIodmFsdWUpKQogICAgcmV0dXJuIFRydWU=","base64") INTO ACTION;200;
 EXPORT FROM ACTION;200;/action/methods/test_setregister
 EXPORT FROM ACTION WHERE name == "test_setregister";200;/action/methods/test_setregister
-SET ("test_getregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfZ2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIHJlZ19rZXksIHZhbHVlIGluIHBhcmFtcy5pdGVyaXRlbXMoKToKICAgICAgICByZWdfdmFsdWUgPSBmb3JlbWFuLmdldF9yZWdpc3RlcihyZWdfa2V5KQogICAgICAgIHJlc3VsdHNbcmVnX2tleV0gPSByZWdfdmFsdWUKICAgIHJldHVybiBUcnVlCg==","base64") INTO ACTION;200;
+SET ("test_getregister","python","aW1wb3J0IGZvcmVtYW4KZGVmIHRlc3RfZ2V0cmVnaXN0ZXIocGFyYW1zLHJlc3VsdHMpOgogICAgZm9yIHJlZ19rZXksIHZhbHVlIGluIHBhcmFtcy5pdGVtcygpOgogICAgICAgIHJlZ192YWx1ZSA9IGZvcmVtYW4uZ2V0X3JlZ2lzdGVyKHJlZ19rZXkpCiAgICAgICAgcmVzdWx0c1tyZWdfa2V5XSA9IHJlZ192YWx1ZQogICAgcmV0dXJuIFRydWU=","base64") INTO ACTION;200;
 EXPORT FROM ACTION;200;/action/methods/test_getregister
 EXPORT FROM ACTION WHERE name == "test_getregister";200;/action/methods/test_getregister
 EXECUTE test_setregister (test_reg) VALUES ("hello");200;
