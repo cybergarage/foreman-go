@@ -26,11 +26,10 @@ jobs:
       run: |
         git clone https://github.com/cybergarage/foreman-cc.git
         pushd foreman-cc
-        echo `pwd`
+        ./configure_ubuntu
         ls -l
-        CFLAGS="-I`pwd`" ./configure_ubuntu
+        make
         ls -l
-        more config.h
         make -j 20 check
         sudo make install
         popd
