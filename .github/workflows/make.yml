@@ -16,14 +16,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup Forema-cc
+    - name: Install Foreman-cc packages
       run: |
         sudo apt update
         sudo apt-get install -y g++ automake libboost-all-dev make pkg-config
         sudo apt-get install -y libsqlite3-dev libcurl3-dev uuid-dev libalglib-dev libossp-uuid-dev libpython3-all-dev
         sudo apt-get install -y valgrind
+
+    - name: Setup Foreman-cc
+      run: |
         sudo git clone https://github.com/cybergarage/foreman-cc.git
-        sudo pushd foreman-cc && ./configure_ubuntu && make -j 20 install && popd
+        sudo cd foreman-cc && ./configure_ubuntu && make -j 20 install && cd ..
 
     - name: Set up Go
       uses: actions/setup-go@v4
