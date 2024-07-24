@@ -28,8 +28,9 @@ jobs:
         pushd foreman-cc
         echo `pwd`
         ls -l
-        more config.h
         CFLAGS="-I`pwd`" ./configure_ubuntu
+        ls -l
+        more config.h
         make -j 20 check
         sudo make install
         popd
