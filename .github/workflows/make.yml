@@ -19,14 +19,16 @@ jobs:
     - name: Install Foreman-cc packages
       run: |
         sudo apt update
-        sudo apt-get install -y g++ automake libboost-all-dev make pkg-config libconfig-dev
+        sudo apt-get install -y g++ automake libboost-all-dev make pkg-config
         sudo apt-get install -y libsqlite3-dev libcurl3-dev libalglib-dev libossp-uuid-dev libpython3-all-dev
 
     - name: Setup Foreman-cc
       run: |
         git clone https://github.com/cybergarage/foreman-cc.git
         pushd foreman-cc
-        ./bootstrap && ./configure_ubuntu && make -j 20 check
+        echo `pwd`
+        ./configure_ubuntu
+        make -j 20 check
         sudo make install
         popd
 
