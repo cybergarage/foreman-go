@@ -26,8 +26,8 @@ jobs:
     - name: Setup Foreman-cc
       run: |
         git clone https://github.com/cybergarage/foreman-cc.git
-        pushd foreman-cc && ./boostrap && ./configure_ubuntu && make -j 20 check && popd
-        pushd foreman-cc && sudo make install && popd
+        cd foreman-cc && ./boostrap && ./configure_ubuntu && make -j 20 check && cd ..
+        cd foreman-cc && sudo make install && cd ..
 
     - name: Set up Go
       uses: actions/setup-go@v4
