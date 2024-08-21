@@ -42,7 +42,7 @@ func (mgr *Manager) executeSelectQuery(q fql.Query) (interface{}, *errors.Error)
 	}
 
 	if !hasName {
-		return nil, errors.NewErrorWithError(fmt.Errorf(errorQueryEmptyID))
+		return nil, errors.NewErrorWithError(errorQueryEmptyID)
 	}
 
 	obj, ok := mgr.GetObject(name)

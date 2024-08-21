@@ -4,10 +4,16 @@
 
 package register
 
+import (
+	"errors"
+)
+
+var errorNilObject = errors.New("Nil object")
+var errorQueryEmptyID = errors.New("Empty ID")
+
 const (
 	errorInvalidObject     = "Invalid object (%s)"
 	errorInvalidObjectData = "Invalid object (%s) data (%s)"
 	errorInvalidStore      = "Invalid store (%s)"
-	errorQueryEmptyID      = "Empty ID"
 	errorQueryNotFoundID   = "Not found ID (%s)"
 )
