@@ -75,6 +75,9 @@ func (store *CgoStore) Clear() error {
 
 // SetObject sets a object into the store.
 func (store *CgoStore) SetObject(obj Object) error {
+	if obj == nil {
+		return errorNilObject
+	}
 	cerr := C.foreman_error_new()
 	defer C.foreman_error_delete(cerr)
 
