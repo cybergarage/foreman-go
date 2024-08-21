@@ -163,7 +163,7 @@ func (store *cgoStore) AddMetricWithoutNotification(m *Metric) error {
 
 	// Update register
 
-	if store.Register != nil {
+	if m != nil && store.Register != nil {
 		store.Register.UpdateMetricWithoutNotification(m)
 	}
 
