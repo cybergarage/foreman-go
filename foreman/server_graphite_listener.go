@@ -37,6 +37,14 @@ func (server *Server) InsertMetricsRequestReceived(gms []*go_graphite.Metrics, e
 		return
 	}
 
+	if gms == nil {
+		return
+	}
+
+	if len(gms) == 0 {
+		return
+	}
+
 	ms := make([]*metric.Metric, 0)
 	for _, gm := range gms {
 		for _, dp := range gm.DataPoints {
