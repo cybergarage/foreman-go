@@ -9,4 +9,4 @@ require (
 	github.com/cybergarage/uecho-go v1.2.1
 )
 
-require github.com/cybergarage/go-logger v1.3.4 // indirect
+require github.com/cybergarage/go-logger v1.3.11 // indirect
