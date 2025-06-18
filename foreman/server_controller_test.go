@@ -49,7 +49,7 @@ func testServerController(t *testing.T, server *Server) {
 }
 
 func TestServerControllerDefaultFinders(t *testing.T) {
-	//log.SetStdoutDebugEnbled(true)
+	//log.EnableStdoutDebug(true)
 	servers := setupControllerTestServers(t)
 
 	for _, server := range servers {
