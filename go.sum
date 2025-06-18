@@ -4,8 +4,6 @@ github.com/antlr/antlr4 v0.0.0-20191011202612-ad2bd05285ca h1:QHbltbNkVcw97h4zA/
 github.com/antlr/antlr4 v0.0.0-20191011202612-ad2bd05285ca/go.mod h1:T7PbCXFs94rrTttyxjbyT5+/1V8T2TYDejxUfHJjw1Y=
 github.com/cybergarage/go-graphite v1.0.2 h1:TKB7u+kb40xD9KyrQzwpuBboaiXNdlelhkVQQ7n+5/Q=
 github.com/cybergarage/go-graphite v1.0.2/go.mod h1:C/WUt71GU/xUpEZytkN5PvFKtdLEOJ7Nw/ej/z1zbQo=
-github.com/cybergarage/go-logger v1.3.4 h1:UTgYZr/LwQtYVOncS3NJ64We5kCe7ce6L85y/MOYfrM=
-github.com/cybergarage/go-logger v1.3.4/go.mod h1:2iMjinHam5oqyKEGsKIzeQQmmOPxpCgro95LOlEC2ks=
 github.com/cybergarage/go-logger v1.3.11 h1:NwnC7cD/IDkdwBYhSODXaMEBmAu3c/jK4Q2XDsg1fno=
 github.com/cybergarage/go-logger v1.3.11/go.mod h1:SU5vzAFJOTs89JXk+Jn89RaNmcR07parcJgnW4e8aDw=
 github.com/cybergarage/uecho-go v1.2.1 h1:zDOQZNINPwJEiMK2PsclJHbvuZ0F/wzBkw9lwT7fOPQ=
