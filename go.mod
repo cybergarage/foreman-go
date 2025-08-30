@@ -1,6 +1,10 @@
 module github.com/cybergarage/foreman-go
 
-go 1.25
+<<<<<<< HEAD
+go 1.22
+=======
+go 1.22
+>>>>>>> 983b2f6 (Update go.mod)
 
 require (
 	github.com/BurntSushi/toml v1.4.0
